@@ -53,7 +53,7 @@ size_t run_sp::get_fromi_toi (const Rcpp::DataFrame &vert_map_in,
     return static_cast <size_t> (fromi.size ());
 }
 
-size_t get_fromi (const Rcpp::DataFrame &vert_map_in,
+size_t run_sp::get_fromi (const Rcpp::DataFrame &vert_map_in,
         Rcpp::IntegerVector &fromi, Rcpp::NumericVector &id_vec)
 {
     if (fromi [0] < 0) // use all vertices
