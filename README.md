@@ -2,7 +2,7 @@
 Status](https://ci.appveyor.com/api/projects/status/github/ATFutures/gtfs-router?branch=master&svg=true)](https://ci.appveyor.com/project/ATFutures/gtfs-router)
 [![codecov](https://codecov.io/gh/ATFutures/gtfs-router/branch/master/graph/badge.svg)](https://codecov.io/gh/ATFutures/gtfs-router)
 [![Project Status:
-Concept](http://www.repostatus.org/badges/latest/concept)](http://www.repostatus.org/#concept)
+Concept](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
 
 # GTFS Router
 
