@@ -1,10 +1,10 @@
 
 #include "run_sp.h"
 
-#include "dgraph.h"
+#include "gtfs_graph.h"
 
 template <typename T>
-void inst_graph (std::shared_ptr<DGraph> g, unsigned int nedges,
+void inst_graph (std::shared_ptr<GTFSGraph> g, unsigned int nedges,
         const std::map <std::string, unsigned int>& vert_map,
         const std::vector <std::string>& from,
         const std::vector <std::string>& to,
@@ -114,7 +114,7 @@ Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
     size_t nverts = run_sp::make_vert_map (vert_map_in, vert_map_id,
             vert_map_n, vert_map);
 
-    std::shared_ptr<DGraph> g = std::make_shared<DGraph>(nverts);
+    std::shared_ptr<GTFSGraph> g = std::make_shared<GTFSGraph>(nverts);
     inst_graph (g, nedges, vert_map, from, to, dist, wt);
 
     std::shared_ptr <Dijkstra> dijkstra =
@@ -190,7 +190,7 @@ Rcpp::List rcpp_get_paths (const Rcpp::DataFrame graph,
     size_t nverts = run_sp::make_vert_map (vert_map_in, vert_map_id,
             vert_map_n, vert_map);
 
-    std::shared_ptr<DGraph> g = std::make_shared<DGraph>(nverts);
+    std::shared_ptr<GTFSGraph> g = std::make_shared<GTFSGraph>(nverts);
     inst_graph (g, nedges, vert_map, from, to, dist, wt);
 
     std::shared_ptr<Dijkstra> dijkstra =

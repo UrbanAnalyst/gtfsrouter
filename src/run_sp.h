@@ -10,7 +10,7 @@
 
 #include "dijkstra.h"
 
-class DGraph;
+class GTFSGraph;
 class Dijkstra;
 
 constexpr float INFINITE_FLOAT =  std::numeric_limits<float>::max ();

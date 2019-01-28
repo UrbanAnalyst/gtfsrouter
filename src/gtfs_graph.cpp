@@ -1,36 +1,32 @@
-/* Directed Graphs
- * ----------------------------------------------------------------------------
- * Author:  Shane Saunders
- */
-#include "dgraph.h"
+#include "gtfs_graph.h"
 
 #include <Rcpp.h>
 //#include <cstdio>
 
-/*--- DGraph ----------------------------------------------------------------*/
+/*--- GTFSGraph ----------------------------------------------------------------*/
 
 /* --- Constructor ---
- * Creates a DGraph object containing n vertices.
+ * Creates a GTFSGraph object containing n vertices.
  */
-DGraph::DGraph(unsigned int n) : m_vertices(n)
+GTFSGraph::GTFSGraph(unsigned int n) : m_vertices(n)
 {
     initVertices();
 }
 
 /* --- Destructor ---
 */
-DGraph::~DGraph()
+GTFSGraph::~GTFSGraph()
 {
     clear();
 }
 
 // length of vertices
-unsigned int DGraph::nVertices() const
+unsigned int GTFSGraph::nVertices() const
 {
   return static_cast <unsigned int> (m_vertices.size());
 }
 
-const std::vector<DGraphVertex>& DGraph::vertices() const
+const std::vector<GTFSGraphVertex>& GTFSGraph::vertices() const
 {
   return m_vertices;
 }
@@ -38,9 +34,9 @@ const std::vector<DGraphVertex>& DGraph::vertices() const
 /* --- clear() ---
  * Clears all edges from the graph.
  */
-void DGraph::clear()
+void GTFSGraph::clear()
 {
-    DGraphEdge *edge, *nextEdge;
+    GTFSGraphEdge *edge, *nextEdge;
     for(unsigned int i = 0; i < m_vertices.size(); i++) {
         edge = m_vertices[i].outHead;
 
@@ -53,7 +49,7 @@ void DGraph::clear()
     initVertices();
 }
 
-void DGraph::initVertices()
+void GTFSGraph::initVertices()
 {
     for(unsigned int i = 0; i < m_vertices.size(); i++) {
         m_vertices[i].outHead = m_vertices[i].outTail = nullptr;
@@ -66,10 +62,10 @@ void DGraph::initVertices()
  * Adds a new edge from vertex 'source' to vertex 'target' with
  * with a corresponding distance of dist.
  */
-void DGraph::addNewEdge(unsigned int source, unsigned int target,
+void GTFSGraph::addNewEdge(unsigned int source, unsigned int target,
         double dist, double wt)
 {
-    DGraphEdge *newEdge = new DGraphEdge;
+    GTFSGraphEdge *newEdge = new GTFSGraphEdge;
     newEdge->source = source;
     newEdge->target = target;
     newEdge->dist = dist;
@@ -77,7 +73,7 @@ void DGraph::addNewEdge(unsigned int source, unsigned int target,
     newEdge->nextOut = nullptr;
     newEdge->nextIn = nullptr;
 
-    DGraphVertex *vertex = &m_vertices[source];
+    GTFSGraphVertex *vertex = &m_vertices[source];
     if(vertex->outTail) {
         vertex->outTail->nextOut = newEdge;
     }
@@ -98,11 +94,11 @@ void DGraph::addNewEdge(unsigned int source, unsigned int target,
     vertex->inSize++;
 }
 
-bool DGraph::edgeExists(unsigned int v, unsigned int w) const
+bool GTFSGraph::edgeExists(unsigned int v, unsigned int w) const
 {
     /* Scan all existing edges from v to determine whether an edge to w exists.
     */
-    const DGraphEdge *edge = m_vertices[v].outHead;
+    const GTFSGraphEdge *edge = m_vertices[v].outHead;
     while(edge) {
         if(edge->target == w) return true;
         edge = edge->nextOut;
@@ -113,7 +109,7 @@ bool DGraph::edgeExists(unsigned int v, unsigned int w) const
 /* --- reachable() ---
  * Test whether all vertices are reachable from the source vertex s.
  */
-bool DGraph::reachable (unsigned int s) const
+bool GTFSGraph::reachable (unsigned int s) const
 {
     std::vector<unsigned int> stack(m_vertices.size());
     unsigned int tos = 0;
@@ -123,7 +119,7 @@ bool DGraph::reachable (unsigned int s) const
     unsigned int vertexCount = 0;
     visited [s] = 1;
     stack [tos++] = s;
-    DGraphEdge *edge;
+    GTFSGraphEdge *edge;
     unsigned int v, w;
     while (tos) {
         v = stack [--tos];
@@ -140,25 +136,4 @@ bool DGraph::reachable (unsigned int s) const
     }
 
     return vertexCount == m_vertices.size();
-}
-
-
-/* --- print() ---
- * Prints a text representation of the graph to the standard output.
- */
-void DGraph::print() const
-{
-    const DGraphEdge *edge;
-
-    Rcpp::Rcout << "Graph (vertex: edge{dist} list) = " << std::endl;
-
-    for(unsigned int i = 0; i < m_vertices.size(); i++) {
-        Rcpp::Rcout << i << ": ";
-        edge = m_vertices[i].outHead;
-        while(edge) {
-            Rcpp::Rcout << edge->target << "{" << edge->dist << "} ";
-            edge = edge->nextOut;
-        }
-        Rcpp::Rcout << std::endl;
-    }
 }
