@@ -3,24 +3,16 @@
 #include <Rcpp.h>
 //#include <cstdio>
 
-/*--- GTFSGraph ----------------------------------------------------------------*/
-
-/* --- Constructor ---
- * Creates a GTFSGraph object containing n vertices.
- */
-GTFSGraph::GTFSGraph(unsigned int n) : m_vertices(n)
+GTFSGraph::GTFSGraph (unsigned int n) : m_vertices(n)
 {
     initVertices();
 }
 
-/* --- Destructor ---
-*/
 GTFSGraph::~GTFSGraph()
 {
     clear();
 }
 
-// length of vertices
 unsigned int GTFSGraph::nVertices() const
 {
   return static_cast <unsigned int> (m_vertices.size());
@@ -31,9 +23,6 @@ const std::vector<GTFSGraphVertex>& GTFSGraph::vertices() const
   return m_vertices;
 }
 
-/* --- clear() ---
- * Clears all edges from the graph.
- */
 void GTFSGraph::clear()
 {
     GTFSGraphEdge *edge, *nextEdge;
@@ -58,10 +47,6 @@ void GTFSGraph::initVertices()
     }
 }
 
-/* --- addNewEdge() ---
- * Adds a new edge from vertex 'source' to vertex 'target' with
- * with a corresponding distance of dist.
- */
 void GTFSGraph::addNewEdge(unsigned int source, unsigned int target,
         double dist, double wt)
 {
@@ -96,8 +81,6 @@ void GTFSGraph::addNewEdge(unsigned int source, unsigned int target,
 
 bool GTFSGraph::edgeExists(unsigned int v, unsigned int w) const
 {
-    /* Scan all existing edges from v to determine whether an edge to w exists.
-    */
     const GTFSGraphEdge *edge = m_vertices[v].outHead;
     while(edge) {
         if(edge->target == w) return true;
@@ -106,9 +89,6 @@ bool GTFSGraph::edgeExists(unsigned int v, unsigned int w) const
     return false;
 }
 
-/* --- reachable() ---
- * Test whether all vertices are reachable from the source vertex s.
- */
 bool GTFSGraph::reachable (unsigned int s) const
 {
     std::vector<unsigned int> stack(m_vertices.size());

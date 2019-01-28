@@ -31,7 +31,7 @@ class GTFSGraph {
         GTFSGraph& operator=(const GTFSGraph&) = delete;
     
         void clear();
-        void addNewEdge (unsigned int srcVertexNo, unsigned int destVertexNo,
+        void addNewEdge (unsigned int srcVertex, unsigned int destVertex,
                 double dist, double wt);
         bool edgeExists (unsigned int v, unsigned int w) const;
         bool reachable (unsigned int s) const;
