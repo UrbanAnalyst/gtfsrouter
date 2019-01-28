@@ -5,17 +5,6 @@
 
 using namespace Rcpp;
 
-// rcpp_get_component_vector
-Rcpp::List rcpp_get_component_vector(const Rcpp::DataFrame& graph);
-RcppExport SEXP _gtfsrouter_rcpp_get_component_vector(SEXP graphSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Rcpp::DataFrame& >::type graph(graphSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_get_component_vector(graph));
-    return rcpp_result_gen;
-END_RCPP
-}
 // rcpp_get_sp_dists
 Rcpp::NumericMatrix rcpp_get_sp_dists(const Rcpp::DataFrame graph, const Rcpp::DataFrame vert_map_in, Rcpp::IntegerVector fromi, Rcpp::IntegerVector toi);
 RcppExport SEXP _gtfsrouter_rcpp_get_sp_dists(SEXP graphSEXP, SEXP vert_map_inSEXP, SEXP fromiSEXP, SEXP toiSEXP) {
@@ -46,7 +35,6 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_gtfsrouter_rcpp_get_component_vector", (DL_FUNC) &_gtfsrouter_rcpp_get_component_vector, 1},
     {"_gtfsrouter_rcpp_get_sp_dists", (DL_FUNC) &_gtfsrouter_rcpp_get_sp_dists, 4},
     {"_gtfsrouter_rcpp_get_paths", (DL_FUNC) &_gtfsrouter_rcpp_get_paths, 4},
     {NULL, NULL, 0}
