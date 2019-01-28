@@ -4,4 +4,6 @@
 #' GTFS feed.
 #' @name gtfsrouter
 #' @docType package
+#' @importFrom Rcpp evalCpp
+#' @useDynLib gtfsrouter, .registration = TRUE
 NULL
