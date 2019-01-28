@@ -19,6 +19,13 @@ matrix:
           r: release
         - os: osx
           r: devel
+          before_install: ''
+          disable_homebrew: true
+    allow_failures: # temporarily enabled. TODO: disable
+        - os: osx
+          r: devel
+          before_install: ''
+          disable_homebrew: true
 
 notifications:
   email:
