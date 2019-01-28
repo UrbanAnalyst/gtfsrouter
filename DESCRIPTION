@@ -1,0 +1,17 @@
+Package: gtfsrouter
+Title: Quickest Route with GTFS Feed
+Version: 0.0.0.001
+Authors@R: c(
+    person("Mark", "Padgham",
+            email="mark.padgham@email.com",
+            role=c("aut", "cre")))
+Description: Find the quickest route between two points at a particular start
+    time with GTFS feed.
+License: GPL-3
+VignetteBuilder: knitr
+Encoding: UTF-8
+LazyData: true
+URL: https://github.com/ATFutures/gtfs-router
+BugReports: https://github.com/ATFutures/gtfs-router/issues
+RoxygenNote: 6.1.1
+Roxygen: list(markdown = TRUE)
