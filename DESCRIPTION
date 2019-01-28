@@ -8,6 +8,8 @@ Authors@R: c(
 Description: Find the quickest route between two points at a particular start
     time with GTFS feed.
 License: GPL-3
+Suggests:
+    knitr
 VignetteBuilder: knitr
 Encoding: UTF-8
 LazyData: true
