@@ -15,7 +15,8 @@ Rcpp::List rcpp_transfer_times (const Rcpp::DataFrame stop_times)
         departure_time = stop_times ["departure_time"],
         stop_id = stop_times ["stop_id"];
 
-    str_vec2_t trips_by_id = group_trips_by_id (stop_times);
+    str_vec2_t trips_by_id;
+    group_trips_by_id (stop_times, trips_by_id);
 
     transfer_time_map_t transfer_map;
 
@@ -56,7 +57,8 @@ Rcpp::List rcpp_transfer_times (const Rcpp::DataFrame stop_times)
     return res;
 }
 
-str_vec2_t group_trips_by_id (const Rcpp::DataFrame stop_times)
+void group_trips_by_id (const Rcpp::DataFrame stop_times,
+        str_vec2_t &trips_by_id)
 {
     // First get lengths of trip_id vectors
     std::vector <int> trip_id = stop_times ["trip_id"];
@@ -79,7 +81,8 @@ str_vec2_t group_trips_by_id (const Rcpp::DataFrame stop_times)
     }
 
     // Then fill the list with the actual id vectors
-    str_vec2_t res (trip_lengths.size () - 1);
+    //str_vec2_t res (trip_lengths.size () - 1);
+    trips_by_id.resize (trip_lengths.size () - 1);
     std::vector <std::string> stop_ids = stop_times ["stop_id"],
         departure_time = stop_times ["departure_time"];
     std::vector <std::string> res_i;
@@ -94,7 +97,8 @@ str_vec2_t group_trips_by_id (const Rcpp::DataFrame stop_times)
     {
         if (trip_id [i] != this_trip)
         {
-            res [trip_num++] = res_i;
+            //res [trip_num++] = res_i;
+            trips_by_id [trip_num++] = res_i;
             this_trip = trip_id [i];
             res_i.resize (trip_lengths [trip_num] * 2);
             j = 0;
@@ -102,7 +106,4 @@ str_vec2_t group_trips_by_id (const Rcpp::DataFrame stop_times)
         res_i [j] = stop_ids [i];
         res_i [trip_lengths [trip_num] + j++] = departure_time [i];
     }
-    //res.attr ("names") = trip_id_vec;
-
-    return res;
 }
