@@ -26,10 +26,12 @@ const std::vector<GTFSGraphVertex>& GTFSGraph::vertices() const
 void GTFSGraph::clear()
 {
     GTFSGraphEdge *edge, *nextEdge;
-    for(unsigned int i = 0; i < m_vertices.size(); i++) {
+    for(unsigned int i = 0; i < m_vertices.size(); i++)
+    {
         edge = m_vertices[i].outHead;
 
-        while(edge) {
+        while(edge)
+        {
             nextEdge = edge->nextOut;
             delete edge;
             edge = nextEdge;
@@ -40,7 +42,8 @@ void GTFSGraph::clear()
 
 void GTFSGraph::initVertices()
 {
-    for(unsigned int i = 0; i < m_vertices.size(); i++) {
+    for(unsigned int i = 0; i < m_vertices.size(); i++)
+    {
         m_vertices[i].outHead = m_vertices[i].outTail = nullptr;
         m_vertices[i].inHead = m_vertices[i].inTail = nullptr;
         m_vertices[i].outSize = m_vertices[i].inSize = 0;
@@ -48,7 +51,7 @@ void GTFSGraph::initVertices()
 }
 
 void GTFSGraph::addNewEdge(unsigned int source, unsigned int target,
-        double dist)
+        int dist)
 {
     GTFSGraphEdge *newEdge = new GTFSGraphEdge;
     newEdge->source = source;
@@ -58,7 +61,8 @@ void GTFSGraph::addNewEdge(unsigned int source, unsigned int target,
     newEdge->nextIn = nullptr;
 
     GTFSGraphVertex *vertex = &m_vertices[source];
-    if(vertex->outTail) {
+    if(vertex->outTail)
+    {
         vertex->outTail->nextOut = newEdge;
     }
     else {
@@ -68,10 +72,12 @@ void GTFSGraph::addNewEdge(unsigned int source, unsigned int target,
     vertex->outSize++;
 
     vertex = &m_vertices[target];
-    if(vertex->inTail) {
+    if(vertex->inTail)
+    {
         vertex->inTail->nextIn = newEdge;
     }
-    else {
+    else
+    {
         vertex->inHead = newEdge;
     }
     vertex->inTail = newEdge;

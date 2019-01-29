@@ -67,7 +67,7 @@ Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
 
     std::vector <std::string> from = graph ["from"];
     std::vector <std::string> to = graph ["to"];
-    std::vector <double> dist = graph ["d"];
+    std::vector <int> dist = graph ["d"];
 
     unsigned int nedges = static_cast <unsigned int> (graph.nrow ());
     std::map <std::string, unsigned int> vert_map;
@@ -82,8 +82,8 @@ Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
     std::shared_ptr <Dijkstra> dijkstra =
         std::make_shared <Dijkstra> (nverts, g);
 
-    std::vector<double> d (nverts);
-    std::vector<int> prev (nverts);
+    std::vector <int> d (nverts);
+    std::vector <int> prev (nverts);
 
     dijkstra->init (g); // specify the graph
 
@@ -101,7 +101,7 @@ Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
         dijkstra->run (d, prev, static_cast <unsigned int> (fromi [v]));
         for (unsigned int vi = 0; vi < nto; vi++)
         {
-            if (d [static_cast <size_t> (toi [vi])] < INFINITE_DOUBLE)
+            if (d [static_cast <size_t> (toi [vi])] < INFINITE_INT)
             {
                 dout (v, vi) = d [static_cast <size_t> (toi [vi])];
             }
@@ -139,7 +139,7 @@ Rcpp::List rcpp_get_paths (const Rcpp::DataFrame graph,
 
     std::vector <std::string> from = graph ["from"];
     std::vector <std::string> to = graph ["to"];
-    std::vector <double> dist = graph ["d"];
+    std::vector <int> dist = graph ["d"];
 
     unsigned int nedges = static_cast <unsigned int> (graph.nrow ());
     std::map <std::string, unsigned int> vert_map;
@@ -155,15 +155,15 @@ Rcpp::List rcpp_get_paths (const Rcpp::DataFrame graph,
         std::make_shared <Dijkstra> (nverts, g);
     
     Rcpp::List res (nfrom);
-    std::vector<double> d(nverts);
-    std::vector<int> prev(nverts);
+    std::vector <int> d(nverts);
+    std::vector <int> prev(nverts);
 
     dijkstra->init (g); // specify the graph
 
     for (unsigned int v = 0; v < nfrom; v++)
     {
         Rcpp::checkUserInterrupt ();
-        std::fill (d.begin(), d.end(), INFINITE_DOUBLE);
+        std::fill (d.begin(), d.end(), INFINITE_INT);
 
         dijkstra->run (d, prev, static_cast <unsigned int> (fromi [v]));
 
@@ -171,7 +171,7 @@ Rcpp::List rcpp_get_paths (const Rcpp::DataFrame graph,
         for (unsigned int vi = 0; vi < nto; vi++)
         {
             std::vector <unsigned int> onePath;
-            if (d [static_cast <size_t> (toi [vi])] < INFINITE_DOUBLE)
+            if (d [static_cast <size_t> (toi [vi])] < INFINITE_INT)
             {
                 int target = toi [vi]; // target can be -1!
                 while (target < INFINITE_INT)
