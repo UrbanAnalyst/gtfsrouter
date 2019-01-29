@@ -1,8 +1,5 @@
 #include "gtfs_graph.h"
 
-#include <Rcpp.h>
-//#include <cstdio>
-
 GTFSGraph::GTFSGraph (unsigned int n) : m_vertices(n)
 {
     initVertices();
@@ -51,12 +48,13 @@ void GTFSGraph::initVertices()
 }
 
 void GTFSGraph::addNewEdge(unsigned int source, unsigned int target,
-        int dist)
+        int dist, int transfer)
 {
     GTFSGraphEdge *newEdge = new GTFSGraphEdge;
     newEdge->source = source;
     newEdge->target = target;
     newEdge->dist = dist;
+    newEdge->transfer = transfer;
     newEdge->nextOut = nullptr;
     newEdge->nextIn = nullptr;
 

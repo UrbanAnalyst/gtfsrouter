@@ -7,7 +7,7 @@
 class GTFSGraphEdge {
     public:
         unsigned int source, target;
-        int dist;
+        int dist, transfer;
         GTFSGraphEdge *nextOut, *nextIn;
 };
 
@@ -26,13 +26,12 @@ class GTFSGraph {
         unsigned int nVertices() const;
         const std::vector <GTFSGraphVertex>& vertices() const;
         
-        // disable copy/assign as will crash (double-delete)
         GTFSGraph (const GTFSGraph&) = delete;
         GTFSGraph& operator=(const GTFSGraph&) = delete;
     
         void clear();
         void addNewEdge (unsigned int srcVertex, unsigned int destVertex,
-                int dist);
+                int dist, int transfer);
     private:
         void initVertices();
     

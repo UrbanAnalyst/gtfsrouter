@@ -8,13 +8,14 @@ void inst_graph (std::shared_ptr<GTFSGraph> g, unsigned int nedges,
         const std::map <std::string, unsigned int>& vert_map,
         const std::vector <std::string>& from,
         const std::vector <std::string>& to,
-        const std::vector <T>& dist)
+        const std::vector <T>& dist,
+        const std::vector <T>& transfer)
 {
     for (unsigned int i = 0; i < nedges; ++i)
     {
         unsigned int fromi = vert_map.at(from [i]);
         unsigned int toi = vert_map.at(to [i]);
-        g->addNewEdge (fromi, toi, dist [i]);
+        g->addNewEdge (fromi, toi, dist [i], transfer [i]);
     }
 }
 
@@ -68,6 +69,7 @@ Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
     std::vector <std::string> from = graph ["from"];
     std::vector <std::string> to = graph ["to"];
     std::vector <int> dist = graph ["d"];
+    std::vector <int> transfer = graph ["transfer"];
 
     unsigned int nedges = static_cast <unsigned int> (graph.nrow ());
     std::map <std::string, unsigned int> vert_map;
@@ -77,7 +79,7 @@ Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
             vert_map_n, vert_map);
 
     std::shared_ptr <GTFSGraph> g = std::make_shared <GTFSGraph> (nverts);
-    inst_graph (g, nedges, vert_map, from, to, dist);
+    inst_graph (g, nedges, vert_map, from, to, dist, transfer);
 
     std::shared_ptr <Dijkstra> dijkstra =
         std::make_shared <Dijkstra> (nverts, g);
@@ -96,7 +98,7 @@ Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
     for (unsigned int v = 0; v < nfrom; v++)
     {
         Rcpp::checkUserInterrupt ();
-        std::fill (d.begin(), d.end(), INFINITE_DOUBLE);
+        std::fill (d.begin(), d.end(), INFINITE_INT);
 
         dijkstra->run (d, prev, static_cast <unsigned int> (fromi [v]));
         for (unsigned int vi = 0; vi < nto; vi++)
@@ -140,6 +142,7 @@ Rcpp::List rcpp_get_paths (const Rcpp::DataFrame graph,
     std::vector <std::string> from = graph ["from"];
     std::vector <std::string> to = graph ["to"];
     std::vector <int> dist = graph ["d"];
+    std::vector <int> transfer = graph ["transfer"];
 
     unsigned int nedges = static_cast <unsigned int> (graph.nrow ());
     std::map <std::string, unsigned int> vert_map;
@@ -149,7 +152,7 @@ Rcpp::List rcpp_get_paths (const Rcpp::DataFrame graph,
             vert_map_n, vert_map);
 
     std::shared_ptr <GTFSGraph> g = std::make_shared <GTFSGraph> (nverts);
-    inst_graph (g, nedges, vert_map, from, to, dist);
+    inst_graph (g, nedges, vert_map, from, to, dist, transfer);
 
     std::shared_ptr<Dijkstra> dijkstra =
         std::make_shared <Dijkstra> (nverts, g);
