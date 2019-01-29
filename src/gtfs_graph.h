@@ -7,7 +7,7 @@
 class GTFSGraphEdge {
     public:
         unsigned int source, target;
-        double dist, wt;
+        double dist;
         GTFSGraphEdge *nextOut, *nextIn;
 };
 
@@ -32,9 +32,7 @@ class GTFSGraph {
     
         void clear();
         void addNewEdge (unsigned int srcVertex, unsigned int destVertex,
-                double dist, double wt);
-        bool edgeExists (unsigned int v, unsigned int w) const;
-        bool reachable (unsigned int s) const;
+                double dist);
     private:
         void initVertices();
     

@@ -8,14 +8,13 @@ void inst_graph (std::shared_ptr<GTFSGraph> g, unsigned int nedges,
         const std::map <std::string, unsigned int>& vert_map,
         const std::vector <std::string>& from,
         const std::vector <std::string>& to,
-        const std::vector <T>& dist,
-        const std::vector <T>& wt)
+        const std::vector <T>& dist)
 {
     for (unsigned int i = 0; i < nedges; ++i)
     {
         unsigned int fromi = vert_map.at(from [i]);
         unsigned int toi = vert_map.at(to [i]);
-        g->addNewEdge (fromi, toi, dist [i], wt [i]);
+        g->addNewEdge (fromi, toi, dist [i]);
     }
 }
 
@@ -53,42 +52,6 @@ size_t run_sp::get_fromi_toi (const Rcpp::DataFrame &vert_map_in,
     return static_cast <size_t> (fromi.size ());
 }
 
-size_t run_sp::get_fromi (const Rcpp::DataFrame &vert_map_in,
-        Rcpp::IntegerVector &fromi, Rcpp::NumericVector &id_vec)
-{
-    if (fromi [0] < 0) // use all vertices
-    {
-        id_vec = vert_map_in ["id"];
-        fromi = id_vec;
-    }
-    return static_cast <size_t> (fromi.size ());
-}
-
-// Flows from the dijkstra output are reallocated based on matching vertex
-// pairs to edge indices. Note, however, that contracted graphs frequently
-// have duplicate vertex pairs with different distances. The following
-// therefore uses two maps, one to hold the ultimate index from vertex
-// pairs, and the other to hold minimal distances. This is used in flow routines
-// only.
-void run_sp::make_vert_to_edge_maps (const std::vector <std::string> &from,
-        const std::vector <std::string> &to, const std::vector <double> &wt,
-        std::unordered_map <std::string, unsigned int> &verts_to_edge_map,
-        std::unordered_map <std::string, double> &verts_to_dist_map)
-{
-    for (unsigned int i = 0; i < from.size (); i++)
-    {
-        std::string two_verts = "f" + from [i] + "t" + to [i];
-        verts_to_edge_map.emplace (two_verts, i);
-        if (verts_to_dist_map.find (two_verts) == verts_to_dist_map.end ())
-            verts_to_dist_map.emplace (two_verts, wt [i]);
-        else if (wt [i] < verts_to_dist_map.at (two_verts))
-        {
-            verts_to_dist_map [two_verts] = wt [i];
-            verts_to_edge_map [two_verts] = i;
-        }
-    }
-}
-
 //' rcpp_get_sp_dists
 //'
 //' @noRd
@@ -105,7 +68,6 @@ Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
     std::vector <std::string> from = graph ["from"];
     std::vector <std::string> to = graph ["to"];
     std::vector <double> dist = graph ["d"];
-    std::vector <double> wt = graph ["w"];
 
     unsigned int nedges = static_cast <unsigned int> (graph.nrow ());
     std::map <std::string, unsigned int> vert_map;
@@ -114,13 +76,12 @@ Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
     size_t nverts = run_sp::make_vert_map (vert_map_in, vert_map_id,
             vert_map_n, vert_map);
 
-    std::shared_ptr<GTFSGraph> g = std::make_shared<GTFSGraph>(nverts);
-    inst_graph (g, nedges, vert_map, from, to, dist, wt);
+    std::shared_ptr <GTFSGraph> g = std::make_shared <GTFSGraph> (nverts);
+    inst_graph (g, nedges, vert_map, from, to, dist);
 
     std::shared_ptr <Dijkstra> dijkstra =
         std::make_shared <Dijkstra> (nverts, g);
 
-    std::vector<double> w (nverts);
     std::vector<double> d (nverts);
     std::vector<int> prev (nverts);
 
@@ -135,14 +96,12 @@ Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
     for (unsigned int v = 0; v < nfrom; v++)
     {
         Rcpp::checkUserInterrupt ();
-        std::fill (w.begin(), w.end(), INFINITE_DOUBLE);
         std::fill (d.begin(), d.end(), INFINITE_DOUBLE);
 
-        dijkstra->run (d, w, prev, static_cast <unsigned int> (fromi [v]));
+        dijkstra->run (d, prev, static_cast <unsigned int> (fromi [v]));
         for (unsigned int vi = 0; vi < nto; vi++)
         {
-            //if (toi [vi] < INFINITE_INT)
-            if (w [static_cast <size_t> (toi [vi])] < INFINITE_DOUBLE)
+            if (d [static_cast <size_t> (toi [vi])] < INFINITE_DOUBLE)
             {
                 dout (v, vi) = d [static_cast <size_t> (toi [vi])];
             }
@@ -181,7 +140,6 @@ Rcpp::List rcpp_get_paths (const Rcpp::DataFrame graph,
     std::vector <std::string> from = graph ["from"];
     std::vector <std::string> to = graph ["to"];
     std::vector <double> dist = graph ["d"];
-    std::vector <double> wt = graph ["w"];
 
     unsigned int nedges = static_cast <unsigned int> (graph.nrow ());
     std::map <std::string, unsigned int> vert_map;
@@ -190,14 +148,13 @@ Rcpp::List rcpp_get_paths (const Rcpp::DataFrame graph,
     size_t nverts = run_sp::make_vert_map (vert_map_in, vert_map_id,
             vert_map_n, vert_map);
 
-    std::shared_ptr<GTFSGraph> g = std::make_shared<GTFSGraph>(nverts);
-    inst_graph (g, nedges, vert_map, from, to, dist, wt);
+    std::shared_ptr <GTFSGraph> g = std::make_shared <GTFSGraph> (nverts);
+    inst_graph (g, nedges, vert_map, from, to, dist);
 
     std::shared_ptr<Dijkstra> dijkstra =
         std::make_shared <Dijkstra> (nverts, g);
     
     Rcpp::List res (nfrom);
-    std::vector<double> w(nverts);
     std::vector<double> d(nverts);
     std::vector<int> prev(nverts);
 
@@ -206,16 +163,15 @@ Rcpp::List rcpp_get_paths (const Rcpp::DataFrame graph,
     for (unsigned int v = 0; v < nfrom; v++)
     {
         Rcpp::checkUserInterrupt ();
-        std::fill (w.begin(), w.end(), INFINITE_DOUBLE);
         std::fill (d.begin(), d.end(), INFINITE_DOUBLE);
 
-        dijkstra->run (d, w, prev, static_cast <unsigned int> (fromi [v]));
+        dijkstra->run (d, prev, static_cast <unsigned int> (fromi [v]));
 
         Rcpp::List res1 (nto);
         for (unsigned int vi = 0; vi < nto; vi++)
         {
             std::vector <unsigned int> onePath;
-            if (w [static_cast <size_t> (toi [vi])] < INFINITE_DOUBLE)
+            if (d [static_cast <size_t> (toi [vi])] < INFINITE_DOUBLE)
             {
                 int target = toi [vi]; // target can be -1!
                 while (target < INFINITE_INT)

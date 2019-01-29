@@ -22,7 +22,6 @@ gtfs_route <- function (graph, from, to)
     to_index <- index_id$index - 1 # 0-based
     to_id <- index_id$id
 
-    #graph <- dodgr:::convert_graph (graph, gr_cols)
     graph <- graph [, c ("edge_id", "from_id", "to_id", "d", "d_weighted")]
     names (graph) <- c ("edge_id", "from", "to", "d", "w")
 

@@ -32,14 +32,6 @@ size_t get_fromi_toi (const Rcpp::DataFrame &vert_map_in,
         Rcpp::IntegerVector &fromi, Rcpp::IntegerVector &toi,
         Rcpp::NumericVector &id_vec);
 
-size_t get_fromi (const Rcpp::DataFrame &vert_map_in,
-        Rcpp::IntegerVector &fromi, Rcpp::NumericVector &id_vec);
-
-void make_vert_to_edge_maps (const std::vector <std::string> &from,
-        const std::vector <std::string> &to, const std::vector <double> &wt,
-        std::unordered_map <std::string, unsigned int> &verts_to_edge_map,
-        std::unordered_map <std::string, double> &verts_to_dist_map);
-
 } // end namespace run_sp
 
 Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
