@@ -19,8 +19,6 @@ void inst_graph (std::shared_ptr<GTFSGraph> g, unsigned int nedges,
     }
 }
 
-
-
 size_t run_sp::make_vert_map (const Rcpp::DataFrame &vert_map_in,
         const std::vector <std::string> &vert_map_id,
         const std::vector <unsigned int> &vert_map_n,
@@ -35,24 +33,6 @@ size_t run_sp::make_vert_map (const Rcpp::DataFrame &vert_map_in,
     return (nverts);
 }
 
-size_t run_sp::get_fromi_toi (const Rcpp::DataFrame &vert_map_in,
-        Rcpp::IntegerVector &fromi, Rcpp::IntegerVector &toi,
-        Rcpp::NumericVector &id_vec)
-{
-    if (fromi [0] < 0) // use all vertices
-    {
-        id_vec = vert_map_in ["id"];
-        fromi = id_vec;
-    }
-    if (toi [0] < 0) // use all vertices
-    {
-        if (id_vec.size () == 0)
-            id_vec = vert_map_in ["id"];
-        toi = id_vec;
-    }
-    return static_cast <size_t> (fromi.size ());
-}
-
 //' rcpp_get_sp_dists
 //'
 //' @noRd
@@ -62,8 +42,7 @@ Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
         Rcpp::IntegerVector fromi,
         Rcpp::IntegerVector toi)
 {
-    Rcpp::NumericVector id_vec;
-    size_t nfrom = run_sp::get_fromi_toi (vert_map_in, fromi, toi, id_vec);
+    size_t nfrom = static_cast <size_t> (fromi.size ());
     size_t nto = static_cast <size_t> (toi.size ());
 
     std::vector <std::string> from = graph ["from"];
@@ -136,7 +115,7 @@ Rcpp::List rcpp_get_paths (const Rcpp::DataFrame graph,
         Rcpp::IntegerVector toi)
 {
     Rcpp::NumericVector id_vec;
-    size_t nfrom = run_sp::get_fromi_toi (vert_map_in, fromi, toi, id_vec);
+    size_t nfrom = static_cast <size_t> (fromi.size ());
     size_t nto = static_cast <size_t> (toi.size ());
 
     std::vector <std::string> from = graph ["from"];

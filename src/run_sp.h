@@ -28,10 +28,6 @@ size_t make_vert_map (const Rcpp::DataFrame &vert_map_in,
         const std::vector <unsigned int> &vert_map_n,
         std::map <std::string, unsigned int> &vert_map);
 
-size_t get_fromi_toi (const Rcpp::DataFrame &vert_map_in,
-        Rcpp::IntegerVector &fromi, Rcpp::IntegerVector &toi,
-        Rcpp::NumericVector &id_vec);
-
 } // end namespace run_sp
 
 Rcpp::NumericMatrix rcpp_get_sp_dists (const Rcpp::DataFrame graph,
