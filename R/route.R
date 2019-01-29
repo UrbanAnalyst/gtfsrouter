@@ -24,7 +24,8 @@ gtfs_route <- function (graph, from, to)
 
     graph <- graph [, c ("edge_id", "from_id", "to_id", "d", "transfer")]
     names (graph) <- c ("edge_id", "from", "to", "d", "transfer")
-    graph$d <- ceiling (graph$d * 1000)
+    graph$d <- round (graph$d * 1000)
+    graph$d [graph$d < 1] <- 1
 
     d <- rcpp_get_sp_dists (graph, vert_map, from_index, to_index)
 

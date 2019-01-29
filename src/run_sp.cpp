@@ -9,7 +9,7 @@ void inst_graph (std::shared_ptr<GTFSGraph> g, unsigned int nedges,
         const std::vector <std::string>& from,
         const std::vector <std::string>& to,
         const std::vector <T>& dist,
-        const std::vector <T>& transfer)
+        const std::vector <int>& transfer)
 {
     for (unsigned int i = 0; i < nedges; ++i)
     {
@@ -137,8 +137,8 @@ Rcpp::List rcpp_get_paths (const Rcpp::DataFrame graph,
         std::make_shared <Dijkstra> (nverts, g);
     
     Rcpp::List res (nfrom);
-    std::vector <int> d(nverts);
-    std::vector <int> prev(nverts);
+    std::vector <int> d (nverts);
+    std::vector <int> prev (nverts);
 
     dijkstra->init (g); // specify the graph
 

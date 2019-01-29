@@ -7,7 +7,8 @@
 class GTFSGraphEdge {
     public:
         unsigned int source, target;
-        int dist, transfer;
+        int dist;
+        int transfer;
         GTFSGraphEdge *nextOut, *nextIn;
 };
 
