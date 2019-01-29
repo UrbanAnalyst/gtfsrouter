@@ -28,3 +28,10 @@ rcpp_get_paths <- function(graph, vert_map_in, fromi, toi) {
     .Call(`_gtfsrouter_rcpp_get_paths`, graph, vert_map_in, fromi, toi)
 }
 
+#' rcpp_get_sp_dists
+#'
+#' @noRd
+rcpp_transfer_times <- function(stop_times) {
+    .Call(`_gtfsrouter_rcpp_transfer_times`, stop_times)
+}
+

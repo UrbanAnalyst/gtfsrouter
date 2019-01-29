@@ -33,10 +33,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_transfer_times
+Rcpp::List rcpp_transfer_times(const Rcpp::DataFrame stop_times);
+RcppExport SEXP _gtfsrouter_rcpp_transfer_times(SEXP stop_timesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::DataFrame >::type stop_times(stop_timesSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_transfer_times(stop_times));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_gtfsrouter_rcpp_get_sp_dists", (DL_FUNC) &_gtfsrouter_rcpp_get_sp_dists, 4},
     {"_gtfsrouter_rcpp_get_paths", (DL_FUNC) &_gtfsrouter_rcpp_get_paths, 4},
+    {"_gtfsrouter_rcpp_transfer_times", (DL_FUNC) &_gtfsrouter_rcpp_transfer_times, 1},
     {NULL, NULL, 0}
 };
 
