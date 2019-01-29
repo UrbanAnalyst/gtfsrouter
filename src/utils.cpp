@@ -30,12 +30,13 @@ Rcpp::List rcpp_transfer_times (const Rcpp::DataFrame stop_times)
             {
                 times.resize (1);
                 times [0] = trips_by_id [i] [j + n];
+                transfer_map.emplace (trips_by_id [i] [j - 1], times);
             } else
             {
                 times = transfer_map.at (trips_by_id [i] [j - 1]);
                 times.push_back (trips_by_id [i] [j + n]);
+                transfer_map [trips_by_id [i] [j - 1] ] = times;
             }
-            transfer_map.emplace (trips_by_id [i] [j - 1], times);
         }
     }
 
@@ -47,8 +48,7 @@ Rcpp::List rcpp_transfer_times (const Rcpp::DataFrame stop_times)
     for (auto i: transfer_map)
     {
         names [count] = i.first;
-        std::vector <std::string> resi = i.second;
-        res [count] = resi;
+        res [count] = i.second;
         count++;
     }
     res.attr ("names") = names;
