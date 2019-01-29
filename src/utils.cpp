@@ -3,6 +3,9 @@
 
 //' rcpp_get_sp_dists
 //'
+//' Works with a "transfer_map" which is a map between each transfer node and
+//' all connecting nodes and departure times at those nodes.
+//'
 //' @noRd
 // [[Rcpp::export]]
 Rcpp::List rcpp_transfer_times (const Rcpp::DataFrame stop_times)
@@ -14,25 +17,42 @@ Rcpp::List rcpp_transfer_times (const Rcpp::DataFrame stop_times)
 
     str_vec2_t trips_by_id = group_trips_by_id (stop_times);
 
-    std::map <std::string, transfer_time_map_t> transfer_map;
+    transfer_time_map_t transfer_map;
 
     for (int i = 0; i < trips_by_id.size (); i++)
     {
-        transfer_time_map_t one_map;
-        //std::vector <std::string> resi = trips_by_id [i];
         int n = floor (trips_by_id [i].size () / 2);
-        for (int j = 0; j < n; j++)
+        for (int j = 1; j < n; j++)
         {
-            if (transfer_map.find (trips_by_id [i] [j]) ==
+            std::vector <std::string> times;
+            if (transfer_map.find (trips_by_id [i] [j - 1]) ==
                     transfer_map.end ())
             {
-                std::vector <std::string> times = {trips_by_id [i] [j + n]};
-                //transfer_map.emplace (trips_by_id [i], times);
+                times.resize (1);
+                times [0] = trips_by_id [i] [j + n];
+            } else
+            {
+                times = transfer_map.at (trips_by_id [i] [j - 1]);
+                times.push_back (trips_by_id [i] [j + n]);
             }
+            transfer_map.emplace (trips_by_id [i] [j - 1], times);
         }
     }
+
+    // Then convert those maps back into std::vectors to return as items of
+    // Rcpp::List
+    Rcpp::List res (transfer_map.size ());
+    std::vector <std::string> names (transfer_map.size ());
+    int count = 0;
+    for (auto i: transfer_map)
+    {
+        names [count] = i.first;
+        std::vector <std::string> resi = i.second;
+        res [count] = resi;
+        count++;
+    }
+    res.attr ("names") = names;
     
-    Rcpp::List res;
     return res;
 }
 
