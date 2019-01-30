@@ -8,12 +8,12 @@ Concept](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repo
 
 # GTFS Router
 
-Find quickest routes with [GTFS
-feed](https://developers.google.com/transit/gtfs/). Among the additional
-aims of this repo are to quantify the dynamic stability of a GTFS
-network in time and space, and to identify “weakest nodes” as those
-where a temporal disruption propogates out to have the greatest effect
-throughout the broader network.
+Routing engine for [GTFS (General Transit Feed
+Specification)](https://developers.google.com/transit/gtfs/) data. Among
+the additional aims of this repo are to quantify the dynamic stability
+of a GTFS network in time and space, and to identify “weakest nodes” as
+those where a temporal disruption propogates out to have the greatest
+effect throughout the broader network.
 
 Test data will be the VBB (Verkehrsverbund Berlin-Brandenburg) GTFS feed
 available
