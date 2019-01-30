@@ -8,7 +8,7 @@ Concept](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repo
 
 # GTFS Router
 
-Routing engine for [GTFS (General Transit Feed
+**R** package for routing with [GTFS (General Transit Feed
 Specification)](https://developers.google.com/transit/gtfs/) data. Among
 the additional aims of this repo are to quantify the dynamic stability
 of a GTFS network in time and space, and to identify “weakest nodes” as
