@@ -9,7 +9,8 @@ Concept](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repo
 # GTFS Router
 
 **R** package for routing with [GTFS (General Transit Feed
-Specification)](https://developers.google.com/transit/gtfs/) data. Among
+Specification)](https://developers.google.com/transit/gtfs/) data, using
+the [Connection Scan Algorithm](https://arxiv.org/abs/1703.05997). Among
 the additional aims of this repo are to quantify the dynamic stability
 of a GTFS network in time and space, and to identify “weakest nodes” as
 those where a temporal disruption propogates out to have the greatest
