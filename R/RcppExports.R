@@ -28,7 +28,16 @@ rcpp_get_paths <- function(graph, vert_map_in, fromi, toi) {
     .Call(`_gtfsrouter_rcpp_get_paths`, graph, vert_map_in, fromi, toi)
 }
 
-#' rcpp_get_sp_dists
+#' rcpp_time_to_seconds
+#'
+#' Vectorize the above function
+#'
+#' @noRd
+rcpp_time_to_seconds <- function(times) {
+    .Call(`_gtfsrouter_rcpp_time_to_seconds`, times)
+}
+
+#' rcpp_transfer_times
 #'
 #' Works with a "transfer_map" which is a map between each transfer node and
 #' all connecting nodes and departure times at those nodes.

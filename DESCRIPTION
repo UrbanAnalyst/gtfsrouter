@@ -9,7 +9,8 @@ Description: Find the quickest route between two points at a particular start
     time with GTFS feed.
 License: GPL-3
 Imports:
-    Rcpp (>= 0.12.6),
+    data.table,
+    Rcpp (>= 0.12.6)
 Suggests:
     knitr
 LinkingTo:
