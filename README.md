@@ -8,6 +8,8 @@ Concept](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repo
 
 # GTFS Router
 
+**NOTE: EXPERIMENTAL ONLY; NOT READY FOR USE**
+
 **R** package for routing with [GTFS (General Transit Feed
 Specification)](https://developers.google.com/transit/gtfs/) data, using
 the [Connection Scan Algorithm](https://arxiv.org/abs/1703.05997). Among
