@@ -5,10 +5,11 @@
 #' @param filename Name of GTFS archive
 #' @return List of 2 \pkg{data.table} objects, one for "stop_times" and one for
 #' "transfers"
+#' @importFrom data.table :=
 #' @export
 extract_gtfs <- function (filename = NULL)
 {
-    if (!is.null (filename))
+    if (is.null (filename))
         stop ("filename must be given")
     if (!file.exists (filename))
         stop ("filename ", filename, " does not exist")

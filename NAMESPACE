@@ -3,4 +3,5 @@
 export(extract_gtfs)
 export(gtfs_route)
 importFrom(Rcpp,evalCpp)
+importFrom(data.table,":=")
 useDynLib(gtfsrouter, .registration = TRUE)
