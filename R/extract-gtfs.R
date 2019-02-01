@@ -29,6 +29,10 @@ extract_gtfs <- function (filename = NULL)
     stop_times [, arrival_time := rcpp_time_to_seconds (arrival_time)]
     stop_times [, departure_time := rcpp_time_to_seconds (departure_time)]
 
+    stops <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
+                                              "\" \"stops.txt\""),
+                                showProgress = FALSE)
+
     transfers <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
                                                   "\" \"transfers.txt\""),
                                     showProgress = FALSE)
@@ -42,6 +46,7 @@ extract_gtfs <- function (filename = NULL)
                                                is.na (min_transfer_time), 0)]
 
     list (stop_times = stop_times,
+          stops = stops,
           transfers = transfers)
 }
 
