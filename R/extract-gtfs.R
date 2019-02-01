@@ -37,7 +37,8 @@ extract_gtfs <- function (filename = NULL)
                                                   "\" \"transfers.txt\""),
                                     showProgress = FALSE)
     transfer = stop_times [, stop_id] %in% transfers [, from_stop_id]
-    stop_times <- stop_times [, transfer := transfer] [order (departure_time)]
+    #stop_times <- stop_times [, transfer := transfer] [order (departure_time)]
+    stop_times <- stop_times [, transfer := transfer]
 
     index <- which (transfers [, from_stop_id] %in% stop_times [, stop_id] &
                     transfers [, to_stop_id] %in% stop_times [, stop_id])

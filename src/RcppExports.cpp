@@ -5,6 +5,34 @@
 
 using namespace Rcpp;
 
+// rcpp_make_timetable
+Rcpp::List rcpp_make_timetable(Rcpp::DataFrame stop_times);
+RcppExport SEXP _gtfsrouter_rcpp_make_timetable(SEXP stop_timesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type stop_times(stop_timesSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_make_timetable(stop_times));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcpp_csa
+Rcpp::List rcpp_csa(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const std::vector <std::string> stations, const std::vector <int> trips, const std::vector <int> start_stations, const std::vector <int> end_stations, const int start_time);
+RcppExport SEXP _gtfsrouter_rcpp_csa(SEXP timetableSEXP, SEXP transfersSEXP, SEXP stationsSEXP, SEXP tripsSEXP, SEXP start_stationsSEXP, SEXP end_stationsSEXP, SEXP start_timeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type timetable(timetableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type transfers(transfersSEXP);
+    Rcpp::traits::input_parameter< const std::vector <std::string> >::type stations(stationsSEXP);
+    Rcpp::traits::input_parameter< const std::vector <int> >::type trips(tripsSEXP);
+    Rcpp::traits::input_parameter< const std::vector <int> >::type start_stations(start_stationsSEXP);
+    Rcpp::traits::input_parameter< const std::vector <int> >::type end_stations(end_stationsSEXP);
+    Rcpp::traits::input_parameter< const int >::type start_time(start_timeSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_csa(timetable, transfers, stations, trips, start_stations, end_stations, start_time));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_get_sp_dists
 Rcpp::NumericMatrix rcpp_get_sp_dists(const Rcpp::DataFrame graph, const Rcpp::DataFrame vert_map_in, Rcpp::IntegerVector fromi, Rcpp::IntegerVector toi);
 RcppExport SEXP _gtfsrouter_rcpp_get_sp_dists(SEXP graphSEXP, SEXP vert_map_inSEXP, SEXP fromiSEXP, SEXP toiSEXP) {
@@ -57,6 +85,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_gtfsrouter_rcpp_make_timetable", (DL_FUNC) &_gtfsrouter_rcpp_make_timetable, 1},
+    {"_gtfsrouter_rcpp_csa", (DL_FUNC) &_gtfsrouter_rcpp_csa, 7},
     {"_gtfsrouter_rcpp_get_sp_dists", (DL_FUNC) &_gtfsrouter_rcpp_get_sp_dists, 4},
     {"_gtfsrouter_rcpp_get_paths", (DL_FUNC) &_gtfsrouter_rcpp_get_paths, 4},
     {"_gtfsrouter_rcpp_time_to_seconds", (DL_FUNC) &_gtfsrouter_rcpp_time_to_seconds, 1},
