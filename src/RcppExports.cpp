@@ -17,7 +17,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_csa
-Rcpp::List rcpp_csa(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const std::vector <std::string> stations, const std::vector <int> trips, const std::vector <int> start_stations, const std::vector <int> end_stations, const int start_time);
+int rcpp_csa(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const std::vector <std::string> stations, const std::vector <int> trips, const std::vector <int> start_stations, const std::vector <int> end_stations, const int start_time);
 RcppExport SEXP _gtfsrouter_rcpp_csa(SEXP timetableSEXP, SEXP transfersSEXP, SEXP stationsSEXP, SEXP tripsSEXP, SEXP start_stationsSEXP, SEXP end_stationsSEXP, SEXP start_timeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

@@ -100,7 +100,7 @@ Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times)
 //'
 //' @noRd
 // [[Rcpp::export]]
-Rcpp::List rcpp_csa (Rcpp::DataFrame timetable,
+int rcpp_csa (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const std::vector <std::string> stations,
         const std::vector <int> trips,
@@ -120,33 +120,88 @@ Rcpp::List rcpp_csa (Rcpp::DataFrame timetable,
 
     int n = timetable.nrow ();
 
-    // convert transfers into a map
-    std::unordered_map <std::string, int> transfer_map;
+    // convert transfers into a map from start to (end, transfer_time)
+    std::unordered_map <int, std::unordered_map <int, int> > transfer_map;
     std::vector <int> trans_from = transfers ["from_stop_id"],
         trans_to = transfers ["to_stop_id"],
         trans_time = transfers ["min_transfer_time"];
     for (int i = 0; i < transfers.nrow (); i++)
         if (trans_from [i] != trans_to [i])
         {
-            std::string trans_id = std::to_string (trans_from [i]) + "-" +
-                std::to_string (trans_to [i]);
-            transfer_map.emplace (trans_id, trans_time [i]);
+            std::unordered_map <int, int> transfer_pair;
+            if (transfer_map.find (trans_from [i]) ==
+                    transfer_map.end ())
+            {
+                transfer_pair.clear ();
+                transfer_pair.emplace (trans_to [i], trans_time [i]);
+                transfer_map.emplace (trans_from [i], transfer_pair);
+            } else
+            {
+                transfer_pair = transfer_map.at (trans_from [i]);
+                transfer_pair.emplace (trans_to [i], trans_time [i]);
+                transfer_map [trans_from [i] ] = transfer_pair;
+            }
         }
 
-    // Then the main CSA loop
-    std::vector <int> earliest_connection (INFINITE_INT);
-    std::vector <bool> is_connected (ntrips, false);
+    // set transfer times from first connection
+    std::vector <int> earliest_connection (nstations, INFINITE_INT);
     for (int i = 0; i < start_stations.size (); i++)
     {
         earliest_connection [start_stations [i] ] = start_time;
+        if (transfer_map.find (start_stations [i]) !=
+                transfer_map.end ())
+        {
+            std::unordered_map <int, int> transfer_pair =
+                transfer_map.at (start_stations [i]);
+            // Don't penalise these first footpaths:
+            for (auto t: transfer_pair)
+                earliest_connection [t.first] = start_time;
+                //earliest_connection [t.first] = start_time + t.second;
+        }
     }
 
+    // main CSA loop
+    std::vector <int> departure_station = timetable ["departure_station"],
+        arrival_station = timetable ["arrival_station"],
+        departure_time = timetable ["departure_time"],
+        arrival_time = timetable ["arrival_time"],
+        trip_id = timetable ["trip_id"];
+    int earliest = INFINITE_INT;
+    std::vector <bool> is_connected (n, false);
     for (int i = 0; i < n; i++)
     {
-        //int stn_i = stop_id_map.at (stop_id [i]);
-        //if (departure_time [i] >= earliest_connection 
+        if ((earliest_connection [departure_station [i]] <=
+                departure_time [i]) || (i > 1 && is_connected [i - 1]))
+        {
+            earliest_connection [arrival_station [i]] =
+                std::min (earliest_connection [arrival_station [i]],
+                        arrival_time [i]);
+            for (auto j: end_stations)
+                if (arrival_station [i] == j)
+                    if (earliest_connection [j] < earliest)
+                        earliest = earliest_connection [j];
+
+            if (transfer_map.find (arrival_station [i]) !=
+                    transfer_map.end ())
+            {
+                std::unordered_map <int, int> transfer_pair =
+                    transfer_map.at (arrival_station [i]);
+                for (auto t: transfer_pair)
+                {
+                    int ttime = arrival_time [i] + t.second;
+                    if (earliest_connection [t.first] > ttime)
+                    {
+                        earliest_connection [t.first] = ttime;
+                        for (auto j: end_stations)
+                            if (arrival_station [i] == j)
+                                if (earliest_connection [j] < earliest)
+                                    earliest = earliest_connection [j];
+                    }
+                }
+            }
+            is_connected [i] = true;
+        }
     }
 
-    Rcpp::List res;
-    return res;
+    return earliest;
 }

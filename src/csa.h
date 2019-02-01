@@ -8,7 +8,7 @@ constexpr int INFINITE_INT =  std::numeric_limits<int>::max ();
 
 Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times);
 
-Rcpp::List rcpp_csa (Rcpp::DataFrame timetable,
+int rcpp_csa (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const std::vector <std::string> stations,
         const std::vector <int> trips,
