@@ -118,7 +118,7 @@ int rcpp_csa (Rcpp::DataFrame timetable,
     for (int i = 0; i < ntrips; i++)
         trip_map.emplace (trips [i], i);
 
-    int n = timetable.nrow ();
+    const int n = timetable.nrow ();
 
     // convert transfers into a map from start to (end, transfer_time)
     std::unordered_map <int, std::unordered_map <int, int> > transfer_map;
@@ -161,7 +161,7 @@ int rcpp_csa (Rcpp::DataFrame timetable,
     }
 
     // main CSA loop
-    std::vector <int> departure_station = timetable ["departure_station"],
+    const std::vector <int> departure_station = timetable ["departure_station"],
         arrival_station = timetable ["arrival_station"],
         departure_time = timetable ["departure_time"],
         arrival_time = timetable ["arrival_time"],
@@ -170,16 +170,18 @@ int rcpp_csa (Rcpp::DataFrame timetable,
     std::vector <bool> is_connected (n, false);
     for (int i = 0; i < n; i++)
     {
-        if ((earliest_connection [departure_station [i]] <=
-                departure_time [i]) || (i > 1 && is_connected [i - 1]))
+        if ((earliest_connection [departure_station [i]] <= departure_time [i])
+                || (i > 1 && is_connected [i - 1]))
         {
             earliest_connection [arrival_station [i]] =
                 std::min (earliest_connection [arrival_station [i]],
                         arrival_time [i]);
             for (auto j: end_stations)
-                if (arrival_station [i] == j)
-                    if (earliest_connection [j] < earliest)
-                        earliest = earliest_connection [j];
+                if (arrival_station [i] == j &&
+                    earliest_connection [i] < earliest)
+                {
+                        earliest = earliest_connection [i];
+                }
 
             if (transfer_map.find (arrival_station [i]) !=
                     transfer_map.end ())
@@ -193,9 +195,11 @@ int rcpp_csa (Rcpp::DataFrame timetable,
                     {
                         earliest_connection [t.first] = ttime;
                         for (auto j: end_stations)
-                            if (arrival_station [i] == j)
-                                if (earliest_connection [j] < earliest)
-                                    earliest = earliest_connection [j];
+                            if (arrival_station [i] == j &&
+                                earliest_connection [i] < earliest)
+                            {
+                                    earliest = earliest_connection [i];
+                            }
                     }
                 }
             }

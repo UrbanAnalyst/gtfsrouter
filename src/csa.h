@@ -2,8 +2,6 @@
 
 #include <Rcpp.h>
 
-constexpr float INFINITE_FLOAT =  std::numeric_limits<float>::max ();
-constexpr double INFINITE_DOUBLE =  std::numeric_limits<double>::max ();
 constexpr int INFINITE_INT =  std::numeric_limits<int>::max ();
 
 Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times);
