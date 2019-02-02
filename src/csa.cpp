@@ -108,6 +108,13 @@ int rcpp_csa (Rcpp::DataFrame timetable,
         const std::vector <int> end_stations,
         const int start_time)
 {
+    // make start and end stations into std::unordered_sets
+    std::unordered_set <int> start_stations_set, end_stations_set;
+    for (auto i: start_stations)
+        start_stations_set.emplace (i);
+    for (auto i: end_stations)
+        end_stations_set.emplace (i);
+
     const int nstations = stations.size ();
     std::unordered_map <std::string, int> station_map;
     for (int i = 0; i < nstations; i++)
@@ -168,8 +175,20 @@ int rcpp_csa (Rcpp::DataFrame timetable,
         trip_id = timetable ["trip_id"];
     int earliest = INFINITE_INT;
     std::vector <bool> is_connected (n, false);
+    bool at_start = false;
     for (int i = 0; i < n; i++)
     {
+        // skip all connections until start_station is found
+        if (!at_start)
+        {
+            if (start_stations_set.find (departure_station [i]) !=
+                    start_stations_set.end () &&
+                    departure_time [i] >= start_time)
+                at_start = true;
+            else
+                continue;
+        }
+
         if ((earliest_connection [departure_station [i]] <= departure_time [i])
                 || (i > 1 && is_connected [i - 1]))
         {
