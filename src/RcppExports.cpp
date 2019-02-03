@@ -17,19 +17,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_csa
-int rcpp_csa(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const std::vector <std::string> stations, const std::vector <int> trips, const std::vector <int> start_stations, const std::vector <int> end_stations, const int start_time);
-RcppExport SEXP _gtfsrouter_rcpp_csa(SEXP timetableSEXP, SEXP transfersSEXP, SEXP stationsSEXP, SEXP tripsSEXP, SEXP start_stationsSEXP, SEXP end_stationsSEXP, SEXP start_timeSEXP) {
+int rcpp_csa(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const int nstations, const int ntrips, const std::vector <int> start_stations, const std::vector <int> end_stations, const int start_time);
+RcppExport SEXP _gtfsrouter_rcpp_csa(SEXP timetableSEXP, SEXP transfersSEXP, SEXP nstationsSEXP, SEXP ntripsSEXP, SEXP start_stationsSEXP, SEXP end_stationsSEXP, SEXP start_timeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type timetable(timetableSEXP);
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type transfers(transfersSEXP);
-    Rcpp::traits::input_parameter< const std::vector <std::string> >::type stations(stationsSEXP);
-    Rcpp::traits::input_parameter< const std::vector <int> >::type trips(tripsSEXP);
+    Rcpp::traits::input_parameter< const int >::type nstations(nstationsSEXP);
+    Rcpp::traits::input_parameter< const int >::type ntrips(ntripsSEXP);
     Rcpp::traits::input_parameter< const std::vector <int> >::type start_stations(start_stationsSEXP);
     Rcpp::traits::input_parameter< const std::vector <int> >::type end_stations(end_stationsSEXP);
     Rcpp::traits::input_parameter< const int >::type start_time(start_timeSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_csa(timetable, transfers, stations, trips, start_stations, end_stations, start_time));
+    rcpp_result_gen = Rcpp::wrap(rcpp_csa(timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time));
     return rcpp_result_gen;
 END_RCPP
 }

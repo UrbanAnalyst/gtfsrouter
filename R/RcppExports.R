@@ -12,11 +12,18 @@ rcpp_make_timetable <- function(stop_times) {
 
 #' rcpp_csa
 #'
-#' Connection Scan Algorithm for GTFS data
+#' Connection Scan Algorithm for GTFS data. The timetable has 
+#' [deparutre_station, arrival_station, departure_time, arrival_time,
+#'     trip_id],
+#' with all entries as integer values, including times in seconds after
+#' 00:00:00. The station and trip IDs can be mapped back on to actual station
+#' IDs, but do not necessarily form a single set of unit-interval values
+#' because the timetable is first cut down to only that portion after the
+#' desired start time.
 #'
 #' @noRd
-rcpp_csa <- function(timetable, transfers, stations, trips, start_stations, end_stations, start_time) {
-    .Call(`_gtfsrouter_rcpp_csa`, timetable, transfers, stations, trips, start_stations, end_stations, start_time)
+rcpp_csa <- function(timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time) {
+    .Call(`_gtfsrouter_rcpp_csa`, timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time)
 }
 
 #' rcpp_get_sp_dists

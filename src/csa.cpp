@@ -96,34 +96,31 @@ Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times)
 
 //' rcpp_csa
 //'
-//' Connection Scan Algorithm for GTFS data
+//' Connection Scan Algorithm for GTFS data. The timetable has 
+//' [deparutre_station, arrival_station, departure_time, arrival_time,
+//'     trip_id],
+//' with all entries as integer values, including times in seconds after
+//' 00:00:00. The station and trip IDs can be mapped back on to actual station
+//' IDs, but do not necessarily form a single set of unit-interval values
+//' because the timetable is first cut down to only that portion after the
+//' desired start time.
 //'
 //' @noRd
 // [[Rcpp::export]]
 int rcpp_csa (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
-        const std::vector <std::string> stations,
-        const std::vector <int> trips,
+        const int nstations, const int ntrips,
         const std::vector <int> start_stations,
         const std::vector <int> end_stations,
         const int start_time)
 {
-    // make start and end stations into std::unordered_sets
+    // make start and end stations into std::unordered_sets to allow
+    // constant-time lookup.
     std::unordered_set <int> start_stations_set, end_stations_set;
     for (auto i: start_stations)
         start_stations_set.emplace (i);
     for (auto i: end_stations)
         end_stations_set.emplace (i);
-
-    const int nstations = stations.size ();
-    std::unordered_map <std::string, int> station_map;
-    for (int i = 0; i < nstations; i++)
-        station_map.emplace (stations [i], i);
-
-    const int ntrips = trips.size ();
-    std::unordered_map <int, int> trip_map;
-    for (int i = 0; i < ntrips; i++)
-        trip_map.emplace (trips [i], i);
 
     const int n = timetable.nrow ();
 
@@ -174,7 +171,7 @@ int rcpp_csa (Rcpp::DataFrame timetable,
         arrival_time = timetable ["arrival_time"],
         trip_id = timetable ["trip_id"];
     int earliest = INFINITE_INT;
-    std::vector <bool> is_connected (n, false);
+    std::vector <bool> is_connected (ntrips, false);
     bool at_start = false;
     for (int i = 0; i < n; i++)
     {
@@ -190,7 +187,7 @@ int rcpp_csa (Rcpp::DataFrame timetable,
         }
 
         if ((earliest_connection [departure_station [i]] <= departure_time [i])
-                || (i > 1 && is_connected [i - 1]))
+                || (i > 1 && is_connected [trip_id [i - 1] ]))
         {
             earliest_connection [arrival_station [i]] =
                 std::min (earliest_connection [arrival_station [i]],
@@ -205,6 +202,7 @@ int rcpp_csa (Rcpp::DataFrame timetable,
             if (transfer_map.find (arrival_station [i]) !=
                     transfer_map.end ())
             {
+                /*
                 std::unordered_map <int, int> transfer_pair =
                     transfer_map.at (arrival_station [i]);
                 for (auto t: transfer_pair)
@@ -221,8 +219,9 @@ int rcpp_csa (Rcpp::DataFrame timetable,
                             }
                     }
                 }
+                */
             }
-            is_connected [i] = true;
+            is_connected [trip_id [i] ] = true;
         }
     }
 
