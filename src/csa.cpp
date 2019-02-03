@@ -187,7 +187,7 @@ int rcpp_csa (Rcpp::DataFrame timetable,
         }
 
         if ((earliest_connection [departure_station [i]] <= departure_time [i])
-                || (i > 1 && is_connected [trip_id [i - 1] ]))
+                || is_connected [trip_id [i] ])
         {
             earliest_connection [arrival_station [i]] =
                 std::min (earliest_connection [arrival_station [i]],
@@ -199,13 +199,9 @@ int rcpp_csa (Rcpp::DataFrame timetable,
                         earliest = earliest_connection [i];
                 }
 
-            if (transfer_map.find (arrival_station [i]) !=
-                    transfer_map.end ())
+            if (transfer_map.find (arrival_station [i]) != transfer_map.end ())
             {
-                /*
-                std::unordered_map <int, int> transfer_pair =
-                    transfer_map.at (arrival_station [i]);
-                for (auto t: transfer_pair)
+                for (auto t: transfer_map.at (arrival_station [i]))
                 {
                     int ttime = arrival_time [i] + t.second;
                     if (earliest_connection [t.first] > ttime)
@@ -219,7 +215,6 @@ int rcpp_csa (Rcpp::DataFrame timetable,
                             }
                     }
                 }
-                */
             }
             is_connected [trip_id [i] ] = true;
         }
