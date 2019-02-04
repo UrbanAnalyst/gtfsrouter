@@ -4,21 +4,27 @@
 \alias{gtfs_route}
 \title{gtfs_route}
 \usage{
-gtfs_route(graph, from, to)
+gtfs_route(gtfs, from, to, start_time, quiet = TRUE)
 }
 \arguments{
-\item{graph}{\code{data.frame} or equivalent object representing the network
-graph (see Details)}
+\item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
+efficient queries, pre-processed with \link{gtfs_timetable}.}
 
-\item{from}{Vector or matrix of points \strong{from} which route distances are to
-be calculated (see Details)}
+\item{from}{Name of start station}
 
-\item{to}{Vector or matrix of points \strong{to} which route distances are to be
-calculated (see Details)}
+\item{to}{Name of end station}
+
+\item{start_time}{Desired departure time at \code{from} station, either in seconds
+after midnight, a vector of two or three integers (hours, minutes) or (hours,
+minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
+\pkg{lubridate}.}
+
+\item{quiet}{If \code{FALSE}, dump progress notifications to screen.}
 }
 \value{
 square matrix of distances between nodes
 }
 \description{
-Calculate matrix of pair-wise distances between points.
+Calculate single route between a start and end station departing at or after
+a specified time.
 }

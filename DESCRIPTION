@@ -10,6 +10,7 @@ Description: Find the quickest route between two points at a particular start
 License: GPL-3
 Imports:
     data.table,
+    methods,
     Rcpp (>= 0.12.6)
 Suggests:
     knitr

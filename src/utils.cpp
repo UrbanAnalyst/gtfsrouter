@@ -1,34 +1,5 @@
 #include "utils.h"
 
-int convert_time_to_seconds (std::string hms)
-{
-    const std::string delim = ":";
-    unsigned int ipos = static_cast <unsigned int> (hms.find (delim.c_str ()));
-    int h = atoi (hms.substr (0, ipos).c_str ());
-    hms = hms.substr (ipos + 1, hms.length () - ipos - 1);
-    ipos = static_cast <unsigned int> (hms.find (delim.c_str ()));
-    int m = atoi (hms.substr (0, ipos).c_str ());
-    int s = atoi (hms.substr (ipos + 1, hms.length ()).c_str ());
-
-    return 3600 * h + 60 * m + s;
-}
-
-//' rcpp_time_to_seconds
-//'
-//' Vectorize the above function
-//'
-//' @noRd
-// [[Rcpp::export]]
-Rcpp::IntegerVector rcpp_time_to_seconds (std::vector <std::string> times)
-{
-    Rcpp::IntegerVector res (times.size ());
-    for (int i = 0; i < times.size (); i++)
-    {
-        res (i) = convert_time_to_seconds (times [i]);
-    }
-    return res;
-}
-
 //' rcpp_transfer_times
 //'
 //' Works with a "transfer_map" which is a map between each transfer node and

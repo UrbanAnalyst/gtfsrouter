@@ -5,6 +5,28 @@
 
 using namespace Rcpp;
 
+// rcpp_convert_time
+int rcpp_convert_time(const std::string& hms);
+RcppExport SEXP _gtfsrouter_rcpp_convert_time(SEXP hmsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const std::string& >::type hms(hmsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_convert_time(hms));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcpp_time_to_seconds
+Rcpp::IntegerVector rcpp_time_to_seconds(std::vector <std::string> times);
+RcppExport SEXP _gtfsrouter_rcpp_time_to_seconds(SEXP timesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector <std::string> >::type times(timesSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_time_to_seconds(times));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_make_timetable
 Rcpp::List rcpp_make_timetable(Rcpp::DataFrame stop_times);
 RcppExport SEXP _gtfsrouter_rcpp_make_timetable(SEXP stop_timesSEXP) {
@@ -61,17 +83,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcpp_time_to_seconds
-Rcpp::IntegerVector rcpp_time_to_seconds(std::vector <std::string> times);
-RcppExport SEXP _gtfsrouter_rcpp_time_to_seconds(SEXP timesSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector <std::string> >::type times(timesSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_time_to_seconds(times));
-    return rcpp_result_gen;
-END_RCPP
-}
 // rcpp_transfer_times
 Rcpp::List rcpp_transfer_times(const Rcpp::DataFrame stop_times);
 RcppExport SEXP _gtfsrouter_rcpp_transfer_times(SEXP stop_timesSEXP) {
@@ -85,11 +96,12 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_gtfsrouter_rcpp_convert_time", (DL_FUNC) &_gtfsrouter_rcpp_convert_time, 1},
+    {"_gtfsrouter_rcpp_time_to_seconds", (DL_FUNC) &_gtfsrouter_rcpp_time_to_seconds, 1},
     {"_gtfsrouter_rcpp_make_timetable", (DL_FUNC) &_gtfsrouter_rcpp_make_timetable, 1},
     {"_gtfsrouter_rcpp_csa", (DL_FUNC) &_gtfsrouter_rcpp_csa, 7},
     {"_gtfsrouter_rcpp_get_sp_dists", (DL_FUNC) &_gtfsrouter_rcpp_get_sp_dists, 4},
     {"_gtfsrouter_rcpp_get_paths", (DL_FUNC) &_gtfsrouter_rcpp_get_paths, 4},
-    {"_gtfsrouter_rcpp_time_to_seconds", (DL_FUNC) &_gtfsrouter_rcpp_time_to_seconds, 1},
     {"_gtfsrouter_rcpp_transfer_times", (DL_FUNC) &_gtfsrouter_rcpp_transfer_times, 1},
     {NULL, NULL, 0}
 };

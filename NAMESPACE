@@ -2,6 +2,7 @@
 
 export(extract_gtfs)
 export(gtfs_route)
+export(gtfs_timetable)
 importFrom(Rcpp,evalCpp)
 importFrom(data.table,":=")
 useDynLib(gtfsrouter, .registration = TRUE)
