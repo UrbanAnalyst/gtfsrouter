@@ -176,14 +176,17 @@ int rcpp_csa (Rcpp::DataFrame timetable,
         departure_time = timetable ["departure_time"],
         arrival_time = timetable ["arrival_time"],
         trip_id = timetable ["trip_id"];
+
     int earliest = INFINITE_INT;
     std::vector <bool> is_connected (ntrips_st, false);
     bool at_start = false;
+
+    // trip connections:
+    std::vector <int> prev_stn (nstations_st, -1);
+    int end_station = -1;
+
     for (size_t i = 0; i < n; i++)
     {
-        size_t asi = static_cast <size_t> (arrival_station [i]),
-               dsi = static_cast <size_t> (departure_station [i]),
-               tidi = static_cast <size_t> (trip_id [i]);
         // skip all connections until start_station is found
         if (!at_start)
         {
@@ -195,6 +198,9 @@ int rcpp_csa (Rcpp::DataFrame timetable,
                 continue;
         }
         // add all departures from start_stations_set:
+        size_t asi = static_cast <size_t> (arrival_station [i]),
+               dsi = static_cast <size_t> (departure_station [i]),
+               tidi = static_cast <size_t> (trip_id [i]);
         if (start_stations_set.find (departure_station [i]) !=
                 start_stations_set.end () &&
                 departure_time [i] >= start_time)
@@ -208,14 +214,18 @@ int rcpp_csa (Rcpp::DataFrame timetable,
         if ((earliest_connection [dsi] <= departure_time [i])
                 || is_connected [tidi])
         {
-            earliest_connection [asi] =
-                std::min (earliest_connection [asi], arrival_time [i]);
+            if (arrival_time [i] < earliest_connection [asi])
+            {
+                earliest_connection [asi] = arrival_time [i];
+                prev_stn [static_cast <size_t> (arrival_station [i])] =
+                    departure_station [i];
+            }
             if (end_stations_set.find (arrival_station [i]) !=
                     end_stations_set.end ())
             {
-                earliest_connection [asi] =
-                    std::min (earliest_connection [asi], arrival_time [i]);
-                earliest = std::min (earliest, earliest_connection [asi]);
+                if (arrival_time [i] < earliest)
+                    earliest = arrival_time [i];
+                end_station = arrival_station [i];
                 end_stations_set.erase (arrival_station [i]);
             }
 
@@ -224,14 +234,20 @@ int rcpp_csa (Rcpp::DataFrame timetable,
                 for (auto t: transfer_map.at (arrival_station [i]))
                 {
                     int ttime = arrival_time [i] + t.second;
-                    size_t trans_dest = static_cast <size_t> (t.first);
-                    if (earliest_connection [trans_dest] > ttime)
+                    int trans_dest = t.first;
+                    size_t trans_dest_st = static_cast <size_t> (trans_dest);
+                    if (ttime < earliest_connection [trans_dest_st])
                     {
-                        earliest_connection [trans_dest] = ttime;
+                        earliest_connection [trans_dest_st] = ttime;
+                        prev_stn [trans_dest_st] = arrival_station [i];
                         if (end_stations_set.find (trans_dest) !=
                                 end_stations_set.end ())
                         {
-                            earliest = std::min (earliest, ttime);
+                            if (ttime < earliest)
+                            {
+                                earliest = ttime;
+                                end_station = trans_dest;
+                            }
                             end_stations_set.erase (trans_dest);
                         }
                     }
@@ -241,6 +257,13 @@ int rcpp_csa (Rcpp::DataFrame timetable,
         }
         if (end_stations_set.size () == 0)
             break;
+    }
+    Rcpp::Rcout << "end station = " << end_station << std::endl;
+    int i = end_station;
+    while (i >= 0)
+    {
+        Rcpp::Rcout << i << std::endl;
+        i = prev_stn [static_cast <size_t> (i)];
     }
 
     return earliest;
