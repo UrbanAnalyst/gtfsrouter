@@ -185,19 +185,33 @@ int rcpp_csa (Rcpp::DataFrame timetable,
             else
                 continue;
         }
+        // add all departures from start_stations_set:
+        if (start_stations_set.find (departure_station [i]) !=
+                start_stations_set.end () &&
+                departure_time [i] >= start_time)
+        {
+            is_connected [trip_id [i] ] = true;
+            earliest_connection [arrival_station [i]] =
+                std::min (earliest_connection [arrival_station [i]],
+                        arrival_time [i]);
+        }
 
+        // main connection scan:
         if ((earliest_connection [departure_station [i]] <= departure_time [i])
                 || is_connected [trip_id [i] ])
         {
             earliest_connection [arrival_station [i]] =
                 std::min (earliest_connection [arrival_station [i]],
                         arrival_time [i]);
-            for (auto j: end_stations)
-                if (arrival_station [i] == j &&
-                    earliest_connection [i] < earliest)
-                {
-                        earliest = earliest_connection [i];
-                }
+            if (end_stations_set.find (arrival_station [i]) !=
+                    end_stations_set.end ())
+            {
+                earliest_connection [arrival_station [i]] =
+                    std::min (earliest_connection [arrival_station [i]],
+                            arrival_time [i]);
+                earliest = std::min (earliest,
+                        earliest_connection [arrival_station [i]]);
+            }
 
             if (transfer_map.find (arrival_station [i]) != transfer_map.end ())
             {
@@ -207,12 +221,15 @@ int rcpp_csa (Rcpp::DataFrame timetable,
                     if (earliest_connection [t.first] > ttime)
                     {
                         earliest_connection [t.first] = ttime;
-                        for (auto j: end_stations)
-                            if (arrival_station [i] == j &&
-                                earliest_connection [i] < earliest)
-                            {
-                                    earliest = earliest_connection [i];
-                            }
+                        if (end_stations_set.find (arrival_station [i]) !=
+                                end_stations_set.end ())
+                        {
+                            earliest_connection [t.first] =
+                                std::min (earliest_connection [t.first],
+                                        arrival_time [i]);
+                            earliest = std::min (earliest,
+                                    earliest_connection [t.first]);
+                        }
                     }
                 }
             }
