@@ -178,7 +178,7 @@ int rcpp_csa (Rcpp::DataFrame timetable,
         trip_id = timetable ["trip_id"];
     int earliest = INFINITE_INT;
     std::vector <bool> is_connected (ntrips_st, false);
-    bool at_start = false, stop_flag = false;;
+    bool at_start = false;
     for (size_t i = 0; i < n; i++)
     {
         size_t asi = static_cast <size_t> (arrival_station [i]),
@@ -216,7 +216,7 @@ int rcpp_csa (Rcpp::DataFrame timetable,
                 earliest_connection [asi] =
                     std::min (earliest_connection [asi], arrival_time [i]);
                 earliest = std::min (earliest, earliest_connection [asi]);
-                stop_flag = true;
+                end_stations_set.erase (arrival_station [i]);
             }
 
             if (transfer_map.find (arrival_station [i]) != transfer_map.end ())
@@ -232,14 +232,14 @@ int rcpp_csa (Rcpp::DataFrame timetable,
                                 end_stations_set.end ())
                         {
                             earliest = std::min (earliest, ttime);
-                            stop_flag = true;
+                            end_stations_set.erase (trans_dest);
                         }
                     }
                 }
             }
             is_connected [tidi] = true;
         }
-        if (stop_flag)
+        if (end_stations_set.size () == 0)
             break;
     }
 
