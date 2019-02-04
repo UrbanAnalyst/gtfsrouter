@@ -137,7 +137,7 @@ int rcpp_csa (Rcpp::DataFrame timetable,
     for (size_t i = 0; i < static_cast <size_t> (transfers.nrow ()); i++)
         if (trans_from [i] != trans_to [i])
         {
-            std::unordered_map <int, int> transfer_pair;
+            std::unordered_map <int, int> transfer_pair; // station, time
             if (transfer_map.find (trans_from [i]) ==
                     transfer_map.end ())
             {
@@ -178,7 +178,7 @@ int rcpp_csa (Rcpp::DataFrame timetable,
         trip_id = timetable ["trip_id"];
     int earliest = INFINITE_INT;
     std::vector <bool> is_connected (ntrips_st, false);
-    bool at_start = false;
+    bool at_start = false, stop_flag = false;;
     for (size_t i = 0; i < n; i++)
     {
         size_t asi = static_cast <size_t> (arrival_station [i]),
@@ -216,6 +216,7 @@ int rcpp_csa (Rcpp::DataFrame timetable,
                 earliest_connection [asi] =
                     std::min (earliest_connection [asi], arrival_time [i]);
                 earliest = std::min (earliest, earliest_connection [asi]);
+                stop_flag = true;
             }
 
             if (transfer_map.find (arrival_station [i]) != transfer_map.end ())
@@ -223,24 +224,23 @@ int rcpp_csa (Rcpp::DataFrame timetable,
                 for (auto t: transfer_map.at (arrival_station [i]))
                 {
                     int ttime = arrival_time [i] + t.second;
-                    size_t ti_t = static_cast <size_t> (t.first);
-                    if (earliest_connection [ti_t] > ttime)
+                    size_t trans_dest = static_cast <size_t> (t.first);
+                    if (earliest_connection [trans_dest] > ttime)
                     {
-                        earliest_connection [ti_t] = ttime;
-                        if (end_stations_set.find (arrival_station [i]) !=
+                        earliest_connection [trans_dest] = ttime;
+                        if (end_stations_set.find (trans_dest) !=
                                 end_stations_set.end ())
                         {
-                            earliest_connection [ti_t] =
-                                std::min (earliest_connection [ti_t],
-                                        arrival_time [i]);
-                            earliest = std::min (earliest,
-                                    earliest_connection [ti_t]);
+                            earliest = std::min (earliest, ttime);
+                            stop_flag = true;
                         }
                     }
                 }
             }
             is_connected [tidi] = true;
         }
+        if (stop_flag)
+            break;
     }
 
     return earliest;
