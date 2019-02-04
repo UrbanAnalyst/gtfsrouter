@@ -10,6 +10,7 @@
 
 // ----------  Functions to convert start time:  ----------
 bool time_is_standard (const std::string &hms);
+bool time_is_lubridate (const std::string &hms);
 int convert_time_std (std::string hms);
 int convert_time_lubridate (std::string hms);
 int rcpp_convert_time (const std::string &hms);

@@ -105,7 +105,7 @@ int convert_time_to_seconds (std::string hms)
 Rcpp::IntegerVector rcpp_time_to_seconds (std::vector <std::string> times)
 {
     Rcpp::IntegerVector res (times.size ());
-    for (int i = 0; i < times.size (); i++)
+    for (size_t i = 0; i < times.size (); i++)
     {
         res (i) = convert_time_to_seconds (times [i]);
     }
