@@ -181,29 +181,22 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
 
     int earliest = INFINITE_INT;
     std::vector <bool> is_connected (ntrips, false);
-    bool at_start = false;
 
     // trip connections:
     size_t end_station = INFINITE_INT;
     for (size_t i = 0; i < n; i++)
     {
-        // skip all connections prior to start_time
-        if (!at_start)
-        {
-            if (departure_time [i] < start_time)
-                continue;
-            else
-                at_start = true;
-        }
+        if (departure_time [i] < start_time)
+            continue;
 
         // add all departures from start_stations_set:
         if (start_stations_set.find (departure_station [i]) !=
                 start_stations_set.end () &&
-                departure_time [i] >= start_time &&
                 arrival_time [i] < earliest_connection [arrival_station [i] ])
         {
             is_connected [trip_id [i] ] = true;
             earliest_connection [arrival_station [i] ] = arrival_time [i];
+            current_trip [departure_station [i] ] = trip_id [i];
             current_trip [arrival_station [i] ] = trip_id [i];
             prev_stn [arrival_station [i] ] = departure_station [i];
             prev_time [arrival_station [i] ] = departure_time [i];
@@ -219,13 +212,16 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
                 prev_stn [arrival_station [i] ] = departure_station [i];
                 prev_time [arrival_station [i] ] = departure_time [i];
                 current_trip [arrival_station [i] ] = trip_id [i];
+                current_trip [departure_station [i] ] = trip_id [i];
             }
             if (end_stations_set.find (arrival_station [i]) !=
                     end_stations_set.end ())
             {
                 if (arrival_time [i] < earliest)
+                {
                     earliest = arrival_time [i];
-                end_station = arrival_station [i];
+                    end_station = arrival_station [i];
+                }
                 end_stations_set.erase (arrival_station [i]);
             }
 
@@ -233,8 +229,8 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
             {
                 for (auto t: transfer_map.at (arrival_station [i]))
                 {
-                    int ttime = arrival_time [i] + t.second;
                     size_t trans_dest = t.first;
+                    int ttime = arrival_time [i] + t.second;
                     if (ttime < earliest_connection [trans_dest])
                     {
                         earliest_connection [trans_dest] = ttime;
