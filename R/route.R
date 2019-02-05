@@ -77,6 +77,9 @@ gtfs_route <- function (gtfs, from, to, start_time, quiet = TRUE)
         gtfs <- gtfs_timetable (gtfs)
     }
 
+    # no visible binding note:
+    departure_time <- NULL
+
     start_time <- convert_time (start_time)
     gtfs$timetable <- gtfs$timetable [departure_time >= start_time, ]
 
@@ -122,4 +125,62 @@ station_name_to_id <- function (stn_name, gtfs)
 
     ret <- gtfs$stops [grep (stn_name, gtfs$stops [, stop_name]), ] [, stop_id]
     ret [which (ret %in% gtfs$stop_id [, stop_id])]
+}
+
+get_route_name <- function (gtfs, trip_id = NULL)
+{
+    # no visible binding notes:
+    route_id <- route_short_name <- NULL
+
+    index <- match (trip_id, gtfs$trip_table [, trip_id])
+    route <- gtfs$trip_table [index, ] [, route_id]
+    gtfs$routes [route_id == route, ] [, route_short_name]
+}
+
+# Re-map the result of gtfs_route onto trip details (names of routes & stations,
+# plus departure times). This is called seperately for each distinct route in
+# the result.
+get_one_trip <- function (gtfs, y, trip_num = 1)
+{
+    # no visible binding notes:
+    trip_id <- stop_id <- stop_name <- departure_time <- arrival_time <- NULL
+
+    trips <- gtfs$trips [unique (y$trip)]
+    trip <- trips [trip_num, trips]
+
+    route <- get_route_name (gtfs, trip_id = trip)
+
+    trip_stops <- gtfs$stop_times [trip_id == trip, ]
+    trip_stop_num <- match (trip_stops [, stop_id], gtfs$stop_ids [, stop_id])
+    trip_stop_num <- trip_stop_num [which (trip_stop_num %in% y$station)]
+    trip_stop_id <- gtfs$stop_ids [trip_stop_num, stop_id]
+    trip_stop_names <- gtfs$stops [match (trip_stop_id, gtfs$stops [, stop_id]),
+                                   stop_name]
+    trip_stops <- trip_stops [which (trip_stops [, stop_id %in% trip_stop_id]), ]
+    trip_stop_departure <- format_time (trip_stops [, departure_time])
+    trip_stop_arrival <- format_time (trip_stops [, arrival_time])
+    data.frame (route = route,
+                stop = trip_stop_names,
+                departure_time = trip_stop_departure,
+                arrival_time = trip_stop_arrival,
+                stringsAsFactors = FALSE)
+}
+
+# convert timevec in seconds into hh:mm:ss - functionality of hms::hms without
+# dependency
+format_time <- function (timevec)
+{
+    hh <- floor (timevec / 3600)
+    timevec <- timevec - hh * 3600
+    mm <- floor (timevec / 60)
+    ss <- round (timevec - mm * 60)
+
+    paste0 (zero_pad (hh), ":", zero_pad (mm), ":", zero_pad (ss))
+}
+
+zero_pad <- function (x)
+{
+    x <- paste0 (x)
+    x [nchar (x) < 2] <- paste0 (0, x [nchar (x) < 2])
+    return (x)
 }

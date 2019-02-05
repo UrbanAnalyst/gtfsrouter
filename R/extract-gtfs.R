@@ -46,8 +46,19 @@ extract_gtfs <- function (filename = NULL)
     transfers [, min_transfer_time := replace (min_transfer_time,
                                                is.na (min_transfer_time), 0)]
 
+    # trips and routes tables used just to map trips onto route IDs at final
+    # step of route_gtfs().
+    trip_table <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
+                                                   "\" \"trips.txt\""),
+                                     showProgress = FALSE)
+    routes <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
+                                               "\" \"routes.txt\""),
+                                 showProgress = FALSE)
+
     list (stop_times = stop_times,
           stops = stops,
-          transfers = transfers)
+          transfers = transfers,
+          trip_table = trip_table,
+          routes = routes)
 }
 
