@@ -19,18 +19,23 @@ gtfs_timetable <- function (gtfs)
     from_stop_id <- to_stop_id <- stop_id <- NULL
 
     tt <- rcpp_make_timetable (gtfs$stop_times)
+    # tt$timetable has [departure/arrival_station, departure/arrival_time,
+    # trip_id], where the station and trip values are 0-based indices into the
+    # vectors of tt$stop_ids and tt$trips.
 
-    # translate transfer stations into indices
-    index <- match (gtfs$transfers [, from_stop_id], tt$stations)
+    # translate transfer stations into indices, converting back to 0-based to
+    # match the indices of tt$timetable
+    index <- match (gtfs$transfers [, from_stop_id], tt$stations) - 1
     gtfs$transfers <- gtfs$transfers [, from_stop_id := index]
-    index <- match (gtfs$transfers [, to_stop_id], tt$stations)
+    index <- match (gtfs$transfers [, to_stop_id], tt$stations) - 1
     gtfs$transfers <- gtfs$transfers [, to_stop_id := index]
 
     # Then convert all output to data.table just for print formatting:
     gtfs$timetable <- data.table::data.table (tt$timetable)
     gtfs$stations <- data.table::data.table (stations = tt$stations)
     gtfs$trips <- data.table::data.table (trips = tt$trips)
-    # add a couple of extra pre-processing items:
+    # add a couple of extra pre-processing items, with 1 added to numbers here
+    # because indices are 0-based:
     gtfs$stop_ids <- data.table::data.table (stop_id =
                             unique (gtfs$stop_times [, stop_id]))
     gtfs$n_stations <- max (unique (c (gtfs$timetable$departure_station,
@@ -62,7 +67,6 @@ gtfs_timetable <- function (gtfs)
 #' @export 
 gtfs_route <- function (gtfs, from, to, start_time, quiet = TRUE)
 {
-    start_time <- convert_time (start_time)
     if (!"timetable" %in% names (gtfs))
     {
         if (!quiet)
@@ -73,14 +77,14 @@ gtfs_route <- function (gtfs, from, to, start_time, quiet = TRUE)
         gtfs <- gtfs_timetable (gtfs)
     }
 
+    start_time <- convert_time (start_time)
+    gtfs$timetable <- gtfs$timetable [departure_time >= start_time, ]
+
     stations <- NULL # no visible binding note
     start_stns <- match (station_name_to_id (from, gtfs),
-                         gtfs$stations [, stations])
+                         gtfs$stations [, stations]) - 1
     end_stns <- match (station_name_to_id (to, gtfs),
-                       gtfs$stations [, stations])
-
-    start_time <- convert_time (start_time)
-
+                       gtfs$stations [, stations]) - 1
 
     rcpp_csa (gtfs$timetable, gtfs$transfers, gtfs$n_stations, gtfs$n_trips,
               start_stns, end_stns, start_time)

@@ -2,7 +2,12 @@
 
 //' rcpp_make_timetable
 //'
-//' Make timetable from GTFS stop_times
+//' Make timetable from GTFS stop_times. All stops are converted to 0-indexed
+//' integer indices into the list of stops, and stop times to seconds after
+//' midnight. Similarly, trip codes are converted into 0-indexed integer values
+//' into a list of trips. The corresponding vectors of stop_ids and trip_ids are
+//' also returned to subsequent re-map the integer values back on to their
+//' original IDs.
 //'
 //' @noRd
 // [[Rcpp::export]]
@@ -105,7 +110,10 @@ Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times)
 //' IDs, but do not necessarily form a single set of unit-interval values
 //' because the timetable is first cut down to only that portion after the
 //' desired start time. These are nevertheless used as direct array indices
-//' throughout, so are all size_t objects rather than int.
+//' throughout, so are all size_t objects rather than int. All indices in the
+//' timetable and transfers DataFrames, as well as start_/end_stations, are
+//' 1-based, but they are still used directly which just means that the first
+//' entries (that is, entry [0]) of station and trip vectors are never used.
 //'
 //' @noRd
 // [[Rcpp::export]]
@@ -118,7 +126,8 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         const int start_time)
 {
     // make start and end stations into std::unordered_sets to allow
-    // constant-time lookup.
+    // constant-time lookup. stations at this point are 1-based R indices, but
+    // that doesn't matter here.
     std::unordered_set <size_t> start_stations_set, end_stations_set;
     for (auto i: start_stations)
         start_stations_set.emplace (i);
@@ -127,7 +136,8 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
 
     const size_t n = static_cast <size_t> (timetable.nrow ());
 
-    // convert transfers into a map from start to (end, transfer_time)
+    // convert transfers into a map from start to (end, transfer_time). Transfer
+    // indices are also 1-based here.
     std::unordered_map <size_t, std::unordered_map <size_t, int> > transfer_map;
     std::vector <size_t> trans_from = transfers ["from_stop_id"],
         trans_to = transfers ["to_stop_id"];
@@ -182,6 +192,17 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
     int earliest = INFINITE_INT;
     std::vector <bool> is_connected (ntrips, false);
 
+    std::unordered_set <size_t> test_set;
+    test_set.insert (19653);
+    test_set.insert (24757);
+    test_set.insert (24764);
+    test_set.insert (24763);
+    test_set.insert (25570);
+    test_set.insert (25569);
+    test_set.insert (25568);
+    test_set.insert (25923);
+    test_set.insert (25922);
+
     // trip connections:
     size_t end_station = INFINITE_INT;
     for (size_t i = 0; i < n; i++)
@@ -208,6 +229,17 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         {
             if (arrival_time [i] < earliest_connection [arrival_station [i] ])
             {
+                if (test_set.find (arrival_station [i]) != test_set.end () ||
+                        test_set.find (departure_station [i]) != test_set.end ())
+                {
+                    Rcpp::Rcout << "direct: [" << departure_station [i] <<
+                        " -> " << arrival_station [i] << " at ";
+                    print_hms (departure_time [i]);
+                    Rcpp::Rcout << " -> ";
+                    print_hms (arrival_time [i]);
+                    Rcpp::Rcout << "]" << std::endl;
+                }
+
                 earliest_connection [arrival_station [i] ] = arrival_time [i];
                 prev_stn [arrival_station [i] ] = departure_station [i];
                 prev_time [arrival_station [i] ] = departure_time [i];
@@ -236,6 +268,18 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
                         earliest_connection [trans_dest] = ttime;
                         prev_stn [trans_dest] = arrival_station [i];
                         prev_time [trans_dest] = arrival_time [i];
+
+                        if (test_set.find (trans_dest) != test_set.end () ||
+                                test_set.find (arrival_station [i]) != test_set.end ())
+                        {
+                            Rcpp::Rcout << "transfer: [" << arrival_station [i] <<
+                                " -> " << trans_dest << " at ";
+                            print_hms (arrival_time [i]);
+                            Rcpp::Rcout << " -> ";
+                            print_hms (ttime);
+                            Rcpp::Rcout << "]" << std::endl;
+                        }
+
                         if (end_stations_set.find (trans_dest) !=
                                 end_stations_set.end ())
                         {
@@ -269,16 +313,16 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
     std::vector <int> time_out (count);
     i = end_station;
     time_out [0] = earliest;
-    trip_out [0] = current_trip [i];
-    end_station_out [0] = i;
+    trip_out [0] = current_trip [i] + 1; // convert back to 1-based indices
+    end_station_out [0] = i + 1; // convert back to 1-based indices
     count = 1;
     while (i < INFINITE_INT)
     {
         time_out [count] = prev_time [i];
         i = prev_stn [static_cast <size_t> (i)];
-        end_station_out [count] = i;
+        end_station_out [count] = i + 1;
         if (i < INFINITE_INT)
-            trip_out [count] = current_trip [i];
+            trip_out [count] = current_trip [i] + 1;
         count++;
     }
     // The last entry of these is all INF, so must be removed.
@@ -293,4 +337,13 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
             Rcpp::_["stringsAsFactors"] = false);
 
     return res;
+}
+
+void print_hms (int t)
+{
+    int hh = floor (t / 3600);
+    t = t - hh * 3600;
+    int mm = floor (t / 60);
+    t = t - mm * 60;
+    Rcpp::Rcout << hh << ":" << mm << ":" << t;
 }

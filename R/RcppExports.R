@@ -19,7 +19,12 @@ rcpp_time_to_seconds <- function(times) {
 
 #' rcpp_make_timetable
 #'
-#' Make timetable from GTFS stop_times
+#' Make timetable from GTFS stop_times. All stops are converted to 0-indexed
+#' integer indices into the list of stops, and stop times to seconds after
+#' midnight. Similarly, trip codes are converted into 0-indexed integer values
+#' into a list of trips. The corresponding vectors of stop_ids and trip_ids are
+#' also returned to subsequent re-map the integer values back on to their
+#' original IDs.
 #'
 #' @noRd
 rcpp_make_timetable <- function(stop_times) {
@@ -36,7 +41,10 @@ rcpp_make_timetable <- function(stop_times) {
 #' IDs, but do not necessarily form a single set of unit-interval values
 #' because the timetable is first cut down to only that portion after the
 #' desired start time. These are nevertheless used as direct array indices
-#' throughout, so are all size_t objects rather than int.
+#' throughout, so are all size_t objects rather than int. All indices in the
+#' timetable and transfers DataFrames, as well as start_/end_stations, are
+#' 1-based, but they are still used directly which just means that the first
+#' entries (that is, entry [0]) of station and trip vectors are never used.
 #'
 #' @noRd
 rcpp_csa <- function(timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time) {

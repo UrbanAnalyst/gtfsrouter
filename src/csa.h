@@ -13,3 +13,4 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         const std::vector <size_t> start_stations,
         const std::vector <size_t> end_stations,
         const int start_time);
+void print_hms (int t);
