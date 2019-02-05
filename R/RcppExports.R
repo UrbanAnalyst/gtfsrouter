@@ -35,7 +35,8 @@ rcpp_make_timetable <- function(stop_times) {
 #' 00:00:00. The station and trip IDs can be mapped back on to actual station
 #' IDs, but do not necessarily form a single set of unit-interval values
 #' because the timetable is first cut down to only that portion after the
-#' desired start time.
+#' desired start time. These are nevertheless used as direct array indices
+#' throughout, so are all size_t objects rather than int.
 #'
 #' @noRd
 rcpp_csa <- function(timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time) {

@@ -39,17 +39,17 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_csa
-int rcpp_csa(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const int nstations, const int ntrips, const std::vector <int> start_stations, const std::vector <int> end_stations, const int start_time);
+Rcpp::DataFrame rcpp_csa(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const size_t nstations, const size_t ntrips, const std::vector <size_t> start_stations, const std::vector <size_t> end_stations, const int start_time);
 RcppExport SEXP _gtfsrouter_rcpp_csa(SEXP timetableSEXP, SEXP transfersSEXP, SEXP nstationsSEXP, SEXP ntripsSEXP, SEXP start_stationsSEXP, SEXP end_stationsSEXP, SEXP start_timeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type timetable(timetableSEXP);
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type transfers(transfersSEXP);
-    Rcpp::traits::input_parameter< const int >::type nstations(nstationsSEXP);
-    Rcpp::traits::input_parameter< const int >::type ntrips(ntripsSEXP);
-    Rcpp::traits::input_parameter< const std::vector <int> >::type start_stations(start_stationsSEXP);
-    Rcpp::traits::input_parameter< const std::vector <int> >::type end_stations(end_stationsSEXP);
+    Rcpp::traits::input_parameter< const size_t >::type nstations(nstationsSEXP);
+    Rcpp::traits::input_parameter< const size_t >::type ntrips(ntripsSEXP);
+    Rcpp::traits::input_parameter< const std::vector <size_t> >::type start_stations(start_stationsSEXP);
+    Rcpp::traits::input_parameter< const std::vector <size_t> >::type end_stations(end_stationsSEXP);
     Rcpp::traits::input_parameter< const int >::type start_time(start_timeSEXP);
     rcpp_result_gen = Rcpp::wrap(rcpp_csa(timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time));
     return rcpp_result_gen;
