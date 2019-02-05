@@ -18,32 +18,35 @@ gtfs_timetable <- function (gtfs)
     # no visible binding notes
     from_stop_id <- to_stop_id <- stop_id <- NULL
 
-    tt <- rcpp_make_timetable (gtfs$stop_times)
-    # tt$timetable has [departure/arrival_station, departure/arrival_time,
-    # trip_id], where the station and trip values are 0-based indices into the
-    # vectors of tt$stop_ids and tt$trips.
+    if (!"timetable" %in% names (gtfs))
+    {
+        tt <- rcpp_make_timetable (gtfs$stop_times)
+        # tt$timetable has [departure/arrival_station, departure/arrival_time,
+        # trip_id], where the station and trip values are 0-based indices into the
+        # vectors of tt$stop_ids and tt$trips.
 
-    # translate transfer stations into indices, converting back to 0-based to
-    # match the indices of tt$timetable
-    index <- match (gtfs$transfers [, from_stop_id], tt$stations) - 1
-    gtfs$transfers <- gtfs$transfers [, from_stop_id := index]
-    index <- match (gtfs$transfers [, to_stop_id], tt$stations) - 1
-    gtfs$transfers <- gtfs$transfers [, to_stop_id := index]
+        # translate transfer stations into indices, converting back to 0-based to
+        # match the indices of tt$timetable
+        index <- match (gtfs$transfers [, from_stop_id], tt$stations) - 1
+        gtfs$transfers <- gtfs$transfers [, from_stop_id := index]
+        index <- match (gtfs$transfers [, to_stop_id], tt$stations) - 1
+        gtfs$transfers <- gtfs$transfers [, to_stop_id := index]
 
-    # Then convert all output to data.table just for print formatting:
-    gtfs$timetable <- data.table::data.table (tt$timetable)
-    gtfs$stations <- data.table::data.table (stations = tt$stations)
-    gtfs$trips <- data.table::data.table (trips = tt$trips)
-    # add a couple of extra pre-processing items, with 1 added to numbers here
-    # because indices are 0-based:
-    gtfs$stop_ids <- data.table::data.table (stop_id =
-                            unique (gtfs$stop_times [, stop_id]))
-    gtfs$n_stations <- max (unique (c (gtfs$timetable$departure_station,
-                                       gtfs$timetable$arrival_station))) + 1
-    gtfs$n_trips <- max (gtfs$timetable$trip_id) + 1
+        # Then convert all output to data.table just for print formatting:
+        gtfs$timetable <- data.table::data.table (tt$timetable)
+        gtfs$stations <- data.table::data.table (stations = tt$stations)
+        gtfs$trips <- data.table::data.table (trips = tt$trips)
+        # add a couple of extra pre-processing items, with 1 added to numbers here
+        # because indices are 0-based:
+        gtfs$stop_ids <- data.table::data.table (
+                                stop_id = unique (gtfs$stop_times [, stop_id]))
+        gtfs$n_stations <- max (unique (c (gtfs$timetable$departure_station,
+                                           gtfs$timetable$arrival_station))) + 1
+        gtfs$n_trips <- max (gtfs$timetable$trip_id) + 1
 
-    # And order the timetable by departure_time
-    gtfs$timetable <- gtfs$timetable [order (gtfs$timetable$departure_time), ]
+        # And order the timetable by departure_time
+        gtfs$timetable <- gtfs$timetable [order (gtfs$timetable$departure_time), ]
+    }
 
     return (gtfs)
 }
