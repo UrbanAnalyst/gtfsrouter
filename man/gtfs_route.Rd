@@ -4,7 +4,7 @@
 \alias{gtfs_route}
 \title{gtfs_route}
 \usage{
-gtfs_route(gtfs, from, to, start_time, quiet = TRUE)
+gtfs_route(gtfs, from, to, start_time)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
@@ -18,8 +18,6 @@ efficient queries, pre-processed with \link{gtfs_timetable}.}
 after midnight, a vector of two or three integers (hours, minutes) or (hours,
 minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
 \pkg{lubridate}.}
-
-\item{quiet}{If \code{FALSE}, dump progress notifications to screen.}
 }
 \value{
 square matrix of distances between nodes

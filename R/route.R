@@ -64,24 +64,16 @@ gtfs_timetable <- function (gtfs)
 #' after midnight, a vector of two or three integers (hours, minutes) or (hours,
 #' minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
 #' \pkg{lubridate}.
-#' @param quiet If `FALSE`, dump progress notifications to screen.
 #' @return square matrix of distances between nodes
 #'
 #' @export 
-gtfs_route <- function (gtfs, from, to, start_time, quiet = TRUE)
+gtfs_route <- function (gtfs, from, to, start_time)
 {
     if (!"timetable" %in% names (gtfs))
-    {
-        if (!quiet)
-            message ("Converting GTFS data to timetable form; ",
-                     "this step can also be pre-processed with ",
-                     "`gtfs_timetable()`")
-
         gtfs <- gtfs_timetable (gtfs)
-    }
 
     # no visible binding note:
-    departure_time <- NULL
+    departure_time <- stop_name <- stop_id <- NULL
 
     start_time <- convert_time (start_time)
     gtfs$timetable <- gtfs$timetable [departure_time >= start_time, ]
@@ -104,7 +96,7 @@ gtfs_route <- function (gtfs, from, to, start_time, quiet = TRUE)
                             map_one_trip (gtfs, route, i)))
 }
 
-convert_time <- function (my_time, quiet = TRUE)
+convert_time <- function (my_time)
 {
     if (methods::is (my_time, "difftime") ||
         methods::is (my_time, "Period"))
@@ -114,8 +106,7 @@ convert_time <- function (my_time, quiet = TRUE)
     {
         if (length (my_time) == 1)
         {
-            if (!quiet)
-                message ("Mumeric time of length 1 are presumed to be seconds")
+            # do nothing; presume to be seconds, not hours
         } else if (length (my_time) == 2)
             my_time <- 3600 * my_time [1] + 60 * my_time [2]
         else if (length (my_time) == 3)
