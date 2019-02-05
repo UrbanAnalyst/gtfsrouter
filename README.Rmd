@@ -1,12 +1,11 @@
 [![Build Status](https://travis-ci.org/ATFutures/gtfs-router.svg)](https://travis-ci.org/ATFutures/gtfs-router) 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/ATFutures/gtfs-router?branch=master&svg=true)](https://ci.appveyor.com/project/ATFutures/gtfs-router)
 [![codecov](https://codecov.io/gh/ATFutures/gtfs-router/branch/master/graph/badge.svg)](https://codecov.io/gh/ATFutures/gtfs-router)
-[![Project Status: Concept](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
+[![Project Status: WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
 
 
 # GTFS Router
-
-**NOTE: EXPERIMENTAL ONLY; NOT READY FOR USE**
 
 **R** package for routing with [GTFS (General Transit Feed
 Specification)](https://developers.google.com/transit/gtfs/) data, using the
@@ -20,6 +19,36 @@ Test data will be the VBB (Verkehrsverbund Berlin-Brandenburg) GTFS feed
 available [here](https://daten.berlin.de/datensaetze/vbb-fahrplandaten-gtfs),
 with the results providing useful input data for
 [`flux.fail`](https://flux.fail).
+
+## Example
+
+Download the VBB data from the above link in a local directory, load the
+package:
+```{r dummy, eval = FALSE}
+library (gtfsrouter)
+```
+```{r for-real, eval = TRUE, echo = FALSE, message = FALSE}
+devtools::load_all (".", export_all = TRUE)
+```
+Then:
+```{r example, eval = TRUE}
+gtfs <- extract_gtfs (list.files () [grep ("VBB", list.files ())])
+gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
+st <- system.time (
+             r <- gtfs_route (gtfs,
+                              from = "Schönlein",
+                              to = "Berlin Hauptbahnhof",
+                              start_time = 14 * 3600) # 14:00 in seconds
+)
+st
+knitr::kable (r)
+```
+
+And a routing query on a very large network (the GTFS data are
+`r round(file.size(list.files()[grep("VBB",list.files())]) / 1e6)` MB) takes only 
+`r round (st[3] * 100) / 100` seconds.
+
+
 
 ## GTFS Structure
 
