@@ -9,8 +9,7 @@ WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.o
 # GTFS Router
 
 **R** package for routing with [GTFS (General Transit Feed
-Specification)](https://developers.google.com/transit/gtfs/) data, using
-the [Connection Scan Algorithm](https://arxiv.org/abs/1703.05997). Among
+Specification)](https://developers.google.com/transit/gtfs/) data. Among
 the additional aims of this repo are to quantify the dynamic stability
 of a GTFS network in time and space, and to identify “weakest nodes” as
 those where a temporal disruption propogates out to have the greatest
@@ -46,7 +45,7 @@ st
 ```
 
     ##    user  system elapsed 
-    ##   1.431   0.018   0.247
+    ##   1.431   0.016   0.252
 
 ``` r
 knitr::kable (r)
