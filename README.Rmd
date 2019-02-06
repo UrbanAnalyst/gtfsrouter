@@ -40,18 +40,23 @@ packageVersion("gtfsrouter")
 
 The package contains some sample data from Berlin (the Verkehrverbund Berlin
 Brandenburg, or VBB). These data can be stored in a local `.zip` file with the
-following commands:
-Download the VBB data from the above link in a local directory, load the
-package:
-Then:
-```{r example, eval = TRUE}
-gtfs <- extract_gtfs (list.files () [grep ("VBB", list.files ())])
+package function `berlin_gtfs_to_zip()`.
+```{r create-zip, eval = TRUE}
+berlin_gtfs_to_zip()
+tempfiles <- list.files (tempdir (), full.names = TRUE)
+filename <- tempfiles [grep ("vbb.zip", tempfiles)]
+filename
+```
+For normal package use, `filename` will specify the name of the local GTFS data
+stored as a single `.zip` file. Routing is then as simple as the following code:
+```{r example}
+gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
 st <- system.time (
              r <- gtfs_route (gtfs,
-                              from = "Schönlein",
+                              from = "Schonlein",
                               to = "Berlin Hauptbahnhof",
-                              start_time = 14 * 3600) # 14:00 in seconds
+                              start_time = 12 * 3600 + 60) # 12:02 in seconds
 )
 st
 knitr::kable (r)

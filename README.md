@@ -21,31 +21,56 @@ available
 the results providing useful input data for
 [`flux.fail`](https://flux.fail).
 
-## Example
+## Installation
 
-Download the VBB data from the above link in a local directory, load the
-package:
+To install:
 
 ``` r
-library (gtfsrouter)
+remotes::install_github("atfutures/gtfs-router")
 ```
 
-Then:
+To load the package and check the version:
 
 ``` r
-gtfs <- extract_gtfs (list.files () [grep ("VBB", list.files ())])
+library(gtfsrouter)
+packageVersion("gtfsrouter")
+```
+
+    ## [1] '0.0.1'
+
+## Example
+
+The package contains some sample data from Berlin (the Verkehrverbund
+Berlin Brandenburg, or VBB). These data can be stored in a local `.zip`
+file with the package function `berlin_gtfs_to_zip()`.
+
+``` r
+berlin_gtfs_to_zip()
+tempfiles <- list.files (tempdir (), full.names = TRUE)
+filename <- tempfiles [grep ("vbb.zip", tempfiles)]
+filename
+```
+
+    ## [1] "/tmp/RtmpR7nBPi/vbb.zip"
+
+For normal package use, `filename` will specify the name of the local
+GTFS data stored as a single `.zip` file. Routing is then as simple as
+the following code:
+
+``` r
+gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
 st <- system.time (
              r <- gtfs_route (gtfs,
-                              from = "Schönlein",
+                              from = "Schonlein",
                               to = "Berlin Hauptbahnhof",
-                              start_time = 14 * 3600) # 14:00 in seconds
+                              start_time = 12 * 3600 + 60) # 12:02 in seconds
 )
 st
 ```
 
     ##    user  system elapsed 
-    ##   1.431   0.016   0.252
+    ##   0.464   0.000   0.061
 
 ``` r
 knitr::kable (r)
@@ -53,19 +78,19 @@ knitr::kable (r)
 
 | route | stop                            | departure\_time | arrival\_time |
 | :---- | :------------------------------ | :-------------- | :------------ |
-| U8    | U Schönleinstr. (Berlin)        | 14:04:00        | 14:04:00      |
-| U8    | U Kottbusser Tor (Berlin)       | 14:06:00        | 14:06:00      |
-| U8    | U Moritzplatz (Berlin)          | 14:08:00        | 14:08:00      |
-| U8    | U Heinrich-Heine-Str. (Berlin)  | 14:09:30        | 14:09:30      |
-| U8    | S+U Jannowitzbrücke (Berlin)    | 14:10:30        | 14:10:30      |
-| S5    | S+U Jannowitzbrücke (Berlin)    | 14:15:54        | 14:15:24      |
-| S5    | S+U Alexanderplatz Bhf (Berlin) | 14:18:12        | 14:17:24      |
-| S5    | S Hackescher Markt (Berlin)     | 14:19:54        | 14:19:24      |
-| S5    | S+U Friedrichstr. Bhf (Berlin)  | 14:22:12        | 14:21:24      |
-| S5    | S+U Berlin Hauptbahnhof         | 14:24:42        | 14:24:06      |
+| U8    | U Schonleinstr. (Berlin)        | 12:04:00        | 12:04:00      |
+| U8    | U Kottbusser Tor (Berlin)       | 12:06:00        | 12:06:00      |
+| U8    | U Moritzplatz (Berlin)          | 12:08:00        | 12:08:00      |
+| U8    | U Heinrich-Heine-Str. (Berlin)  | 12:09:30        | 12:09:30      |
+| U8    | S+U Jannowitzbrucke (Berlin)    | 12:10:30        | 12:10:30      |
+| S5    | S+U Jannowitzbrucke (Berlin)    | 12:15:54        | 12:15:24      |
+| S5    | S+U Alexanderplatz Bhf (Berlin) | 12:18:12        | 12:17:24      |
+| S5    | S Hackescher Markt (Berlin)     | 12:19:54        | 12:19:24      |
+| S5    | S+U Friedrichstr. Bhf (Berlin)  | 12:22:12        | 12:21:24      |
+| S5    | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
 
-And a routing query on a very large network (the GTFS data are 64 MB)
-takes only 0.25 seconds.
+And a routing query on a very large network (the GTFS data are MB) takes
+only 0.06 seconds.
 
 ## GTFS Structure
 

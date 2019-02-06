@@ -15,6 +15,6 @@ berlin_gtfs_to_zip <- function ()
                                        file.path (tempdir (), i), quote = TRUE)
     )
     flist <- file.path (tempdir (), flist)
-    utils::zip (file.path (tempdir (), "vbb.zip"), files = flist)
+    utils::zip (file.path (tempdir (), "vbb.zip"), files = flist, flags = "-q")
     invisible (file.remove (flist))
 }
