@@ -1,0 +1,81 @@
+# Construction of data set "berlin.rda"
+
+## download and unzip the data
+
+```{r}
+u <- "https://www.vbb.de/media/download/2029"
+utils::download.file(u, "./data-raw/vbb.zip")
+unzip ("vbb.zip", exdir = "./data-raw/")
+```
+
+## Reduce down to U and S Bahn only and recreate vbb.zip
+
+First remove GTFS files that are not directly needed for routing
+```{r}
+rms <- c ("./data-raw/shapes.txt", "./data-raw/agency.txt",
+          "./data-raw/calendar_dates.txt", "./data-raw/calendar.txt")
+invisible (file.remove (rms))
+```
+
+Then cut down the data only to S and U bahn routes and stops, with `stop_times`
+reduced to the single hour between 11:00-12:00. Non-ASCII characters also have
+to be converted to pass checks (so all umlauts and eszetts are removed).
+```{r}
+library (stringi)
+routes <- data.table::fread ("./data-raw/routes.txt")
+index_s <- grep ("^S", routes [, route_short_name])
+index_u <- grep ("^U", routes [, route_short_name])
+routes <- routes [c (index_s, index_u), ]
+data.table::fwrite (routes, "./data-raw/routes.txt", quote = TRUE)
+
+trips <- data.table::fread ("./data-raw/trips.txt")
+trips <- trips [which (trips [, route_id] %in% routes [, route_id]), ]
+trips <- trips [, trip_headsign := stri_trans_general (trip_headsign, "latin-ascii")]
+data.table::fwrite (trips, "./data-raw/trips.txt", quote = TRUE)
+
+stop_times <- data.table::fread ("./data-raw/stop_times.txt", showProgress = FALSE)
+stop_times <- stop_times [which (stop_times [, trip_id] %in% trips [, trip_id]), ]
+stop_times <- stop_times [, stop_headsign :=
+                          stri_trans_general (stop_headsign, "latin-ascii")]
+arrival_time <- gtfsrouter:::rcpp_time_to_seconds (stop_times [, arrival_time])
+departure_time <- gtfsrouter:::rcpp_time_to_seconds (stop_times [, departure_time])
+index <- which (departure_time > 12 * 3600 & arrival_time < 13 * 3600)
+data.table::fwrite (stop_times [index, ], "./data-raw/stop_times.txt", quote = TRUE)
+
+stops <- data.table::fread ("./data-raw/stops.txt", showProgress = FALSE)
+stops <- stops [which (stops [, stop_id] %in% stop_times [, stop_id]), ]
+stops <- stops [, stop_name := stri_trans_general (stop_name, "latin-ascii")]
+data.table::fwrite (stops, "./data-raw/stops.txt", quote = TRUE)
+
+transfers <- data.table::fread ("./data-raw/transfers.txt", showProgress = FALSE)
+index <- which ((transfers [, from_stop_id] %in% stops [, stop_id]) &
+                (transfers [, to_stop_id] %in% stops [, stop_id]))
+transfers <- transfers [index, ]
+data.table::fwrite (transfers, "./data-raw/transfers.txt", quote = TRUE)
+```
+
+
+Re-zip
+```{r}
+flist <- c ("./data-raw/routes.txt", "./data-raw/trips.txt", "./data-raw/stop_times.txt",
+            "./data-raw/stops.txt", "./data-raw/transfers.txt")
+zip ("./data-raw/vbb.zip", files = flist)
+invisible (file.remove (flist))
+```
+
+## Then extract contents for test data
+
+```{r}
+unzip ("./data-raw/vbb.zip", exdir = ".")
+berlin_gtfs <- list (routes = data.table::fread ("./data-raw/routes.txt"),
+              trips = data.table::fread ("./data-raw/trips.txt"),
+              stop_times = data.table::fread ("./data-raw/stop_times.txt"),
+              stops = data.table::fread ("./data-raw/stops.txt"),
+              transfers = data.table::fread ("./data-raw/transfers.txt"))
+usethis::use_data (berlin_gtfs, overwrite = TRUE, compress = "xz")
+flist <- c ("./data-raw/routes.txt", "./data-raw/trips.txt", "./data-raw/stop_times.txt",
+            "./data-raw/stops.txt", "./data-raw/transfers.txt")
+invisible (file.remove (flist))
+invisible (file.remove ("./data-raw/vbb.zip"))
+```
+

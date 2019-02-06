@@ -8,6 +8,7 @@ Authors@R: c(
 Description: Find the quickest route between two points at a particular start
     time with GTFS feed.
 License: GPL-3
+Depends: R (>= 2.10)
 Imports:
     data.table,
     methods,
