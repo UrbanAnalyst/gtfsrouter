@@ -104,8 +104,7 @@ gtfs_route <- function (gtfs, from, to, start_time)
 
 convert_time <- function (my_time)
 {
-    if (methods::is (my_time, "difftime") ||
-        methods::is (my_time, "Period"))
+    if (methods::is (my_time, "difftime") || methods::is (my_time, "Period"))
     {
         my_time <- rcpp_convert_time (paste0 (my_time))
     } else if (is.numeric (my_time))
