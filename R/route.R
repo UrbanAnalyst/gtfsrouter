@@ -18,37 +18,41 @@ gtfs_timetable <- function (gtfs)
     # no visible binding notes
     from_stop_id <- to_stop_id <- stop_id <- NULL
 
+    # IMPORTANT: data.table works entirely by reference, so all operations
+    # change original values unless first copied! This function thus returns a
+    # copy even when it does nothing else, so always entails some cost.
+    gtfs_cp <- data.table::copy (gtfs)
     if (!"timetable" %in% names (gtfs))
     {
-        tt <- rcpp_make_timetable (gtfs$stop_times)
+        tt <- rcpp_make_timetable (gtfs_cp$stop_times)
         # tt$timetable has [departure/arrival_station, departure/arrival_time,
         # trip_id], where the station and trip values are 0-based indices into the
         # vectors of tt$stop_ids and tt$trips.
 
         # translate transfer stations into indices, converting back to 0-based to
         # match the indices of tt$timetable
-        index <- match (gtfs$transfers [, from_stop_id], tt$stations) - 1
-        gtfs$transfers <- gtfs$transfers [, from_stop_id := index]
-        index <- match (gtfs$transfers [, to_stop_id], tt$stations) - 1
-        gtfs$transfers <- gtfs$transfers [, to_stop_id := index]
+        index <- match (gtfs_cp$transfers [, from_stop_id], tt$stations) - 1
+        gtfs_cp$transfers <- gtfs_cp$transfers [, from_stop_id := index]
+        index <- match (gtfs_cp$transfers [, to_stop_id], tt$stations) - 1
+        gtfs_cp$transfers <- gtfs_cp$transfers [, to_stop_id := index]
 
         # Then convert all output to data.table just for print formatting:
-        gtfs$timetable <- data.table::data.table (tt$timetable)
-        gtfs$stations <- data.table::data.table (stations = tt$stations)
-        gtfs$trips <- data.table::data.table (trips = tt$trips)
+        gtfs_cp$timetable <- data.table::data.table (tt$timetable)
+        gtfs_cp$stations <- data.table::data.table (stations = tt$stations)
+        gtfs_cp$trips <- data.table::data.table (trips = tt$trips)
         # add a couple of extra pre-processing items, with 1 added to numbers here
         # because indices are 0-based:
-        gtfs$stop_ids <- data.table::data.table (
-                                stop_id = unique (gtfs$stop_times [, stop_id]))
-        gtfs$n_stations <- max (unique (c (gtfs$timetable$departure_station,
-                                           gtfs$timetable$arrival_station))) + 1
-        gtfs$n_trips <- max (gtfs$timetable$trip_id) + 1
+        gtfs_cp$stop_ids <- data.table::data.table (
+                                stop_id = unique (gtfs_cp$stop_times [, stop_id]))
+        gtfs_cp$n_stations <- max (unique (c (gtfs_cp$timetable$departure_station,
+                                           gtfs_cp$timetable$arrival_station))) + 1
+        gtfs_cp$n_trips <- max (gtfs_cp$timetable$trip_id) + 1
 
         # And order the timetable by departure_time
-        gtfs$timetable <- gtfs$timetable [order (gtfs$timetable$departure_time), ]
+        gtfs_cp$timetable <- gtfs_cp$timetable [order (gtfs_cp$timetable$departure_time), ]
     }
 
-    return (gtfs)
+    return (gtfs_cp)
 }
 
 #' gtfs_route
@@ -77,6 +81,8 @@ gtfs_route <- function (gtfs, from, to, start_time)
 
     start_time <- convert_time (start_time)
     gtfs$timetable <- gtfs$timetable [departure_time >= start_time, ]
+    if (nrow (gtfs$timetable) == 0)
+        stop ("There are no scheduled services after that time.")
 
     stations <- NULL # no visible binding note
     start_stns <- match (station_name_to_id (from, gtfs),
