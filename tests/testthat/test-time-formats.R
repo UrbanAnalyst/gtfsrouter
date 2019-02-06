@@ -29,4 +29,15 @@ test_that("route", {
                                                   start_time = start_time))
               expect_identical (route1, route4)
 
-})
+              start_time <- c (12, 2, 0, 0)
+              expect_error (route5 <- gtfs_route (gt, from = from, to = to,
+                                                  start_time = start_time),
+                            "Don't know how to parse time vectors of length 4")
+
+              expect_error (route6 <- gtfs_route (gt, from = from, to = to,
+                                                  start_time = "blah"),
+                            "Time is of unknown class")
+              expect_error (route6 <- gtfs_route (gt, from = from, to = to,
+                                                  start_time = NULL),
+                            "Time is of unknown class")
+             })
