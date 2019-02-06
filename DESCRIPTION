@@ -1,6 +1,6 @@
 Package: gtfsrouter
 Title: Quickest Route with GTFS Feed
-Version: 0.0.0.001
+Version: 0.0.1
 Authors@R: c(
     person("Mark", "Padgham",
             email="mark.padgham@email.com",

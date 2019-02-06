@@ -19,16 +19,30 @@ available [here](https://daten.berlin.de/datensaetze/vbb-fahrplandaten-gtfs),
 with the results providing useful input data for
 [`flux.fail`](https://flux.fail).
 
+## Installation
+
+To install:
+```{r remotes, eval=FALSE}
+remotes::install_github("atfutures/gtfs-router")
+```
+```{r load_all, echo = FALSE, message = FALSE}
+devtools::load_all (".", export_all = FALSE)
+```
+
+
+To load the package and check the version:
+```{r pkg-version, eval=TRUE}
+library(gtfsrouter)
+packageVersion("gtfsrouter")
+```
+
 ## Example
 
+The package contains some sample data from Berlin (the Verkehrverbund Berlin
+Brandenburg, or VBB). These data can be stored in a local `.zip` file with the
+following commands:
 Download the VBB data from the above link in a local directory, load the
 package:
-```{r dummy, eval = FALSE}
-library (gtfsrouter)
-```
-```{r for-real, eval = TRUE, echo = FALSE, message = FALSE}
-devtools::load_all (".", export_all = TRUE)
-```
 Then:
 ```{r example, eval = TRUE}
 gtfs <- extract_gtfs (list.files () [grep ("VBB", list.files ())])
