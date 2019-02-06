@@ -15,26 +15,34 @@ extract_gtfs <- function (filename = NULL)
         stop ("filename ", filename, " does not exist")
 
     flist <- utils::unzip (filename, list = TRUE)
-    if (!("stop_times.txt" %in% flist$Name & "transfers.txt" %in% flist$Name))
+    if (!(any (grepl ("routes.txt", flist$Name)) &
+          any (grepl ("trips.txt", flist$Name)) &
+          any (grepl ("stop_times.txt", flist$Name)) &
+          any (grepl ("stops.txt", flist$Name)) &
+          any (grepl ("transfers.txt", flist$Name))))
         stop (filename, " does not appear to be a GTFS file; ",
-              "it must contain 'stop_times.txt' and 'transfers.txt'")
+              "it must minimally contain\n   'routes.txt', stop_times.txt' ",
+              "'stop_times.txt', 'stops.txt', and 'transfers.txt'")
 
     # suppress no visible binding for global variables notes:
     arrival_time <- departure_time <- stop_id <- min_transfer_time <- 
         from_stop_id <- to_stop_id <- `:=` <- NULL
 
+    stop_times <- flist$Name [grep ("stop_times", flist$Name)]
     stop_times <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
-                                                   "\" \"stop_times.txt\""),
+                                                   "\" \"", stop_times, "\""),
                                      showProgress = FALSE)
     stop_times [, arrival_time := rcpp_time_to_seconds (arrival_time)]
     stop_times [, departure_time := rcpp_time_to_seconds (departure_time)]
 
+    stops <- flist$Name [grep ("stops", flist$Name)]
     stops <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
-                                              "\" \"stops.txt\""),
+                                                   "\" \"", stops, "\""),
                                 showProgress = FALSE)
 
+    transfers <- flist$Name [grep ("transfers", flist$Name)]
     transfers <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
-                                                  "\" \"transfers.txt\""),
+                                                  "\" \"", transfers, "\""),
                                     showProgress = FALSE)
     transfer = stop_times [, stop_id] %in% transfers [, from_stop_id]
     #stop_times <- stop_times [, transfer := transfer] [order (departure_time)]
@@ -48,11 +56,14 @@ extract_gtfs <- function (filename = NULL)
 
     # trips and routes tables used just to map trips onto route IDs at final
     # step of route_gtfs().
+    trip_table <- flist$Name [grep ("trips", flist$Name)]
     trip_table <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
-                                                   "\" \"trips.txt\""),
+                                                   "\" \"", trip_table, "\""),
                                      showProgress = FALSE)
+
+    routes <- flist$Name [grep ("routes", flist$Name)]
     routes <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
-                                               "\" \"routes.txt\""),
+                                               "\" \"", routes, "\""),
                                  showProgress = FALSE)
 
     list (stop_times = stop_times,
