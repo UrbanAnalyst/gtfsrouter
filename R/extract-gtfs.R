@@ -31,6 +31,7 @@ extract_gtfs <- function (filename = NULL)
     stop_times <- flist$Name [grep ("stop_times", flist$Name)]
     stop_times <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
                                                    "\" \"", stop_times, "\""),
+                                     integer64 = "character",
                                      showProgress = FALSE)
     stop_times [, arrival_time := rcpp_time_to_seconds (arrival_time)]
     stop_times [, departure_time := rcpp_time_to_seconds (departure_time)]
@@ -38,11 +39,13 @@ extract_gtfs <- function (filename = NULL)
     stops <- flist$Name [grep ("stops", flist$Name)]
     stops <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
                                                    "\" \"", stops, "\""),
+                                integer64 = "character",
                                 showProgress = FALSE)
 
     transfers <- flist$Name [grep ("transfers", flist$Name)]
     transfers <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
                                                   "\" \"", transfers, "\""),
+                                    integer64 = "character",
                                     showProgress = FALSE)
     transfer = stop_times [, stop_id] %in% transfers [, from_stop_id]
     #stop_times <- stop_times [, transfer := transfer] [order (departure_time)]
@@ -59,11 +62,13 @@ extract_gtfs <- function (filename = NULL)
     trip_table <- flist$Name [grep ("trips", flist$Name)]
     trip_table <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
                                                    "\" \"", trip_table, "\""),
+                                     integer64 = "character",
                                      showProgress = FALSE)
 
     routes <- flist$Name [grep ("routes", flist$Name)]
     routes <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
                                                "\" \"", routes, "\""),
+                                 integer64 = "character",
                                  showProgress = FALSE)
 
     list (stop_times = stop_times,

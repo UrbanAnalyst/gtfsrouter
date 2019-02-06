@@ -68,10 +68,13 @@ invisible (file.remove (flist))
 ```{r}
 unzip ("./data-raw/vbb.zip", exdir = ".")
 berlin_gtfs <- list (routes = data.table::fread ("./data-raw/routes.txt"),
-              trips = data.table::fread ("./data-raw/trips.txt"),
+              trips = data.table::fread ("./data-raw/trips.txt",
+                                         integer64 = "character"),
               stop_times = data.table::fread ("./data-raw/stop_times.txt"),
-              stops = data.table::fread ("./data-raw/stops.txt"),
-              transfers = data.table::fread ("./data-raw/transfers.txt"))
+              stops = data.table::fread ("./data-raw/stops.txt",
+                                         integer64 = "character"),
+              transfers = data.table::fread ("./data-raw/transfers.txt",
+                                             integer64 = "character"))
 usethis::use_data (berlin_gtfs, overwrite = TRUE, compress = "xz")
 flist <- c ("./data-raw/routes.txt", "./data-raw/trips.txt", "./data-raw/stop_times.txt",
             "./data-raw/stops.txt", "./data-raw/transfers.txt")

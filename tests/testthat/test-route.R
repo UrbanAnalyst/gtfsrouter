@@ -15,3 +15,16 @@ test_that("extract", {
               expect_equal (names (g), c ("stop_times", "stops", "transfers",
                                           "trip_table", "routes"))
 })
+
+test_that ("timetable", {
+              f <- file.path (tempdir (), "vbb.zip")
+              expect_true (file.exists (f))
+              expect_silent (g <- extract_gtfs (f))
+              expect_silent (gt <- gtfs_timetable (g))
+})
+
+test_that("route", {
+              f <- file.path (tempdir (), "vbb.zip")
+              expect_true (file.exists (f))
+              expect_silent (g <- extract_gtfs (f))
+})
