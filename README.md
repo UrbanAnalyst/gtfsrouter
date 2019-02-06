@@ -51,7 +51,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpR7nBPi/vbb.zip"
+    ## [1] "/tmp/Rtmp6a3Nos/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file. Routing is then as simple as
@@ -70,7 +70,7 @@ st
 ```
 
     ##    user  system elapsed 
-    ##   0.464   0.000   0.061
+    ##   0.479   0.000   0.061
 
 ``` r
 knitr::kable (r)
@@ -90,7 +90,10 @@ knitr::kable (r)
 | S5    | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
 
 And a routing query on a very large network (the GTFS data are MB) takes
-only 0.06 seconds.
+only 0.06 seconds. (Note that non-ASCII symbols have been removed from
+the test data, so “Schönleinstr” has become “Schonleinstr”, but the
+package will operate with the full VBB feed and proper station matches
+such as `from = "Schönlein"`.)
 
 ## GTFS Structure
 
