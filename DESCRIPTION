@@ -15,6 +15,7 @@ Imports:
     Rcpp (>= 0.12.6)
 Suggests:
     hms,
+    lubridate,
     knitr,
     testthat
 LinkingTo:
