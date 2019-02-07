@@ -15,12 +15,6 @@ of a GTFS network in time and space, and to identify “weakest nodes” as
 those where a temporal disruption propogates out to have the greatest
 effect throughout the broader network.
 
-Test data will be the VBB (Verkehrsverbund Berlin-Brandenburg) GTFS feed
-available
-[here](https://daten.berlin.de/datensaetze/vbb-fahrplandaten-gtfs), with
-the results providing useful input data for
-[`flux.fail`](https://flux.fail).
-
 ## Installation
 
 To install:
@@ -51,7 +45,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/Rtmp6a3Nos/vbb.zip"
+    ## [1] "/tmp/RtmpvoAQck/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file. Routing is then as simple as
@@ -70,7 +64,7 @@ st
 ```
 
     ##    user  system elapsed 
-    ##   0.479   0.000   0.061
+    ##   0.475   0.000   0.062
 
 ``` r
 knitr::kable (r)
