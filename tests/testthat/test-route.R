@@ -5,6 +5,15 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
 
 
 test_that("extract", {
+              expect_error (g <- extract_gtfs (),
+                            "filename must be given")
+              expect_error (g <- extract_gtfs ("non-existent-file.zip"),
+                            "filename non-existent-file.zip does not exist")
+              f <- file.path (tempdir (), "junk")
+              cat ("junk", file = f)
+              expect_error (g <- extract_gtfs (f),
+                            paste0 ("zip file '", f, "' cannot be opened"))
+
               berlin_gtfs_to_zip ()
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
@@ -59,6 +68,11 @@ test_that("route", {
               expect_true (all (diff (dep_t) > 0))
               arr_t <- hms::parse_hms (route$arrival_time)
               expect_true (all (diff (arr_t) > 0))
+
+              # test data only go until 13:00, so:
+              expect_error (route <- gtfs_route (gt, from = from, to = to,
+                                                 start_time = 14 * 3600),
+                            "There are no scheduled services after that time")
 })
 
 test_that("route without timetable", {

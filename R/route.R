@@ -102,29 +102,6 @@ gtfs_route <- function (gtfs, from, to, start_time)
                             map_one_trip (gtfs, route, i)))
 }
 
-convert_time <- function (my_time)
-{
-    if (methods::is (my_time, "difftime") || methods::is (my_time, "Period"))
-    {
-        my_time <- rcpp_convert_time (paste0 (my_time))
-    } else if (is.numeric (my_time))
-    {
-        if (length (my_time) == 1)
-        {
-            # do nothing; presume to be seconds, not hours
-        } else if (length (my_time) == 2)
-            my_time <- 3600 * my_time [1] + 60 * my_time [2]
-        else if (length (my_time) == 3)
-            my_time <- 3600 * my_time [1] + 60 * my_time [2] + my_time [3]
-        else
-            stop ("Don't know how to parse time vectors of length ",
-                  length (my_time))
-    } else
-        stop ("Time is of unknown class")
-
-    return (my_time)
-}
-
 station_name_to_id <- function (stn_name, gtfs)
 {
     # no visible binding notes:
@@ -171,23 +148,4 @@ map_one_trip <- function (gtfs, route, trip_num = 1)
                 departure_time = trip_stop_departure,
                 arrival_time = trip_stop_arrival,
                 stringsAsFactors = FALSE)
-}
-
-# convert timevec in seconds into hh:mm:ss - functionality of hms::hms without
-# dependency
-format_time <- function (timevec)
-{
-    hh <- floor (timevec / 3600)
-    timevec <- timevec - hh * 3600
-    mm <- floor (timevec / 60)
-    ss <- round (timevec - mm * 60)
-
-    paste0 (zero_pad (hh), ":", zero_pad (mm), ":", zero_pad (ss))
-}
-
-zero_pad <- function (x)
-{
-    x <- paste0 (x)
-    x [nchar (x) < 2] <- paste0 (0, x [nchar (x) < 2])
-    return (x)
 }

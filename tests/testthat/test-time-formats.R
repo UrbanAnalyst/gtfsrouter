@@ -4,7 +4,7 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
              identical (Sys.getenv ("TRAVIS"), "true"))
 
 
-test_that("route", {
+test_that("convert-time", {
               berlin_gtfs_to_zip ()
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
@@ -35,6 +35,7 @@ test_that("route", {
                                                   start_time = start_time))
               expect_identical (route1, route5)
 
+              # ------- errors
               start_time <- c (12, 2, 0, 0)
               expect_error (route6 <- gtfs_route (gt, from = from, to = to,
                                                   start_time = start_time),

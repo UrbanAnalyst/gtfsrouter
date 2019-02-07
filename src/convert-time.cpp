@@ -36,10 +36,10 @@ int convert_time_std (std::string hms)
         ipos = static_cast <unsigned int> (hms.find (delim.c_str ()));
         m = hms.substr (0, ipos);
         s = hms.substr (ipos + 1, hms.length () - ipos - 1);
-    } else
-    {
-        m = hms;
-        s = "00";
+    //} else // difftime objects always have seconds so this is not possible
+    //{
+    //    m = hms;
+    //    s = "00";
     }
     return 3600 * atoi (h.c_str ()) +
         60 * atoi (m.c_str ()) +
@@ -75,8 +75,8 @@ int rcpp_convert_time (const std::string &hms)
         time = convert_time_std (hms_cp);
     else if (time_is_lubridate (hms_cp))
         time = convert_time_lubridate (hms_cp);
-    else
-        Rcpp::stop ("Unrecognized time format");
+    else // already checked in R before passing to this fn
+        Rcpp::stop ("Unrecognized time format"); // # nocov
 
     return time;
 }
