@@ -45,7 +45,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpvoAQck/vbb.zip"
+    ## [1] "/tmp/Rtmp5V1vWL/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file. Routing is then as simple as
@@ -58,13 +58,13 @@ st <- system.time (
              r <- gtfs_route (gtfs,
                               from = "Schonlein",
                               to = "Berlin Hauptbahnhof",
-                              start_time = 12 * 3600 + 60) # 12:02 in seconds
+                              start_time = 12 * 3600 + 120) # 12:02 in seconds
 )
 st
 ```
 
     ##    user  system elapsed 
-    ##   0.475   0.000   0.062
+    ##   0.459   0.000   0.061
 
 ``` r
 knitr::kable (r)

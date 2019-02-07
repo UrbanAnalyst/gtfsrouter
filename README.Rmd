@@ -51,7 +51,7 @@ st <- system.time (
              r <- gtfs_route (gtfs,
                               from = "Schonlein",
                               to = "Berlin Hauptbahnhof",
-                              start_time = 12 * 3600 + 60) # 12:02 in seconds
+                              start_time = 12 * 3600 + 120) # 12:02 in seconds
 )
 st
 knitr::kable (r)
