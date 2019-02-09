@@ -69,7 +69,7 @@ gtfs_route (gtfs,
 | S5    | S+U Friedrichstr. Bhf (Berlin)  | 12:22:12        | 12:21:24      |
 | S5    | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
 
-And a routing query on a very large network (the GTFS data are MB) takes
+And a routing query on a very large network (the GTFS data are 64 MB) takes
 only 0.06 seconds. (Note that non-ASCII symbols have been removed from
 the test data, so “Schönleinstr” has become “Schonleinstr”, but the
 package will operate with the full VBB feed and proper station matches
