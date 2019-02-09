@@ -9,11 +9,7 @@ WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.o
 # GTFS Router
 
 **R** package for routing with [GTFS (General Transit Feed
-Specification)](https://developers.google.com/transit/gtfs/) data. Among
-the additional aims of this repo are to quantify the dynamic stability
-of a GTFS network in time and space, and to identify “weakest nodes” as
-those where a temporal disruption propogates out to have the greatest
-effect throughout the broader network.
+Specification)](https://developers.google.com/transit/gtfs/) data.
 
 ## Installation
 
@@ -54,20 +50,10 @@ the following code:
 ``` r
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
-st <- system.time (
-             r <- gtfs_route (gtfs,
-                              from = "Schonlein",
-                              to = "Berlin Hauptbahnhof",
-                              start_time = 12 * 3600 + 120) # 12:02 in seconds
-)
-st
-```
-
-    ##    user  system elapsed 
-    ##   0.459   0.000   0.061
-
-``` r
-knitr::kable (r)
+gtfs_route (gtfs,
+        from = "Schonlein",
+        to = "Berlin Hauptbahnhof",
+        start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
 
 | route | stop                            | departure\_time | arrival\_time |
