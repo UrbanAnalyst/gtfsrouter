@@ -17,12 +17,12 @@ Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times)
 
     std::unordered_map <std::string, int> stop_id_map;
     std::deque <std::string> stop_ids;
-    std::deque <int> trip_ids;
-    std::unordered_map <int, int> trip_id_map;
+    std::deque <std::string> trip_ids;
+    std::unordered_map <std::string, int> trip_id_map;
 
-    std::vector <std::string> stop_id_vec = stop_times ["stop_id"];
-    std::vector <int> trip_id_vec = stop_times ["trip_id"],
-        arrival_time_vec = stop_times ["arrival_time"],
+    std::vector <std::string> stop_id_vec = stop_times ["stop_id"],
+        trip_id_vec = stop_times ["trip_id"];
+    std::vector <int> arrival_time_vec = stop_times ["arrival_time"],
         departure_time_vec = stop_times ["departure_time"];
 
     // Get maps of stop and trip IDs
@@ -43,7 +43,7 @@ Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times)
 
     // count number of connections
     size_t n_connections = 0;
-    int n_trip_id = trip_id_vec [0];
+    std::string n_trip_id = trip_id_vec [0];
     for (size_t i = 1; i < n; i++)
     {
         if (trip_id_vec [i] == n_trip_id)
@@ -57,8 +57,8 @@ Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times)
     std::vector <int> departure_time (n_connections),
         arrival_time (n_connections),
         departure_station (n_connections),
-        arrival_station (n_connections),
-        trip_id (n_connections);
+        arrival_station (n_connections);
+    std::vector <int> trip_id (n_connections);
 
     n_connections = 0;
     n_trip_id = trip_id_vec [0];
@@ -92,7 +92,7 @@ Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times)
             Rcpp::Named ("trip_id") = trip_id,
             Rcpp::_["stringsAsFactors"] = false);
     Rcpp::CharacterVector station_names = Rcpp::wrap (stop_ids);
-    Rcpp::IntegerVector trip_numbers = Rcpp::wrap (trip_ids);
+    Rcpp::CharacterVector trip_numbers = Rcpp::wrap (trip_ids);
 
     return Rcpp::List::create (
             Rcpp::Named ("timetable") = timetable,

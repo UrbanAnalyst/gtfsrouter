@@ -26,7 +26,7 @@ extract_gtfs <- function (filename = NULL)
 
     # suppress no visible binding for global variables notes:
     arrival_time <- departure_time <- stop_id <- min_transfer_time <- 
-        from_stop_id <- to_stop_id <- `:=` <- NULL
+        from_stop_id <- to_stop_id <- trip_id <- `:=` <- NULL
 
     stop_times <- flist$Name [grep ("stop_times", flist$Name)]
     stop_times <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
@@ -35,6 +35,7 @@ extract_gtfs <- function (filename = NULL)
                                      showProgress = FALSE)
     stop_times [, arrival_time := rcpp_time_to_seconds (arrival_time)]
     stop_times [, departure_time := rcpp_time_to_seconds (departure_time)]
+    stop_times [, trip_id := paste0 (trip_id)]
 
     stops <- flist$Name [grep ("stops", flist$Name)]
     stops <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
