@@ -59,8 +59,8 @@ get_route_name <- function (gtfs, trip_id = NULL)
     # no visible binding notes:
     route_id <- route_short_name <- NULL
 
-    index <- match (trip_id, gtfs$trip_table [, trip_id])
-    route <- gtfs$trip_table [index, ] [, route_id]
+    index <- match (trip_id, gtfs$trips [, trip_id])
+    route <- gtfs$trips [index, ] [, route_id]
     gtfs$routes [route_id == route, ] [, route_short_name]
 }
 

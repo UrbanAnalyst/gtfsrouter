@@ -60,9 +60,9 @@ extract_gtfs <- function (filename = NULL)
 
     # trips and routes tables used just to map trips onto route IDs at final
     # step of route_gtfs().
-    trip_table <- flist$Name [grep ("trips", flist$Name)]
-    trip_table <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
-                                                   "\" \"", trip_table, "\""),
+    trips <- flist$Name [grep ("trips", flist$Name)]
+    trips <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
+                                                   "\" \"", trips, "\""),
                                      integer64 = "character",
                                      showProgress = FALSE)
 
@@ -75,7 +75,7 @@ extract_gtfs <- function (filename = NULL)
     list (stop_times = stop_times,
           stops = stops,
           transfers = transfers,
-          trip_table = trip_table,
+          trips = trips,
           routes = routes)
 }
 
