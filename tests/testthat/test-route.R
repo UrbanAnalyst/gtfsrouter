@@ -50,7 +50,7 @@ test_that ("timetable", {
 
               expect_equal (names (gt), c ("stop_times", "stops", "transfers",
                                           "trip_table", "routes", "timetable",
-                                          "stations", "trips", "stop_ids",
+                                          "stations", "trip_numbers", "stop_ids",
                                           "n_stations", "n_trips"))
               expect_equal (gt$n_stations, 871)
               expect_equal (gt$n_trips, 1933)

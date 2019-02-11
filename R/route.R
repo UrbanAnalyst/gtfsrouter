@@ -72,8 +72,8 @@ map_one_trip <- function (gtfs, route, trip_num = 1)
     # no visible binding notes:
     trip_id <- stop_id <- stop_name <- departure_time <- arrival_time <- NULL
 
-    trips <- gtfs$trips [unique (route$trip)]
-    trip <- trips [trip_num, trips]
+    trip_numbers <- gtfs$trip_numbers [unique (route$trip)]
+    trip <- trip_numbers [trip_num, trip_numbers]
 
     route_name <- get_route_name (gtfs, trip_id = trip)
 

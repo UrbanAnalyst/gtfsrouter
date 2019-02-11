@@ -39,7 +39,8 @@ gtfs_timetable <- function (gtfs)
         # Then convert all output to data.table just for print formatting:
         gtfs_cp$timetable <- data.table::data.table (tt$timetable)
         gtfs_cp$stations <- data.table::data.table (stations = tt$stations)
-        gtfs_cp$trips <- data.table::data.table (trips = tt$trips)
+        gtfs_cp$trip_numbers <- data.table::data.table (trip_numbers =
+                                                        tt$trip_numbers)
         # add a couple of extra pre-processing items, with 1 added to numbers here
         # because indices are 0-based:
         gtfs_cp$stop_ids <- data.table::data.table (

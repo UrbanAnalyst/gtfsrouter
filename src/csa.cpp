@@ -97,7 +97,7 @@ Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times)
     return Rcpp::List::create (
             Rcpp::Named ("timetable") = timetable,
             Rcpp::Named ("stations") = station_names,
-            Rcpp::Named ("trips") = trip_numbers);
+            Rcpp::Named ("trip_numbers") = trip_numbers);
 }
 
 //' rcpp_csa
