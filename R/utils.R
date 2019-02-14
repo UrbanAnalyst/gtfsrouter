@@ -7,8 +7,8 @@
 #' @export
 berlin_gtfs_to_zip <- function ()
 {
-    flist <- c ("routes.txt", "trips.txt", "stop_times.txt",
-                "stops.txt", "transfers.txt")
+    flist <- c ("calendar.txt", "routes.txt", "trips.txt",
+                "stop_times.txt", "stops.txt", "transfers.txt")
     f <- gtfsrouter::berlin_gtfs
     chk <- sapply (flist, function (i)
                    data.table::fwrite (f [[strsplit (i, ".txt") [[1]] ]],

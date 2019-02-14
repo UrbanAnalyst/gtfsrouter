@@ -26,8 +26,8 @@ test_that("extract", {
               expect_is (g, "list")
               expect_true (all (sapply (g, function (i)
                                         is (i, "data.table"))))
-              expect_equal (names (g), c ("routes", "trips", "stop_times",
-                                          "stops", "transfers"))
+              expect_equal (names (g), c ("calendar", "routes", "trips",
+                                          "stop_times", "stops", "transfers"))
 })
 
 test_that ("timetable", {
@@ -40,20 +40,20 @@ test_that ("timetable", {
               expect_identical (gt, gt2)
               expect_true (length (gt) > length (g))
 
-              expect_identical (g$stop_times, gt$stop_times)
+              expect_true (nrow (gt$stop_times) < nrow (g$stop_times))
               expect_identical (g$stops, gt$stops)
-              expect_identical (g$stop_times, gt$stop_times)
               # stations in transfers are changed to integer indices:
               expect_true (!identical (g$transfers, gt$transfers))
-              expect_identical (g$trips, gt$trips)
+              expect_true (nrow (gt$trips) < nrow (g$trips))
               expect_identical (g$routes, gt$routes)
 
-              expect_equal (names (gt), c ("routes", "trips", "stop_times",
-                                           "stops", "transfers", "timetable",
-                                           "stations", "trip_numbers",
-                                           "stop_ids", "n_stations", "n_trips"))
-              expect_equal (gt$n_stations, 871)
-              expect_equal (gt$n_trips, 1933)
+              expect_equal (names (gt), c ("calendar", "routes", "trips",
+                                           "stop_times", "stops", "transfers",
+                                           "timetable", "stations",
+                                           "trip_numbers", "stop_ids",
+                                           "n_stations", "n_trips"))
+              expect_equal (gt$n_stations, 771)
+              expect_equal (gt$n_trips, 574)
 })
 
 test_that("route", {

@@ -11,13 +11,18 @@
 #' after midnight, a vector of two or three integers (hours, minutes) or (hours,
 #' minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
 #' \pkg{lubridate}.
+#' @param day Day of the week on which to calculate route, either as an
+#' unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
+#' between 1 = Sunday and 7 = Saturday. If not given, the current day will be
+#' used. (Not used if `gtfs` has already been prepared with
+#' \link{gtfs_timetable}.)
 #' @return square matrix of distances between nodes
 #'
 #' @export 
-gtfs_route <- function (gtfs, from, to, start_time)
+gtfs_route <- function (gtfs, from, to, start_time, day = NULL)
 {
     if (!"timetable" %in% names (gtfs))
-        gtfs <- gtfs_timetable (gtfs)
+        gtfs <- gtfs_timetable (gtfs, day)
 
     # no visible binding note:
     departure_time <- stop_name <- stop_id <- NULL
@@ -28,10 +33,8 @@ gtfs_route <- function (gtfs, from, to, start_time)
         stop ("There are no scheduled services after that time.")
 
     stations <- NULL # no visible binding note
-    start_stns <- match (station_name_to_id (from, gtfs),
-                         gtfs$stations [, stations]) - 1
-    end_stns <- match (station_name_to_id (to, gtfs),
-                       gtfs$stations [, stations]) - 1
+    start_stns <- station_name_to_ids (from, gtfs)
+    end_stns <- station_name_to_ids (to, gtfs)
 
     route <- rcpp_csa (gtfs$timetable, gtfs$transfers, gtfs$n_stations,
                      gtfs$n_trips, start_stns, end_stns, start_time)
@@ -45,13 +48,19 @@ gtfs_route <- function (gtfs, from, to, start_time)
                             map_one_trip (gtfs, route, i)))
 }
 
-station_name_to_id <- function (stn_name, gtfs)
+# names generally match to multiple IDs, each of which is returned here
+station_name_to_ids <- function (stn_name, gtfs)
 {
     # no visible binding notes:
-    stop_name <- stop_id <- NULL
+    stop_name <- stop_id <- stations <- NULL
 
     ret <- gtfs$stops [grep (stn_name, gtfs$stops [, stop_name]), ] [, stop_id]
-    ret [which (ret %in% gtfs$stop_id [, stop_id])]
+    ret <- ret [which (ret %in% gtfs$stop_id [, stop_id])]
+    ret <- match (ret, gtfs$stations [, stations]) - 1
+    if (length (ret) == 0)
+        stop (stn_name, " does not match any stations")
+
+    return (ret)
 }
 
 get_route_name <- function (gtfs, trip_id = NULL)

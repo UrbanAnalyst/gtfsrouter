@@ -4,10 +4,15 @@
 \alias{gtfs_timetable}
 \title{gtfs_timetable}
 \usage{
-gtfs_timetable(gtfs)
+gtfs_timetable(gtfs, day = NULL)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs}.}
+
+\item{day}{Day of the week on which to calculate route, either as an
+unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
+between 1 = Sunday and 7 = Saturday. If not given, the current day will be
+used.}
 }
 \value{
 The input data with an addition items, \code{timetable}, \code{stations}, and

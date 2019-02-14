@@ -4,7 +4,7 @@
 \alias{gtfs_route}
 \title{gtfs_route}
 \usage{
-gtfs_route(gtfs, from, to, start_time)
+gtfs_route(gtfs, from, to, start_time, day = NULL)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
@@ -18,6 +18,12 @@ efficient queries, pre-processed with \link{gtfs_timetable}.}
 after midnight, a vector of two or three integers (hours, minutes) or (hours,
 minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
 \pkg{lubridate}.}
+
+\item{day}{Day of the week on which to calculate route, either as an
+unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
+between 1 = Sunday and 7 = Saturday. If not given, the current day will be
+used. (Not used if \code{gtfs} has already been prepared with
+\link{gtfs_timetable}.)}
 }
 \value{
 square matrix of distances between nodes

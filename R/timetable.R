@@ -3,6 +3,10 @@
 #' Convert GTFS data into format able to be used to calculate routes.
 #'
 #' @param gtfs A set of GTFS data returned from \link{extract_gtfs}.
+#' @param day Day of the week on which to calculate route, either as an
+#' unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
+#' between 1 = Sunday and 7 = Saturday. If not given, the current day will be
+#' used.
 #' @return The input data with an addition items, `timetable`, `stations`, and
 #' `trips`, containing data formatted for more efficient use with
 #' \link{gtfs_route} (see Note).
@@ -13,8 +17,14 @@
 #' that case will generally take longer.
 #'
 #' @export
-gtfs_timetable <- function (gtfs)
+gtfs_timetable <- function (gtfs, day = NULL)
 {
+    if (!attr (gtfs, "filter_by_day"))
+    {
+        gtfs <- filter_by_day (gtfs, day)
+        attr (gtfs, "filter_by_day") <- TRUE
+    }
+
     # no visible binding notes
     from_stop_id <- to_stop_id <- stop_id <- NULL
 
@@ -54,5 +64,24 @@ gtfs_timetable <- function (gtfs)
     }
 
     return (gtfs_cp)
+}
+
+filter_by_day <- function (gtfs, day = NULL)
+{
+    if (is.null (day))
+        day <- strftime (Sys.time (), "%A")
+    day <- tolower (day)
+
+    # no visible binding notes
+    trip_id <- NULL
+
+    index <- which (gtfs$calendar [, get (day)] == 1)
+    service_id <- gtfs$calendar [index, ] [, service_id]
+    index <- which (gtfs$trips [, service_id] %in% service_id)
+    gtfs$trips <- gtfs$trips [index, ]
+    index <- which (gtfs$stop_times [, trip_id] %in% gtfs$trips [, trip_id])
+    gtfs$stop_times <- gtfs$stop_times [index, ]
+
+    return (gtfs)
 }
 
