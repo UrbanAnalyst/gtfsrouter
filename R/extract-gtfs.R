@@ -57,7 +57,7 @@ extract_gtfs <- function (filename = NULL)
     # https://stackoverflow.com/questions/18064602/why-do-i-need-to-wrap-get-in-a-dummy-function-within-a-j-lapply-call
     res <- lapply (objs, function (i) get (i))
     names (res) <- objs
-    attr (res, "filter_by_day") <- FALSE
+    attr (res, "filtered") <- FALSE
 
     return (res)
 }

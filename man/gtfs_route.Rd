@@ -4,7 +4,8 @@
 \alias{gtfs_route}
 \title{gtfs_route}
 \usage{
-gtfs_route(gtfs, from, to, start_time, day = NULL)
+gtfs_route(gtfs, from, to, start_time, day = NULL,
+  route_pattern = NULL)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
@@ -24,6 +25,11 @@ unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
 between 1 = Sunday and 7 = Saturday. If not given, the current day will be
 used. (Not used if \code{gtfs} has already been prepared with
 \link{gtfs_timetable}.)}
+
+\item{route_pattern}{Using only those routes matching given pattern, for
+example, "^U" for routes starting with "U" (as commonly used for underground
+or subway routes. (Parameter not used at all if \code{gtfs} has already been
+prepared with \link{gtfs_timetable}.)}
 }
 \value{
 square matrix of distances between nodes

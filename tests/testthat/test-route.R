@@ -106,3 +106,22 @@ test_that("route without timetable", {
                                                   start_time = start_time))
               expect_identical (route, route2)
 })
+
+test_that ("route_pattern", {
+              f <- file.path (tempdir (), "vbb.zip")
+              expect_true (file.exists (f))
+              expect_silent (g <- extract_gtfs (f))
+              expect_silent (gt <- gtfs_timetable (g, route_pattern = "^S"))
+              from <- "Schonlein" # U-bahn station, not "S"
+              to <- "Berlin Hauptbahnhof"
+              start_time <- 12 * 3600 + 120 # 12:02
+              expect_error (route <- gtfs_route (gt, from = from, to = to,
+                                                  start_time = start_time),
+                            "Schonlein does not match any stations")
+
+              expect_silent (gt <- gtfs_timetable (g, route_pattern = "^U"))
+              expect_error (route <- gtfs_route (gt, from = from, to = to,
+                                                  start_time = start_time),
+                            "No route found between the nominated stations")
+              # There is no U-bahn connection all the way to Hbf
+})

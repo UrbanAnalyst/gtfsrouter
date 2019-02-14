@@ -279,25 +279,31 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
     std::vector <size_t> end_station_out (count), trip_out (count, INFINITE_INT);
     std::vector <int> time_out (count);
     i = end_station;
-    if (i > current_trip.size ())
-        Rcpp::stop ("End station does not exist; this should never happen"); // # nocov
-    time_out [0] = earliest;
-    trip_out [0] = current_trip [i] + 1; // convert back to 1-based indices
-    end_station_out [0] = i + 1; // convert back to 1-based indices
-    count = 1;
-    while (i < INFINITE_INT)
+    if (i > current_trip.size ()) // No route able to be found
     {
-        time_out [count] = prev_time [i];
-        i = prev_stn [static_cast <size_t> (i)];
-        end_station_out [count] = i + 1;
-        if (i < INFINITE_INT)
-            trip_out [count] = current_trip [i] + 1;
-        count++;
+        end_station_out.clear ();
+        time_out.clear ();
+        trip_out.clear ();
+    } else
+    {
+        time_out [0] = earliest;
+        trip_out [0] = current_trip [i] + 1; // convert back to 1-based indices
+        end_station_out [0] = i + 1; // convert back to 1-based indices
+        count = 1;
+        while (i < INFINITE_INT)
+        {
+            time_out [count] = prev_time [i];
+            i = prev_stn [static_cast <size_t> (i)];
+            end_station_out [count] = i + 1;
+            if (i < INFINITE_INT)
+                trip_out [count] = current_trip [i] + 1;
+            count++;
+        }
+        // The last entry of these is all INF, so must be removed.
+        end_station_out.resize (end_station_out.size () - 1);
+        time_out.resize (time_out.size () - 1);
+        trip_out.resize (trip_out.size () - 1);
     }
-    // The last entry of these is all INF, so must be removed.
-    end_station_out.resize (end_station_out.size () - 1);
-    time_out.resize (time_out.size () - 1);
-    trip_out.resize (trip_out.size () - 1);
 
     Rcpp::DataFrame res = Rcpp::DataFrame::create (
             Rcpp::Named ("station") = end_station_out,

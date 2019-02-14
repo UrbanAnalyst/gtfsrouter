@@ -7,6 +7,10 @@
 #' unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
 #' between 1 = Sunday and 7 = Saturday. If not given, the current day will be
 #' used.
+#' @param route_pattern Using only those routes matching given pattern, for
+#' example, "^U" for routes starting with "U" (as commonly used for underground
+#' or subway routes.
+#'
 #' @return The input data with an addition items, `timetable`, `stations`, and
 #' `trips`, containing data formatted for more efficient use with
 #' \link{gtfs_route} (see Note).
@@ -17,12 +21,14 @@
 #' that case will generally take longer.
 #'
 #' @export
-gtfs_timetable <- function (gtfs, day = NULL)
+gtfs_timetable <- function (gtfs, day = NULL, route_pattern = NULL)
 {
-    if (!attr (gtfs, "filter_by_day"))
+    if (!attr (gtfs, "filtered"))
     {
         gtfs <- filter_by_day (gtfs, day)
-        attr (gtfs, "filter_by_day") <- TRUE
+        if (!is.null (route_pattern))
+            gtfs <- filter_by_route (gtfs, route_pattern)
+        attr (gtfs, "filtered") <- TRUE
     }
 
     # no visible binding notes
@@ -103,3 +109,29 @@ filter_by_day <- function (gtfs, day = NULL)
     return (gtfs)
 }
 
+filter_by_route <- function (gtfs, route_pattern = NULL)
+{
+    # no visible binding notes:
+    route_short_name <- route_id <- trip_id <- stop_id <-
+        from_stop_id <- to_stop_id <- NULL
+
+    index <- grep (route_pattern, gtfs$routes [, route_short_name])
+    gtfs$routes <- gtfs$routes [index, ]
+
+    gtfs$trips <- gtfs$trips [which (gtfs$trips [, route_id] %in%
+                                     gtfs$routes [, route_id]), ]
+
+    gtfs$stop_times <- gtfs$stop_times [which (gtfs$stop_times [, trip_id] %in%
+                                               gtfs$trips [, trip_id]), ]
+
+    gtfs$stops <- gtfs$stops [which (gtfs$stops [, stop_id] %in% 
+                                     gtfs$stop_times [, stop_id]), ]
+
+    index <- which ((gtfs$transfers [, from_stop_id] %in% 
+                     gtfs$stops [, stop_id]) &
+                    (gtfs$transfers [, to_stop_id] %in% 
+                     gtfs$stops [, stop_id]))
+    gtfs$transfers <- gtfs$transfers [index, ]
+
+    return (gtfs)
+}

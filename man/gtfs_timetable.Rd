@@ -4,7 +4,7 @@
 \alias{gtfs_timetable}
 \title{gtfs_timetable}
 \usage{
-gtfs_timetable(gtfs, day = NULL)
+gtfs_timetable(gtfs, day = NULL, route_pattern = NULL)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs}.}
@@ -13,6 +13,10 @@ gtfs_timetable(gtfs, day = NULL)
 unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
 between 1 = Sunday and 7 = Saturday. If not given, the current day will be
 used.}
+
+\item{route_pattern}{Using only those routes matching given pattern, for
+example, "^U" for routes starting with "U" (as commonly used for underground
+or subway routes.}
 }
 \value{
 The input data with an addition items, \code{timetable}, \code{stations}, and

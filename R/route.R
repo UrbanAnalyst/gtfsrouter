@@ -16,13 +16,19 @@
 #' between 1 = Sunday and 7 = Saturday. If not given, the current day will be
 #' used. (Not used if `gtfs` has already been prepared with
 #' \link{gtfs_timetable}.)
+#' @param route_pattern Using only those routes matching given pattern, for
+#' example, "^U" for routes starting with "U" (as commonly used for underground
+#' or subway routes. (Parameter not used at all if `gtfs` has already been
+#' prepared with \link{gtfs_timetable}.)
+#'
 #' @return square matrix of distances between nodes
 #'
 #' @export 
-gtfs_route <- function (gtfs, from, to, start_time, day = NULL)
+gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
+                        route_pattern = NULL)
 {
     if (!"timetable" %in% names (gtfs))
-        gtfs <- gtfs_timetable (gtfs, day)
+        gtfs <- gtfs_timetable (gtfs, day, route_pattern)
 
     # no visible binding note:
     departure_time <- stop_name <- stop_id <- NULL
@@ -38,6 +44,9 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL)
 
     route <- rcpp_csa (gtfs$timetable, gtfs$transfers, gtfs$n_stations,
                      gtfs$n_trips, start_stns, end_stns, start_time)
+    if (nrow (route) == 0)
+        stop ("No route found between the nominated stations")
+
     route$station_name <- sapply (route$station, function (i)
         gtfs$stops [stop_id == gtfs$stations [i] [, stations], ] [, stop_name])
 
