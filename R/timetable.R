@@ -68,14 +68,30 @@ gtfs_timetable <- function (gtfs, day = NULL)
 
 filter_by_day <- function (gtfs, day = NULL)
 {
+    days <- c ("sunday", "monday", "tuesday", "wednesday", "thursday",
+               "friday", "saturday")
+
     if (is.null (day))
         day <- strftime (Sys.time (), "%A")
+    else if (is.numeric (day))
+    {
+        if (any (day %% 1 != 0))
+            stop ("day must be an integer value")
+        day <- days [day]
+    }
     day <- tolower (day)
+
+    day <- days [pmatch (day, days)]
+    if (any (is.na (day)))
+        stop ("day must be a day of the week")
 
     # no visible binding notes
     trip_id <- NULL
 
-    index <- which (gtfs$calendar [, get (day)] == 1)
+    # Find indices of all services on nominated days
+    index <- lapply (day, function (i)
+                     which (gtfs$calendar [, get (i)] == 1))
+    index <- sort (unique (do.call (c, index)))
     service_id <- gtfs$calendar [index, ] [, service_id]
     index <- which (gtfs$trips [, service_id] %in% service_id)
     gtfs$trips <- gtfs$trips [index, ]
