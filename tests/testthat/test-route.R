@@ -26,8 +26,8 @@ test_that("extract", {
               expect_is (g, "list")
               expect_true (all (sapply (g, function (i)
                                         is (i, "data.table"))))
-              expect_equal (names (g), c ("stop_times", "stops", "transfers",
-                                          "trips", "routes"))
+              expect_equal (names (g), c ("routes", "trips", "stop_times",
+                                          "stops", "transfers"))
 })
 
 test_that ("timetable", {
@@ -48,10 +48,10 @@ test_that ("timetable", {
               expect_identical (g$trips, gt$trips)
               expect_identical (g$routes, gt$routes)
 
-              expect_equal (names (gt), c ("stop_times", "stops", "transfers",
-                                          "trips", "routes", "timetable",
-                                          "stations", "trip_numbers", "stop_ids",
-                                          "n_stations", "n_trips"))
+              expect_equal (names (gt), c ("routes", "trips", "stop_times",
+                                           "stops", "transfers", "timetable",
+                                           "stations", "trip_numbers",
+                                           "stop_ids", "n_stations", "n_trips"))
               expect_equal (gt$n_stations, 871)
               expect_equal (gt$n_trips, 1933)
 })
