@@ -48,3 +48,16 @@ test_that("convert-time", {
                                                   start_time = NULL),
                             "Time is of unknown class")
              })
+
+test_that ("day param", {
+              berlin_gtfs_to_zip ()
+              f <- file.path (tempdir (), "vbb.zip")
+              expect_true (file.exists (f))
+              expect_silent (g <- extract_gtfs (f))
+              expect_silent (gt <- gtfs_timetable (g))
+              expect_silent (gt <- gtfs_timetable (g, 1))
+              expect_error (gt <- gtfs_timetable (g, day = 1.1),
+                            "day must be an integer value")
+              #expect_error (gt <- gtfs_timetable (g, day = 10),
+              #              "numeric days must be between 1 (Sun) and 7 (Sat)")
+             })

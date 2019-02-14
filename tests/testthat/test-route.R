@@ -26,8 +26,18 @@ test_that("extract", {
               expect_is (g, "list")
               expect_true (all (sapply (g, function (i)
                                         is (i, "data.table"))))
-              expect_equal (names (g), c ("calendar", "routes", "trips",
-                                          "stop_times", "stops", "transfers"))
+              nms <-  c ("calendar", "routes", "trips",
+                         "stop_times", "stops", "transfers")
+              expect_equal (names (g), nms)
+
+              files <- file.path (tempdir (), paste0 (nms, ".txt"))
+              files <- files [-1]
+              for (f in files)
+                  writeLines ("a", f)
+              f2 <- file.path (tempdir (), "vbb2.zip")
+              zip (f2, files)
+              expect_error (g <- extract_gtfs (f2),
+                            paste0 (f2, " does not appear to be a GTFS file"))
 })
 
 test_that ("timetable", {
@@ -63,7 +73,7 @@ test_that("route", {
               expect_silent (gt <- gtfs_timetable (g))
               from <- "Schonlein"
               to <- "Berlin Hauptbahnhof"
-              start_time <- 12 * 3600 + 120 # 12:02
+              start_time <- 12 * 3600 + 1200 # 12:20
               expect_silent (route <- gtfs_route (gt, from = from, to = to,
                                                   start_time = start_time))
               expect_is (route, "data.frame")

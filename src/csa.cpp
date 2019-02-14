@@ -273,14 +273,14 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         count++;
         i = prev_stn [static_cast <size_t> (i)];
         if (count > nstations)
-            Rcpp::stop ("no route found; something went wrong");
+            Rcpp::stop ("no route found; something went wrong"); // # nocov
     }
 
     std::vector <size_t> end_station_out (count), trip_out (count, INFINITE_INT);
     std::vector <int> time_out (count);
     i = end_station;
     if (i > current_trip.size ())
-        Rcpp::stop ("End station does not exist; this should never happen");
+        Rcpp::stop ("End station does not exist; this should never happen"); // # nocov
     time_out [0] = earliest;
     trip_out [0] = current_trip [i] + 1; // convert back to 1-based indices
     end_station_out [0] = i + 1; // convert back to 1-based indices

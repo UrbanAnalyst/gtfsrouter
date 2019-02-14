@@ -18,8 +18,6 @@ extract_gtfs <- function (filename = NULL)
 
     need_these_files <- c ("calendar", "routes", "stop_times", "transfers",
                            "trips")
-    need_these_files <- c ("routes", "stop_times", "transfers",
-                           "trips")
     checks <- vapply (need_these_files, function (i)
                       any (grepl (paste0 (i, ".txt"), flist$Name)), logical (1))
     if (!all (checks))
