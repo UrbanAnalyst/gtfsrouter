@@ -6,6 +6,12 @@
 #' @return List of 2 \pkg{data.table} objects, one for "stop_times" and one for
 #' "transfers"
 #' @importFrom data.table :=
+#'
+#' @examples
+#' berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir
+#' f <- file.path (tempdir (), "vbb.zip") # name of feed
+#' gtfs <- extract_gtfs (f)
+#'
 #' @export
 extract_gtfs <- function (filename = NULL)
 {

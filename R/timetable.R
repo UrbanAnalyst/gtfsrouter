@@ -20,6 +20,8 @@
 #' include a formatted `timetable`, it will be calculated anyway, but queries in
 #' that case will generally take longer.
 #'
+#' @inherit gtfs_route return examples
+#'
 #' @export
 gtfs_timetable <- function (gtfs, day = NULL, route_pattern = NULL)
 {
