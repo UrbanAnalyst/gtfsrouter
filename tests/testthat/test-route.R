@@ -2,6 +2,7 @@ context("route")
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
              identical (Sys.getenv ("TRAVIS"), "true"))
+is_appveyor <- Sys.getenv ("APPVEYOR") != "" # appevyor sets this envvar
 
 
 test_that("extract", {
@@ -15,7 +16,7 @@ test_that("extract", {
               # Expected match: "zip file 'C:/Users/appveyor/AppData/Local/Temp/1\\Rtmp8aCxU2/junk' cannot be opened"
               # Actual message: "zip file 'C:/Users/appveyor/AppData/Local/Temp/1\\Rtmp8aCxU2/junk' cannot be opened"
               # --- and yes, those two are in fact identical! Therefore:
-              if (Sys.getenv ("APPVEYOR") == "") # appevyor sets this envvar
+              if (!is_appveyor)
                   expect_error (g <- extract_gtfs (f),
                                 paste0 ("zip file '", f, "' cannot be opened"))
 
@@ -36,8 +37,9 @@ test_that("extract", {
                   writeLines ("a", f)
               f2 <- file.path (tempdir (), "vbb2.zip")
               zip (f2, files)
-              expect_error (g <- extract_gtfs (f2),
-                            paste0 (f2, " does not appear to be a GTFS file"))
+              if (!is_appveyor)
+                  expect_error (g <- extract_gtfs (f2),
+                                paste0 (f2, " does not appear to be a GTFS file"))
 })
 
 test_that ("timetable", {
