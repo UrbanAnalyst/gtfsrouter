@@ -5,7 +5,8 @@
 \alias{plot.gtfs_isochrone}
 \title{plot.gtfs_isochrone}
 \usage{
-\method{plot}{gtfs_isochrone}(x, ..., hull_alpha = 0.1)
+\method{plot}{gtfs_isochrone}(x, ..., hull_alpha = 0.1,
+  show_all = FALSE)
 }
 \arguments{
 \item{x}{object to be plotted}
@@ -14,6 +15,9 @@
 
 \item{hull_alpha}{alpha value of non-convex hulls (see ?alphashape::ashape
 for details).}
+
+\item{show_all}{If \code{TRUE}, all other stations beyond the isochrone are also
+plotted}
 }
 \description{
 plot.gtfs_isochrone

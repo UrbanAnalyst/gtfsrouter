@@ -46,7 +46,17 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     stns <- gtfs$stations [stns] [, stations]
 
     stops <- gtfs$stops [match (stns, gtfs$stops [, stop_id]), ]
-    stops <- data.frame (stops [, c ("stop_name", "stop_lat", "stop_lon")])
+    stops <- data.frame (stops [, c ("stop_name", "stop_lon", "stop_lat")])
+    stops <- stops [!duplicated (stops), ]
+
+    all_stops <- gtfs$stops [, c ("stop_name", "stop_lon", "stop_lat")]
+    all_stops <- data.frame (all_stops)
+    all_stops <- all_stops [!duplicated (all_stops), ]
+    all_stops <- all_stops [!all_stops$stop_name %in% stops$stop_name, ]
+
+    stops$in_isochrone <- TRUE
+    all_stops$in_isochrone <- FALSE
+    stops <- rbind (stops, all_stops)
 
     class (stops) <- c ("gtfs_isochrone", class (stops))
     return (stops)
@@ -59,28 +69,34 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
 #' @param x object to be plotted
 #' @param hull_alpha alpha value of non-convex hulls (see ?alphashape::ashape
 #' for details).
+#' @param show_all If `TRUE`, all other stations beyond the isochrone are also
+#' plotted
 #' @param ... ignored here
 #' @export
-plot.gtfs_isochrone <- function (x, ..., hull_alpha = 0.1)
+plot.gtfs_isochrone <- function (x, ..., hull_alpha = 0.1, show_all = FALSE)
 {
     requireNamespace ("sf")
     requireNamespace ("alphahull")
     requireNamespace ("mapview")
 
+    x_out <- x [which (!x$in_isochrone), ]
+    x <- x [which (x$in_isochrone), ]
     hull <- get_ahull (x)
 
     bdry <- sf::st_polygon (list (as.matrix (hull [, 2:3])))
     bdry <- sf::st_sf (sf::st_sfc (bdry, crs = 4326))
 
-    x_sf <- sapply (seq (nrow (x)), function (i) {
-        sf::st_sfc (sf::st_point (as.numeric (x [i, c ("stop_lon", "stop_lat")])))
-                                })
-    x_sf <- sf::st_sf (name = x$stop_name,
-                       geometry= sf::st_sfc (x_sf, crs = 4326))
+    x_sf <- pts_to_sf (x)
+    x_out_sf <- pts_to_sf (x_out)
 
     m <- mapview::mapview (x_sf, cex = 5, color = "red", col.regions = "blue",
                            legend = FALSE)
-    mapview::addFeatures (m, bdry, color = "orange")
+    m <- mapview::addFeatures (m, bdry, color = "orange")
+    if (show_all)
+        m <- mapview::addFeatures (m, x_out_sf, radius = 1, color = "gray",
+                                   col.regions = "grey", legend = FALSE)
+
+    print (m)
 }
 
 get_ahull <- function (x)
@@ -113,4 +129,12 @@ get_ahull <- function (x)
         inds <- inds [-j, , drop = FALSE] #nolint
     }
     xy [match (ind_seq, xy$ind), ]
+}
+
+pts_to_sf <- function (x)
+{
+    x$in_isochrone <- NULL # remove that column
+    xcol <- which (names (x) == "stop_lon")
+    ycol <- which (names (x) == "stop_lat")
+    sf::st_as_sf (x, coords = c (xcol, ycol), crs = 4326)
 }
