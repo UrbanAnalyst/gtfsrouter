@@ -17,6 +17,28 @@ rcpp_time_to_seconds <- function(times) {
     .Call(`_gtfsrouter_rcpp_time_to_seconds`, times)
 }
 
+#' rcpp_csa_isochrone
+#'
+#' Calculate isochrones using Connection Scan Algorithm for GTFS data. The
+NULL
+
+#' [deparutre_station, arrival_station, departure_time, arrival_time,
+#'     trip_id],
+#' with all entries as integer values, including times in seconds after
+#' 00:00:00. The station and trip IDs can be mapped back on to actual station
+#' IDs, but do not necessarily form a single set of unit-interval values
+#' because the timetable is first cut down to only that portion after the
+#' desired start time. These are nevertheless used as direct array indices
+#' throughout, so are all size_t objects rather than int. All indices in the
+#' timetable and transfers DataFrames, as well as startstations, are
+#' 1-based, but they are still used directly which just means that the first
+#' entries (that is, entry [0]) of station and trip vectors are never used.
+#'
+#' @noRd
+rcpp_csa_isochrone <- function(timetable, transfers, nstations, ntrips, start_stations, start_time, end_time) {
+    .Call(`_gtfsrouter_rcpp_csa_isochrone`, timetable, transfers, nstations, ntrips, start_stations, start_time, end_time)
+}
+
 #' rcpp_make_timetable
 #'
 #' Make timetable from GTFS stop_times. All stops are converted to 0-indexed

@@ -72,8 +72,8 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
     if (nrow (route) == 0)
         stop ("No route found between the nominated stations")
 
-    route$station_name <- sapply (route$station, function (i)
-        gtfs$stops [stop_id == gtfs$stations [i] [, stations], ] [, stop_name])
+    stns <- gtfs$stations [route$station + 1] [, stations]
+    route$station_name <- gtfs$stops [match (stns, gtfs$stops [, stop_id]), ] [, stop_name]
 
     # map_one_trip maps the integer-valued stations back on to actual station
     # names. This is done seperately for each distinct trip so trip identifiers

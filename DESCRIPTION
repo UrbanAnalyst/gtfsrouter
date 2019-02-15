@@ -14,9 +14,12 @@ Imports:
     methods,
     Rcpp (>= 0.12.6)
 Suggests:
+    alphahull,
     hms,
     lubridate,
     knitr,
+    mapview,
+    sf,
     testthat
 LinkingTo:
     Rcpp
