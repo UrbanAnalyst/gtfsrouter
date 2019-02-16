@@ -42,7 +42,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpSFHdAa/vbb.zip"
+    ## [1] "/tmp/Rtmp7UDP4d/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -61,9 +61,6 @@ gtfs_route (gtfs,
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
 
-    ##    user  system elapsed 
-    ##   0.381   0.000   0.050
-
 | route | stop                            | departure\_time | arrival\_time |
 | :---- | :------------------------------ | :-------------- | :------------ |
 | U8    | U Schonleinstr. (Berlin)        | 12:04:00        | 12:04:00      |
@@ -77,13 +74,14 @@ gtfs_route (gtfs,
 | S5    | S+U Friedrichstr. Bhf (Berlin)  | 12:22:12        | 12:21:24      |
 | S5    | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
 
-And a routing query on a very large network (the GTFS data are MB) takes
-only 0.05 seconds.
+A routing query on a very large network (the GTFS data are MB) takes
+only around 0.05 seconds.
 
 ### gtfs\_isochrone
 
 Isochrones from a nominated station can be extracted with the
-`gtfs_isochrone()` function.
+`gtfs_isochrone()` function, returning a list of all stations reachable
+within a specified time period from that station.
 
 ``` r
 gtfs <- extract_gtfs (filename)
@@ -107,14 +105,10 @@ head(x)
 The function returns a `data.frame` of all stations, with `in_isochrone
 = TRUE` for those reachable from the nominated station within the
 nominated time. The results of `gtfs_isochrone` can also be plotted as
-an interactive web map. This requires the packages
+an interactive web map, simply by `plot(x)`. This requires the packages
 [`sf`](https:cran.r-project.org/package=sf),
 [`alphahull`](https:cran.r-project.org/package=alphahull), and
 [`mapview`](https:cran.r-project.org/package=mapview) to be installed.
-
-``` r
-plot (x)
-```
 
 ## GTFS Structure
 
