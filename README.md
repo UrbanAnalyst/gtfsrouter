@@ -28,11 +28,12 @@ packageVersion("gtfsrouter")
 
     ## [1] '0.0.1'
 
-## Example
+## Main functions
 
-The package contains some sample data from Berlin (the Verkehrverbund
-Berlin Brandenburg, or VBB). These data can be stored in a local `.zip`
-file with the package function `berlin_gtfs_to_zip()`.
+The main functions can be demonstrated with sample data from Berlin (the
+Verkehrverbund Berlin Brandenburg, or VBB), included with the package.
+GTFS data are always stored as `.zip` files, and these sample data can
+be written to local storage with the function `berlin_gtfs_to_zip()`.
 
 ``` r
 berlin_gtfs_to_zip()
@@ -41,20 +42,27 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/Rtmp5V1vWL/vbb.zip"
+    ## [1] "/tmp/RtmpSFHdAa/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
-GTFS data stored as a single `.zip` file. Routing is then as simple as
-the following code:
+GTFS data stored as a single `.zip` file.
+
+### gtfs\_route
+
+Given the name of a GTFS `.zip` file, `filename`, routing is as simple
+as the following code:
 
 ``` r
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
 gtfs_route (gtfs,
-        from = "Schonlein",
-        to = "Berlin Hauptbahnhof",
-        start_time = 12 * 3600 + 120) # 12:02 in seconds
+            from = "Schonlein",
+            to = "Berlin Hauptbahnhof",
+            start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
+
+    ##    user  system elapsed 
+    ##   0.381   0.000   0.050
 
 | route | stop                            | departure\_time | arrival\_time |
 | :---- | :------------------------------ | :-------------- | :------------ |
@@ -69,11 +77,44 @@ gtfs_route (gtfs,
 | S5    | S+U Friedrichstr. Bhf (Berlin)  | 12:22:12        | 12:21:24      |
 | S5    | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
 
-And a routing query on a very large network (the GTFS data are 64 MB) takes
-only 0.06 seconds. (Note that non-ASCII symbols have been removed from
-the test data, so “Schönleinstr” has become “Schonleinstr”, but the
-package will operate with the full VBB feed and proper station matches
-such as `from = "Schönlein"`.)
+And a routing query on a very large network (the GTFS data are MB) takes
+only 0.05 seconds.
+
+### gtfs\_isochrone
+
+Isochrones from a nominated station can be extracted with the
+`gtfs_isochrone()` function.
+
+``` r
+gtfs <- extract_gtfs (filename)
+gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
+x <- gtfs_isochrone (gtfs,
+                     from = "Schonlein",
+                     start_time = 12 * 3600 + 120,
+                     end_time = 12 * 3600 + 720) # 10 minutes later
+head(x)
+```
+
+|   | stop\_name                     | stop\_lon | stop\_lat | in\_isochrone |
+| - | :----------------------------- | --------: | --------: | :------------ |
+| 1 | U Rathaus Neukolln (Berlin)    |  13.43481 |  52.48115 | TRUE          |
+| 2 | U Kottbusser Tor (Berlin)      |  13.41775 |  52.49905 | TRUE          |
+| 3 | U Gorlitzer Bahnhof (Berlin)   |  13.42847 |  52.49903 | TRUE          |
+| 5 | U Lipschitzallee (Berlin)      |  13.46311 |  52.42464 | TRUE          |
+| 6 | U Franz-Neumann-Platz (Berlin) |  13.36428 |  52.56385 | TRUE          |
+| 7 | U Leinestr. (Berlin)           |  13.42840 |  52.47287 | TRUE          |
+
+The function returns a `data.frame` of all stations, with `in_isochrone
+= TRUE` for those reachable from the nominated station within the
+nominated time. The results of `gtfs_isochrone` can also be plotted as
+an interactive web map. This requires the packages
+[`sf`](https:cran.r-project.org/package=sf),
+[`alphahull`](https:cran.r-project.org/package=alphahull), and
+[`mapview`](https:cran.r-project.org/package=mapview) to be installed.
+
+``` r
+plot (x)
+```
 
 ## GTFS Structure
 
