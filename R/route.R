@@ -82,7 +82,8 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
                             map_one_trip (gtfs, route, i)))
 }
 
-# names generally match to multiple IDs, each of which is returned here
+# names generally match to multiple IDs, each of which is returned here, as
+# 0-indexed IDs into gtfs$stations
 station_name_to_ids <- function (stn_name, gtfs)
 {
     # no visible binding notes:

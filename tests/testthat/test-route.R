@@ -64,8 +64,8 @@ test_that ("timetable", {
                                            "timetable", "stations",
                                            "trip_numbers", "stop_ids",
                                            "n_stations", "n_trips"))
-              expect_equal (gt$n_stations, 773)
-              expect_equal (gt$n_trips, 552)
+              expect_equal (gt$n_stations, nrow (gt$stations))
+              expect_equal (gt$n_trips, nrow (gt$trip_numbers))
 })
 
 test_that("route", {
