@@ -250,11 +250,13 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
                         if (end_stations_set.find (trans_dest) !=
                                 end_stations_set.end ())
                         {
+                            // # nocov start
                             if (ttime < earliest)
                             {
                                 earliest = ttime;
                                 end_station = trans_dest;
                             }
+                            // # nocov end
                             end_stations_set.erase (trans_dest);
                         }
                     }
