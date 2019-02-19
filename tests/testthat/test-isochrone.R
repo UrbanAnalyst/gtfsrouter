@@ -35,20 +35,4 @@ test_that("isochrone-internal", {
               expect_true (nrow (x_out) < nrow (x))
               x <- x [which (x$in_isochrone), ]
               expect_true (nrow (x) < nrow (x_out))
-
-              hull <- gtfsrouter:::get_ahull (x)
-              expect_is (hull, "data.frame")
-              expect_equal (ncol (hull), 3)
-              expect_identical (names (hull), c ("ind", "x","y"))
-              bdry <- sf::st_polygon (list (as.matrix (hull [, 2:3])))
-              bdry <- sf::st_sf (sf::st_sfc (bdry, crs = 4326))
-
-              x_sf <- gtfsrouter:::pts_to_sf (x)
-              expect_equal (nrow (x_sf), nrow (x))
-              expect_equal (ncol (x_sf), 2)
-              expect_identical (names (x_sf), c ("stop_name", "geometry"))
-              x_out_sf <- gtfsrouter:::pts_to_sf (x_out)
-              expect_equal (nrow (x_out_sf), nrow (x_out))
-              expect_equal (ncol (x_out_sf), 2)
-              expect_identical (names (x_out_sf), c ("stop_name", "geometry"))
              })
