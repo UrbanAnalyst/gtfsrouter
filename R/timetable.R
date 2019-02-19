@@ -42,7 +42,8 @@ gtfs_timetable <- function (gtfs, day = NULL, route_pattern = NULL)
     gtfs_cp <- data.table::copy (gtfs)
     if (!"timetable" %in% names (gtfs))
     {
-        tt <- rcpp_make_timetable (gtfs_cp$stop_times)
+        tt <- rcpp_make_timetable (gtfs_cp$stop_times, gtfs_cp$stops,
+                                   gtfs_cp$trips)
         # tt$timetable has [departure/arrival_station, departure/arrival_time,
         # trip_id], where the station and trip values are 0-based indices into the
         # vectors of tt$stop_ids and tt$trips.

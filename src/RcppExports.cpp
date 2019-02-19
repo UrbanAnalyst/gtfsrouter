@@ -45,13 +45,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_make_timetable
-Rcpp::List rcpp_make_timetable(Rcpp::DataFrame stop_times);
-RcppExport SEXP _gtfsrouter_rcpp_make_timetable(SEXP stop_timesSEXP) {
+Rcpp::List rcpp_make_timetable(Rcpp::DataFrame stop_times, Rcpp::DataFrame stops, Rcpp::DataFrame trips);
+RcppExport SEXP _gtfsrouter_rcpp_make_timetable(SEXP stop_timesSEXP, SEXP stopsSEXP, SEXP tripsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type stop_times(stop_timesSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_make_timetable(stop_times));
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type stops(stopsSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type trips(tripsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_make_timetable(stop_times, stops, trips));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -77,7 +79,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gtfsrouter_rcpp_convert_time", (DL_FUNC) &_gtfsrouter_rcpp_convert_time, 1},
     {"_gtfsrouter_rcpp_time_to_seconds", (DL_FUNC) &_gtfsrouter_rcpp_time_to_seconds, 1},
     {"_gtfsrouter_rcpp_csa_isochrone", (DL_FUNC) &_gtfsrouter_rcpp_csa_isochrone, 7},
-    {"_gtfsrouter_rcpp_make_timetable", (DL_FUNC) &_gtfsrouter_rcpp_make_timetable, 1},
+    {"_gtfsrouter_rcpp_make_timetable", (DL_FUNC) &_gtfsrouter_rcpp_make_timetable, 3},
     {"_gtfsrouter_rcpp_csa", (DL_FUNC) &_gtfsrouter_rcpp_csa, 7},
     {NULL, NULL, 0}
 };

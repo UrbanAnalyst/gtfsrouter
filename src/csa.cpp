@@ -11,7 +11,8 @@
 //'
 //' @noRd
 // [[Rcpp::export]]
-Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times)
+Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times,
+        Rcpp::DataFrame stops, Rcpp::DataFrame trips)
 {
     size_t n = static_cast <size_t> (stop_times.nrow ());
 

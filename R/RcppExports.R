@@ -49,8 +49,8 @@ rcpp_csa_isochrone <- function(timetable, transfers, nstations, ntrips, start_st
 #' original IDs.
 #'
 #' @noRd
-rcpp_make_timetable <- function(stop_times) {
-    .Call(`_gtfsrouter_rcpp_make_timetable`, stop_times)
+rcpp_make_timetable <- function(stop_times, stops, trips) {
+    .Call(`_gtfsrouter_rcpp_make_timetable`, stop_times, stops, trips)
 }
 
 #' rcpp_csa
