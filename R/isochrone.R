@@ -41,11 +41,11 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     start_stns <- station_name_to_ids (from, gtfs)
 
     stns <- rcpp_csa_isochrone (gtfs$timetable, gtfs$transfers,
-                                gtfs$n_stations, gtfs$n_trips, start_stns,
-                                start_time, end_time)
-    stns <- gtfs$stations [stns] [, stations]
+                                nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
+                                start_stns, start_time, end_time)
+    stop_ids <- gtfs$stop_ids [stns] [, stop_ids]
 
-    stops <- gtfs$stops [match (stns, gtfs$stops [, stop_id]), ]
+    stops <- gtfs$stops [match (stop_ids, gtfs$stops [, stop_id]), ]
     stops <- data.frame (stops [, c ("stop_name", "stop_lon", "stop_lat")])
     stops <- stops [!duplicated (stops), ]
 
