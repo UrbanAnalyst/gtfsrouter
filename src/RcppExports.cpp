@@ -45,15 +45,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_make_timetable
-Rcpp::List rcpp_make_timetable(Rcpp::DataFrame stop_times, Rcpp::DataFrame stops, Rcpp::DataFrame trips);
-RcppExport SEXP _gtfsrouter_rcpp_make_timetable(SEXP stop_timesSEXP, SEXP stopsSEXP, SEXP tripsSEXP) {
+Rcpp::DataFrame rcpp_make_timetable(Rcpp::DataFrame stop_times, std::vector <std::string> stop_ids, std::vector <std::string> trip_ids);
+RcppExport SEXP _gtfsrouter_rcpp_make_timetable(SEXP stop_timesSEXP, SEXP stop_idsSEXP, SEXP trip_idsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type stop_times(stop_timesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type stops(stopsSEXP);
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type trips(tripsSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_make_timetable(stop_times, stops, trips));
+    Rcpp::traits::input_parameter< std::vector <std::string> >::type stop_ids(stop_idsSEXP);
+    Rcpp::traits::input_parameter< std::vector <std::string> >::type trip_ids(trip_idsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_make_timetable(stop_times, stop_ids, trip_ids));
     return rcpp_result_gen;
 END_RCPP
 }

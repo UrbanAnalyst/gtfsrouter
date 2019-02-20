@@ -41,16 +41,13 @@ rcpp_csa_isochrone <- function(timetable, transfers, nstations, ntrips, start_st
 
 #' rcpp_make_timetable
 #'
-#' Make timetable from GTFS stop_times. All stops are converted to 0-indexed
-#' integer indices into the list of stops, and stop times to seconds after
-#' midnight. Similarly, trip codes are converted into 0-indexed integer values
-#' into a list of trips. The corresponding vectors of stop_ids and trip_ids are
-#' also returned to subsequent re-map the integer values back on to their
-#' original IDs.
+#' Make timetable from GTFS stop_times. Both stop_ids and trip_ids are vectors
+#' of unique values which are converted to unordered_maps on to 1-indexed
+#' integer values.
 #'
 #' @noRd
-rcpp_make_timetable <- function(stop_times, stops, trips) {
-    .Call(`_gtfsrouter_rcpp_make_timetable`, stop_times, stops, trips)
+rcpp_make_timetable <- function(stop_times, stop_ids, trip_ids) {
+    .Call(`_gtfsrouter_rcpp_make_timetable`, stop_times, stop_ids, trip_ids)
 }
 
 #' rcpp_csa

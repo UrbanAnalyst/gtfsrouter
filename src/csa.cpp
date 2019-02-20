@@ -2,86 +2,70 @@
 
 //' rcpp_make_timetable
 //'
-//' Make timetable from GTFS stop_times. All stops are converted to 0-indexed
-//' integer indices into the list of stops, and stop times to seconds after
-//' midnight. Similarly, trip codes are converted into 0-indexed integer values
-//' into a list of trips. The corresponding vectors of stop_ids and trip_ids are
-//' also returned to subsequent re-map the integer values back on to their
-//' original IDs.
+//' Make timetable from GTFS stop_times. Both stop_ids and trip_ids are vectors
+//' of unique values which are converted to unordered_maps on to 1-indexed
+//' integer values.
 //'
 //' @noRd
 // [[Rcpp::export]]
-Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times,
-        Rcpp::DataFrame stops, Rcpp::DataFrame trips)
+Rcpp::DataFrame rcpp_make_timetable (Rcpp::DataFrame stop_times,
+        std::vector <std::string> stop_ids, std::vector <std::string> trip_ids)
 {
-    size_t n = static_cast <size_t> (stop_times.nrow ());
+    std::unordered_map <std::string, int> trip_id_map;
+    int i = 1; // 1-indexed
+    for (auto tr: trip_ids)
+        trip_id_map.emplace (tr, i++);
 
     std::unordered_map <std::string, int> stop_id_map;
-    std::deque <std::string> stop_ids;
-    std::deque <std::string> trip_ids;
-    std::unordered_map <std::string, int> trip_id_map;
+    i = 1;
+    for (auto st: stop_ids)
+        stop_id_map.emplace (st, i++);
 
-    std::vector <std::string> stop_id_vec = stop_times ["stop_id"],
-        trip_id_vec = stop_times ["trip_id"];
+    std::vector <std::string> stop_times_stop_id = stop_times ["stop_id"],
+        stop_times_trip_id = stop_times ["trip_id"];
     std::vector <int> arrival_time_vec = stop_times ["arrival_time"],
         departure_time_vec = stop_times ["departure_time"];
 
-    // Get maps of stop and trip IDs
-    int count_stops = 0, count_trips = 0;
-    for (size_t i = 0; i < n; i++)
-    {
-        if (stop_id_map.find (stop_id_vec [i]) == stop_id_map.end ())
-        {
-            stop_ids.push_back (stop_id_vec [i]);
-            stop_id_map.emplace (stop_id_vec [i], count_stops++);
-        }
-        if (trip_id_map.find (trip_id_vec [i]) == trip_id_map.end ())
-        {
-            trip_ids.push_back (trip_id_vec [i]);
-            trip_id_map.emplace (trip_id_vec [i], count_trips++);
-        }
-    }
-
     // count number of connections
     size_t n_connections = 0;
-    std::string n_trip_id = trip_id_vec [0];
-    for (size_t i = 1; i < n; i++)
+    std::string trip_id_i = stop_times_trip_id [0];
+    size_t n_stop_times = static_cast <size_t> (stop_times.nrow ());
+    for (size_t i = 1; i < n_stop_times; i++)
     {
-        if (trip_id_vec [i] == n_trip_id)
+        if (stop_times_trip_id [i] == trip_id_i)
             n_connections++;
         else
         {
-            n_trip_id = trip_id_vec [i];
+            trip_id_i = stop_times_trip_id [i];
         }
     }
 
+    // The vectors forming the timetable:
     std::vector <int> departure_time (n_connections),
         arrival_time (n_connections),
         departure_station (n_connections),
-        arrival_station (n_connections);
-    std::vector <int> trip_id (n_connections);
+        arrival_station (n_connections),
+        trip_id (n_connections);
 
     n_connections = 0;
-    n_trip_id = trip_id_vec [0];
-    int ds = stop_id_map.at (stop_id_vec [0]);
-    int tn = trip_id_map.at (trip_id_vec [0]);
-    for (size_t i = 1; i < n; i++)
+    trip_id_i = stop_times_trip_id [0];
+    int dest_stop = stop_id_map.at (stop_times_stop_id [0]);
+    for (size_t i = 1; i < n_stop_times; i++)
     {
-        if (trip_id_vec [i] == n_trip_id)
+        if (stop_times_trip_id [i] == trip_id_i)
         {
-            int as = stop_id_map.at (stop_id_vec [i]);
-            departure_station [n_connections] = ds;
-            arrival_station [n_connections] = as;
+            int arrival_stop = stop_id_map.at (stop_times_stop_id [i]);
+            departure_station [n_connections] = dest_stop;
+            arrival_station [n_connections] = arrival_stop;
             departure_time [n_connections] = departure_time_vec [i - 1];
             arrival_time [n_connections] = arrival_time_vec [i];
-            trip_id [n_connections] = tn;
-            ds = as;
+            trip_id [n_connections] = trip_id_map.at (trip_id_i);
+            dest_stop = arrival_stop;
             n_connections++;
         } else
         {
-            ds = stop_id_map.at (stop_id_vec [i]);
-            n_trip_id = trip_id_vec [i];
-            tn = trip_id_map.at (n_trip_id);
+            dest_stop = stop_id_map.at (stop_times_stop_id [i]);
+            trip_id_i = stop_times_trip_id [i];
         }
     }
 
@@ -92,13 +76,8 @@ Rcpp::List rcpp_make_timetable (Rcpp::DataFrame stop_times,
             Rcpp::Named ("arrival_time") = arrival_time,
             Rcpp::Named ("trip_id") = trip_id,
             Rcpp::_["stringsAsFactors"] = false);
-    Rcpp::CharacterVector station_names = Rcpp::wrap (stop_ids);
-    Rcpp::CharacterVector trip_numbers = Rcpp::wrap (trip_ids);
 
-    return Rcpp::List::create (
-            Rcpp::Named ("timetable") = timetable,
-            Rcpp::Named ("stations") = station_names,
-            Rcpp::Named ("trip_numbers") = trip_numbers);
+    return timetable;
 }
 
 //' rcpp_csa
@@ -290,16 +269,16 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
     } else
     {
         time_out [0] = earliest;
-        trip_out [0] = current_trip [i] + 1; // convert back to 1-based indices
-        end_station_out [0] = i + 1; // convert back to 1-based indices
+        trip_out [0] = current_trip [i];
+        end_station_out [0] = i;
         count = 1;
         while (i < INFINITE_INT)
         {
             time_out [count] = prev_time [i];
             i = prev_stn [static_cast <size_t> (i)];
-            end_station_out [count] = i + 1;
+            end_station_out [count] = i;
             if (i < INFINITE_INT)
-                trip_out [count] = current_trip [i] + 1;
+                trip_out [count] = current_trip [i];
             count++;
         }
         // The last entry of these is all INF, so must be removed.
@@ -309,9 +288,9 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
     }
 
     Rcpp::DataFrame res = Rcpp::DataFrame::create (
-            Rcpp::Named ("station") = end_station_out,
+            Rcpp::Named ("stop_id") = end_station_out,
             Rcpp::Named ("time") = time_out,
-            Rcpp::Named ("trip") = trip_out,
+            Rcpp::Named ("trip_id") = trip_out,
             Rcpp::_["stringsAsFactors"] = false);
 
     return res;

@@ -61,9 +61,7 @@ test_that ("timetable", {
 
               expect_equal (names (gt), c ("calendar", "routes", "trips",
                                            "stop_times", "stops", "transfers",
-                                           "timetable", "stations",
-                                           "trip_numbers", "stop_ids",
-                                           "n_stations", "n_trips"))
+                                           "timetable", "stop_ids", "trip_ids"))
               expect_equal (gt$n_stations, nrow (gt$stations))
               expect_equal (gt$n_trips, nrow (gt$trip_numbers))
 })

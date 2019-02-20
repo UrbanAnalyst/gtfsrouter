@@ -67,13 +67,13 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
     start_stns <- station_name_to_ids (from, gtfs)
     end_stns <- station_name_to_ids (to, gtfs)
 
-    route <- rcpp_csa (gtfs$timetable, gtfs$transfers, gtfs$n_stations,
-                     gtfs$n_trips, start_stns, end_stns, start_time)
+    route <- rcpp_csa (gtfs$timetable, gtfs$transfers, nrow (gtfs$stop_ids),
+                       nrow (gtfs$trip_ids), start_stns, end_stns, start_time)
     if (nrow (route) == 0)
         stop ("No route found between the nominated stations")
 
-    stns <- gtfs$stations [route$station + 1] [, stations]
-    route$station_name <- gtfs$stops [match (stns, gtfs$stops [, stop_id]), ] [, stop_name]
+    stns <- gtfs$stop_ids [route$stop_id] [, stop_ids]
+    route$stop_name <- gtfs$stops [match (stns, gtfs$stops [, stop_id]), ] [, stop_name]
 
     # map_one_trip maps the integer-valued stations back on to actual station
     # names. This is done seperately for each distinct trip so trip identifiers
@@ -90,8 +90,7 @@ station_name_to_ids <- function (stn_name, gtfs)
     stop_name <- stop_id <- stations <- NULL
 
     ret <- gtfs$stops [grep (stn_name, gtfs$stops [, stop_name]), ] [, stop_id]
-    ret <- ret [which (ret %in% gtfs$stop_id [, stop_id])]
-    ret <- match (ret, gtfs$stations [, stations]) - 1
+    ret <- match (ret, gtfs$stop_ids [, stop_ids])
     if (length (ret) == 0)
         stop (stn_name, " does not match any stations")
 
@@ -116,15 +115,15 @@ map_one_trip <- function (gtfs, route, trip_num = 1)
     # no visible binding notes:
     trip_id <- stop_id <- stop_name <- departure_time <- arrival_time <- NULL
 
-    trip_numbers <- gtfs$trip_numbers [unique (route$trip)]
-    trip <- trip_numbers [trip_num, trip_numbers]
+    trip_ids <- gtfs$trip_ids [unique (route$trip)]
+    trip <- trip_ids [trip_num, trip_ids]
 
     route_name <- get_route_name (gtfs, trip_id = trip)
 
     trip_stops <- gtfs$stop_times [trip_id == trip, ]
-    trip_stop_num <- match (trip_stops [, stop_id], gtfs$stop_ids [, stop_id])
-    trip_stop_num <- trip_stop_num [which (trip_stop_num %in% route$station)]
-    trip_stop_id <- gtfs$stop_ids [trip_stop_num, stop_id]
+    trip_stop_num <- match (trip_stops [, stop_id], gtfs$stop_ids [, stop_ids])
+    trip_stop_num <- trip_stop_num [which (trip_stop_num %in% route$stop_id)]
+    trip_stop_id <- gtfs$stop_ids [trip_stop_num, stop_ids]
     trip_stop_names <- gtfs$stops [match (trip_stop_id, gtfs$stops [, stop_id]),
                                    stop_name]
     trip_stops <- trip_stops [which (trip_stops [, stop_id %in% trip_stop_id]), ]
