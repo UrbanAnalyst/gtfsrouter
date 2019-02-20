@@ -99,6 +99,7 @@ plot.gtfs_isochrone <- function (x, ..., hull_alpha = 0.1, show_all = FALSE)
     print (m)
 }
 
+# nocov start
 get_ahull <- function (x)
 {
     xy <- data.frame ("x" = x$stop_lon, "y" = x$stop_lat)
@@ -138,3 +139,4 @@ pts_to_sf <- function (x)
     ycol <- which (names (x) == "stop_lat")
     sf::st_as_sf (x, coords = c (xcol, ycol), crs = 4326)
 }
+# nocov end
