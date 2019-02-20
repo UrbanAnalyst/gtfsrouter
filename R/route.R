@@ -56,7 +56,7 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
         gtfs <- gtfs_timetable (gtfs, day, route_pattern)
 
     # no visible binding note:
-    departure_time <- stop_name <- stop_id <- NULL
+    departure_time <- stop_id <- stop_name <- stop_ids <- NULL
 
     start_time <- convert_time (start_time)
     gtfs$timetable <- gtfs$timetable [departure_time >= start_time, ]

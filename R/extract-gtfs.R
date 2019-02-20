@@ -58,7 +58,7 @@ extract_gtfs <- function (filename = NULL)
     transfers [, min_transfer_time := replace (min_transfer_time,
                                                is.na (min_transfer_time), 0)]
 
-    trips [, trip_id := paste0 (trip_id)]
+    trips <- trips [, trip_id := paste0 (trip_id)]
 
     objs <- gsub (".txt", "", basename (flist$Name))
     # Note: **NOT** lapply (objs, get)!!

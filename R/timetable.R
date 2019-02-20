@@ -34,7 +34,7 @@ gtfs_timetable <- function (gtfs, day = NULL, route_pattern = NULL)
     }
 
     # no visible binding notes
-    from_stop_id <- to_stop_id <- stop_id <- NULL
+    stop_id <- trip_id <- stop_ids <- from_stop_id <- to_stop_id <- NULL
 
     # IMPORTANT: data.table works entirely by reference, so all operations
     # change original values unless first copied! This function thus returns a
