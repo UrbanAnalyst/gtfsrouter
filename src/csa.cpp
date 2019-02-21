@@ -187,7 +187,6 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         {
             is_connected [trip_id [i] ] = true;
             earliest_connection [arrival_station [i] ] = arrival_time [i];
-            current_trip [departure_station [i] ] = trip_id [i];
             current_trip [arrival_station [i] ] = trip_id [i];
             prev_stn [arrival_station [i] ] = departure_station [i];
             prev_time [arrival_station [i] ] = departure_time [i];
@@ -203,7 +202,6 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
                 prev_stn [arrival_station [i] ] = departure_station [i];
                 prev_time [arrival_station [i] ] = departure_time [i];
                 current_trip [arrival_station [i] ] = trip_id [i];
-                current_trip [departure_station [i] ] = trip_id [i];
             }
             if (end_stations_set.find (arrival_station [i]) !=
                     end_stations_set.end ())
@@ -286,6 +284,12 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         end_station_out.resize (end_station_out.size () - 1);
         time_out.resize (time_out.size () - 1);
         trip_out.resize (trip_out.size () - 1);
+        // trip_out values don't exist for start stations of each route, so
+        for (int j = 1; j < trip_out.size (); j++)
+            if (trip_out [j] == INFINITE_INT)
+                trip_out [j] = trip_out [j - 1];
+        // and last value of trip_out is always Inf, so
+        //trip_out [trip_out.size () - 1] = trip_out [trip_out.size () - 2];
     }
 
     Rcpp::DataFrame res = Rcpp::DataFrame::create (
