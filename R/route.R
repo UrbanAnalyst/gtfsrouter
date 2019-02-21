@@ -87,7 +87,7 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
 station_name_to_ids <- function (stn_name, gtfs)
 {
     # no visible binding notes:
-    stop_name <- stop_id <- stations <- NULL
+    stop_name <- stop_id <- stop_ids <- stations <- NULL
 
     ret <- gtfs$stops [grep (stn_name, gtfs$stops [, stop_name]), ] [, stop_id]
     ret <- match (ret, gtfs$stop_ids [, stop_ids])
@@ -113,7 +113,8 @@ get_route_name <- function (gtfs, trip_id = NULL)
 map_one_trip <- function (gtfs, route, trip_num = 1)
 {
     # no visible binding notes:
-    trip_id <- stop_id <- stop_name <- departure_time <- arrival_time <- NULL
+    trip_id <- stop_id <- stop_ids <- stop_name <-
+        departure_time <- arrival_time <- NULL
 
     trip_ids <- gtfs$trip_ids [unique (route$trip)]
     trip <- trip_ids [trip_num, trip_ids]
