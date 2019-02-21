@@ -94,7 +94,7 @@ Rcpp::IntegerVector rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     for (size_t i = 0; i < n; i++)
     {
         if (departure_time [i] < start_time)
-            continue;
+            continue; // # nocov - these lines already removed in R fn.
         if (departure_time [i] > end_time)
             break;
 

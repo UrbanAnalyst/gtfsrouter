@@ -178,7 +178,7 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
     for (size_t i = 0; i < n; i++)
     {
         if (departure_time [i] < start_time)
-            continue;
+            continue; // # nocov - these lines already removed in R fn.
 
         // add all departures from start_stations_set:
         if (start_stations_set.find (departure_station [i]) !=

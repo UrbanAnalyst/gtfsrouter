@@ -79,7 +79,7 @@ filter_by_day <- function (gtfs, day = NULL)
         if (any (day %% 1 != 0))
             stop ("day must be an integer value")
         if (any (day < 0 | day > 7))
-            stop ("numeric days must be between 1 (Sun) and 7 (Sat)")
+            stop ("numeric days must be between 1 (Sun) and 7 (Sat)") # nocov
         day <- days [day]
     }
     day <- tolower (day)

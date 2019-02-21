@@ -60,4 +60,6 @@ test_that ("day param", {
                             "day must be an integer value")
               #expect_error (gt <- gtfs_timetable (g, day = 10),
               #              "numeric days must be between 1 (Sun) and 7 (Sat)")
+              expect_error (gt <- gtfs_timetable (g, day = NA),
+                            "day must be a day of the week")
              })
