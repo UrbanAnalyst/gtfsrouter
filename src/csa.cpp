@@ -141,11 +141,12 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         }
 
     // set transfer times from first connection; the prev and current vars are
-    // used in the main loop below.
-    std::vector <int> earliest_connection (nstations, INFINITE_INT),
-        prev_time (nstations, INFINITE_INT);
-    std::vector <size_t> prev_stn (nstations, INFINITE_INT),
-        current_trip (nstations, INFINITE_INT);
+    // used in the main loop below. Thus use nstations + 1 because it's
+    // 1-indexed throughout, and the first element is ignored.
+    std::vector <int> earliest_connection (nstations + 1, INFINITE_INT),
+        prev_time (nstations + 1, INFINITE_INT);
+    std::vector <size_t> prev_stn (nstations + 1, INFINITE_INT),
+        current_trip (nstations + 1, INFINITE_INT);
     for (size_t i = 0; i < start_stations.size (); i++)
     {
         earliest_connection [start_stations [i]] = start_time;
