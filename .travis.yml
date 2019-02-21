@@ -1,6 +1,6 @@
 language: R
 warnings_are_errors: true
-sudo: false
+sudo: required
 cache: packages
 
 matrix:
