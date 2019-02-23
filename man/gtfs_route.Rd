@@ -5,7 +5,7 @@
 \title{gtfs_route}
 \usage{
 gtfs_route(gtfs, from, to, start_time, day = NULL,
-  route_pattern = NULL)
+  route_pattern = NULL, quiet = FALSE)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
@@ -30,6 +30,9 @@ used. (Not used if \code{gtfs} has already been prepared with
 example, "^U" for routes starting with "U" (as commonly used for underground
 or subway routes. (Parameter not used at all if \code{gtfs} has already been
 prepared with \link{gtfs_timetable}.)}
+
+\item{quiet}{Set to \code{TRUE} to suppress screen messages (currently just
+regarding timetable construction).}
 }
 \value{
 square matrix of distances between nodes

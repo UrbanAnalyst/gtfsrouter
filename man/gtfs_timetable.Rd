@@ -4,7 +4,7 @@
 \alias{gtfs_timetable}
 \title{gtfs_timetable}
 \usage{
-gtfs_timetable(gtfs, day = NULL, route_pattern = NULL)
+gtfs_timetable(gtfs, day = NULL, route_pattern = NULL, quiet = FALSE)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs}.}
@@ -17,6 +17,9 @@ used.}
 \item{route_pattern}{Using only those routes matching given pattern, for
 example, "^U" for routes starting with "U" (as commonly used for underground
 or subway routes.}
+
+\item{quiet}{Set to \code{TRUE} to suppress screen messages (currently just
+regarding timetable construction).}
 }
 \value{
 The input data with an addition items, \code{timetable}, \code{stations}, and

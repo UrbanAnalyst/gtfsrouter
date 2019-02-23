@@ -20,6 +20,8 @@
 #' example, "^U" for routes starting with "U" (as commonly used for underground
 #' or subway routes. (Parameter not used at all if `gtfs` has already been
 #' prepared with \link{gtfs_timetable}.)
+#' @param quiet Set to `TRUE` to suppress screen messages (currently just
+#' regarding timetable construction).
 #'
 #' @return square matrix of distances between nodes
 #'
@@ -50,10 +52,10 @@
 #'
 #' @export 
 gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
-                        route_pattern = NULL)
+                        route_pattern = NULL, quiet = FALSE)
 {
     if (!"timetable" %in% names (gtfs))
-        gtfs <- gtfs_timetable (gtfs, day, route_pattern)
+        gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)
 
     # no visible binding note:
     departure_time <- stop_id <- stop_name <- stop_ids <- NULL

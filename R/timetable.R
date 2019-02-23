@@ -20,14 +20,16 @@
 #' include a formatted `timetable`, it will be calculated anyway, but queries in
 #' that case will generally take longer.
 #'
+#' @inheritParams gtfs_route
 #' @inherit gtfs_route return examples
 #'
 #' @export
-gtfs_timetable <- function (gtfs, day = NULL, route_pattern = NULL)
+gtfs_timetable <- function (gtfs, day = NULL, route_pattern = NULL,
+                            quiet = FALSE)
 {
     if (!attr (gtfs, "filtered"))
     {
-        gtfs <- filter_by_day (gtfs, day)
+        gtfs <- filter_by_day (gtfs, day, quiet = quiet)
         if (!is.null (route_pattern))
             gtfs <- filter_by_route (gtfs, route_pattern)
         attr (gtfs, "filtered") <- TRUE
@@ -67,14 +69,17 @@ gtfs_timetable <- function (gtfs, day = NULL, route_pattern = NULL)
     return (gtfs_cp)
 }
 
-filter_by_day <- function (gtfs, day = NULL)
+filter_by_day <- function (gtfs, day = NULL, quiet = FALSE)
 {
     days <- c ("sunday", "monday", "tuesday", "wednesday", "thursday",
                "friday", "saturday")
 
     if (is.null (day))
+    {
         day <- strftime (Sys.time (), "%A")
-    else if (is.numeric (day))
+        if (!quiet)
+            message ("Day not specified; extracting timetable for ", day)
+    } else if (is.numeric (day))
     {
         if (any (day %% 1 != 0))
             stop ("day must be an integer value")

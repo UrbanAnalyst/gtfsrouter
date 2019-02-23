@@ -11,23 +11,20 @@
 #' minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
 #' \pkg{lubridate}.
 #' @param end_time End time to calculate isochrone
-#' @param day Day of the week on which to calculate route, either as an
-#' unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
-#' between 1 = Sunday and 7 = Saturday. If not given, the current day will be
-#' used. (Not used if `gtfs` has already been prepared with
-#' \link{gtfs_timetable}.)
 #' @param route_pattern Using only those routes matching given pattern, for
 #' example, "^U" for routes starting with "U" (as commonly used for underground
 #' or subway routes. (Parameter not used at all if `gtfs` has already been
 #' prepared with \link{gtfs_timetable}.)
 #'
+#' @inheritParams gtfs_route
+#'
 #' @return square matrix of distances between nodes
 #' @export 
 gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
-                            route_pattern = NULL)
+                            route_pattern = NULL, quiet = FALSE)
 {
     if (!"timetable" %in% names (gtfs))
-        gtfs <- gtfs_timetable (gtfs, day, route_pattern)
+        gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)
 
     # no visible binding note:
     departure_time <- stop_id <- NULL

@@ -10,7 +10,7 @@ test_that("gtfs_isochrone", {
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
               expect_silent (g <- extract_gtfs (f))
-              expect_silent (g2 <- gtfs_timetable (g))
+              expect_silent (g2 <- gtfs_timetable (g, quiet = TRUE))
               ic <- gtfs_isochrone (g2,
                                     from = "Schonlein",
                                     start_time = 12 * 3600 + 1200,
@@ -33,7 +33,7 @@ test_that("isochrone errors", {
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
               expect_silent (g <- extract_gtfs (f))
-              expect_silent (g <- gtfs_timetable (g))
+              expect_silent (g <- gtfs_timetable (g, quiet = TRUE))
               expect_error (
               ic <- gtfs_isochrone (g,
                                     from = "Schonlein",
@@ -46,7 +46,7 @@ test_that("isochrone-internal", {
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
               expect_silent (g <- extract_gtfs (f))
-              expect_silent (g <- gtfs_timetable (g))
+              expect_silent (g <- gtfs_timetable (g, quiet = TRUE))
               x <- gtfs_isochrone (g,
                                    from = "Schonlein",
                                    start_time = 12 * 3600 + 600,

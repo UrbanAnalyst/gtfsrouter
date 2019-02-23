@@ -46,7 +46,7 @@ test_that ("timetable", {
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
               expect_silent (g <- extract_gtfs (f))
-              expect_silent (gt <- gtfs_timetable (g))
+              expect_silent (gt <- gtfs_timetable (g, quiet = TRUE))
               expect_false (identical (g, gt))
               expect_silent (gt2 <- gtfs_timetable (gt))
               expect_identical (gt, gt2)
@@ -70,7 +70,7 @@ test_that("route", {
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
               expect_silent (g <- extract_gtfs (f))
-              expect_silent (gt <- gtfs_timetable (g))
+              expect_silent (gt <- gtfs_timetable (g, quiet = TRUE))
               from <- "Schonlein"
               to <- "Berlin Hauptbahnhof"
               start_time <- 12 * 3600 + 1200 # 12:20
@@ -94,14 +94,16 @@ test_that("route without timetable", {
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
               expect_silent (g <- extract_gtfs (f))
-              expect_silent (gt <- gtfs_timetable (g))
+              expect_silent (gt <- gtfs_timetable (g, quiet = TRUE))
               from <- "Schonlein"
               to <- "Berlin Hauptbahnhof"
               start_time <- 12 * 3600 + 120 # 12:02
               expect_silent (route <- gtfs_route (gt, from = from, to = to,
-                                                  start_time = start_time))
+                                                  start_time = start_time,
+                                                  quiet = TRUE))
               expect_silent (route2 <- gtfs_route (g, from = from, to = to,
-                                                  start_time = start_time))
+                                                  start_time = start_time,
+                                                  quiet = TRUE))
               expect_identical (route, route2)
 })
 
@@ -109,7 +111,8 @@ test_that ("route_pattern", {
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
               expect_silent (g <- extract_gtfs (f))
-              expect_silent (gt <- gtfs_timetable (g, route_pattern = "^S"))
+              expect_silent (gt <- gtfs_timetable (g, route_pattern = "^S",
+                                                   quiet = TRUE))
               from <- "Schonlein" # U-bahn station, not "S"
               to <- "Berlin Hauptbahnhof"
               start_time <- 12 * 3600 + 120 # 12:02
@@ -117,7 +120,8 @@ test_that ("route_pattern", {
                                                   start_time = start_time),
                             "Schonlein does not match any stations")
 
-              expect_silent (gt <- gtfs_timetable (g, route_pattern = "^U"))
+              expect_silent (gt <- gtfs_timetable (g, route_pattern = "^U",
+                                                   quiet = TRUE))
               expect_error (route <- gtfs_route (gt, from = from, to = to,
                                                   start_time = start_time),
                             "No route found between the nominated stations")
