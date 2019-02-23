@@ -67,6 +67,8 @@ extract_gtfs <- function (filename = NULL)
     names (res) <- objs
     attr (res, "filtered") <- FALSE
 
+    class (res) <- c ("gtfs", class (res))
+
     return (res)
 }
 

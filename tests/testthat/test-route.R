@@ -24,7 +24,7 @@ test_that("extract", {
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
               expect_silent (g <- extract_gtfs (f))
-              expect_is (g, "list")
+              expect_is (g, c ("gtfs", "list"))
               expect_true (all (sapply (g, function (i)
                                         is (i, "data.table"))))
               nms <-  c ("calendar", "routes", "trips",
