@@ -24,10 +24,10 @@ matrix:
           before_install: ''
           disable_homebrew: true
     allow_failures:
-        - os: osx
-          r: release
-          before_install: ''
-          disable_homebrew: true
+        #- os: osx
+        #  r: release
+        #  before_install: ''
+        #  disable_homebrew: true
         - os: osx
           r: devel
           before_install: ''
