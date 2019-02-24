@@ -1,0 +1,23 @@
+#' summary.gtfs
+#'
+#' @name summary.gtfs
+#' @param object A `gtfs` object to be summarised
+#' @param ... ignored here
+#'
+#' @examples
+#' berlin_gtfs_to_zip ()
+#' f <- file.path (tempdir (), "vbb.zip")
+#' g <- extract_gtfs (f)
+#' summary (g)
+#' g <- gtfs_timetable (g)
+#' summary (g) # also summarizes additional timetable information
+#' @export
+summary.gtfs <- function (object, ...)
+{
+    msg <- "A gtfs "
+    if (attr (object, "filtered"))
+        msg <- paste0 (msg, "timetable ")
+    message (msg, "object with the following tables and ",
+             "respective numbers of entries in each:")
+    print (vapply (object, nrow, numeric (1)))
+}
