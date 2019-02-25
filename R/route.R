@@ -141,16 +141,6 @@ station_name_to_ids <- function (stn_name, gtfs)
     return (ret)
 }
 
-get_route_name <- function (gtfs, trip_id = NULL)
-{
-    # no visible binding notes:
-    route_id <- route_short_name <- NULL
-
-    index <- match (trip_id, gtfs$trips [, trip_id])
-    route <- gtfs$trips [index, ] [, route_id]
-    gtfs$routes [route_id == route, ] [, route_short_name]
-}
-
 # Re-map the result of gtfs_route onto trip details (names of routes & stations,
 # plus departure times). This is called seperately for each distinct route in
 # the result.
