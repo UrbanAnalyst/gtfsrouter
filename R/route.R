@@ -54,34 +54,41 @@
 gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
                         route_pattern = NULL, quiet = FALSE)
 {
-    if (!"timetable" %in% names (gtfs))
-        gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)
+    # IMPORTANT: data.table works entirely by reference, so all operations
+    # change original values unless first copied! This function thus returns a
+    # copy even when it does nothing else, so always entails some cost.
+    gtfs_cp <- data.table::copy (gtfs)
+
+    if (!"timetable" %in% names (gtfs_cp))
+        gtfs_cp <- gtfs_timetable (gtfs_cp, day, route_pattern, quiet = quiet)
 
     # no visible binding note:
     departure_time <- stop_id <- stop_name <- stop_ids <- NULL
 
     start_time <- convert_time (start_time)
-    gtfs$timetable <- gtfs$timetable [departure_time >= start_time, ]
-    if (nrow (gtfs$timetable) == 0)
+    gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time, ]
+    if (nrow (gtfs_cp$timetable) == 0)
         stop ("There are no scheduled services after that time.")
 
     stations <- NULL # no visible binding note
-    start_stns <- station_name_to_ids (from, gtfs)
-    end_stns <- station_name_to_ids (to, gtfs)
+    start_stns <- station_name_to_ids (from, gtfs_cp)
+    end_stns <- station_name_to_ids (to, gtfs_cp)
 
-    route <- rcpp_csa (gtfs$timetable, gtfs$transfers, nrow (gtfs$stop_ids),
-                       nrow (gtfs$trip_ids), start_stns, end_stns, start_time)
+    route <- rcpp_csa (gtfs_cp$timetable, gtfs_cp$transfers,
+                       nrow (gtfs_cp$stop_ids), nrow (gtfs_cp$trip_ids),
+                       start_stns, end_stns, start_time)
     if (nrow (route) == 0)
         stop ("No route found between the nominated stations")
 
-    stns <- gtfs$stop_ids [route$stop_id] [, stop_ids]
-    route$stop_name <- gtfs$stops [match (stns, gtfs$stops [, stop_id]), ] [, stop_name]
+    stns <- gtfs_cp$stop_ids [route$stop_id] [, stop_ids]
+    route$stop_name <- gtfs_cp$stops [match (stns,
+                                gtfs_cp$stops [, stop_id]), ] [, stop_name]
 
     # map_one_trip maps the integer-valued stations back on to actual station
     # names. This is done seperately for each distinct trip so trip identifiers
     # can also be easily added
     do.call (rbind, lapply (rev (seq (unique (route$trip))), function (i)
-                            map_one_trip (gtfs, route, i)))
+                            map_one_trip (gtfs_cp, route, i)))
 }
 
 # names generally match to multiple IDs, each of which is returned here, as

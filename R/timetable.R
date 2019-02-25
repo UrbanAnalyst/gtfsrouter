@@ -27,25 +27,26 @@
 gtfs_timetable <- function (gtfs, day = NULL, route_pattern = NULL,
                             quiet = FALSE)
 {
-    if (!attr (gtfs, "filtered"))
+    # IMPORTANT: data.table works entirely by reference, so all operations
+    # change original values unless first copied! This function thus returns a
+    # copy even when it does nothing else, so always entails some cost.
+    gtfs_cp <- data.table::copy (gtfs)
+
+    if (!attr (gtfs_cp, "filtered"))
     {
-        gtfs <- filter_by_day (gtfs, day, quiet = quiet)
+        gtfs_cp <- filter_by_day (gtfs_cp, day, quiet = quiet)
         if (!is.null (route_pattern))
-            gtfs <- filter_by_route (gtfs, route_pattern)
-        attr (gtfs, "filtered") <- TRUE
+            gtfs_cp <- filter_by_route (gtfs_cp, route_pattern)
+        attr (gtfs_cp, "filtered") <- TRUE
     }
 
     # no visible binding notes
     stop_id <- trip_id <- stop_ids <- from_stop_id <- to_stop_id <- NULL
 
-    # IMPORTANT: data.table works entirely by reference, so all operations
-    # change original values unless first copied! This function thus returns a
-    # copy even when it does nothing else, so always entails some cost.
-    gtfs_cp <- data.table::copy (gtfs)
-    if (!"timetable" %in% names (gtfs))
+    if (!"timetable" %in% names (gtfs_cp))
     {
-        stop_ids <- unique (gtfs$stops [, stop_id])
-        trip_ids <- unique (gtfs$trips [, trip_id])
+        stop_ids <- unique (gtfs_cp$stops [, stop_id])
+        trip_ids <- unique (gtfs_cp$trips [, trip_id])
         tt <- rcpp_make_timetable (gtfs_cp$stop_times, stop_ids, trip_ids)
         # tt has [departure/arrival_station, departure/arrival_time,
         # trip_id], where the station and trip values are 1-based indices into
