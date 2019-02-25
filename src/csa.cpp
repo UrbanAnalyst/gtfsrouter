@@ -103,7 +103,8 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         const size_t ntrips,
         const std::vector <size_t> start_stations,
         const std::vector <size_t> end_stations,
-        const int start_time)
+        const int start_time,
+        const int max_transfers)
 {
     // make start and end stations into std::unordered_sets to allow
     // constant-time lookup. stations at this point are 1-based R indices, but
@@ -175,6 +176,7 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
 
     // trip connections:
     size_t end_station = INFINITE_INT;
+    std::vector <int> n_transfers (nstations + 1, 0);
     for (size_t i = 0; i < n; i++)
     {
         if (departure_time [i] < start_time)
@@ -193,8 +195,9 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         }
 
         // main connection scan:
-        if ((earliest_connection [departure_station [i] ] <= departure_time [i])
-                || is_connected [trip_id [i]])
+        if (((earliest_connection [departure_station [i] ] <= departure_time [i]) &&
+                    n_transfers [departure_station [i] ] < max_transfers) ||
+                is_connected [trip_id [i]])
         {
             if (arrival_time [i] < earliest_connection [arrival_station [i] ])
             {
@@ -202,6 +205,8 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
                 prev_stn [arrival_station [i] ] = departure_station [i];
                 prev_time [arrival_station [i] ] = departure_time [i];
                 current_trip [arrival_station [i] ] = trip_id [i];
+                n_transfers [arrival_station [i] ] =
+                    n_transfers [departure_station [i] ];
             }
             if (end_stations_set.find (arrival_station [i]) !=
                     end_stations_set.end ())
@@ -220,11 +225,13 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
                 {
                     size_t trans_dest = t.first;
                     int ttime = arrival_time [i] + t.second;
-                    if (ttime < earliest_connection [trans_dest])
+                    if (ttime < earliest_connection [trans_dest] &&
+                            n_transfers [trans_dest] <= max_transfers)
                     {
                         earliest_connection [trans_dest] = ttime;
                         prev_stn [trans_dest] = arrival_station [i];
                         prev_time [trans_dest] = arrival_time [i];
+                        n_transfers [trans_dest]++;
 
                         if (end_stations_set.find (trans_dest) !=
                                 end_stations_set.end ())

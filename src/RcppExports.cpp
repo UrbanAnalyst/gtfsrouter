@@ -58,8 +58,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_csa
-Rcpp::DataFrame rcpp_csa(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const size_t nstations, const size_t ntrips, const std::vector <size_t> start_stations, const std::vector <size_t> end_stations, const int start_time);
-RcppExport SEXP _gtfsrouter_rcpp_csa(SEXP timetableSEXP, SEXP transfersSEXP, SEXP nstationsSEXP, SEXP ntripsSEXP, SEXP start_stationsSEXP, SEXP end_stationsSEXP, SEXP start_timeSEXP) {
+Rcpp::DataFrame rcpp_csa(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const size_t nstations, const size_t ntrips, const std::vector <size_t> start_stations, const std::vector <size_t> end_stations, const int start_time, const int max_transfers);
+RcppExport SEXP _gtfsrouter_rcpp_csa(SEXP timetableSEXP, SEXP transfersSEXP, SEXP nstationsSEXP, SEXP ntripsSEXP, SEXP start_stationsSEXP, SEXP end_stationsSEXP, SEXP start_timeSEXP, SEXP max_transfersSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -70,7 +70,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const std::vector <size_t> >::type start_stations(start_stationsSEXP);
     Rcpp::traits::input_parameter< const std::vector <size_t> >::type end_stations(end_stationsSEXP);
     Rcpp::traits::input_parameter< const int >::type start_time(start_timeSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_csa(timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time));
+    Rcpp::traits::input_parameter< const int >::type max_transfers(max_transfersSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_csa(timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time, max_transfers));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -80,7 +81,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gtfsrouter_rcpp_time_to_seconds", (DL_FUNC) &_gtfsrouter_rcpp_time_to_seconds, 1},
     {"_gtfsrouter_rcpp_csa_isochrone", (DL_FUNC) &_gtfsrouter_rcpp_csa_isochrone, 7},
     {"_gtfsrouter_rcpp_make_timetable", (DL_FUNC) &_gtfsrouter_rcpp_make_timetable, 3},
-    {"_gtfsrouter_rcpp_csa", (DL_FUNC) &_gtfsrouter_rcpp_csa, 7},
+    {"_gtfsrouter_rcpp_csa", (DL_FUNC) &_gtfsrouter_rcpp_csa, 8},
     {NULL, NULL, 0}
 };
 

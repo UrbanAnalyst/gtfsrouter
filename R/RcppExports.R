@@ -66,7 +66,7 @@ rcpp_make_timetable <- function(stop_times, stop_ids, trip_ids) {
 #' entries (that is, entry [0]) of station and trip vectors are never used.
 #'
 #' @noRd
-rcpp_csa <- function(timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time) {
-    .Call(`_gtfsrouter_rcpp_csa`, timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time)
+rcpp_csa <- function(timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time, max_transfers) {
+    .Call(`_gtfsrouter_rcpp_csa`, timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time, max_transfers)
 }
 

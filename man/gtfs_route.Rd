@@ -5,7 +5,8 @@
 \title{gtfs_route}
 \usage{
 gtfs_route(gtfs, from, to, start_time, day = NULL,
-  route_pattern = NULL, routing_type = "first_depart", quiet = FALSE)
+  route_pattern = NULL, routing_type = "first_depart",
+  max_transfers = NA, quiet = FALSE)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
@@ -36,6 +37,9 @@ departing with the first available service from the nominated start station.
 Any other value will calculate the route that arrives at the nominated
 station on the earliest available service, which may not necessarily be the
 first-departing service.}
+
+\item{max_transfers}{If not \code{NA}, specify a maximum number of transfers
+(including but not exceeding this number) for the route.}
 
 \item{quiet}{Set to \code{TRUE} to suppress screen messages (currently just
 regarding timetable construction).}

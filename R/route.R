@@ -25,6 +25,8 @@
 #' Any other value will calculate the route that arrives at the nominated
 #' station on the earliest available service, which may not necessarily be the
 #' first-departing service.
+#' @param max_transfers If not `NA`, specify a maximum number of transfers
+#' (including but not exceeding this number) for the route.
 #' @param quiet Set to `TRUE` to suppress screen messages (currently just
 #' regarding timetable construction).
 #'
@@ -63,7 +65,7 @@
 #' @export 
 gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
                         route_pattern = NULL, routing_type = "first_depart",
-                        quiet = FALSE)
+                        max_transfers = NA, quiet = FALSE)
 {
     # no visible binding note:
     departure_time <- NULL
@@ -84,7 +86,7 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
     start_stns <- station_name_to_ids (from, gtfs_cp)
     end_stns <- station_name_to_ids (to, gtfs_cp)
 
-    res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time)
+    res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time, max_transfers)
 
     if (!routing_type == "first_depart")
     {
@@ -93,20 +95,23 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
         start_stns <- station_name_to_ids (to, gtfs_cp) # reversed!
         end_stns <- station_name_to_ids (from, gtfs_cp)
         start_time <- 0
-        res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time)
+        res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time,
+                            max_transfers)
     }
     return (res)
 }
 
 # core route calculation
-gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time)
+gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time, max_transfers)
 {
     # no visible binding note:
     stop_id <- stop_name <- stop_ids <- NULL
 
+    if (is.na (max_transfers))
+        max_transfers <- .Machine$integer.max
     route <- rcpp_csa (gtfs$timetable, gtfs$transfers,
                        nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
-                       start_stns, end_stns, start_time)
+                       start_stns, end_stns, start_time, max_transfers)
     if (nrow (route) == 0)
         stop ("No route found between the nominated stations")
 

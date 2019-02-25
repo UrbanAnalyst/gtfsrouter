@@ -152,3 +152,20 @@ test_that ("routing_type", {
                               identical (route [, i], route2 [, i]))
                expect_true (all (chk))
 })
+
+test_that ("max_transfers", {
+               f <- file.path (tempdir (), "vbb.zip")
+               expect_silent (g <- extract_gtfs (f))
+               from <- "Innsbrucker Platz" # U-bahn station, not "S"
+               to <- "Alexanderplatz"
+               start_time <- 12 * 3600 + 120 # 12:02
+               expect_silent (route <- gtfs_route (g, from = from, to = to,
+                                                    start_time = start_time,
+                                                    day = 3,
+                                                    max_transfers = 2))
+               expect_error (route <- gtfs_route (g, from = from, to = to,
+                                     start_time = start_time,
+                                     day = 3,
+                                     max_transfers = 1),
+                             "No route found between the nominated stations")
+})
