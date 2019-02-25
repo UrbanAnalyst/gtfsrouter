@@ -88,6 +88,12 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
 
     if (!routing_type == "first_depart")
     {
+        arrival_time <- max_arrival_time (res)
+        gtfs_cp$timetable <- reverse_timetable (gtfs_cp$timetable, arrival_time)
+        start_stns <- station_name_to_ids (to, gtfs_cp) # reversed!
+        end_stns <- station_name_to_ids (from, gtfs_cp)
+        start_time <- 0
+        res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time)
     }
     return (res)
 }
@@ -117,6 +123,8 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time)
                                    map_one_trip (gtfs, route, i)))
     res [order (res$departure_time), ]
 }
+
+#gtfs_route1_reverse <- function (gtfs, start_stns, end_stns, start_time)
 
 # names generally match to multiple IDs, each of which is returned here, as
 # 0-indexed IDs into gtfs$stations
@@ -166,4 +174,34 @@ map_one_trip <- function (gtfs, route, route_name = "")
                 departure_time = trip_stop_departure,
                 arrival_time = trip_stop_arrival,
                 stringsAsFactors = FALSE)
+}
+
+# get arrival time of single routing result in seconds
+max_arrival_time <- function (x)
+{
+    arrival_times <- vapply (x$arrival_time, function (i)
+                             {
+                                 y <- strsplit (i, ":") [[1]]
+                                 as.numeric (y [1]) * 3600 +
+                                     as.numeric (y [2]) * 60 +
+                                     as.numeric (y [3])
+                             }, numeric (1))
+    max (as.numeric (arrival_times))
+}
+
+# reverse direction of timetable, and substract all times from arrival time
+reverse_timetable <- function (timetable, arrival_time)
+{
+    x <- timetable$departure_station
+    timetable$departure_station <- timetable$arrival_station
+    timetable$arrival_station <- x
+    x <- timetable$departure_time
+    timetable$departure_time <- timetable$arrival_time
+    timetable$arrival_time <- x
+    # then subtract times
+    timetable$departure_time <- arrival_time - timetable$departure_time
+    timetable$arrival_time <- arrival_time - timetable$arrival_time
+
+    timetable <- timetable [which (timetable$departure_time >= 0), ]
+    timetable [order (timetable$departure_time), ]
 }
