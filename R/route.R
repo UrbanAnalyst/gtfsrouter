@@ -83,12 +83,15 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
     stns <- gtfs_cp$stop_ids [route$stop_id] [, stop_ids]
     route$stop_name <- gtfs_cp$stops [match (stns,
                                 gtfs_cp$stops [, stop_id]), ] [, stop_name]
+    route$trip_name <- gtfs_cp$trip_ids [, trip_ids] [route$trip_id]
 
     # map_one_trip maps the integer-valued stations back on to actual station
     # names. This is done seperately for each distinct trip so trip identifiers
     # can also be easily added
-    do.call (rbind, lapply (rev (seq (unique (route$trip))), function (i)
-                            map_one_trip (gtfs_cp, route, i)))
+    trip_ids <- gtfs_cp$trip_ids [unique (route$trip_id)] [, trip_ids]
+    res <- do.call (rbind, lapply (trip_ids, function (i)
+                                   map_one_trip (gtfs_cp, route, i)))
+    res [order (res$departure_time), ]
 }
 
 # names generally match to multiple IDs, each of which is returned here, as
@@ -119,18 +122,13 @@ get_route_name <- function (gtfs, trip_id = NULL)
 # Re-map the result of gtfs_route onto trip details (names of routes & stations,
 # plus departure times). This is called seperately for each distinct route in
 # the result.
-map_one_trip <- function (gtfs, route, trip_num = 1)
+map_one_trip <- function (gtfs, route, route_name = "")
 {
     # no visible binding notes:
     trip_id <- stop_id <- stop_ids <- stop_name <-
         departure_time <- arrival_time <- NULL
 
-    trip_ids <- gtfs$trip_ids [unique (route$trip)]
-    trip <- trip_ids [trip_num, trip_ids]
-
-    route_name <- get_route_name (gtfs, trip_id = trip)
-
-    trip_stops <- gtfs$stop_times [trip_id == trip, ]
+    trip_stops <- gtfs$stop_times [trip_id == route_name, ]
     trip_stop_num <- match (trip_stops [, stop_id], gtfs$stop_ids [, stop_ids])
     trip_stop_num <- trip_stop_num [which (trip_stop_num %in% route$stop_id)]
     trip_stop_id <- gtfs$stop_ids [trip_stop_num, stop_ids]
