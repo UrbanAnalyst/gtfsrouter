@@ -65,16 +65,15 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
                         route_pattern = NULL, routing_type = "first_depart",
                         quiet = FALSE)
 {
+    # no visible binding note:
+    departure_time <- NULL
+
     # IMPORTANT: data.table works entirely by reference, so all operations
-    # change original values unless first copied! This function thus returns a
-    # copy even when it does nothing else, so always entails some cost.
+    # change original values unless first copied!
     gtfs_cp <- data.table::copy (gtfs)
 
     if (!"timetable" %in% names (gtfs_cp))
         gtfs_cp <- gtfs_timetable (gtfs_cp, day, route_pattern, quiet = quiet)
-
-    # no visible binding note:
-    departure_time <- stop_id <- stop_name <- stop_ids <- NULL
 
     start_time <- convert_time (start_time)
     gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time, ]
@@ -96,6 +95,9 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
 # core route calculation
 gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time)
 {
+    # no visible binding note:
+    stop_id <- stop_name <- stop_ids <- NULL
+
     route <- rcpp_csa (gtfs$timetable, gtfs$transfers,
                        nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
                        start_stns, end_stns, start_time)
