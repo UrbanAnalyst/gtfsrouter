@@ -5,7 +5,7 @@
 \title{gtfs_route}
 \usage{
 gtfs_route(gtfs, from, to, start_time, day = NULL,
-  route_pattern = NULL, quiet = FALSE)
+  route_pattern = NULL, routing_type = "first_depart", quiet = FALSE)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
@@ -31,6 +31,12 @@ example, "^U" for routes starting with "U" (as commonly used for underground
 or subway routes. (Parameter not used at all if \code{gtfs} has already been
 prepared with \link{gtfs_timetable}.)}
 
+\item{routing_type}{If \code{"first_depart"} (default), calculates the route
+departing with the first available service from the nominated start station.
+Any other value will calculate the route that arrives at the nominated
+station on the earliest available service, which may not necessarily be the
+first-departing service.}
+
 \item{quiet}{Set to \code{TRUE} to suppress screen messages (currently just
 regarding timetable construction).}
 }
@@ -40,6 +46,12 @@ square matrix of distances between nodes
 \description{
 Calculate single route between a start and end station departing at or after
 a specified time.
+}
+\note{
+This function will by default calculate the route that departs on the
+first available service after the specified \code{start_time}, although this may
+arrive later than subsequent services. If the earliest arriving route is
+desired, ...
 }
 \examples{
 berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir

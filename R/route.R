@@ -20,8 +20,18 @@
 #' example, "^U" for routes starting with "U" (as commonly used for underground
 #' or subway routes. (Parameter not used at all if `gtfs` has already been
 #' prepared with \link{gtfs_timetable}.)
+#' @param routing_type If `"first_depart"` (default), calculates the route
+#' departing with the first available service from the nominated start station.
+#' Any other value will calculate the route that arrives at the nominated
+#' station on the earliest available service, which may not necessarily be the
+#' first-departing service.
 #' @param quiet Set to `TRUE` to suppress screen messages (currently just
 #' regarding timetable construction).
+#'
+#' @note This function will by default calculate the route that departs on the
+#' first available service after the specified `start_time`, although this may
+#' arrive later than subsequent services. If the earliest arriving route is
+#' desired, ...
 #'
 #' @return square matrix of distances between nodes
 #'
@@ -52,7 +62,8 @@
 #'
 #' @export 
 gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
-                        route_pattern = NULL, quiet = FALSE)
+                        route_pattern = NULL, routing_type = "first_depart",
+                        quiet = FALSE)
 {
     # IMPORTANT: data.table works entirely by reference, so all operations
     # change original values unless first copied! This function thus returns a
@@ -74,23 +85,34 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
     start_stns <- station_name_to_ids (from, gtfs_cp)
     end_stns <- station_name_to_ids (to, gtfs_cp)
 
-    route <- rcpp_csa (gtfs_cp$timetable, gtfs_cp$transfers,
-                       nrow (gtfs_cp$stop_ids), nrow (gtfs_cp$trip_ids),
+    res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time)
+
+    if (!routing_type == "first_depart")
+    {
+    }
+    return (res)
+}
+
+# core route calculation
+gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time)
+{
+    route <- rcpp_csa (gtfs$timetable, gtfs$transfers,
+                       nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
                        start_stns, end_stns, start_time)
     if (nrow (route) == 0)
         stop ("No route found between the nominated stations")
 
-    stns <- gtfs_cp$stop_ids [route$stop_id] [, stop_ids]
-    route$stop_name <- gtfs_cp$stops [match (stns,
-                                gtfs_cp$stops [, stop_id]), ] [, stop_name]
-    route$trip_name <- gtfs_cp$trip_ids [, trip_ids] [route$trip_id]
+    stns <- gtfs$stop_ids [route$stop_id] [, stop_ids]
+    route$stop_name <- gtfs$stops [match (stns,
+                                gtfs$stops [, stop_id]), ] [, stop_name]
+    route$trip_name <- gtfs$trip_ids [, trip_ids] [route$trip_id]
 
     # map_one_trip maps the integer-valued stations back on to actual station
     # names. This is done seperately for each distinct trip so trip identifiers
     # can also be easily added
-    trip_ids <- gtfs_cp$trip_ids [unique (route$trip_id)] [, trip_ids]
+    trip_ids <- gtfs$trip_ids [unique (route$trip_id)] [, trip_ids]
     res <- do.call (rbind, lapply (trip_ids, function (i)
-                                   map_one_trip (gtfs_cp, route, i)))
+                                   map_one_trip (gtfs, route, i)))
     res [order (res$departure_time), ]
 }
 
