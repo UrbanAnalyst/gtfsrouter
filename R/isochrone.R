@@ -165,7 +165,8 @@ plot.gtfs_isochrone <- function (x, ..., hull_alpha = 0.1, show_all = FALSE)
     m <- mapview::addFeatures (m, bdry, color = "orange", alpha.regions = 0.2)
     m <- mapview::addFeatures (m, x$routes, colour = "blue")
     m <- mapview::addFeatures (m, x$start_point, radius = 5, color = "green")
-    m <- mapview::addFeatures (m, x$end_points, radius = 3, color = "red")
+    m <- mapview::addFeatures (m, x$end_points, radius = 4, color = "red",
+                               fill = TRUE, fillOpacity = 0.8, fillColor = "red")
 
     print (m)
 }
