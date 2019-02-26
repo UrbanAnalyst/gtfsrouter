@@ -3,7 +3,7 @@
 //' rcpp_csa_isochrone
 //'
 //' Calculate isochrones using Connection Scan Algorithm for GTFS data. The
-//timetable has 
+//' timetable has 
 //' [deparutre_station, arrival_station, departure_time, arrival_time,
 //'     trip_id],
 //' with all entries as integer values, including times in seconds after
@@ -90,7 +90,7 @@ Rcpp::IntegerVector rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     std::vector <bool> is_connected (ntrips, false);
 
     // trip connections:
-    std::unordered_set <size_t> end_stations;
+    std::unordered_set <size_t> end_stations, transfer_stations;
     for (size_t i = 0; i < n; i++)
     {
         if (departure_time [i] < start_time)
@@ -126,6 +126,7 @@ Rcpp::IntegerVector rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                 current_trip [departure_station [i] ] = trip_id [i];
 
                 end_stations.emplace (arrival_station [i]);
+                end_stations.erase (departure_station [i]);
             }
 
             if (transfer_map.find (arrival_station [i]) != transfer_map.end ())
@@ -139,9 +140,6 @@ Rcpp::IntegerVector rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                         earliest_connection [trans_dest] = ttime;
                         prev_stn [trans_dest] = arrival_station [i];
                         prev_time [trans_dest] = arrival_time [i];
-
-                        if (ttime < end_time)
-                            end_stations.emplace (trans_dest);
                     }
                 }
             }

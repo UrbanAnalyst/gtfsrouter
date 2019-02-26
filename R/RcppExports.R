@@ -20,8 +20,7 @@ rcpp_time_to_seconds <- function(times) {
 #' rcpp_csa_isochrone
 #'
 #' Calculate isochrones using Connection Scan Algorithm for GTFS data. The
-NULL
-
+#' timetable has 
 #' [deparutre_station, arrival_station, departure_time, arrival_time,
 #'     trip_id],
 #' with all entries as integer values, including times in seconds after
