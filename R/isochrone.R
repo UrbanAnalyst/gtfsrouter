@@ -26,6 +26,7 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
                             route_pattern = NULL, hull_alpha = 0.1, quiet = FALSE)
 {
     requireNamespace ("geodist")
+    requireNamespace ("lwgeom")
 
     if (!"timetable" %in% names (gtfs))
         gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)

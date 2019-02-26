@@ -18,6 +18,7 @@ Suggests:
     geodist,
     hms,
     lubridate,
+    lwgeom,
     knitr,
     mapview,
     sf,
