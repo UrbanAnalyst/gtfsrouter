@@ -49,7 +49,7 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     routes <- route_to_linestring (isotrips$isotrips)
     xy <- as.numeric (isotrips$isotrips [[1]] [1, c ("stop_lon", "stop_lat")])
     startpt <- sf::st_sfc (sf::st_point (xy), crs = 4326)
-    nm <- isotrips [[1]] [1, "stop_name"]
+    nm <- isotrips$isotrips [[1]] [1, "stop_name"]
     startpt <- sf::st_sf ("stop_name" = nm, geometry = startpt)
 
     res <- list (start_point = startpt,
