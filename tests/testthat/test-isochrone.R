@@ -20,10 +20,11 @@ test_that("gtfs_isochrone", {
               expect_identical (names (ic), c ("start_point",
                                                "mid_points",
                                                "end_points",
-                                               "routes"))
+                                               "routes",
+                                               "hull"))
               classes <- sapply (ic, function (i) class (i) [1])
               expect_identical (as.character (classes),
-                                c ("sf", "sf", "sf", "sfc_LINESTRING"))
+                                c ("sf", "sf", "sf", "sfc_LINESTRING", "sf"))
 
               ic2 <- gtfs_isochrone (g,
                                     from = "Schonlein",

@@ -5,7 +5,7 @@
 \title{gtfs_isochrone}
 \usage{
 gtfs_isochrone(gtfs, from, start_time, end_time, day = NULL,
-  route_pattern = NULL, quiet = FALSE)
+  route_pattern = NULL, hull_alpha = 0.1, quiet = FALSE)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
@@ -30,6 +30,9 @@ used. (Not used if \code{gtfs} has already been prepared with
 example, "^U" for routes starting with "U" (as commonly used for underground
 or subway routes. (Parameter not used at all if \code{gtfs} has already been
 prepared with \link{gtfs_timetable}.)}
+
+\item{hull_alpha}{alpha value of non-convex hulls returned as part of result
+(see ?alphashape::ashape for details).}
 
 \item{quiet}{Set to \code{TRUE} to suppress screen messages (currently just
 regarding timetable construction).}

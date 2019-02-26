@@ -15,13 +15,15 @@
 #' example, "^U" for routes starting with "U" (as commonly used for underground
 #' or subway routes. (Parameter not used at all if `gtfs` has already been
 #' prepared with \link{gtfs_timetable}.)
+#' @param hull_alpha alpha value of non-convex hulls returned as part of result
+#' (see ?alphashape::ashape for details).
 #'
 #' @inheritParams gtfs_route
 #'
 #' @return square matrix of distances between nodes
 #' @export 
 gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
-                            route_pattern = NULL, quiet = FALSE)
+                            route_pattern = NULL, hull_alpha = 0.1, quiet = FALSE)
 {
     if (!"timetable" %in% names (gtfs))
         gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)
@@ -71,7 +73,8 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     res <- list (start_point = startpt,
                  mid_points = route_midpoints (isotrips),
                  end_points = route_endpoints (isotrips),
-                 routes = routes)
+                 routes = routes,
+                 hull = isohull (isotrips, hull_alpha = hull_alpha))
 
     class (res) <- c ("gtfs_isochrone", class (res))
     return (res)
@@ -136,33 +139,34 @@ route_midpoints <- function (x)
     sf::st_sf ("stop_name" = do.call (c, nms), geometry = g)
 }
 
+isohull <- function (x, hull_alpha)
+{
+    xy <- lapply (x, function (i)
+                  as.matrix (i [, c ("stop_lon", "stop_lat")]))
+    xy <- do.call (rbind, xy)
+    hull <- get_ahull (xy, alpha = hull_alpha)
+
+    bdry <- sf::st_polygon (list (as.matrix (hull [, 2:3])))
+    geometry <- sf::st_sfc (bdry, crs = 4326)
+    sf::st_sf (area = sf::st_area (geometry), geometry = geometry)
+}
 
 #' plot.gtfs_isochrone
 #'
 #' @name plot.gtfs_ischrone
 #' @param x object to be plotted
-#' @param hull_alpha alpha value of non-convex hulls (see ?alphashape::ashape
-#' for details).
-#' @param show_all If `TRUE`, all other stations beyond the isochrone are also
-#' plotted (currently not implemented).
 #' @param ... ignored here
 #' @export
-plot.gtfs_isochrone <- function (x, ..., hull_alpha = 0.1, show_all = FALSE)
+plot.gtfs_isochrone <- function (x, ...)
 {
     requireNamespace ("sf")
     requireNamespace ("alphahull")
     requireNamespace ("mapview")
 
-    xy <- sf::st_coordinates (x$routes) [, c ("X", "Y")]
-    hull <- get_ahull (xy, alpha = hull_alpha)
-
-    bdry <- sf::st_polygon (list (as.matrix (hull [, 2:3])))
-    bdry <- sf::st_sf (sf::st_sfc (bdry, crs = 4326))
-
     allpts <- rbind (x$start_pt, x$mid_points, x$end_points)
 
     m <- mapview::mapview (allpts, color = "grey", cex = 3, legend = FALSE)
-    m <- mapview::addFeatures (m, bdry, color = "orange", alpha.regions = 0.2)
+    m <- mapview::addFeatures (m, x$hull, color = "orange", alpha.regions = 0.2)
     m <- mapview::addFeatures (m, x$routes, colour = "blue")
     m <- mapview::addFeatures (m, x$start_point, radius = 5, color = "green")
     m <- mapview::addFeatures (m, x$end_points, radius = 4, color = "red",
@@ -171,7 +175,6 @@ plot.gtfs_isochrone <- function (x, ..., hull_alpha = 0.1, show_all = FALSE)
     print (m)
 }
 
-# nocov start
 get_ahull <- function (x, alpha = alpha)
 {
     x <- x [!duplicated (x), ]
@@ -202,12 +205,3 @@ get_ahull <- function (x, alpha = alpha)
     }
     xy [match (ind_seq, xy$ind), ]
 }
-
-pts_to_sf <- function (x)
-{
-    x$in_isochrone <- NULL # remove that column
-    xcol <- which (names (x) == "stop_lon")
-    ycol <- which (names (x) == "stop_lat")
-    sf::st_as_sf (x, coords = c (xcol, ycol), crs = 4326)
-}
-# nocov end
