@@ -104,7 +104,7 @@ mapview::mapshot (m, file = "isochrone.png")
 ```
 ![](isochrone.png)
 
-The isochrone hull also quantifies its total area and length-to-width ratio.
+The isochrone hull also quantifies its total area and width-to-length ratio.
 
 
 

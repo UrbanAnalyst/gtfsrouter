@@ -42,7 +42,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/Rtmpu73nuq/vbb.zip"
+    ## [1] "/tmp/RtmpKygzfZ/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -177,7 +177,7 @@ x
     ## bbox:           xmin: 13.39176 ymin: 52.46718 xmax: 13.4398 ymax: 52.52162
     ## epsg (SRID):    4326
     ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-    ##            area  lw_ratio                       geometry
+    ##            area  wl_ratio                       geometry
     ## 1 8858005 [m^2] 0.3100325 POLYGON ((13.4398 52.47643,...
     ## 
     ## attr(,"class")
@@ -202,7 +202,7 @@ plot (x)
 
 ![](isochrone.png)
 
-The isochrone hull also quantifies its total area and length-to-width
+The isochrone hull also quantifies its total area and width-to-length
 ratio.
 
 ## GTFS Structure

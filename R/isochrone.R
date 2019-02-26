@@ -152,7 +152,7 @@ isohull <- function (x, hull_alpha)
     bdry <- sf::st_polygon (list (as.matrix (hull [, 2:3])))
     geometry <- sf::st_sfc (bdry, crs = 4326)
     sf::st_sf (area = sf::st_area (geometry),
-               lw_ratio = hull_ratio (geometry),
+               wl_ratio = hull_ratio (geometry),
                geometry = geometry)
 }
 
