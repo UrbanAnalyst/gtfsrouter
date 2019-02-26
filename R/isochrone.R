@@ -34,7 +34,7 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     gtfs_cp <- data.table::copy (gtfs)
 
     # no visible binding note:
-    departure_time <- stop_id <- trip_id <- NULL
+    departure_time <- NULL
 
     start_time <- convert_time (start_time)
     gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time, ]
@@ -44,28 +44,7 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     stations <- NULL # no visible binding note
     start_stns <- station_name_to_ids (from, gtfs_cp)
 
-    stns <- rcpp_csa_isochrone (gtfs_cp$timetable, gtfs_cp$transfers,
-                                nrow (gtfs_cp$stop_ids), nrow (gtfs_cp$trip_ids),
-                                start_stns, start_time, end_time)
-    if (length (stns) < 2)
-        stop ("No isochrone possible") # nocov
-
-    index <- 2 * 1:(length (stns) / 2) - 1
-    trips <- stns [index + 1]
-    stns <- stns [index]
-
-    stop_ids <- lapply (stns, function (i) gtfs_cp$stop_ids [i] [, stop_ids])
-    trip_ids <- lapply (trips, function (i) gtfs_cp$trip_ids [i] [, trip_ids])
-
-    isotrips <- lapply (seq (stop_ids), function (i)
-                   {
-        stops <- gtfs_cp$stops [match (stop_ids [[i]],
-                                       gtfs_cp$stops [, stop_id]), ]
-        trips <- gtfs_cp$trips [match (trip_ids [[i]],
-                                       gtfs_cp$trips [, trip_id]), ]
-        data.frame (cbind (stops [, c ("stop_id", "stop_name", "stop_lon", "stop_lat")]),
-                    cbind (trips [, c ("route_id", "trip_id", "trip_headsign")]))
-                   })
+    isotrips <- get_isotrips (gtfs_cp, start_stns, start_time, end_time)
 
     routes <- route_to_linestring (isotrips)
     xy <- as.numeric (isotrips [[1]] [1, c ("stop_lon", "stop_lat")])
@@ -81,6 +60,34 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
 
     class (res) <- c ("gtfs_isochrone", class (res))
     return (res)
+}
+
+get_isotrips <- function (gtfs, start_stns, start_time, end_time)
+{
+    # no visible binding note:
+    stop_id <- trip_id <- NULL
+
+    stns <- rcpp_csa_isochrone (gtfs$timetable, gtfs$transfers,
+                                nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
+                                start_stns, start_time, end_time)
+    if (length (stns) < 2)
+        stop ("No isochrone possible") # nocov
+
+    index <- 2 * 1:(length (stns) / 2) - 1
+    trips <- stns [index + 1]
+    stns <- stns [index]
+
+    stop_ids <- lapply (stns, function (i) gtfs$stop_ids [i] [, stop_ids])
+    trip_ids <- lapply (trips, function (i) gtfs$trip_ids [i] [, trip_ids])
+
+    isotrips <- lapply (seq (stop_ids), function (i)
+                   {
+        stops <- gtfs$stops [match (stop_ids [[i]], gtfs$stops [, stop_id]), ]
+        trips <- gtfs$trips [match (trip_ids [[i]], gtfs$trips [, trip_id]), ]
+        data.frame (cbind (stops [, c ("stop_id", "stop_name", "stop_lon", "stop_lat")]),
+                    cbind (trips [, c ("route_id", "trip_id", "trip_headsign")]))
+                   })
+
 }
 
 # convert list of data.frames of stops and trips into sf linestrings for each route
