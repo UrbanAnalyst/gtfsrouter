@@ -75,32 +75,38 @@ only around `r round (st[3] * 100) / 100` seconds.
 Isochrones from a nominated station can be extracted with the `gtfs_isochrone()`
 function, returning a list of all stations reachable within a specified time
 period from that station.
-```{r isochrone-fakey, eval = FALSE}
+```{r isochrone, eval = TRUE}
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
 x <- gtfs_isochrone (gtfs,
                      from = "Schonlein",
                      start_time = 12 * 3600 + 120,
                      end_time = 12 * 3600 + 720) # 10 minutes later
-head(x)
-```
-```{r isochrone, eval = TRUE, echo = FALSE}
-gtfs <- extract_gtfs (filename)
-gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
-x <- gtfs_isochrone (gtfs,
-                     from = "Schonlein",
-                     start_time = 12 * 3600 + 120,
-                     end_time = 12 * 3600 + 720) # 10 minutes later
-knitr::kable (head(x))
+x
 ```
 
-The function returns a `data.frame` of all stations, with `in_isochrone = TRUE`
-for those reachable from the nominated station within the nominated time. The
-results of `gtfs_isochrone` can also be plotted as an interactive web map,
-simply by `plot(x)`. This requires the packages
-[`sf`](https:cran.r-project.org/package=sf),
-[`alphahull`](https:cran.r-project.org/package=alphahull), and
-[`mapview`](https:cran.r-project.org/package=mapview) to be installed.
+The function returns an object of class `gtfs_isochrone` containing
+[`sf`](https://github.com/r-spatial/sf)-formatted sets of start and end points,
+along with all intermediate ("mid") points, and routes. An additional item
+contains the non-convex (alpha) hull enclosing the routed points.
+This requires the packages
+[`geodist`](https://github.com/hypertidy/geodist), 
+[`sf`](https://cran.r-project.org/package=sf),
+[`alphahull`](https://cran.r-project.org/package=alphahull), and
+[`mapview`](https://cran.r-project.org/package=mapview) to be installed.
+Isochrone objects have their own plot method:
+```{r plot, eval = FALSE}
+plot (x)
+```
+```{r mapshot, echo = FALSE}
+m <- plot (x)
+mapview::mapshot (m, file = "isochrone.png")
+```
+![](isochrone.png)
+
+The isochrone hull also quantifies its total area and length-to-width ratio.
+
+
 
 
 ## GTFS Structure
