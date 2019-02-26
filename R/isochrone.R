@@ -25,6 +25,8 @@
 gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
                             route_pattern = NULL, hull_alpha = 0.1, quiet = FALSE)
 {
+    requireNamespace ("geodist")
+
     if (!"timetable" %in% names (gtfs))
         gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)
 
@@ -139,6 +141,7 @@ route_midpoints <- function (x)
     sf::st_sf ("stop_name" = do.call (c, nms), geometry = g)
 }
 
+# x is isolines
 isohull <- function (x, hull_alpha)
 {
     xy <- lapply (x, function (i)
@@ -148,7 +151,26 @@ isohull <- function (x, hull_alpha)
 
     bdry <- sf::st_polygon (list (as.matrix (hull [, 2:3])))
     geometry <- sf::st_sfc (bdry, crs = 4326)
-    sf::st_sf (area = sf::st_area (geometry), geometry = geometry)
+    sf::st_sf (area = sf::st_area (geometry),
+               lw_ratio = hull_ratio (geometry),
+               geometry = geometry)
+}
+
+hull_ratio <- function (x)
+{
+    xy <- sf::st_coordinates (x)
+    d <- geodist::geodist (xy)
+    d [lower.tri (d)] <- 0
+    i <- which.max (apply (d, 1, max))
+    j <- which.max (apply (d, 2, max))
+    major_axis <- rbind (xy [i, c ("X", "Y")],
+                         xy [j, c ("X", "Y")])
+    major_axis <- sf::st_sfc (sf::st_linestring (major_axis), crs = 4326)
+    index <- seq (nrow (xy)) [!seq (nrow (xy)) %in% c (i, j)]
+    pts <- sf::st_as_sf (data.frame (xy [index, ]), coords = 1:2, crs = 4326)
+
+    minor_axis_dist <- as.numeric (max (sf::st_distance (pts, major_axis)))
+    minor_axis_dist / max (d)
 }
 
 #' plot.gtfs_isochrone
@@ -173,6 +195,7 @@ plot.gtfs_isochrone <- function (x, ...)
                                fill = TRUE, fillOpacity = 0.8, fillColor = "red")
 
     print (m)
+    invisible (m)
 }
 
 get_ahull <- function (x, alpha = alpha)
