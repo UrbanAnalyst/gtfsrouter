@@ -28,7 +28,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_csa_isochrone
-Rcpp::IntegerVector rcpp_csa_isochrone(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const size_t nstations, const size_t ntrips, const std::vector <size_t> start_stations, const int start_time, const int end_time);
+Rcpp::List rcpp_csa_isochrone(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const size_t nstations, const size_t ntrips, const std::vector <size_t> start_stations, const int start_time, const int end_time);
 RcppExport SEXP _gtfsrouter_rcpp_csa_isochrone(SEXP timetableSEXP, SEXP transfersSEXP, SEXP nstationsSEXP, SEXP ntripsSEXP, SEXP start_stationsSEXP, SEXP start_timeSEXP, SEXP end_timeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

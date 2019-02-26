@@ -29,7 +29,7 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     gtfs_cp <- data.table::copy (gtfs)
 
     # no visible binding note:
-    departure_time <- stop_id <- NULL
+    departure_time <- stop_id <- trip_id <- NULL
 
     start_time <- convert_time (start_time)
     gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time, ]
@@ -42,23 +42,98 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     stns <- rcpp_csa_isochrone (gtfs_cp$timetable, gtfs_cp$transfers,
                                 nrow (gtfs_cp$stop_ids), nrow (gtfs_cp$trip_ids),
                                 start_stns, start_time, end_time)
-    stop_ids <- gtfs_cp$stop_ids [stns] [, stop_ids]
+    if (length (stns) < 2)
+        stop ("No isochrone possible") # nocov
 
-    stops <- gtfs_cp$stops [match (stop_ids, gtfs_cp$stops [, stop_id]), ]
-    stops <- data.frame (stops [, c ("stop_name", "stop_lon", "stop_lat")])
-    stops <- stops [!duplicated (stops), ]
+    index <- 2 * 1:(length (stns) / 2) - 1
+    trips <- stns [index + 1]
+    stns <- stns [index]
 
-    all_stops <- gtfs_cp$stops [, c ("stop_name", "stop_lon", "stop_lat")]
-    all_stops <- data.frame (all_stops)
-    all_stops <- all_stops [!duplicated (all_stops), ]
-    all_stops <- all_stops [!all_stops$stop_name %in% stops$stop_name, ]
+    stop_ids <- lapply (stns, function (i) gtfs_cp$stop_ids [i] [, stop_ids])
+    trip_ids <- lapply (trips, function (i) gtfs_cp$trip_ids [i] [, trip_ids])
 
-    stops$in_isochrone <- TRUE
-    all_stops$in_isochrone <- FALSE
-    stops <- rbind (stops, all_stops)
+    isotrips <- lapply (seq (stop_ids), function (i)
+                   {
+        stops <- gtfs_cp$stops [match (stop_ids [[i]],
+                                       gtfs_cp$stops [, stop_id]), ]
+        trips <- gtfs_cp$trips [match (trip_ids [[i]],
+                                       gtfs_cp$trips [, trip_id]), ]
+        data.frame (cbind (stops [, c ("stop_id", "stop_name", "stop_lon", "stop_lat")]),
+                    cbind (trips [, c ("route_id", "trip_id", "trip_headsign")]))
+                   })
 
-    class (stops) <- c ("gtfs_isochrone", class (stops))
-    return (stops)
+    routes <- route_to_linestring (isotrips)
+    xy <- as.numeric (isotrips [[1]] [1, c ("stop_lon", "stop_lat")])
+    startpt <- sf::st_sfc (sf::st_point (xy), crs = 4326)
+    nm <- isotrips [[1]] [1, "stop_name"]
+    startpt <- sf::st_sf ("stop_name" = nm, geometry = startpt)
+
+    res <- list (start_point = startpt,
+                 mid_points = route_midpoints (isotrips),
+                 end_points = route_endpoints (isotrips),
+                 routes = routes)
+
+    class (res) <- c ("gtfs_isochrone", class (res))
+    return (res)
+}
+
+# convert list of data.frames of stops and trips into sf linestrings for each route
+route_to_linestring <- function (x)
+{
+    # split each route into trip IDs
+    xsp <- list ()
+    for (i in x)
+        xsp <- c (xsp, split (i, f = as.factor (i$trip_id)))
+    names (xsp) <- NULL
+    # remove the trip info so unique sequences of stops can be identified
+    xsp <- lapply (xsp, function (i) {
+                       i [c ("route_id", "trip_id", "trip_headsign")] <- NULL
+                       return (i)
+                   })
+    xsp <- xsp [!duplicated (xsp)]
+    lens <- vapply (xsp, nrow, numeric (1))
+    xsp <- xsp [which (lens > 1)]
+
+    # Then determine which sequences are sub-sequences of others already present
+    lens <- vapply (xsp, nrow, numeric (1))
+    xsp <- xsp [order (lens)]
+    # paste all sequences of stop_ids
+    stop_seqs <- vapply (xsp, function (i) paste0 (i$stop_id, collapse = ""),
+                         character (1))
+    # then find the longest sequence matching each - this can be done with a
+    # simple "max" because of the above ordering by length
+    index <- unlist (lapply (stop_seqs, function (i) max (grep (i, stop_seqs))))
+    xsp <- xsp [sort (unique (index))]
+
+    # Then convert to linestring geometries
+    xy <- lapply (xsp, function (i)
+                  sf::st_linestring (cbind (i$stop_lon, i$stop_lat)))
+    sf::st_sfc (xy, crs = 4326)
+}
+
+# extract endpoints of each route as sf point objects
+route_endpoints <- function (x)
+{
+    xy <- lapply (x, function (i)
+                  as.numeric (i [nrow (i), c ("stop_lon", "stop_lat")]))
+    xy <- do.call (rbind, xy)
+    xy <- data.frame ("x" = xy [, 1], "y" = xy [, 2])
+    g <- sf::st_as_sf (xy, coords = 1:2, crs = 4326)$geometry
+    nms <- vapply (x, function (i)
+                  i [nrow (i), "stop_name"], character (1))
+    sf::st_sf ("stop_name" = nms, geometry = g)
+}
+
+route_midpoints <- function (x)
+{
+    xy <- lapply (x, function (i)
+                  as.matrix (i [2:(nrow (i) - 1), c ("stop_lon", "stop_lat")]))
+    xy <- do.call (rbind, xy)
+    xy <- data.frame ("x" = xy [, 1], "y" = xy [, 2])
+    g <- sf::st_as_sf (xy, coords = 1:2, crs = 4326)$geometry
+    nms <- lapply (x, function (i)
+                  i [2:(nrow (i) - 1), "stop_name"])
+    sf::st_sf ("stop_name" = do.call (c, nms), geometry = g)
 }
 
 
@@ -78,22 +153,19 @@ plot.gtfs_isochrone <- function (x, ..., hull_alpha = 0.1, show_all = FALSE)
     requireNamespace ("alphahull")
     requireNamespace ("mapview")
 
-    x_out <- x [which (!x$in_isochrone), ]
-    x <- x [which (x$in_isochrone), ]
-    hull <- get_ahull (x)
+    xy <- sf::st_coordinates (x$routes) [, c ("X", "Y")]
+    hull <- get_ahull (xy)
 
     bdry <- sf::st_polygon (list (as.matrix (hull [, 2:3])))
     bdry <- sf::st_sf (sf::st_sfc (bdry, crs = 4326))
 
-    x_sf <- pts_to_sf (x)
-    x_out_sf <- pts_to_sf (x_out)
+    allpts <- rbind (x$start_pt, x$mid_points, x$end_points)
 
-    m <- mapview::mapview (x_sf, cex = 5, color = "red", col.regions = "blue",
-                           legend = FALSE)
-    m <- mapview::addFeatures (m, bdry, color = "orange")
-    if (show_all)
-        m <- mapview::addFeatures (m, x_out_sf, radius = 1, color = "gray",
-                                   col.regions = "grey", legend = FALSE)
+    m <- mapview::mapview (allpts, color = "grey", cex = 3, legend = FALSE)
+    m <- mapview::addFeatures (m, bdry, color = "orange", alpha.regions = 0.2)
+    m <- mapview::addFeatures (m, x$routes, colour = "blue")
+    m <- mapview::addFeatures (m, x$start_point, radius = 5, color = "green")
+    m <- mapview::addFeatures (m, x$end_points, radius = 3, color = "red")
 
     print (m)
 }
@@ -101,10 +173,9 @@ plot.gtfs_isochrone <- function (x, ..., hull_alpha = 0.1, show_all = FALSE)
 # nocov start
 get_ahull <- function (x)
 {
-    xy <- data.frame ("x" = x$stop_lon, "y" = x$stop_lat)
-    xy <- xy [!duplicated (xy), ]
+    x <- x [!duplicated (x), ]
     alpha <- 0.1
-    a <- data.frame (alphahull::ashape (xy, alpha = alpha)$edges)
+    a <- data.frame (alphahull::ashape (x, alpha = alpha)$edges)
 
     xy <- rbind (data.frame (ind = a$ind1, x = a$x1, y = a$y1),
                  data.frame (ind = a$ind2, x = a$x2, y = a$y2))

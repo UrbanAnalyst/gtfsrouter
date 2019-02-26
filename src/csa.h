@@ -16,7 +16,7 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         const int start_time,
         const int max_transfers);
 
-Rcpp::IntegerVector rcpp_csa_isochrone (Rcpp::DataFrame timetable,
+Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const size_t nstations,
         const size_t ntrips,

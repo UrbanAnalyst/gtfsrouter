@@ -2,23 +2,14 @@
 
 //' rcpp_csa_isochrone
 //'
-//' Calculate isochrones using Connection Scan Algorithm for GTFS data. The
-//' timetable has 
-//' [deparutre_station, arrival_station, departure_time, arrival_time,
-//'     trip_id],
-//' with all entries as integer values, including times in seconds after
-//' 00:00:00. The station and trip IDs can be mapped back on to actual station
-//' IDs, but do not necessarily form a single set of unit-interval values
-//' because the timetable is first cut down to only that portion after the
-//' desired start time. These are nevertheless used as direct array indices
-//' throughout, so are all size_t objects rather than int. All indices in the
-//' timetable and transfers DataFrames, as well as startstations, are
-//' 1-based, but they are still used directly which just means that the first
-//' entries (that is, entry [0]) of station and trip vectors are never used.
+//' Calculate isochrones using Connection Scan Algorithm for GTFS data. Works
+//' largely as rcpp_csa. Returns a list of integer vectors, with [i] holding
+//' sequences of stations on a given route, the end on being the terminal
+//' isochrone point, and [i+1] holding correpsonding trip numbers.
 //'
 //' @noRd
 // [[Rcpp::export]]
-Rcpp::IntegerVector rcpp_csa_isochrone (Rcpp::DataFrame timetable,
+Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const size_t nstations,
         const size_t ntrips,
@@ -147,5 +138,29 @@ Rcpp::IntegerVector rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         }
     }
 
-    return Rcpp::wrap (end_stations);
+   
+    Rcpp::List res (2 * end_stations.size ());
+    int count = 0;
+    for (auto es: end_stations)
+    {
+        std::vector <int> trip_out, end_station_out;
+        int i = es;
+        trip_out.push_back (current_trip [i]);
+        end_station_out.push_back (i);
+        while (i < INFINITE_INT)
+        {
+            i = prev_stn [static_cast <size_t> (i)];
+            end_station_out.push_back (i);
+            if (i < INFINITE_INT)
+                trip_out.push_back (current_trip [i]);
+        }
+        end_station_out.resize (end_station_out.size () - 1);
+        std::reverse (end_station_out.begin (), end_station_out.end ());
+        std::reverse (trip_out.begin (), trip_out.end ());
+
+        res (2 * count) = end_station_out;
+        res (2 * count++ + 1) = trip_out;
+    }
+
+    return res;
 }
