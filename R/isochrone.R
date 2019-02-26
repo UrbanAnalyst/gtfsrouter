@@ -46,17 +46,17 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
 
     isotrips <- get_isotrips (gtfs_cp, start_stns, start_time, end_time)
 
-    routes <- route_to_linestring (isotrips)
-    xy <- as.numeric (isotrips [[1]] [1, c ("stop_lon", "stop_lat")])
+    routes <- route_to_linestring (isotrips$isotrips)
+    xy <- as.numeric (isotrips$isotrips [[1]] [1, c ("stop_lon", "stop_lat")])
     startpt <- sf::st_sfc (sf::st_point (xy), crs = 4326)
     nm <- isotrips [[1]] [1, "stop_name"]
     startpt <- sf::st_sf ("stop_name" = nm, geometry = startpt)
 
     res <- list (start_point = startpt,
-                 mid_points = route_midpoints (isotrips),
-                 end_points = route_endpoints (isotrips),
+                 mid_points = route_midpoints (isotrips$isotrips),
+                 end_points = route_endpoints (isotrips$isotrips),
                  routes = routes,
-                 hull = isohull (isotrips, hull_alpha = hull_alpha))
+                 hull = isohull (isotrips$isotrips, hull_alpha = hull_alpha))
 
     class (res) <- c ("gtfs_isochrone", class (res))
     return (res)
@@ -73,7 +73,9 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
     if (length (stns) < 2)
         stop ("No isochrone possible") # nocov
 
-    index <- 2 * 1:(length (stns) / 2) - 1
+    last_departure <- stns [length (stns)]
+
+    index <- 2 * 1:((length (stns) - 1) / 2) - 1
     trips <- stns [index + 1]
     stns <- stns [index]
 
@@ -88,6 +90,9 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
                     cbind (trips [, c ("route_id", "trip_id", "trip_headsign")]))
                    })
 
+
+    list (isotrips = isotrips,
+          last_departure = last_departure)
 }
 
 # convert list of data.frames of stops and trips into sf linestrings for each route

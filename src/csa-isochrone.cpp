@@ -82,6 +82,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
 
     // trip connections:
     std::unordered_set <size_t> end_stations, transfer_stations;
+    int last_departure = 0;
     for (size_t i = 0; i < n; i++)
     {
         if (departure_time [i] < start_time)
@@ -100,6 +101,8 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             current_trip [arrival_station [i] ] = trip_id [i];
             prev_stn [arrival_station [i] ] = departure_station [i];
             prev_time [arrival_station [i] ] = departure_time [i];
+            if (departure_time [i] > last_departure)
+                last_departure = departure_time [i];
 
             end_stations.emplace (arrival_station [i]);
         }
@@ -139,7 +142,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     }
 
    
-    Rcpp::List res (2 * end_stations.size ());
+    Rcpp::List res (2 * end_stations.size () + 1);
     int count = 0;
     for (auto es: end_stations)
     {
@@ -161,6 +164,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         res (2 * count) = end_station_out;
         res (2 * count++ + 1) = trip_out;
     }
+    res (res.length () - 1) = last_departure;
 
     return res;
 }
