@@ -17,7 +17,7 @@
 for details).}
 
 \item{show_all}{If \code{TRUE}, all other stations beyond the isochrone are also
-plotted}
+plotted (currently not implemented).}
 }
 \description{
 plot.gtfs_isochrone

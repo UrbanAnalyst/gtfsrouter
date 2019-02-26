@@ -144,7 +144,7 @@ route_midpoints <- function (x)
 #' @param hull_alpha alpha value of non-convex hulls (see ?alphashape::ashape
 #' for details).
 #' @param show_all If `TRUE`, all other stations beyond the isochrone are also
-#' plotted
+#' plotted (currently not implemented).
 #' @param ... ignored here
 #' @export
 plot.gtfs_isochrone <- function (x, ..., hull_alpha = 0.1, show_all = FALSE)
@@ -154,7 +154,7 @@ plot.gtfs_isochrone <- function (x, ..., hull_alpha = 0.1, show_all = FALSE)
     requireNamespace ("mapview")
 
     xy <- sf::st_coordinates (x$routes) [, c ("X", "Y")]
-    hull <- get_ahull (xy)
+    hull <- get_ahull (xy, alpha = hull_alpha)
 
     bdry <- sf::st_polygon (list (as.matrix (hull [, 2:3])))
     bdry <- sf::st_sf (sf::st_sfc (bdry, crs = 4326))
@@ -172,7 +172,7 @@ plot.gtfs_isochrone <- function (x, ..., hull_alpha = 0.1, show_all = FALSE)
 }
 
 # nocov start
-get_ahull <- function (x)
+get_ahull <- function (x, alpha = alpha)
 {
     x <- x [!duplicated (x), ]
     alpha <- 0.1
