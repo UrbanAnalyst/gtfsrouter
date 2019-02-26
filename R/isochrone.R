@@ -26,27 +26,29 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     if (!"timetable" %in% names (gtfs))
         gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)
 
+    gtfs_cp <- data.table::copy (gtfs)
+
     # no visible binding note:
     departure_time <- stop_id <- NULL
 
     start_time <- convert_time (start_time)
-    gtfs$timetable <- gtfs$timetable [departure_time >= start_time, ]
-    if (nrow (gtfs$timetable) == 0)
+    gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time, ]
+    if (nrow (gtfs_cp$timetable) == 0)
         stop ("There are no scheduled services after that time.")
 
     stations <- NULL # no visible binding note
-    start_stns <- station_name_to_ids (from, gtfs)
+    start_stns <- station_name_to_ids (from, gtfs_cp)
 
-    stns <- rcpp_csa_isochrone (gtfs$timetable, gtfs$transfers,
-                                nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
+    stns <- rcpp_csa_isochrone (gtfs_cp$timetable, gtfs_cp$transfers,
+                                nrow (gtfs_cp$stop_ids), nrow (gtfs_cp$trip_ids),
                                 start_stns, start_time, end_time)
-    stop_ids <- gtfs$stop_ids [stns] [, stop_ids]
+    stop_ids <- gtfs_cp$stop_ids [stns] [, stop_ids]
 
-    stops <- gtfs$stops [match (stop_ids, gtfs$stops [, stop_id]), ]
+    stops <- gtfs_cp$stops [match (stop_ids, gtfs_cp$stops [, stop_id]), ]
     stops <- data.frame (stops [, c ("stop_name", "stop_lon", "stop_lat")])
     stops <- stops [!duplicated (stops), ]
 
-    all_stops <- gtfs$stops [, c ("stop_name", "stop_lon", "stop_lat")]
+    all_stops <- gtfs_cp$stops [, c ("stop_name", "stop_lon", "stop_lat")]
     all_stops <- data.frame (all_stops)
     all_stops <- all_stops [!duplicated (all_stops), ]
     all_stops <- all_stops [!all_stops$stop_name %in% stops$stop_name, ]
