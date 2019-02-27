@@ -57,6 +57,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_median_timetable
+Rcpp::DataFrame rcpp_median_timetable(Rcpp::DataFrame full_timetable, Rcpp::DataFrame transfers, std::vector <std::string> stop_ids);
+RcppExport SEXP _gtfsrouter_rcpp_median_timetable(SEXP full_timetableSEXP, SEXP transfersSEXP, SEXP stop_idsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type full_timetable(full_timetableSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type transfers(transfersSEXP);
+    Rcpp::traits::input_parameter< std::vector <std::string> >::type stop_ids(stop_idsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_median_timetable(full_timetable, transfers, stop_ids));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_csa
 Rcpp::DataFrame rcpp_csa(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const size_t nstations, const size_t ntrips, const std::vector <size_t> start_stations, const std::vector <size_t> end_stations, const int start_time, const int max_transfers);
 RcppExport SEXP _gtfsrouter_rcpp_csa(SEXP timetableSEXP, SEXP transfersSEXP, SEXP nstationsSEXP, SEXP ntripsSEXP, SEXP start_stationsSEXP, SEXP end_stationsSEXP, SEXP start_timeSEXP, SEXP max_transfersSEXP) {
@@ -81,6 +94,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gtfsrouter_rcpp_time_to_seconds", (DL_FUNC) &_gtfsrouter_rcpp_time_to_seconds, 1},
     {"_gtfsrouter_rcpp_csa_isochrone", (DL_FUNC) &_gtfsrouter_rcpp_csa_isochrone, 7},
     {"_gtfsrouter_rcpp_make_timetable", (DL_FUNC) &_gtfsrouter_rcpp_make_timetable, 3},
+    {"_gtfsrouter_rcpp_median_timetable", (DL_FUNC) &_gtfsrouter_rcpp_median_timetable, 3},
     {"_gtfsrouter_rcpp_csa", (DL_FUNC) &_gtfsrouter_rcpp_csa, 8},
     {NULL, NULL, 0}
 };

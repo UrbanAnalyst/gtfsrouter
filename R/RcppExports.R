@@ -40,6 +40,12 @@ rcpp_make_timetable <- function(stop_times, stop_ids, trip_ids) {
     .Call(`_gtfsrouter_rcpp_make_timetable`, stop_times, stop_ids, trip_ids)
 }
 
+#' rcpp_median_timetable
+#' @noRd
+rcpp_median_timetable <- function(full_timetable, transfers, stop_ids) {
+    .Call(`_gtfsrouter_rcpp_median_timetable`, full_timetable, transfers, stop_ids)
+}
+
 #' rcpp_csa
 #'
 #' Connection Scan Algorithm for GTFS data. The timetable has 

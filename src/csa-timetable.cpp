@@ -81,9 +81,32 @@ Rcpp::DataFrame rcpp_make_timetable (Rcpp::DataFrame stop_times,
 }
 
 // # nocov start
-Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame timetable,
+//' rcpp_median_timetable
+//' @noRd
+// [[Rcpp::export]]
+Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable,
         Rcpp::DataFrame transfers, std::vector <std::string> stop_ids)
 {
+    std::vector <int>
+        departure_station = full_timetable ["departure_station"],
+        arrival_station = full_timetable ["arrival_station"],
+        departure_time = full_timetable ["departure_time"],
+        arrival_time = full_timetable ["arrival_time"];
+
+    std::unordered_map <std::string, std::vector <int> > timetable;
+    size_t n_stop_times = static_cast <size_t> (full_timetable.nrow ());
+    for (size_t i = 1; i < n_stop_times; i++)
+    {
+        std::string stn_str;
+        stn_str = std::to_string (departure_station [i]) +
+            "-" + std::to_string (arrival_station [i]);
+        std::vector <int> times;
+        if (timetable.find (stn_str) != timetable.end ())
+            times = timetable.at (stn_str);
+        times.push_back (arrival_time [i] - departure_time [i]);
+        timetable [stn_str] = times;
+    }
+
     Rcpp::DataFrame res;
     return res;
 }
