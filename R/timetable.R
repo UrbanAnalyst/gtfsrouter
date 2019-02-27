@@ -40,34 +40,40 @@ gtfs_timetable <- function (gtfs, day = NULL, route_pattern = NULL,
         attr (gtfs_cp, "filtered") <- TRUE
     }
 
-    # no visible binding notes
-    stop_id <- trip_id <- stop_ids <- from_stop_id <- to_stop_id <- NULL
-
     if (!"timetable" %in% names (gtfs_cp))
     {
-        stop_ids <- unique (gtfs_cp$stops [, stop_id])
-        trip_ids <- unique (gtfs_cp$trips [, trip_id])
-        tt <- rcpp_make_timetable (gtfs_cp$stop_times, stop_ids, trip_ids)
-        # tt has [departure/arrival_station, departure/arrival_time,
-        # trip_id], where the station and trip values are 1-based indices into
-        # the vectors of stop_ids and trip_ids.
-
-        # translate transfer stations into indices
-        index <- match (gtfs_cp$transfers [, from_stop_id], stop_ids)
-        gtfs_cp$transfers <- gtfs_cp$transfers [, from_stop_id := index]
-        index <- match (gtfs_cp$transfers [, to_stop_id], stop_ids)
-        gtfs_cp$transfers <- gtfs_cp$transfers [, to_stop_id := index]
-
-        # order the timetable by departure_time
-        tt <- tt [order (tt$departure_time), ]
-        # Then convert all output to data.table just for print formatting:
-        gtfs_cp$timetable <- data.table::data.table (tt)
-        gtfs_cp$stop_ids <- data.table::data.table (stop_ids = stop_ids)
-        gtfs_cp$trip_ids <- data.table::data.table (trip_ids = trip_ids)
-        # add a couple of extra pre-processing items, with 1 added to numbers here
+        gtfs_cp <- make_timetable (gtfs_cp)
     }
 
     return (gtfs_cp)
+}
+
+make_timetable <- function (gtfs)
+{
+    # no visible binding notes
+    stop_id <- trip_id <- stop_ids <- from_stop_id <- to_stop_id <- NULL
+
+    stop_ids <- unique (gtfs$stops [, stop_id])
+    trip_ids <- unique (gtfs$trips [, trip_id])
+    tt <- rcpp_make_timetable (gtfs$stop_times, stop_ids, trip_ids)
+    # tt has [departure/arrival_station, departure/arrival_time,
+    # trip_id], where the station and trip values are 1-based indices into
+    # the vectors of stop_ids and trip_ids.
+
+    # translate transfer stations into indices
+    index <- match (gtfs$transfers [, from_stop_id], stop_ids)
+    gtfs$transfers <- gtfs$transfers [, from_stop_id := index]
+    index <- match (gtfs$transfers [, to_stop_id], stop_ids)
+    gtfs$transfers <- gtfs$transfers [, to_stop_id := index]
+
+    # order the timetable by departure_time
+    tt <- tt [order (tt$departure_time), ]
+    # Then convert all output to data.table just for print formatting:
+    gtfs$timetable <- data.table::data.table (tt)
+    gtfs$stop_ids <- data.table::data.table (stop_ids = stop_ids)
+    gtfs$trip_ids <- data.table::data.table (trip_ids = trip_ids)
+
+    return (gtfs)
 }
 
 filter_by_day <- function (gtfs, day = NULL, quiet = FALSE)

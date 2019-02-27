@@ -79,3 +79,12 @@ Rcpp::DataFrame rcpp_make_timetable (Rcpp::DataFrame stop_times,
 
     return timetable;
 }
+
+// # nocov start
+Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame timetable,
+        Rcpp::DataFrame transfers, std::vector <std::string> stop_ids)
+{
+    Rcpp::DataFrame res;
+    return res;
+}
+// # nocov end
