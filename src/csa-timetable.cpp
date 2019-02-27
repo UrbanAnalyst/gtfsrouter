@@ -84,8 +84,7 @@ Rcpp::DataFrame rcpp_make_timetable (Rcpp::DataFrame stop_times,
 //' rcpp_median_timetable
 //' @noRd
 // [[Rcpp::export]]
-Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable,
-        Rcpp::DataFrame transfers, std::vector <std::string> stop_ids)
+Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable)
 {
     std::vector <int>
         departure_station = full_timetable ["departure_station"],
@@ -95,7 +94,7 @@ Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable,
 
     std::unordered_map <std::string, std::vector <int> > timetable;
     size_t n_stop_times = static_cast <size_t> (full_timetable.nrow ());
-    for (size_t i = 1; i < n_stop_times; i++)
+    for (size_t i = 0; i < n_stop_times; i++)
     {
         std::string stn_str;
         stn_str = std::to_string (departure_station [i]) +
@@ -107,7 +106,33 @@ Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable,
         timetable [stn_str] = times;
     }
 
-    Rcpp::DataFrame res;
+    size_t n = timetable.size ();
+    std::vector <int> start_station (n), end_station (n),
+        time_min (n), time_median (n), time_max (n);
+    int i = 0;
+    for (auto t: timetable)
+    {
+        std::string stn_str = t.first;
+        size_t ipos = stn_str.find ("-");
+        start_station [i] = atoi (stn_str.substr (0, ipos).c_str ());
+        stn_str = stn_str.substr (ipos + 1, stn_str.size () - 1);
+        end_station [i] = atoi (stn_str.c_str ());
+        std::vector <int> times = t.second;
+        std::sort (times.begin (), times.end ());
+        time_min [i] = times [0];
+        time_max [i] = times [times.size () - 1];
+        ipos = round (times.size () / 2);
+        time_median [i] = times [ipos];
+        i++;
+    }
+
+    Rcpp::DataFrame res = Rcpp::DataFrame::create (
+            Rcpp::Named ("departure_station") = start_station,
+            Rcpp::Named ("arrival_station") = end_station,
+            Rcpp::Named ("time_min") = time_min,
+            Rcpp::Named ("time_median") = time_median,
+            Rcpp::Named ("time_max") = time_max,
+            Rcpp::_["stringsAsFactors"] = false);
     return res;
 }
 // # nocov end

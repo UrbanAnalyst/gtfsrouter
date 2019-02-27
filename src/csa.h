@@ -7,8 +7,7 @@ constexpr int INFINITE_INT =  std::numeric_limits<int>::max ();
 // ---- csa-timetable.cpp
 Rcpp::DataFrame rcpp_make_timetable (Rcpp::DataFrame stop_times,
         std::vector <std::string> stop_ids, std::vector <std::string> trip_ids);
-Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable,
-        Rcpp::DataFrame transfers, std::vector <std::string> stop_ids);
+Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable);
 
 // ---- csa.cpp
 Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
