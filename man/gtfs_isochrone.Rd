@@ -41,6 +41,6 @@ regarding timetable construction).}
 square matrix of distances between nodes
 }
 \description{
-Calculate an isochrone from a given start station, returning the list of all
-stations reachable to the specified \code{end_time}.
+Calculate a single isochrone from a given start station, returning the list
+of all stations reachable to the specified \code{end_time}.
 }

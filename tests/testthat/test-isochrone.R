@@ -54,3 +54,13 @@ test_that("isochrone errors", {
                                     end_time = 14 * 3600 + 2400),
                             "There are no scheduled services after that time")
              })
+
+test_that ("isochrones", {
+               f <- file.path (tempdir (), "vbb.zip")
+               g <- extract_gtfs (f)
+               g <- gtfs_timetable (g)
+               from <- "Schonlein"
+               expect_silent (all_routes <- 
+                   gtfs_isochrones (g, from, time_incr = 600, quiet = TRUE))
+               expect_is (all_routes, "list")
+             })

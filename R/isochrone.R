@@ -1,7 +1,7 @@
 #' gtfs_isochrone
 #'
-#' Calculate an isochrone from a given start station, returning the list of all
-#' stations reachable to the specified `end_time`.
+#' Calculate a single isochrone from a given start station, returning the list
+#' of all stations reachable to the specified `end_time`.
 #'
 #' @param gtfs A set of GTFS data returned from \link{extract_gtfs} or, for more
 #' efficient queries, pre-processed with \link{gtfs_timetable}.
