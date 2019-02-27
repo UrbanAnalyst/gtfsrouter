@@ -11,11 +11,15 @@ test_that("gtfs_isochrone", {
               expect_true (file.exists (f))
               expect_silent (g <- extract_gtfs (f))
               expect_silent (g2 <- gtfs_timetable (g, day = 3, quiet = TRUE))
+              start_time <- 12 * 3600 + 1200
+              end_time <- start_time + 1200
               ic <- gtfs_isochrone (g2,
                                     from = "Schonlein",
-                                    start_time = 12 * 3600 + 1200,
-                                    end_time = 12 * 3600 + 2400)
+                                    start_time = start_time,
+                                    end_time = end_time)
               expect_is (ic, c ("gtfs_isochrone", "list"))
+              expect_true (ic$start_time > start_time)
+              expect_true (ic$end_time > end_time)
 
               expect_identical (names (ic), c ("start_point",
                                                "mid_points",
