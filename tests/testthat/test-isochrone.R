@@ -62,5 +62,7 @@ test_that ("isochrones", {
                from <- "Schonlein"
                expect_silent (all_routes <- 
                    gtfs_isochrones (g, from, time_incr = 600, quiet = TRUE))
+               expect_output (all_routes <- 
+                   gtfs_isochrones (g, from, time_incr = 600, quiet = FALSE))
                expect_is (all_routes, "list")
              })
