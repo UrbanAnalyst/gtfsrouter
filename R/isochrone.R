@@ -52,11 +52,17 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     nm <- isotrips$isotrips [[1]] [1, "stop_name"]
     startpt <- sf::st_sf ("stop_name" = nm, geometry = startpt)
 
+    hull <- NULL
+    if (length (isotrips$isotrips) > 1)
+        hull <- isohull (isotrips$isotrips, hull_alpha = hull_alpha)
+
     res <- list (start_point = startpt,
                  mid_points = route_midpoints (isotrips$isotrips),
                  end_points = route_endpoints (isotrips$isotrips),
                  routes = routes,
-                 hull = isohull (isotrips$isotrips, hull_alpha = hull_alpha))
+                 hull = hull,
+                 start_time = isotrips$start_time,
+                 end_time = isotrips$end_time)
 
     class (res) <- c ("gtfs_isochrone", class (res))
     return (res)
@@ -73,7 +79,7 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
     if (length (stns) < 2)
         stop ("No isochrone possible") # nocov
 
-    last_departure <- stns [length (stns)]
+    actual_start_time <- as.numeric (stns [length (stns)])
 
     index <- 2 * 1:((length (stns) - 1) / 2) - 1
     trips <- stns [index + 1]
@@ -90,9 +96,9 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
                     cbind (trips [, c ("route_id", "trip_id", "trip_headsign")]))
                    })
 
-
     list (isotrips = isotrips,
-          last_departure = last_departure)
+          start_time = actual_start_time,
+          end_time = actual_start_time + end_time - start_time)
 }
 
 # convert list of data.frames of stops and trips into sf linestrings for each route
@@ -186,31 +192,6 @@ hull_ratio <- function (x)
     minor_axis_dist / max (d)
 }
 
-#' plot.gtfs_isochrone
-#'
-#' @name plot.gtfs_ischrone
-#' @param x object to be plotted
-#' @param ... ignored here
-#' @export
-plot.gtfs_isochrone <- function (x, ...)
-{
-    requireNamespace ("sf")
-    requireNamespace ("alphahull")
-    requireNamespace ("mapview")
-
-    allpts <- rbind (x$start_pt, x$mid_points, x$end_points)
-
-    m <- mapview::mapview (allpts, color = "grey", cex = 3, legend = FALSE)
-    m <- mapview::addFeatures (m, x$hull, color = "orange", alpha.regions = 0.2)
-    m <- mapview::addFeatures (m, x$routes, colour = "blue")
-    m <- mapview::addFeatures (m, x$start_point, radius = 5, color = "green")
-    m <- mapview::addFeatures (m, x$end_points, radius = 4, color = "red",
-                               fill = TRUE, fillOpacity = 0.8, fillColor = "red")
-
-    print (m)
-    invisible (m)
-}
-
 get_ahull <- function (x, alpha = alpha)
 {
     x <- x [!duplicated (x), ]
@@ -240,4 +221,29 @@ get_ahull <- function (x, alpha = alpha)
         inds <- inds [-j, , drop = FALSE] #nolint
     }
     xy [match (ind_seq, xy$ind), ]
+}
+
+#' plot.gtfs_isochrone
+#'
+#' @name plot.gtfs_ischrone
+#' @param x object to be plotted
+#' @param ... ignored here
+#' @export
+plot.gtfs_isochrone <- function (x, ...)
+{
+    requireNamespace ("sf")
+    requireNamespace ("alphahull")
+    requireNamespace ("mapview")
+
+    allpts <- rbind (x$start_pt, x$mid_points, x$end_points)
+
+    m <- mapview::mapview (allpts, color = "grey", cex = 3, legend = FALSE)
+    m <- mapview::addFeatures (m, x$hull, color = "orange", alpha.regions = 0.2)
+    m <- mapview::addFeatures (m, x$routes, colour = "blue")
+    m <- mapview::addFeatures (m, x$start_point, radius = 5, color = "green")
+    m <- mapview::addFeatures (m, x$end_points, radius = 4, color = "red",
+                               fill = TRUE, fillOpacity = 0.8, fillColor = "red")
+
+    print (m)
+    invisible (m)
 }
