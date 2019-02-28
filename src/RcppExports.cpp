@@ -58,7 +58,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_median_timetable
-Rcpp::DataFrame rcpp_median_timetable(Rcpp::DataFrame full_timetable);
+Rcpp::List rcpp_median_timetable(Rcpp::DataFrame full_timetable);
 RcppExport SEXP _gtfsrouter_rcpp_median_timetable(SEXP full_timetableSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
