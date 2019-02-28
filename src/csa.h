@@ -7,6 +7,35 @@ constexpr int INFINITE_INT =  std::numeric_limits<int>::max ();
 typedef std::unordered_map <size_t, std::unordered_map <size_t, int> > 
     TransferMapType;
 
+// ---- csa-timetable.cpp
+struct Timetable_Inputs
+{
+    std::vector <std::string> stop_id, trip_id;
+    std::vector <int> arrival_time, departure_time;
+};
+
+struct Timetable_Outputs
+{
+    std::vector <int> departure_time, arrival_time,
+        departure_station, arrival_station, trip_id;
+};
+
+namespace timetable {
+    void timetable_in_from_df (Rcpp::DataFrame &stop_times,
+            Timetable_Inputs &tt_in);
+    size_t count_connections (const Timetable_Inputs &tt_in);
+    void initialise_tt_outputs (Timetable_Outputs &tt_out, size_t n);
+    void make_timetable (const Timetable_Inputs &tt_in,
+            Timetable_Outputs &tt_out,
+            const std::vector <std::string> &stop_ids,
+            const std::vector <std::string> &trip_ids);
+}
+
+Rcpp::DataFrame rcpp_make_timetable (Rcpp::DataFrame stop_times,
+        std::vector <std::string> stop_ids, std::vector <std::string> trip_ids);
+Rcpp::List rcpp_median_timetable (Rcpp::DataFrame full_timetable);
+
+// ---- csa.cpp
 struct CSA_Parameters
 {
     size_t timetable_size, ntrips, nstations;
@@ -34,12 +63,6 @@ struct CSA_Return
     size_t earliest_time;
 };
 
-// ---- csa-timetable.cpp
-Rcpp::DataFrame rcpp_make_timetable (Rcpp::DataFrame stop_times,
-        std::vector <std::string> stop_ids, std::vector <std::string> trip_ids);
-Rcpp::List rcpp_median_timetable (Rcpp::DataFrame full_timetable);
-
-// ---- csa.cpp
 namespace csa {
 void fill_csa_pars (CSA_Parameters &csa_pars, int max_transfers, int start_time,
         size_t timetable_size, size_t ntrips, size_t nstations);

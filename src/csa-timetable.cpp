@@ -11,6 +11,67 @@
 Rcpp::DataFrame rcpp_make_timetable (Rcpp::DataFrame stop_times,
         std::vector <std::string> stop_ids, std::vector <std::string> trip_ids)
 {
+    Timetable_Inputs tt_in;
+    timetable::timetable_in_from_df (stop_times, tt_in);
+
+    size_t n = timetable::count_connections (tt_in);
+
+    Timetable_Outputs tt_out;
+    timetable::initialise_tt_outputs (tt_out, n);
+    timetable::make_timetable (tt_in, tt_out, stop_ids, trip_ids);
+
+    Rcpp::DataFrame timetable = Rcpp::DataFrame::create (
+            Rcpp::Named ("departure_station") = tt_out.departure_station,
+            Rcpp::Named ("arrival_station") = tt_out.arrival_station,
+            Rcpp::Named ("departure_time") = tt_out.departure_time,
+            Rcpp::Named ("arrival_time") = tt_out.arrival_time,
+            Rcpp::Named ("trip_id") = tt_out.trip_id,
+            Rcpp::_["stringsAsFactors"] = false);
+
+    return timetable;
+}
+
+void timetable::timetable_in_from_df (Rcpp::DataFrame &stop_times,
+        Timetable_Inputs &tt_in)
+{
+    tt_in.stop_id = Rcpp::as <std::vector <std::string> > (stop_times ["stop_id"]);
+    tt_in.trip_id = Rcpp::as <std::vector <std::string> > (stop_times ["trip_id"]);
+    tt_in.arrival_time = Rcpp::as <std::vector <int> > (
+            stop_times ["arrival_time"]);
+    tt_in.departure_time = Rcpp::as <std::vector <int> > (
+            stop_times ["departure_time"]);
+}
+
+size_t timetable::count_connections (const Timetable_Inputs &tt_in)
+{
+    size_t n_connections = 0;
+    std::string trip_id_i = tt_in.trip_id [0];
+    for (size_t i = 1; i < tt_in.trip_id.size (); i++)
+    {
+        if (tt_in.trip_id [i] == trip_id_i)
+            n_connections++;
+        else
+        {
+            trip_id_i = tt_in.trip_id [i];
+        }
+    }
+    return n_connections;
+}
+    
+void timetable::initialise_tt_outputs (Timetable_Outputs &tt_out, size_t n)
+{
+    tt_out.departure_time.resize (n);
+    tt_out.arrival_time.resize (n);
+    tt_out.departure_station.resize (n);
+    tt_out.arrival_station.resize (n);
+    tt_out.trip_id.resize (n);
+}
+
+void timetable::make_timetable (const Timetable_Inputs &tt_in,
+        Timetable_Outputs &tt_out,
+        const std::vector <std::string> &stop_ids,
+        const std::vector <std::string> &trip_ids)
+{
     std::unordered_map <std::string, int> trip_id_map;
     int i = 1; // 1-indexed
     for (auto tr: trip_ids)
@@ -21,63 +82,27 @@ Rcpp::DataFrame rcpp_make_timetable (Rcpp::DataFrame stop_times,
     for (auto st: stop_ids)
         stop_id_map.emplace (st, i++);
 
-    std::vector <std::string> stop_times_stop_id = stop_times ["stop_id"],
-        stop_times_trip_id = stop_times ["trip_id"];
-    std::vector <int> arrival_time_vec = stop_times ["arrival_time"],
-        departure_time_vec = stop_times ["departure_time"];
-
-    // count number of connections
     size_t n_connections = 0;
-    std::string trip_id_i = stop_times_trip_id [0];
-    size_t n_stop_times = static_cast <size_t> (stop_times.nrow ());
-    for (size_t i = 1; i < n_stop_times; i++)
+    std::string trip_id_i = tt_in.trip_id [0];
+    int dest_stop = stop_id_map.at (tt_in.stop_id [0]);
+    for (size_t i = 1; i < tt_in.trip_id.size (); i++)
     {
-        if (stop_times_trip_id [i] == trip_id_i)
-            n_connections++;
-        else
+        if (tt_in.trip_id [i] == trip_id_i)
         {
-            trip_id_i = stop_times_trip_id [i];
-        }
-    }
-
-    // The vectors forming the timetable:
-    std::vector <int> departure_time (n_connections),
-        arrival_time (n_connections),
-        departure_station (n_connections),
-        arrival_station (n_connections),
-        trip_id (n_connections);
-
-    n_connections = 0;
-    trip_id_i = stop_times_trip_id [0];
-    int dest_stop = stop_id_map.at (stop_times_stop_id [0]);
-    for (size_t i = 1; i < n_stop_times; i++)
-    {
-        if (stop_times_trip_id [i] == trip_id_i)
-        {
-            int arrival_stop = stop_id_map.at (stop_times_stop_id [i]);
-            departure_station [n_connections] = dest_stop;
-            arrival_station [n_connections] = arrival_stop;
-            departure_time [n_connections] = departure_time_vec [i - 1];
-            arrival_time [n_connections] = arrival_time_vec [i];
-            trip_id [n_connections] = trip_id_map.at (trip_id_i);
+            int arrival_stop = stop_id_map.at (tt_in.stop_id [i]);
+            tt_out.departure_station [n_connections] = dest_stop;
+            tt_out.arrival_station [n_connections] = arrival_stop;
+            tt_out.departure_time [n_connections] = tt_in.departure_time [i - 1];
+            tt_out.arrival_time [n_connections] = tt_in.arrival_time [i];
+            tt_out.trip_id [n_connections] = trip_id_map.at (trip_id_i);
             dest_stop = arrival_stop;
             n_connections++;
         } else
         {
-            dest_stop = stop_id_map.at (stop_times_stop_id [i]);
-            trip_id_i = stop_times_trip_id [i];
+            dest_stop = stop_id_map.at (tt_in.stop_id [i]);
+            trip_id_i = tt_in.trip_id [i];
         }
     }
-
-    Rcpp::DataFrame timetable = Rcpp::DataFrame::create (
-            Rcpp::Named ("departure_station") = departure_station,
-            Rcpp::Named ("arrival_station") = arrival_station,
-            Rcpp::Named ("departure_time") = departure_time,
-            Rcpp::Named ("arrival_time") = arrival_time,
-            Rcpp::Named ("trip_id") = trip_id,
-            Rcpp::_["stringsAsFactors"] = false);
-
-    return timetable;
 }
 
 // # nocov start
