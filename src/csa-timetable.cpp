@@ -67,20 +67,24 @@ void timetable::initialise_tt_outputs (Timetable_Outputs &tt_out, size_t n)
     tt_out.trip_id.resize (n);
 }
 
+void timetable::make_trip_stop_map (const std::vector <std::string> &input,
+        std::unordered_map <std::string, int> &output_map)
+{
+    int count = 1; // 1-indexed
+    for (auto i: input)
+        output_map.emplace (i, count++);
+}
+
 void timetable::make_timetable (const Timetable_Inputs &tt_in,
         Timetable_Outputs &tt_out,
         const std::vector <std::string> &stop_ids,
         const std::vector <std::string> &trip_ids)
 {
     std::unordered_map <std::string, int> trip_id_map;
-    int i = 1; // 1-indexed
-    for (auto tr: trip_ids)
-        trip_id_map.emplace (tr, i++);
+    make_trip_stop_map (trip_ids, trip_id_map);
 
     std::unordered_map <std::string, int> stop_id_map;
-    i = 1;
-    for (auto st: stop_ids)
-        stop_id_map.emplace (st, i++);
+    make_trip_stop_map (stop_ids, stop_id_map);
 
     size_t n_connections = 0;
     std::string trip_id_i = tt_in.trip_id [0];

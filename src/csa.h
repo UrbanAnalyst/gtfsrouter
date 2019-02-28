@@ -25,6 +25,8 @@ namespace timetable {
             Timetable_Inputs &tt_in);
     size_t count_connections (const Timetable_Inputs &tt_in);
     void initialise_tt_outputs (Timetable_Outputs &tt_out, size_t n);
+    void make_trip_stop_map (const std::vector <std::string> &input,
+            std::unordered_map <std::string, int> &output_map);
     void make_timetable (const Timetable_Inputs &tt_in,
             Timetable_Outputs &tt_out,
             const std::vector <std::string> &stop_ids,
