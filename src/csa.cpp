@@ -27,45 +27,40 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         const int max_transfers)
 {
     CSA_Parameters csa_pars;
-    csa_pars.max_transfers = max_transfers;
-    csa_pars.start_time = start_time;
-    csa_pars.timetable_size = static_cast <size_t> (timetable.nrow ());
-    csa_pars.ntrips = ntrips;
-    csa_pars.nstations = nstations;
+    csa::fill_csa_pars (csa_pars, max_transfers, start_time,
+            static_cast <size_t> (timetable.nrow ()), ntrips, nstations);
 
-    // make start and end stations into std::unordered_sets to allow
-    // constant-time lookup. stations at this point are 1-based R indices, but
-    // that doesn't matter here.
     std::unordered_set <size_t> start_stations_set, end_stations_set;
-    for (auto i: start_stations)
-        start_stations_set.emplace (i);
-    for (auto i: end_stations)
-        end_stations_set.emplace (i);
+    csa::make_station_sets (start_stations, end_stations,
+            start_stations_set, end_stations_set);
 
-    //TransferMapType transfer_map;
     CSA_Inputs csa_in;
     csa::make_transfer_map (csa_in.transfer_map, transfers);
 
-    // set transfer times from first connection; the prev and current vars are
-    // used in the main loop below. Thus use nstations + 1 because it's
-    // 1-indexed throughout, and the first element is ignored.
+    // The csa_out vectors use nstations + 1 because it's 1-indexed throughout,
+    // and the first element is ignored.
     CSA_Outputs csa_out;
     csa_out.earliest_connection.resize (csa_pars.nstations + 1, INFINITE_INT);
+    csa_out.n_transfers.resize (csa_pars.nstations + 1, 0);
+    csa_out.prev_time.resize (csa_pars.nstations + 1, INFINITE_INT);
+    csa_out.prev_stn.resize (csa_pars.nstations + 1, INFINITE_INT);
+    csa_out.current_trip.resize (csa_pars.nstations + 1, INFINITE_INT);
+
     csa::get_earliest_connection (start_stations, csa_pars.start_time,
             csa_in.transfer_map, csa_out.earliest_connection);
 
-    // main CSA loop
-    // stations and trips are size_t because they're used as direct array indices.
     csa::csa_in_from_df (timetable, csa_in);
 
-    CSA_Return csa_ret;
-    csa_ret = csa::main_csa_loop (csa_pars, start_stations_set, end_stations_set,
-            csa_in, csa_out);
+    CSA_Return csa_ret = csa::main_csa_loop (csa_pars, start_stations_set,
+            end_stations_set, csa_in, csa_out);
 
-    size_t route_len = csa::get_route_length (csa_out, csa_pars, csa_ret.end_station);
+    size_t route_len = csa::get_route_length (csa_out, csa_pars,
+            csa_ret.end_station);
 
-    std::vector <size_t> end_station_out (route_len), trip_out (route_len, INFINITE_INT);
+    std::vector <size_t> end_station_out (route_len),
+        trip_out (route_len, INFINITE_INT);
     std::vector <int> time_out (route_len);
+
     csa::extract_final_trip (csa_out, csa_ret, end_station_out,
             trip_out, time_out);
 
@@ -76,6 +71,29 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
             Rcpp::_["stringsAsFactors"] = false);
 
     return res;
+}
+
+void csa::fill_csa_pars (CSA_Parameters &csa_pars, int max_transfers, int start_time,
+        size_t timetable_size, size_t ntrips, size_t nstations)
+{
+    csa_pars.max_transfers = max_transfers;
+    csa_pars.start_time = start_time;
+    csa_pars.timetable_size = timetable_size;
+    csa_pars.ntrips = ntrips;
+    csa_pars.nstations = nstations;
+}
+
+// make start and end stations into std::unordered_sets to allow constant-time
+// lookup.
+void csa::make_station_sets (const std::vector <size_t> &start_stations,
+        const std::vector <size_t> &end_stations,
+        std::unordered_set <size_t> &start_stations_set,
+        std::unordered_set <size_t> &end_stations_set)
+{
+    for (auto i: start_stations)
+        start_stations_set.emplace (i);
+    for (auto i: end_stations)
+        end_stations_set.emplace (i);
 }
 
 void csa::csa_in_from_df (Rcpp::DataFrame &timetable,
@@ -155,10 +173,6 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
     std::vector <bool> is_connected (csa_pars.ntrips, false);
 
     // trip connections:
-    csa_out.n_transfers.resize (csa_pars.nstations + 1, 0);
-    csa_out.prev_time.resize (csa_pars.nstations + 1, INFINITE_INT);
-    csa_out.prev_stn.resize (csa_pars.nstations + 1, INFINITE_INT);
-    csa_out.current_trip.resize (csa_pars.nstations + 1, INFINITE_INT);
     for (size_t i = 0; i < csa_pars.timetable_size; i++)
     {
         if (csa_in.departure_time [i] < csa_pars.start_time)
@@ -170,10 +184,7 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
                 csa_in.arrival_time [i] < csa_out.earliest_connection [csa_in.arrival_station [i] ])
         {
             is_connected [csa_in.trip_id [i] ] = true;
-            csa_out.earliest_connection [csa_in.arrival_station [i] ] = csa_in.arrival_time [i];
-            csa_out.current_trip [csa_in.arrival_station [i] ] = csa_in.trip_id [i];
-            csa_out.prev_stn [csa_in.arrival_station [i] ] = csa_in.departure_station [i];
-            csa_out.prev_time [csa_in.arrival_station [i] ] = csa_in.departure_time [i];
+            csa::fill_one_csa_out (csa_out, csa_in, csa_in.arrival_station [i], i);
         }
 
         // main connection scan:
@@ -183,23 +194,13 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
         {
             if (csa_in.arrival_time [i] < csa_out.earliest_connection [csa_in.arrival_station [i] ])
             {
-                csa_out.earliest_connection [csa_in.arrival_station [i] ] = csa_in.arrival_time [i];
-                csa_out.prev_stn [csa_in.arrival_station [i] ] = csa_in.departure_station [i];
-                csa_out.prev_time [csa_in.arrival_station [i] ] = csa_in.departure_time [i];
-                csa_out.current_trip [csa_in.arrival_station [i] ] = csa_in.trip_id [i];
+                csa::fill_one_csa_out (csa_out, csa_in, csa_in.arrival_station [i], i);
+
                 csa_out.n_transfers [csa_in.arrival_station [i] ] =
                     csa_out.n_transfers [csa_in.departure_station [i] ];
             }
-            if (end_stations_set.find (csa_in.arrival_station [i]) !=
-                    end_stations_set.end ())
-            {
-                if (csa_in.arrival_time [i] < csa_ret.earliest_time)
-                {
-                    csa_ret.earliest_time = csa_in.arrival_time [i];
-                    csa_ret.end_station = csa_in.arrival_station [i];
-                }
-                end_stations_set.erase (csa_in.arrival_station [i]);
-            }
+            csa::check_end_stations (end_stations_set, csa_in.arrival_station [i],
+                    csa_in.arrival_time [i], csa_ret);
 
             if (csa_in.transfer_map.find (csa_in.arrival_station [i]) != csa_in.transfer_map.end ())
             {
@@ -210,23 +211,15 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
                     if (ttime < csa_out.earliest_connection [trans_dest] &&
                             csa_out.n_transfers [trans_dest] <= csa_pars.max_transfers)
                     {
+                        // modified version of fill_one_csa_out:
                         csa_out.earliest_connection [trans_dest] = ttime;
                         csa_out.prev_stn [trans_dest] = csa_in.arrival_station [i];
                         csa_out.prev_time [trans_dest] = csa_in.arrival_time [i];
                         csa_out.n_transfers [trans_dest]++;
 
-                        if (end_stations_set.find (trans_dest) !=
-                                end_stations_set.end ())
-                        {
-                            // # nocov start
-                            if (ttime < csa_ret.earliest_time)
-                            {
-                                csa_ret.earliest_time = ttime;
-                                csa_ret.end_station = trans_dest;
-                            }
-                            // # nocov end
-                            end_stations_set.erase (trans_dest);
-                        }
+                        csa::check_end_stations (end_stations_set,
+                                trans_dest, ttime, csa_ret);
+
                     }
                 }
             }
@@ -236,6 +229,30 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
             break;
     }
     return csa_ret;
+}
+
+void csa::fill_one_csa_out (CSA_Outputs &csa_out, const CSA_Inputs &csa_in,
+        const size_t &i, const size_t &j)
+{
+    csa_out.earliest_connection [i] = csa_in.arrival_time [j];
+    csa_out.current_trip [i] = csa_in.trip_id [j];
+    csa_out.prev_stn [i] = csa_in.departure_station [j];
+    csa_out.prev_time [i] = csa_in.departure_time [j];
+}
+
+void csa::check_end_stations (std::unordered_set <size_t> &end_stations_set,
+        const size_t &arrival_station, const int &arrival_time,
+        CSA_Return &csa_ret)
+{
+    if (end_stations_set.find (arrival_station) != end_stations_set.end ())
+    {
+        if (arrival_time < csa_ret.earliest_time)
+        {
+            csa_ret.earliest_time = arrival_time;
+            csa_ret.end_station = arrival_station;
+        }
+        end_stations_set.erase (arrival_station);
+    }
 }
 
 size_t csa::get_route_length (const CSA_Outputs &csa_out,
