@@ -29,6 +29,12 @@ rcpp_csa_isochrone <- function(timetable, transfers, nstations, ntrips, start_st
     .Call(`_gtfsrouter_rcpp_csa_isochrone`, timetable, transfers, nstations, ntrips, start_stations, start_time, end_time)
 }
 
+#' rcpp_median_timetable
+#' @noRd
+rcpp_median_timetable <- function(full_timetable) {
+    .Call(`_gtfsrouter_rcpp_median_timetable`, full_timetable)
+}
+
 #' rcpp_make_timetable
 #'
 #' Make timetable from GTFS stop_times. Both stop_ids and trip_ids are vectors
@@ -38,12 +44,6 @@ rcpp_csa_isochrone <- function(timetable, transfers, nstations, ntrips, start_st
 #' @noRd
 rcpp_make_timetable <- function(stop_times, stop_ids, trip_ids) {
     .Call(`_gtfsrouter_rcpp_make_timetable`, stop_times, stop_ids, trip_ids)
-}
-
-#' rcpp_median_timetable
-#' @noRd
-rcpp_median_timetable <- function(full_timetable) {
-    .Call(`_gtfsrouter_rcpp_median_timetable`, full_timetable)
 }
 
 #' rcpp_csa
