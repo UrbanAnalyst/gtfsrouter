@@ -56,6 +56,31 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
 
     // main CSA loop
     // stations and trips are size_t because they're used as direct array indices.
+    csa::csa_in_from_df (timetable, csa_in);
+
+    CSA_Return csa_ret;
+    csa_ret = csa::main_csa_loop (csa_pars, start_stations_set, end_stations_set,
+            csa_in, csa_out);
+
+    size_t route_len = csa::get_route_length (csa_out, csa_pars, csa_ret.end_station);
+
+    std::vector <size_t> end_station_out (route_len), trip_out (route_len, INFINITE_INT);
+    std::vector <int> time_out (route_len);
+    csa::extract_final_trip (csa_out, csa_ret, end_station_out,
+            trip_out, time_out);
+
+    Rcpp::DataFrame res = Rcpp::DataFrame::create (
+            Rcpp::Named ("stop_id") = end_station_out,
+            Rcpp::Named ("time") = time_out,
+            Rcpp::Named ("trip_id") = trip_out,
+            Rcpp::_["stringsAsFactors"] = false);
+
+    return res;
+}
+
+void csa::csa_in_from_df (Rcpp::DataFrame &timetable,
+        CSA_Inputs &csa_in)
+{
     csa_in.departure_station = Rcpp::as <std::vector <size_t> > (
             timetable ["departure_station"]);
     csa_in.arrival_station = Rcpp::as <std::vector <size_t> > (
@@ -66,63 +91,6 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
             timetable ["departure_time"]);
     csa_in.arrival_time = Rcpp::as <std::vector <int> > (
             timetable ["arrival_time"]);
-
-    CSA_Return csa_ret;
-    csa_ret = csa::main_csa_loop (csa_pars, start_stations_set, end_stations_set,
-            csa_in, csa_out);
-
-    size_t count = 1;
-    size_t i = csa_ret.end_station;
-    while (i < INFINITE_INT)
-    {
-        count++;
-        i = csa_out.prev_stn [static_cast <size_t> (i)];
-        if (count > csa_pars.nstations)
-            Rcpp::stop ("no route found; something went wrong"); // # nocov
-    }
-
-    std::vector <size_t> end_station_out (count), trip_out (count, INFINITE_INT);
-    std::vector <int> time_out (count);
-    i = csa_ret.end_station;
-    if (i > csa_out.current_trip.size ()) // No route able to be found
-    {
-        end_station_out.clear ();
-        time_out.clear ();
-        trip_out.clear ();
-    } else
-    {
-        time_out [0] = csa_ret.earliest_time;
-        trip_out [0] = csa_out.current_trip [i];
-        end_station_out [0] = i;
-        count = 1;
-        while (i < INFINITE_INT)
-        {
-            time_out [count] = csa_out.prev_time [i];
-            i = csa_out.prev_stn [static_cast <size_t> (i)];
-            end_station_out [count] = i;
-            if (i < INFINITE_INT)
-                trip_out [count] = csa_out.current_trip [i];
-            count++;
-        }
-        // The last entry of these is all INF, so must be removed.
-        end_station_out.resize (end_station_out.size () - 1);
-        time_out.resize (time_out.size () - 1);
-        trip_out.resize (trip_out.size () - 1);
-        // trip_out values don't exist for start stations of each route, so
-        for (int j = 1; j < trip_out.size (); j++)
-            if (trip_out [j] == INFINITE_INT)
-                trip_out [j] = trip_out [j - 1];
-        // and last value of trip_out is always Inf, so
-        //trip_out [trip_out.size () - 1] = trip_out [trip_out.size () - 2];
-    }
-
-    Rcpp::DataFrame res = Rcpp::DataFrame::create (
-            Rcpp::Named ("stop_id") = end_station_out,
-            Rcpp::Named ("time") = time_out,
-            Rcpp::Named ("trip_id") = trip_out,
-            Rcpp::_["stringsAsFactors"] = false);
-
-    return res;
 }
 
 // convert transfers into a map from start to (end, transfer_time).
@@ -268,4 +236,58 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
             break;
     }
     return csa_ret;
+}
+
+size_t csa::get_route_length (const CSA_Outputs &csa_out,
+        const CSA_Parameters &csa_pars, const size_t &end_stn)
+{
+    size_t count = 1;
+    size_t i = end_stn;
+    while (i < INFINITE_INT)
+    {
+        count++;
+        i = csa_out.prev_stn [static_cast <size_t> (i)];
+        if (count > csa_pars.nstations)
+            Rcpp::stop ("no route found; something went wrong"); // # nocov
+    }
+
+    return count;
+}
+
+void csa::extract_final_trip (const CSA_Outputs &csa_out,
+        const CSA_Return &csa_ret,
+        std::vector <size_t> &end_station,
+        std::vector <size_t> &trip,
+        std::vector <int> &time)
+{
+    size_t i = csa_ret.end_station;
+    if (i > csa_out.current_trip.size ()) // No route able to be found
+    {
+        end_station.clear ();
+        time.clear ();
+        trip.clear ();
+    } else
+    {
+        time [0] = csa_ret.earliest_time;
+        trip [0] = csa_out.current_trip [i];
+        end_station [0] = i;
+        size_t count = 1;
+        while (i < INFINITE_INT)
+        {
+            time [count] = csa_out.prev_time [i];
+            i = csa_out.prev_stn [static_cast <size_t> (i)];
+            end_station [count] = i;
+            if (i < INFINITE_INT)
+                trip [count] = csa_out.current_trip [i];
+            count++;
+        }
+        // The last entry of these is all INF, so must be removed.
+        end_station.resize (end_station.size () - 1);
+        time.resize (time.size () - 1);
+        trip.resize (trip.size () - 1);
+        // trip values don't exist for start stations of each route, so
+        for (int j = 1; j < trip.size (); j++)
+            if (trip [j] == INFINITE_INT)
+                trip [j] = trip [j - 1];
+    }
 }

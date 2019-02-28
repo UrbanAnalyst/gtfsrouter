@@ -40,6 +40,8 @@ Rcpp::List rcpp_median_timetable (Rcpp::DataFrame full_timetable);
 
 // ---- csa.cpp
 namespace csa {
+void csa_in_from_df (Rcpp::DataFrame &timetable,
+        CSA_Inputs &csa_in);
 void make_transfer_map (TransferMapType &transfer_map,
         Rcpp::DataFrame &transfers);
 void get_earliest_connection (
@@ -52,6 +54,13 @@ CSA_Return main_csa_loop (const CSA_Parameters &csa_pars,
         std::unordered_set <size_t> &end_stations_set,
         const CSA_Inputs &csa_inputs,
         CSA_Outputs &csa_out);
+size_t get_route_length (const CSA_Outputs &csa_out,
+        const CSA_Parameters &csa_pars, const size_t &end_stn);
+void extract_final_trip (const CSA_Outputs &csa_out,
+        const CSA_Return &csa_ret,
+        std::vector <size_t> &end_station,
+        std::vector <size_t> &trip,
+        std::vector <int> &time);
 } // end namespace csa
 
 Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
