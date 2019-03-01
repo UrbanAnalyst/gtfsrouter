@@ -125,12 +125,9 @@ void fill_tt_inputs (Rcpp::DataFrame &full_timetable,
 void fill_timetable_services (const Timetable_Outputs &tt_in,
         std::unordered_map <std::string, std::vector <int> > &timetable,
         std::unordered_map <std::string, std::vector <int> > &services);
-void fill_timetable (const int &n,
-        const std::unordered_map <std::string, std::vector <int> > &timetable,
-        Median_Outputs &med_out);
-void fill_services (const int &n,
+void fill_outputs (const int &n,
         const std::unordered_map <std::string, std::vector <int> > &services,
-        Median_Outputs &med_out);
+        Median_Outputs &med_out, bool is_services);
 
 } // end namespace median-timetable
 
