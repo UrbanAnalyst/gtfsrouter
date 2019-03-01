@@ -66,6 +66,7 @@ struct CSA_Return
 };
 
 namespace csa {
+
 void fill_csa_pars (CSA_Parameters &csa_pars, int max_transfers, int start_time,
         size_t timetable_size, size_t ntrips, size_t nstations);
 void make_station_sets (const std::vector <size_t> &start_stations,
@@ -98,6 +99,7 @@ void extract_final_trip (const CSA_Outputs &csa_out,
         std::vector <size_t> &end_station,
         std::vector <size_t> &trip,
         std::vector <int> &time);
+
 } // end namespace csa
 
 Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
@@ -108,6 +110,29 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         const std::vector <size_t> end_stations,
         const int start_time,
         const int max_transfers);
+
+// ---- csa-median-timetable.cpp
+struct Median_Outputs
+{
+    std::vector <int> start_station, end_station,
+        time_min, time_median, time_max;
+};
+
+namespace median_timetable {
+
+void fill_tt_inputs (Rcpp::DataFrame &full_timetable,
+    Timetable_Outputs &tt_out);
+void fill_timetable_services (const Timetable_Outputs &tt_in,
+        std::unordered_map <std::string, std::vector <int> > &timetable,
+        std::unordered_map <std::string, std::vector <int> > &services);
+void fill_timetable (const int &n,
+        const std::unordered_map <std::string, std::vector <int> > &timetable,
+        Median_Outputs &med_out);
+void fill_services (const int &n,
+        const std::unordered_map <std::string, std::vector <int> > &services,
+        Median_Outputs &med_out);
+
+} // end namespace median-timetable
 
 // ---- csa-isochrone.cpp
 Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
