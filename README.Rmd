@@ -54,7 +54,7 @@ gtfs_route (gtfs,
             to = "Berlin Hauptbahnhof",
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
-```{r example, echo = FALSE}
+```{r example, echo = FALSE, message = FALSE}
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
 st <- system.time (
@@ -66,23 +66,19 @@ st <- system.time (
 knitr::kable (r)
 ```
 
-A routing query on a very large network (the GTFS data are
-`r round(file.size(list.files()[grep("VBB",list.files())]) / 1e6)` MB) takes
-only around `r round (st[3] * 100) / 100` seconds.
-
 ### gtfs_isochrone
 
-Isochrones from a nominated station can be extracted with the `gtfs_isochrone()`
-function, returning a list of all stations reachable within a specified time
-period from that station.
-```{r isochrone, eval = TRUE}
+Isochrones from a nominated station - lines delinating the range reachable
+within a given time - can be extracted with the `gtfs_isochrone()` function,
+which returns a list of all stations reachable within the specified time period
+from the nominated station station.
+```{r isochrone, eval = TRUE, message = FALSE}
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
 x <- gtfs_isochrone (gtfs,
                      from = "Schonlein",
                      start_time = 12 * 3600 + 120,
                      end_time = 12 * 3600 + 720) # 10 minutes later
-x
 ```
 
 The function returns an object of class `gtfs_isochrone` containing
@@ -95,7 +91,7 @@ This requires the packages
 [`alphahull`](https://cran.r-project.org/package=alphahull), and
 [`mapview`](https://cran.r-project.org/package=mapview) to be installed.
 Isochrone objects have their own plot method:
-```{r plot, eval = FALSE}
+```{r plot, eval = FALSE, message = FALSE}
 plot (x)
 ```
 ```{r mapshot, echo = FALSE}

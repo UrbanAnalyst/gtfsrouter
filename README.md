@@ -42,7 +42,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpKygzfZ/vbb.zip"
+    ## [1] "/tmp/Rtmpdw3b64/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -61,8 +61,6 @@ gtfs_route (gtfs,
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
 
-    ## Day not specified; extracting timetable for Tuesday
-
 |    | route     | stop                            | departure\_time | arrival\_time |
 | -- | :-------- | :------------------------------ | :-------------- | :------------ |
 | 6  | 106146288 | U Schonleinstr. (Berlin)        | 12:04:00        | 12:04:00      |
@@ -76,112 +74,22 @@ gtfs_route (gtfs,
 | 4  | 103661178 | S+U Friedrichstr. Bhf (Berlin)  | 12:22:12        | 12:21:24      |
 | 5  | 103661178 | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
 
-A routing query on a very large network (the GTFS data are MB) takes
-only around 0.04 seconds.
-
 ### gtfs\_isochrone
 
-Isochrones from a nominated station can be extracted with the
-`gtfs_isochrone()` function, returning a list of all stations reachable
-within a specified time period from that station.
+Isochrones from a nominated station - lines delinating the range
+reachable within a given time - can be extracted with the
+`gtfs_isochrone()` function, which returns a list of all stations
+reachable within the specified time period from the nominated station
+station.
 
 ``` r
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
-```
-
-    ## Day not specified; extracting timetable for Tuesday
-
-``` r
 x <- gtfs_isochrone (gtfs,
                      from = "Schonlein",
                      start_time = 12 * 3600 + 120,
                      end_time = 12 * 3600 + 720) # 10 minutes later
 ```
-
-    ## Loading required namespace: geodist
-
-    ## Linking to GEOS 3.7.1, GDAL 2.3.2, PROJ 5.2.0
-
-``` r
-x
-```
-
-    ## $start_point
-    ## Simple feature collection with 1 feature and 1 field
-    ## geometry type:  POINT
-    ## dimension:      XY
-    ## bbox:           xmin: 13.42224 ymin: 52.49318 xmax: 13.42224 ymax: 52.49318
-    ## epsg (SRID):    4326
-    ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-    ##                  stop_name                  geometry
-    ## 1 U Schonleinstr. (Berlin) POINT (13.42224 52.49318)
-    ## 
-    ## $mid_points
-    ## Simple feature collection with 15 features and 1 field
-    ## geometry type:  POINT
-    ## dimension:      XY
-    ## bbox:           xmin: 13.40653 ymin: 52.47287 xmax: 13.43481 ymax: 52.5155
-    ## epsg (SRID):    4326
-    ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-    ## First 10 features:
-    ##                      stop_name                  geometry
-    ## 1      U Hermannplatz (Berlin) POINT (13.42472 52.48696)
-    ## 2      U Hermannplatz (Berlin) POINT (13.42472 52.48696)
-    ## 3  U Rathaus Neukolln (Berlin) POINT (13.43481 52.48115)
-    ## 4    U Kottbusser Tor (Berlin) POINT (13.41775 52.49905)
-    ## 5    U Kottbusser Tor (Berlin) POINT (13.41775 52.49905)
-    ## 6      U Hermannplatz (Berlin) POINT (13.42472 52.48696)
-    ## 7        U Boddinstr. (Berlin) POINT (13.42578 52.47975)
-    ## 8         U Leinestr. (Berlin)  POINT (13.4284 52.47287)
-    ## 9    U Kottbusser Tor (Berlin) POINT (13.41775 52.49905)
-    ## 10   U Kottbusser Tor (Berlin) POINT (13.41775 52.49905)
-    ## 
-    ## $end_points
-    ## Simple feature collection with 5 features and 1 field
-    ## geometry type:  POINT
-    ## dimension:      XY
-    ## bbox:           xmin: 13.39176 ymin: 52.46718 xmax: 13.4398 ymax: 52.52162
-    ## epsg (SRID):    4326
-    ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-    ##                          stop_name                  geometry
-    ## 1        U Karl-Marx-Str. (Berlin)  POINT (13.4398 52.47643)
-    ## 2     U Gorlitzer Bahnhof (Berlin) POINT (13.42847 52.49903)
-    ## 3         S+U Hermannstr. (Berlin)  POINT (13.4317 52.46718)
-    ## 4        U Hallesches Tor (Berlin) POINT (13.39176 52.49777)
-    ## 5 S+U Alexanderplatz (Berlin) [U8] POINT (13.41212 52.52162)
-    ## 
-    ## $routes
-    ## Geometry set for 5 features 
-    ## geometry type:  LINESTRING
-    ## dimension:      XY
-    ## bbox:           xmin: 13.39176 ymin: 52.46718 xmax: 13.4398 ymax: 52.52162
-    ## epsg (SRID):    4326
-    ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-
-    ## LINESTRING (13.41775 52.49905, 13.42847 52.49903)
-
-    ## LINESTRING (13.42472 52.48696, 13.43481 52.4811...
-
-    ## LINESTRING (13.41775 52.49905, 13.40653 52.4982...
-
-    ## LINESTRING (13.42224 52.49318, 13.42472 52.4869...
-
-    ## LINESTRING (13.42224 52.49318, 13.41775 52.4990...
-
-    ## 
-    ## $hull
-    ## Simple feature collection with 1 feature and 2 fields
-    ## geometry type:  POLYGON
-    ## dimension:      XY
-    ## bbox:           xmin: 13.39176 ymin: 52.46718 xmax: 13.4398 ymax: 52.52162
-    ## epsg (SRID):    4326
-    ## proj4string:    +proj=longlat +datum=WGS84 +no_defs
-    ##            area  wl_ratio                       geometry
-    ## 1 8858005 [m^2] 0.3100325 POLYGON ((13.4398 52.47643,...
-    ## 
-    ## attr(,"class")
-    ## [1] "gtfs_isochrone" "list"
 
 The function returns an object of class `gtfs_isochrone` containing
 [`sf`](https://github.com/r-spatial/sf)-formatted sets of start and end
