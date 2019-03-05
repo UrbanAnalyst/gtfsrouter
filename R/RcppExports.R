@@ -45,8 +45,8 @@ rcpp_median_timetable <- function(full_timetable) {
 #'
 #' timetable here is the result of rcpp_median_timetable
 #' @noRd
-rcpp_median_graph <- function(nverts, timetable, transfers) {
-    .Call(`_gtfsrouter_rcpp_median_graph`, nverts, timetable, transfers)
+rcpp_median_graph <- function(nverts, timetable, transfers, v0) {
+    .Call(`_gtfsrouter_rcpp_median_graph`, nverts, timetable, transfers, v0)
 }
 
 #' rcpp_make_timetable

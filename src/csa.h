@@ -123,6 +123,10 @@ struct Median_Outputs
         duration_min, duration_median, duration_max,
         interval_min, interval_median, interval_max;
 };
+
+struct GraphSimpleEdge {
+    int to, dist;
+};
 // # nocov end
 
 namespace median_timetable {
@@ -141,7 +145,7 @@ void fill_transfer_inputs (Rcpp::DataFrame &transfers,
 } // end namespace median-timetable
 Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable);
 Rcpp::DataFrame rcpp_median_graph (int nverts, Rcpp::DataFrame timetable,
-        Rcpp::DataFrame transfers);
+        Rcpp::DataFrame transfers, int v0);
 
 // ---- csa-isochrone.cpp
 Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
