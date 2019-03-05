@@ -31,12 +31,11 @@ rcpp_csa_isochrone <- function(timetable, transfers, nstations, ntrips, start_st
 
 #' rcpp_median_timetable
 #'
-#' Constructs and returns two tables:
-#' 1. "times", containing the median time required to travel between the
-#'     nominated pairs of stations; and
-#' 2. "intervals", containing median service intervals leaving the first
-#'     nominated station travelling to the second.
-#' min & max times are also returned in both cases
+#' Constructs and returns a table with:
+#' 1. "times", including the (min, median, max) times required to travel
+#'     between the nominated pairs of stations; and
+#' 2. "intervals", containing (min, median, max) service intervals leaving the
+#'     first nominated station travelling to the second.
 #' @noRd
 rcpp_median_timetable <- function(full_timetable) {
     .Call(`_gtfsrouter_rcpp_median_timetable`, full_timetable)
