@@ -41,6 +41,14 @@ rcpp_median_timetable <- function(full_timetable) {
     .Call(`_gtfsrouter_rcpp_median_timetable`, full_timetable)
 }
 
+#' rcpp_median_graph
+#'
+#' timetable here is the result of rcpp_median_timetable
+#' @noRd
+rcpp_median_graph <- function(timetable, transfers) {
+    .Call(`_gtfsrouter_rcpp_median_graph`, timetable, transfers)
+}
+
 #' rcpp_make_timetable
 #'
 #' Make timetable from GTFS stop_times. Both stop_ids and trip_ids are vectors

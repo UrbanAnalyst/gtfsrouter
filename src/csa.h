@@ -133,9 +133,15 @@ void fill_timetable_services (const Timetable_Outputs &tt_in,
         std::unordered_map <std::string, Median_Vectors> &tt_vectors);
 void fill_outputs (const std::unordered_map <std::string, Median_Vectors> &tt_vecs,
         Median_Outputs &med_out);
+void fill_graph_inputs (Rcpp::DataFrame &timetable,
+    Median_Outputs &gr_in);
+void fill_transfer_inputs (Rcpp::DataFrame &transfers,
+        std::unordered_map <std::string, int> &transfer_times);
 
 } // end namespace median-timetable
 Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable);
+Rcpp::DataFrame rcpp_median_graph (Rcpp::DataFrame timetable,
+        Rcpp::DataFrame transfers);
 
 // ---- csa-isochrone.cpp
 Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
