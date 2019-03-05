@@ -140,7 +140,7 @@ void fill_transfer_inputs (Rcpp::DataFrame &transfers,
 
 } // end namespace median-timetable
 Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable);
-Rcpp::DataFrame rcpp_median_graph (Rcpp::DataFrame timetable,
+Rcpp::DataFrame rcpp_median_graph (int nverts, Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers);
 
 // ---- csa-isochrone.cpp
