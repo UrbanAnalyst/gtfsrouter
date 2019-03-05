@@ -21,6 +21,7 @@ Suggests:
     lwgeom,
     knitr,
     mapview,
+    rmarkdown,
     sf,
     testthat
 LinkingTo:
