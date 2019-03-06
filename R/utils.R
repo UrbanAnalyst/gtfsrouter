@@ -60,3 +60,20 @@ zero_pad <- function (x)
     x [nchar (x) < 2] <- paste0 (0, x [nchar (x) < 2])
     return (x)
 }
+
+# cache object using hash from hash_object
+cache_file <- function (hash_object, object, prefix = "")
+{
+    hash <- paste0 (prefix, digest::digest (hash_object), ".Rds")
+    saveRDS (object, file = file.path (tempdir (), hash))
+}
+
+load_cached_file <- function (hash_object, prefix = "")
+{
+    hash <- paste0 (prefix, digest::digest (hash_object), ".Rds")
+    fname <- file.path (tempdir (), hash)
+    ret <- NULL
+    if (file.exists (fname))
+        ret <- readRDS (fname)
+    return (ret)
+}

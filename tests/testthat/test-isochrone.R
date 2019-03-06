@@ -55,14 +55,29 @@ test_that("isochrone errors", {
                             "There are no scheduled services after that time")
              })
 
-test_that ("isochrones", {
+test_that ("median isochrones", {
                f <- file.path (tempdir (), "vbb.zip")
                g <- extract_gtfs (f)
-               g <- gtfs_timetable (g)
-               from <- "Schonlein"
-               expect_silent (all_routes <- 
-                   gtfs_isochrones (g, from, time_incr = 600, quiet = TRUE))
-               expect_output (all_routes <- 
-                   gtfs_isochrones (g, from, time_incr = 600, quiet = FALSE))
-               expect_is (all_routes, "list")
+               g <- gtfs_timetable (g, day = 1:7)
+
+               expect_silent (timetable <- gtfs_median_timetable (g))
+               expect_is (timetable, "data.frame")
+               expect_equal (ncol (timetable), 8)
+               expect_identical (names (timetable),
+                                 c ("departure_station", "arrival_station",
+                                    "duration_min", "duration_median",
+                                    "duration_max", "interval_min",
+                                    "interval_median", "interval_max"))
+
+               expect_silent (graph <- gtfs_median_graph (timetable, g))
+               expect_is (graph, "data.frame")
+               expect_equal (ncol (graph), 3)
+               expect_identical (names (graph), 
+                                 c ("departure_station", "arrival_station",
+                                    "duration"))
+
+               expect_silent (d <- gtfs_median_isochrones (graph, station = 100))
+               expect_is (d, "integer")
+               n <- max (c (graph$departure_station, graph$arrival_station))
+               expect_equal (length (d), n)
              })
