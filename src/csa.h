@@ -111,7 +111,6 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         const int max_transfers);
 
 // ---- csa-median-timetable.cpp
-// # nocov start
 struct Median_Vectors
 {
     std::vector <int> depart_time, duration;
@@ -123,7 +122,6 @@ struct Median_Outputs
         duration_min, duration_median, duration_max,
         interval_min, interval_median, interval_max;
 };
-// # nocov end
 
 namespace median_timetable {
 
