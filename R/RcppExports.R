@@ -43,10 +43,20 @@ rcpp_median_timetable <- function(full_timetable) {
 
 #' rcpp_median_graph
 #'
-#' timetable here is the result of rcpp_median_timetable
+#' Makes a graph of edges quantifying transfer pairs and median durations. This
+#' has to be added to the actual median timetable graph to generate the full
+#' graph.
 #' @noRd
-rcpp_median_graph <- function(nverts, timetable, transfers, v0) {
-    .Call(`_gtfsrouter_rcpp_median_graph`, nverts, timetable, transfers, v0)
+rcpp_median_graph <- function(timetable, transfers) {
+    .Call(`_gtfsrouter_rcpp_median_graph`, timetable, transfers)
+}
+
+#' rcpp_median_dijkstra
+#'
+#' Run one dijkstra from the median timetable graph
+#' @noRd
+rcpp_median_dijkstra <- function(nverts, graph, v0) {
+    .Call(`_gtfsrouter_rcpp_median_dijkstra`, nverts, graph, v0)
 }
 
 #' rcpp_make_timetable
