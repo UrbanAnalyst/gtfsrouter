@@ -105,7 +105,7 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
 gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time, max_transfers)
 {
     # no visible binding note:
-    stop_id <- stop_name <- stop_ids <- NULL
+   trip_id <- trip_headsign <- NULL
 
     if (is.na (max_transfers))
         max_transfers <- .Machine$integer.max
@@ -115,18 +115,21 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time, max_transfers)
     if (nrow (route) == 0)
         stop ("No route found between the nominated stations")
 
-    stns <- gtfs$stop_ids [route$stop_id] [, stop_ids]
-    route$stop_name <- gtfs$stops [match (stns,
-                                gtfs$stops [, stop_id]), ] [, stop_name]
-    route$trip_name <- gtfs$trip_ids [, trip_ids] [route$trip_id]
+    route$trip_id <- gtfs$trip_ids [, trip_ids] [route$trip_number]
 
     # map_one_trip maps the integer-valued stations back on to actual station
     # names. This is done seperately for each distinct trip so trip identifiers
     # can also be easily added
-    trip_ids <- gtfs$trip_ids [unique (route$trip_id)] [, trip_ids]
+    trip_ids <- gtfs$trip_ids [unique (route$trip_number)] [, trip_ids]
     res <- do.call (rbind, lapply (trip_ids, function (i)
                                    map_one_trip (gtfs, route, i)))
-    res [order (res$departure_time), ]
+    res <- res [order (res$departure_time), ]
+
+    # Then insert trip headsigns
+    index <- match (res$trip_id, gtfs$trips [, trip_id])
+    res$trip_name <- gtfs$trips [index, trip_headsign]
+
+    return (res)
 }
 
 #gtfs_route1_reverse <- function (gtfs, start_stns, end_stns, start_time)
@@ -157,15 +160,16 @@ map_one_trip <- function (gtfs, route, route_name = "")
 
     trip_stops <- gtfs$stop_times [trip_id == route_name, ]
     trip_stop_num <- match (trip_stops [, stop_id], gtfs$stop_ids [, stop_ids])
-    trip_stop_num <- trip_stop_num [which (trip_stop_num %in% route$stop_id)]
+    trip_stop_num <- trip_stop_num [which (trip_stop_num %in% route$stop_number)]
     trip_stop_id <- gtfs$stop_ids [trip_stop_num, stop_ids]
     trip_stop_names <- gtfs$stops [match (trip_stop_id, gtfs$stops [, stop_id]),
                                    stop_name]
     trip_stops <- trip_stops [which (trip_stops [, stop_id %in% trip_stop_id]), ]
     trip_stop_departure <- format_time (trip_stops [, departure_time])
     trip_stop_arrival <- format_time (trip_stops [, arrival_time])
-    data.frame (route = route_name,
-                stop = trip_stop_names,
+    data.frame (trip_id = route_name,
+                stop_name = trip_stop_names,
+                stop_id = trip_stop_id,
                 departure_time = trip_stop_departure,
                 arrival_time = trip_stop_arrival,
                 stringsAsFactors = FALSE)

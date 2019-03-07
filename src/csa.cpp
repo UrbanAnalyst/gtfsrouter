@@ -65,9 +65,9 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
             trip_out, time_out);
 
     Rcpp::DataFrame res = Rcpp::DataFrame::create (
-            Rcpp::Named ("stop_id") = end_station_out,
+            Rcpp::Named ("stop_number") = end_station_out,
             Rcpp::Named ("time") = time_out,
-            Rcpp::Named ("trip_id") = trip_out,
+            Rcpp::Named ("trip_number") = trip_out,
             Rcpp::_["stringsAsFactors"] = false);
 
     return res;
