@@ -57,10 +57,14 @@ test_that("isochrone errors", {
 
 test_that ("median isochrones", {
                f <- file.path (tempdir (), "vbb.zip")
+               expect_error (timetable <- gtfs_median_timetable (f),
+                             "Object must be of class gtfs")
                g <- extract_gtfs (f)
+               expect_error (timetable <- gtfs_median_timetable (g),
+                             "Object must have a timetable added by gtfs_timetable")
                g <- gtfs_timetable (g, day = 1:7)
 
-               expect_silent (timetable <- gtfs_median_timetable (g))
+               st <- system.time (timetable <- gtfs_median_timetable (g))
                expect_is (timetable, "data.frame")
                expect_equal (ncol (timetable), 8)
                expect_identical (names (timetable),
@@ -68,6 +72,10 @@ test_that ("median isochrones", {
                                     "duration_min", "duration_median",
                                     "duration_max", "interval_min",
                                     "interval_median", "interval_max"))
+
+               # Second call uses cached version, so should be faster:
+               st2 <- system.time (timetable <- gtfs_median_timetable (g))
+               expect_true (st2 [3] < st [3])
 
                expect_silent (graph <- gtfs_median_graph (timetable, g))
                expect_is (graph, "data.frame")

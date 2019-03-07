@@ -133,8 +133,6 @@ void fill_outputs (const std::unordered_map <std::string, Median_Vectors> &tt_ve
         Median_Outputs &med_out);
 void fill_graph_inputs (Rcpp::DataFrame &timetable,
     Median_Outputs &gr_in);
-void fill_transfer_inputs (Rcpp::DataFrame &transfers,
-        std::unordered_map <std::string, int> &transfer_times);
 
 } // end namespace median-timetable
 Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable);
