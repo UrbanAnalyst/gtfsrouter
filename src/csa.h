@@ -138,7 +138,7 @@ void fill_graph_inputs (Rcpp::DataFrame &timetable,
 Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable);
 Rcpp::DataFrame rcpp_median_graph (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers);
-Rcpp::IntegerVector rcpp_median_dijkstra (int nverts, Rcpp::DataFrame graph,
+Rcpp::DataFrame rcpp_median_dijkstra (int nverts, Rcpp::DataFrame graph,
         int v0);
 
 // ---- csa-isochrone.cpp

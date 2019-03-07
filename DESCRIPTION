@@ -12,11 +12,11 @@ Depends: R (>= 2.10)
 Imports:
     data.table,
     digest,
+    geodist,
     methods,
     Rcpp (>= 0.12.6)
 Suggests:
     alphahull,
-    geodist,
     hms,
     lubridate,
     lwgeom,

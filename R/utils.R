@@ -77,3 +77,29 @@ load_cached_file <- function (hash_object, prefix = "")
         ret <- readRDS (fname)
     return (ret)
 }
+
+# calculate distances between vertex pairs defined in the `gtfs_median_graph()`
+# object `graph`, returning a vector of length = nrow (graph)
+station_distances <- function (graph, gtfs)
+{
+    # no visible binding notes
+    stop_ids <- stop_id <- NULL
+
+    stops_from <- gtfs$stop_ids [graph$departure_station, stop_ids]
+    index_from <- match (stops_from, gtfs$stops [, stop_id])
+    xy_from <- data.frame (gtfs$stops [index_from, c ("stop_lon", "stop_lat")])
+
+    stops_to <- gtfs$stop_ids [graph$arrival_station, stop_ids]
+    index_to <- match (stops_to, gtfs$stops [, stop_id])
+    xy_to <- data.frame (gtfs$stops [index_to, c ("stop_lon", "stop_lat")])
+
+    # geosphere only does sequential calculations, so convert these to an
+    # inter-woven sequence and re-extract the desired distances afterwards
+    xy <- data.frame ("x" = rep (NA, 2 * nrow (xy_from)),
+                      "y" = rep (NA, 2 * nrow (xy_from)))
+    index <- 2 * seq (nrow (xy_from))
+    xy [index - 1, ] <- xy_from
+    xy [index, ] <- xy_to
+    geodist::geodist (xy, sequential = TRUE, measure = "geodesic",
+                      pad = TRUE) [index]
+}

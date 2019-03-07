@@ -79,13 +79,15 @@ test_that ("median isochrones", {
 
                expect_silent (graph <- gtfs_median_graph (timetable, g))
                expect_is (graph, "data.frame")
-               expect_equal (ncol (graph), 3)
+               expect_equal (ncol (graph), 4)
                expect_identical (names (graph), 
                                  c ("departure_station", "arrival_station",
-                                    "duration"))
+                                    "duration", "distance"))
 
                expect_silent (d <- gtfs_median_isochrones (graph, station = 100))
-               expect_is (d, "integer")
+               expect_is (d, "data.frame")
+               expect_equal (ncol (d), 2)
+               expect_identical (names (d), c ("time", "distance"))
                n <- max (c (graph$departure_station, graph$arrival_station))
-               expect_equal (length (d), n)
+               expect_equal (nrow (d), n)
              })

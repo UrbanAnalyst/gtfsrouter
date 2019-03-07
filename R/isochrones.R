@@ -25,8 +25,9 @@ gtfs_median_isochrones <- function (graph, station)
     # nverts is +1 because they're all 1-indexed
     nverts <- max (c (graph$departure_station, graph$arrival_station)) + 1
     d <- rcpp_median_dijkstra (nverts, graph, station)
-    d [d == max (d)] <- NA
-    d <- d [-1] # because first one is the 0-index which is not used
+    d$time [d$time == max (d$time)] <- NA
+    d$distance [d$distance == max (d$distance)] <- NA
+    d <- d [-1, ] # because first one is the 0-index which is not used
 
     return (d)
 }

@@ -193,8 +193,10 @@ gtfs_median_graph <- function (timetable, gtfs)
     nverts <- max (c (timetable$departure_station,
                       timetable$arrival_station)) + 1
     x <- rcpp_median_graph (timetable, gtfs$transfers)
-    rbind (data.frame (departure_station = timetable$departure_station,
-                       arrival_station = timetable$arrival_station,
-                       duration = timetable$duration_median),
-           x)
+    x <- rbind (data.frame (departure_station = timetable$departure_station,
+                            arrival_station = timetable$arrival_station,
+                            duration = timetable$duration_median),
+                x)
+    x$distance <- station_distances (x, gtfs)
+    return (x)
 }

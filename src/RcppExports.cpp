@@ -68,7 +68,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_median_dijkstra
-Rcpp::IntegerVector rcpp_median_dijkstra(int nverts, Rcpp::DataFrame graph, int v0);
+Rcpp::DataFrame rcpp_median_dijkstra(int nverts, Rcpp::DataFrame graph, int v0);
 RcppExport SEXP _gtfsrouter_rcpp_median_dijkstra(SEXP nvertsSEXP, SEXP graphSEXP, SEXP v0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
