@@ -100,7 +100,7 @@ plot (x)
 m <- plot (x)
 mapview::mapshot (m, file = "isochrone.png")
 ```
-![](isochrone.png)
+![](./fig/isochrone.png)
 
 The isochrone hull also quantifies its total area and width-to-length ratio.
 

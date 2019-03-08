@@ -42,7 +42,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpPtHFj8/vbb.zip"
+    ## [1] "/tmp/Rtmpz36DM4/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -61,18 +61,18 @@ gtfs_route (gtfs,
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
 
-|    | route\_name | trip\_name       | stop\_name                      | departure\_time | arrival\_time |
-| -- | :---------- | :--------------- | :------------------------------ | :-------------- | :------------ |
-| 6  | U8          | U Paracelsus-Bad | U Schonleinstr. (Berlin)        | 12:04:00        | 12:04:00      |
-| 7  | U8          | U Paracelsus-Bad | U Kottbusser Tor (Berlin)       | 12:06:00        | 12:06:00      |
-| 8  | U8          | U Paracelsus-Bad | U Moritzplatz (Berlin)          | 12:08:00        | 12:08:00      |
-| 9  | U8          | U Paracelsus-Bad | U Heinrich-Heine-Str. (Berlin)  | 12:09:30        | 12:09:30      |
-| 10 | U8          | U Paracelsus-Bad | S+U Jannowitzbrucke (Berlin)    | 12:10:30        | 12:10:30      |
-| 1  | S5          | S Westkreuz      | S+U Jannowitzbrucke (Berlin)    | 12:15:54        | 12:15:24      |
-| 2  | S5          | S Westkreuz      | S+U Alexanderplatz Bhf (Berlin) | 12:18:12        | 12:17:24      |
-| 3  | S5          | S Westkreuz      | S Hackescher Markt (Berlin)     | 12:19:54        | 12:19:24      |
-| 4  | S5          | S Westkreuz      | S+U Friedrichstr. Bhf (Berlin)  | 12:22:12        | 12:21:24      |
-| 5  | S5          | S Westkreuz      | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
+| route\_name | trip\_name       | stop\_name                      | departure\_time | arrival\_time |
+| :---------- | :--------------- | :------------------------------ | :-------------- | :------------ |
+| U8          | U Paracelsus-Bad | U Schonleinstr. (Berlin)        | 12:04:00        | 12:04:00      |
+| U8          | U Paracelsus-Bad | U Kottbusser Tor (Berlin)       | 12:06:00        | 12:06:00      |
+| U8          | U Paracelsus-Bad | U Moritzplatz (Berlin)          | 12:08:00        | 12:08:00      |
+| U8          | U Paracelsus-Bad | U Heinrich-Heine-Str. (Berlin)  | 12:09:30        | 12:09:30      |
+| U8          | U Paracelsus-Bad | S+U Jannowitzbrucke (Berlin)    | 12:10:30        | 12:10:30      |
+| S5          | S Westkreuz      | S+U Jannowitzbrucke (Berlin)    | 12:15:54        | 12:15:24      |
+| S5          | S Westkreuz      | S+U Alexanderplatz Bhf (Berlin) | 12:18:12        | 12:17:24      |
+| S5          | S Westkreuz      | S Hackescher Markt (Berlin)     | 12:19:54        | 12:19:24      |
+| S5          | S Westkreuz      | S+U Friedrichstr. Bhf (Berlin)  | 12:22:12        | 12:21:24      |
+| S5          | S Westkreuz      | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
 
 ### gtfs\_isochrone
 
@@ -106,7 +106,9 @@ Isochrone objects have their own plot method:
 plot (x)
 ```
 
-![](isochrone.png)
+    ## Loading required namespace: mapview
+
+![](./fig/isochrone.png)
 
 The isochrone hull also quantifies its total area and width-to-length
 ratio.
