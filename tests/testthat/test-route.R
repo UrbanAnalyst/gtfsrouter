@@ -77,14 +77,25 @@ test_that("route", {
               expect_silent (route <- gtfs_route (gt, from = from, to = to,
                                                   start_time = start_time))
               expect_is (route, "data.frame")
-              expect_equal (ncol (route), 6)
-              expect_equal (names (route), c ("trip_id", "trip_name",
-                                              "stop_id", "stop_name",
+              expect_equal (ncol (route), 5)
+              expect_equal (names (route), c ("route_name", "trip_name",
+                                              "stop_name",
                                               "departure_time", "arrival_time"))
               dep_t <- hms::parse_hms (route$departure_time)
               expect_true (all (diff (dep_t) > 0))
               arr_t <- hms::parse_hms (route$arrival_time)
               expect_true (all (diff (arr_t) > 0))
+
+              expect_silent (route2 <- gtfs_route (gt, from = from, to = to,
+                                                   start_time = start_time,
+                                                   include_ids = TRUE))
+              expect_true (!identical (route, route2))
+              expect_is (route2, "data.frame")
+              expect_equal (ncol (route2), 8)
+              expect_equal (names (route2), c ("route_id", "route_name",
+                                               "trip_id", "trip_name",
+                                               "stop_id", "stop_name",
+                                               "departure_time", "arrival_time"))
 
               # test data only go until 13:00, so:
               expect_error (route <- gtfs_route (gt, from = from, to = to,

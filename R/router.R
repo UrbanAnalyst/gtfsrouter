@@ -25,6 +25,8 @@
 #' Any other value will calculate the route that arrives at the nominated
 #' station on the earliest available service, which may not necessarily be the
 #' first-departing service.
+#' @param include_ids If `TRUE`, result will include columns containing
+#' GTFS-specific identifiers for routes, trips, and stops.
 #' @param max_transfers If not `NA`, specify a maximum number of transfers
 #' (including but not exceeding this number) for the route.
 #' @param quiet Set to `TRUE` to suppress screen messages (currently just
@@ -65,7 +67,7 @@
 #' @export 
 gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
                         route_pattern = NULL, routing_type = "first_depart",
-                        max_transfers = NA, quiet = FALSE)
+                        include_ids = FALSE, max_transfers = NA, quiet = FALSE)
 {
     # no visible binding note:
     departure_time <- NULL
@@ -86,7 +88,8 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
     start_stns <- station_name_to_ids (from, gtfs_cp)
     end_stns <- station_name_to_ids (to, gtfs_cp)
 
-    res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time, max_transfers)
+    res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time,
+                        include_ids, max_transfers)
 
     if (!routing_type == "first_depart")
     {
@@ -96,16 +99,17 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
         end_stns <- station_name_to_ids (from, gtfs_cp)
         start_time <- 0
         res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time,
-                            max_transfers)
+                            include_ids, max_transfers)
     }
     return (res)
 }
 
 # core route calculation
-gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time, max_transfers)
+gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
+                         include_ids, max_transfers)
 {
     # no visible binding note:
-   trip_id <- trip_headsign <- NULL
+   trip_id <- trip_headsign <- route_id <- route_short_name <- NULL
 
     if (is.na (max_transfers))
         max_transfers <- .Machine$integer.max
@@ -125,18 +129,25 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time, max_transfers)
                                    map_one_trip (gtfs, route, i)))
     res <- res [order (res$departure_time), ]
 
-    # Then insert trip headsigns
+    # Then insert routes and trip headsigns
     index <- match (res$trip_id, gtfs$trips [, trip_id])
     res$trip_name <- gtfs$trips [index, trip_headsign]
 
-    col_order <- c ("trip_id", "trip_name", "stop_id", "stop_name",
+    index <- match (res$trip_id, gtfs$trips [, trip_id])
+    res$route_id <- gtfs$trips [index, route_id]
+    index <- match (res$route_id, gtfs$routes [, route_id])
+    res$route_name <- gtfs$routes [index, route_short_name]
+
+    col_order <- c ("route_id", "route_name",
+                    "trip_id", "trip_name",
+                    "stop_id", "stop_name",
                     "departure_time", "arrival_time")
+    if (!include_ids)
+        col_order <- col_order [c (2, 4, 6:8)]
     res <- res [, col_order]
 
     return (res)
 }
-
-#gtfs_route1_reverse <- function (gtfs, start_stns, end_stns, start_time)
 
 # names generally match to multiple IDs, each of which is returned here, as
 # 0-indexed IDs into gtfs$stations

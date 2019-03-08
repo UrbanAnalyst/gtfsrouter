@@ -42,7 +42,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/Rtmpd2dgdu/vbb.zip"
+    ## [1] "/tmp/RtmpPtHFj8/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -61,18 +61,18 @@ gtfs_route (gtfs,
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
 
-|    | trip\_id  | trip\_name       | stop\_id     | stop\_name                      | departure\_time | arrival\_time |
-| -- | :-------- | :--------------- | :----------- | :------------------------------ | :-------------- | :------------ |
-| 6  | 106146288 | U Paracelsus-Bad | 070201084102 | U Schonleinstr. (Berlin)        | 12:04:00        | 12:04:00      |
-| 7  | 106146288 | U Paracelsus-Bad | 070201084002 | U Kottbusser Tor (Berlin)       | 12:06:00        | 12:06:00      |
-| 8  | 106146288 | U Paracelsus-Bad | 070201083902 | U Moritzplatz (Berlin)          | 12:08:00        | 12:08:00      |
-| 9  | 106146288 | U Paracelsus-Bad | 070201083802 | U Heinrich-Heine-Str. (Berlin)  | 12:09:30        | 12:09:30      |
-| 10 | 106146288 | U Paracelsus-Bad | 070201083702 | S+U Jannowitzbrucke (Berlin)    | 12:10:30        | 12:10:30      |
-| 1  | 103661178 | S Westkreuz      | 060100004704 | S+U Jannowitzbrucke (Berlin)    | 12:15:54        | 12:15:24      |
-| 2  | 103661178 | S Westkreuz      | 060100003724 | S+U Alexanderplatz Bhf (Berlin) | 12:18:12        | 12:17:24      |
-| 3  | 103661178 | S Westkreuz      | 060100002734 | S Hackescher Markt (Berlin)     | 12:19:54        | 12:19:24      |
-| 4  | 103661178 | S Westkreuz      | 060100001756 | S+U Friedrichstr. Bhf (Berlin)  | 12:22:12        | 12:21:24      |
-| 5  | 103661178 | S Westkreuz      | 060003201214 | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
+|    | route\_name | trip\_name       | stop\_name                      | departure\_time | arrival\_time |
+| -- | :---------- | :--------------- | :------------------------------ | :-------------- | :------------ |
+| 6  | U8          | U Paracelsus-Bad | U Schonleinstr. (Berlin)        | 12:04:00        | 12:04:00      |
+| 7  | U8          | U Paracelsus-Bad | U Kottbusser Tor (Berlin)       | 12:06:00        | 12:06:00      |
+| 8  | U8          | U Paracelsus-Bad | U Moritzplatz (Berlin)          | 12:08:00        | 12:08:00      |
+| 9  | U8          | U Paracelsus-Bad | U Heinrich-Heine-Str. (Berlin)  | 12:09:30        | 12:09:30      |
+| 10 | U8          | U Paracelsus-Bad | S+U Jannowitzbrucke (Berlin)    | 12:10:30        | 12:10:30      |
+| 1  | S5          | S Westkreuz      | S+U Jannowitzbrucke (Berlin)    | 12:15:54        | 12:15:24      |
+| 2  | S5          | S Westkreuz      | S+U Alexanderplatz Bhf (Berlin) | 12:18:12        | 12:17:24      |
+| 3  | S5          | S Westkreuz      | S Hackescher Markt (Berlin)     | 12:19:54        | 12:19:24      |
+| 4  | S5          | S Westkreuz      | S+U Friedrichstr. Bhf (Berlin)  | 12:22:12        | 12:21:24      |
+| 5  | S5          | S Westkreuz      | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
 
 ### gtfs\_isochrone
 
