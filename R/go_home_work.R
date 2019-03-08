@@ -6,6 +6,8 @@
 #'
 #' @param wait An integer specifying the n-th next service. That is, `wait = n`
 #' will return the n-th available service after the next immediate service.
+#' @param start_time If given, search for connections after specified time; if
+#' not given, search for connections from current time.
 #'
 #' @details This function, and the complementary function \link{go_to_work},
 #' requires three local environmental variables specifying the names of home and
@@ -42,9 +44,9 @@
 #' go_home (3) # Wait until third service after that
 #' }
 #' @export
-go_home <- function (wait = 0)
+go_home <- function (wait = 0, start_time)
 {
-    go_home_work (home = TRUE, wait = wait)
+    go_home_work (home = TRUE, wait = wait, start_time)
 }
 
 #' go_to_work
@@ -67,15 +69,19 @@ go_home <- function (wait = 0)
 #' go_to_work (3) # Wait until third service after that
 #' }
 #' @export
-go_to_work <- function (wait = 0)
+go_to_work <- function (wait = 0, start_time)
 {
-    go_home_work (home = FALSE, wait = wait)
+    go_home_work (home = FALSE, wait = wait, start_time)
 }
 
-go_home_work <- function (home = TRUE, wait)
+go_home_work <- function (home = TRUE, wait, start_time)
 {
     vars <- get_envvars ()
     fname <- get_rds_name (vars$file)
+    if (!file.exists (fname))
+        stop ("This function requires the GTFS data to be pre-processed ",
+              "with 'process_gtfs_local'.")
+
     gtfs <- readRDS (fname)
     suppressMessages (gtfs <- gtfs_timetable (gtfs))
     if (home)
@@ -87,14 +93,15 @@ go_home_work <- function (home = TRUE, wait)
         from <- vars$home
         to <- vars$work
     }
-    res <- gtfs_route (gtfs, from = vars$work, to = vars$home)
+    if (missing (start_time))
+        start_time = NULL
+    res <- gtfs_route (gtfs, from = from, to = to, start_time = start_time)
     if (wait > 0)
     {
         for (i in seq (wait))
         {
             depart <- convert_time (res$departure_time [1]) + 1
-            res <- gtfs_route (gtfs, from = vars$work, to = vars$home,
-                               start_time = depart)
+            res <- gtfs_route (gtfs, from = from, to = to, start_time = depart)
         }
     }
     return (res)
@@ -119,11 +126,7 @@ get_envvars <- function ()
 
 get_rds_name <- function (f)
 {
-    fname <- paste0 (tools::file_path_sans_ext (f), ".Rds")
-    if (!file.exists (fname))
-        stop ("This function requires the GTFS data to be pre-processed ",
-              "with 'process_gtfs_local'.")
-    return (fname)
+    paste0 (tools::file_path_sans_ext (f), ".Rds")
 }
 
 #' process_gtfs_local

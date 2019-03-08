@@ -4,11 +4,14 @@
 \alias{go_to_work}
 \title{go_to_work}
 \usage{
-go_to_work(wait = 0)
+go_to_work(wait = 0, start_time)
 }
 \arguments{
 \item{wait}{An integer specifying the n-th next service. That is, \code{wait = n}
 will return the n-th available service after the next immediate service.}
+
+\item{start_time}{If given, search for connections after specified time; if
+not given, search for connections from current time.}
 }
 \value{
 A \code{data.frame} specifying the next available route from work to home.
