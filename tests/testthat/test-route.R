@@ -78,9 +78,9 @@ test_that("route", {
                                                   start_time = start_time))
               expect_is (route, "data.frame")
               expect_equal (ncol (route), 6)
-              expect_equal (names (route), c ("trip_id", "stop_name", "stop_id",
-                                              "departure_time", "arrival_time",
-                                              "trip_name"))
+              expect_equal (names (route), c ("trip_id", "trip_name",
+                                              "stop_id", "stop_name",
+                                              "departure_time", "arrival_time"))
               dep_t <- hms::parse_hms (route$departure_time)
               expect_true (all (diff (dep_t) > 0))
               arr_t <- hms::parse_hms (route$arrival_time)

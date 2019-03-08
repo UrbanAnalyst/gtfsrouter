@@ -129,6 +129,10 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time, max_transfers)
     index <- match (res$trip_id, gtfs$trips [, trip_id])
     res$trip_name <- gtfs$trips [index, trip_headsign]
 
+    col_order <- c ("trip_id", "trip_name", "stop_id", "stop_name",
+                    "departure_time", "arrival_time")
+    res <- res [, col_order]
+
     return (res)
 }
 

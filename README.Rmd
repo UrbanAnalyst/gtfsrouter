@@ -70,6 +70,10 @@ Isochrones from a nominated station - lines delinating the range reachable
 within a given time - can be extracted with the `gtfs_isochrone()` function,
 which returns a list of all stations reachable within the specified time period
 from the nominated station station.
+```{r isochrone-exists, echo = FALSE}
+isochrone_exists <- file.exists ("isochrone.png")
+```
+
 ```{r isochrone, eval = TRUE, message = FALSE}
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
@@ -92,7 +96,7 @@ Isochrone objects have their own plot method:
 ```{r plot, eval = FALSE, message = FALSE}
 plot (x)
 ```
-```{r mapshot, echo = FALSE}
+```{r mapshot, eval = !isochrone_exists, echo = FALSE}
 m <- plot (x)
 mapview::mapshot (m, file = "isochrone.png")
 ```

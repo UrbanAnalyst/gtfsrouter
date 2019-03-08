@@ -42,7 +42,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpXphJLz/vbb.zip"
+    ## [1] "/tmp/Rtmpd2dgdu/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -61,18 +61,18 @@ gtfs_route (gtfs,
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
 
-|    | trip\_id  | stop\_name                      | stop\_id     | departure\_time | arrival\_time | trip\_name       |
-| -- | :-------- | :------------------------------ | :----------- | :-------------- | :------------ | :--------------- |
-| 6  | 106146288 | U Schonleinstr. (Berlin)        | 070201084102 | 12:04:00        | 12:04:00      | U Paracelsus-Bad |
-| 7  | 106146288 | U Kottbusser Tor (Berlin)       | 070201084002 | 12:06:00        | 12:06:00      | U Paracelsus-Bad |
-| 8  | 106146288 | U Moritzplatz (Berlin)          | 070201083902 | 12:08:00        | 12:08:00      | U Paracelsus-Bad |
-| 9  | 106146288 | U Heinrich-Heine-Str. (Berlin)  | 070201083802 | 12:09:30        | 12:09:30      | U Paracelsus-Bad |
-| 10 | 106146288 | S+U Jannowitzbrucke (Berlin)    | 070201083702 | 12:10:30        | 12:10:30      | U Paracelsus-Bad |
-| 1  | 103661178 | S+U Jannowitzbrucke (Berlin)    | 060100004704 | 12:15:54        | 12:15:24      | S Westkreuz      |
-| 2  | 103661178 | S+U Alexanderplatz Bhf (Berlin) | 060100003724 | 12:18:12        | 12:17:24      | S Westkreuz      |
-| 3  | 103661178 | S Hackescher Markt (Berlin)     | 060100002734 | 12:19:54        | 12:19:24      | S Westkreuz      |
-| 4  | 103661178 | S+U Friedrichstr. Bhf (Berlin)  | 060100001756 | 12:22:12        | 12:21:24      | S Westkreuz      |
-| 5  | 103661178 | S+U Berlin Hauptbahnhof         | 060003201214 | 12:24:42        | 12:24:06      | S Westkreuz      |
+|    | trip\_id  | trip\_name       | stop\_id     | stop\_name                      | departure\_time | arrival\_time |
+| -- | :-------- | :--------------- | :----------- | :------------------------------ | :-------------- | :------------ |
+| 6  | 106146288 | U Paracelsus-Bad | 070201084102 | U Schonleinstr. (Berlin)        | 12:04:00        | 12:04:00      |
+| 7  | 106146288 | U Paracelsus-Bad | 070201084002 | U Kottbusser Tor (Berlin)       | 12:06:00        | 12:06:00      |
+| 8  | 106146288 | U Paracelsus-Bad | 070201083902 | U Moritzplatz (Berlin)          | 12:08:00        | 12:08:00      |
+| 9  | 106146288 | U Paracelsus-Bad | 070201083802 | U Heinrich-Heine-Str. (Berlin)  | 12:09:30        | 12:09:30      |
+| 10 | 106146288 | U Paracelsus-Bad | 070201083702 | S+U Jannowitzbrucke (Berlin)    | 12:10:30        | 12:10:30      |
+| 1  | 103661178 | S Westkreuz      | 060100004704 | S+U Jannowitzbrucke (Berlin)    | 12:15:54        | 12:15:24      |
+| 2  | 103661178 | S Westkreuz      | 060100003724 | S+U Alexanderplatz Bhf (Berlin) | 12:18:12        | 12:17:24      |
+| 3  | 103661178 | S Westkreuz      | 060100002734 | S Hackescher Markt (Berlin)     | 12:19:54        | 12:19:24      |
+| 4  | 103661178 | S Westkreuz      | 060100001756 | S+U Friedrichstr. Bhf (Berlin)  | 12:22:12        | 12:21:24      |
+| 5  | 103661178 | S Westkreuz      | 060003201214 | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
 
 ### gtfs\_isochrone
 
@@ -105,8 +105,6 @@ Isochrone objects have their own plot method:
 ``` r
 plot (x)
 ```
-
-    ## Loading required namespace: mapview
 
 ![](isochrone.png)
 
