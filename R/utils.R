@@ -24,6 +24,9 @@ convert_time <- function (my_time)
     if (methods::is (my_time, "difftime") || methods::is (my_time, "Period"))
     {
         my_time <- rcpp_convert_time (paste0 (my_time))
+    } else if (is.character (my_time))
+    {
+        my_time <- rcpp_convert_time (my_time)
     } else if (is.numeric (my_time))
     {
         if (length (my_time) == 1)

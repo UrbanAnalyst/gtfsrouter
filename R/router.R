@@ -10,7 +10,7 @@
 #' @param start_time Desired departure time at `from` station, either in seconds
 #' after midnight, a vector of two or three integers (hours, minutes) or (hours,
 #' minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
-#' \pkg{lubridate}.
+#' \pkg{lubridate}. If not provided, current time is used.
 #' @param day Day of the week on which to calculate route, either as an
 #' unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
 #' between 1 = Sunday and 7 = Saturday. If not given, the current day will be
@@ -65,7 +65,7 @@
 #' route <- gtfs_route (gt, from = from, to = to, start_time = start_time)
 #'
 #' @export 
-gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
+gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
                         route_pattern = NULL, routing_type = "first_depart",
                         include_ids = FALSE, max_transfers = NA, quiet = FALSE)
 {
@@ -79,6 +79,8 @@ gtfs_route <- function (gtfs, from, to, start_time, day = NULL,
     if (!"timetable" %in% names (gtfs_cp))
         gtfs_cp <- gtfs_timetable (gtfs_cp, day, route_pattern, quiet = quiet)
 
+    if (is.null (start_time))
+        start_time <- format (Sys.time (), "%H:%M:%S") # nocov
     start_time <- convert_time (start_time)
     gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time, ]
     if (nrow (gtfs_cp$timetable) == 0)
