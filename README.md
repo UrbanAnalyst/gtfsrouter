@@ -21,6 +21,56 @@ To install:
 remotes::install_github("atfutures/gtfs-router")
 ```
 
+    ##   
+    ─  installing *source* package ‘gtfsrouter’ ...
+    ## 
+      
+       ** libs
+    ## 
+      
+       make[1]: Entering directory '/data/mega/code/repos/atfutures/gtfs-router/src'
+    ## 
+      
+       make[1]: Leaving directory '/data/mega/code/repos/atfutures/gtfs-router/src'
+    ## 
+      
+       make[1]: Entering directory '/data/mega/code/repos/atfutures/gtfs-router/src'
+    ##    ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c RcppExports.cpp -o RcppExports.o
+    ## 
+      
+       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c convert-time.cpp -o convert-time.o
+    ## 
+      
+       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c csa-isochrone.cpp -o csa-isochrone.o
+    ## 
+      
+       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c csa-median-timetable.cpp -o csa-median-timetable.o
+    ## 
+      
+       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c csa-timetable.cpp -o csa-timetable.o
+    ## 
+      
+       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c csa.cpp -o csa.o
+    ## 
+      
+       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c dijkstra.cpp -o dijkstra.o
+    ## 
+      
+       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c graph.cpp -o graph.o
+    ## 
+      
+       ccache clang++ -std=gnu++11 -shared -L/usr/lib64/R/lib -Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now -o gtfsrouter.so RcppExports.o convert-time.o csa-isochrone.o csa-median-timetable.o csa-timetable.o csa.o dijkstra.o graph.o -L/usr/lib64/R/lib -lR
+    ## 
+      
+       make[1]: Leaving directory '/data/mega/code/repos/atfutures/gtfs-router/src'
+    ## 
+      
+       installing to /tmp/RtmphAgm8o/devtools_install_7feb157a603d/gtfsrouter/libs
+    ## 
+      
+    ─  DONE (gtfsrouter)
+    ## 
+
 To load the package and check the version:
 
 ``` r
@@ -44,7 +94,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/Rtmp5isbT1/vbb.zip"
+    ## [1] "/tmp/RtmphAgm8o/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -78,7 +128,7 @@ gtfs_route (gtfs,
 
 ### gtfs\_isochrone
 
-Isochrones from a nominated station - lines delinating the range
+Isochrones from a nominated station - lines delineating the range
 reachable within a given time - can be extracted with the
 `gtfs_isochrone()` function, which returns a list of all stations
 reachable within the specified time period from the nominated station
