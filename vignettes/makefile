@@ -1,5 +1,4 @@
-LFILE = dodgr
-BMFILE = benchmark
+LFILE = gtfsrouter
 
 all: knith
 #all: knith open 
@@ -12,10 +11,6 @@ knitr: $(LFILE).Rmd
 
 open: $(LFILE).html
 	xdg-open $(LFILE).html &
-
-benchmarkh: $(BMFILE).Rmd
-	echo "rmarkdown::render('$(BMFILE).Rmd',output_file='$(BMFILE).html')" | R --no-save -q
-
 
 clean:
 	rm -rf *.html *.png 

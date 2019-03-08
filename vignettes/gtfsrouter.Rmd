@@ -19,5 +19,181 @@ vignette: >
 
 ```{r pkg-load, echo = FALSE, message = FALSE}
 library (gtfsrouter)
+#devtools::load_all (".", export_all = FALSE)
 ```
+
+# 1 Background: GTFS and other R packages
+
+GTFS stands for General Transit Feed Specification. It began life in 2005 as the
+"Google Transit Feed Specification," which was renamed to "General" in 2009.  A
+GTFS data set consists of several comma-delimited (`.csv`) files detailing
+routes, stops, trips, transfers, and other aspects, all bundled in a single
+`.zip`-compressed archive file. For full details, see the relevant [google
+developer site](https://developers.google.com/transit/gtfs/).
+
+There are currently two other **R** packages which handle GTFS data:
+
+1. [`gtfsr`](https://github.com/ropensci/gtfsr), hosted by
+   [rOpenSci](https://ropensci.org), developed by [Danton
+   Noriega](https://github.com/dantonnoriega), but no longer under active
+   development.
+2. [`tidytransit`](https://github.com/r-transit/tidytransit), which began as a
+   fork of [`gtfsr`](https://github.com/ropensci/gtfsr), and currently
+   represents its successor. This package can be used to, "map transit stops and
+   routes, calculate transit frequencies, and validate transit feeds [as well as
+   to read] the General Transit Feed Specification into tidyverse and simple
+   features dataframes."
+
+The one thing neither of these packages enable is the use of GTFS data for
+transit routing, which is where the `gtfsrouter` package comes in. Beyond
+enabling A-to-B routing, the package also provides various functions for the
+statistical analysis of GTFS data sets. It does this through converting the full
+timetable contained in a GTFS data set into a so-called "median timetable"
+representing the median service frequencies at every stop, and the median travel
+times between each pair of stops. This vignette is accordingly divided into two
+major sections: routing and median timetables, respectively describing functions
+for A-to-B routing, and larger-scale statistical analyses.
+
+Functionality in both cases is demonstrated through the sample data set included
+with the package, provided by the "Verkehrsverbund Berlin-Brandenburg" (VBB; or
+Transport Network Berlin-Brandenburg). The `berlin_gtfs` data represents a
+reduced version of the full GTFS data, containing only six tables, and a
+timetable reduced to the single hour between 12:00-13:00. Like all GTFS
+software including [`tidytransit`](https://github.com/r-transit/tidytransit),
+this package is designed to work directly with GTFS data in `.zip`-archived
+format, and so includes a helper function, `berlin_gtfs_to_zip()`, which exports
+the internal data set to a locally-stored `.zip` archive in the `tempdir()` of
+the current **R** session. These data can be exported and re-imported with:
+```{r berlin_gtfs}
+berlin_gtfs_to_zip()
+f <- file.path (tempdir (), "vbb.zip")
+file.exists (f)
+gtfs <- extract_gtfs (f)
+```
+That simply re-creates the original package data, `berlin_gtfs` (although the
+extracted data differ through having a couple of additional attributes defining
+it as a `gtfs` object).
+     
+
+
+
+# 2. Routing
+
+The primary routing function is `gtfs_route()`, the example of which uses the
+`gtfs` data for the VBB created as described above. In simplest form, routing
+requires a start and end point, defaulting to the current time as desired start
+time, and routing for the current day of the week.
+```{r route1-fakey, eval = FALSE}
+from <- "Innsbrucker Platz"
+to <- "Alexanderplatz"
+gtfs_route (gtfs, from = from, to = to)
+```
+```{r route1, eval = TRUE, echo = FALSE}
+from <- "Innsbrucker Platz"
+to <- "Alexanderplatz"
+knitr::kable (gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00"))
+```
+
+Both the start time and day of the week can be explicitly specified:
+```{r route2, eval = TRUE}
+route <- gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday")
+```
+
+## 2.1 GTFS Timetables
+
+The `gtfsrouter` package uses the [Connection Scan
+Algorithm](https://arxiv.org/abs/1703.05997), which requires converting the
+"stop_times" table to a column-wise timetable. The "stop_times" table has
+row-wise entries for each distinct "trip_id", with consecutive rows for a given
+value of "trip_id" holding sequential values for stops and associated times (and
+potentially additional variables). In contrast, the timetables processed by this
+package have separate columns for departure and arrival stations and times. All
+routing queries pre-process the original GTFS data with the `gtfs_timetable()`
+function, which appends this timetable data, along with two single-column tables
+of stop and trip ID values. (The timetable itself contains strictly integer
+values for stops and trips, which are indices into these latter tables.)
+
+The only important point of that from a user's perspective is that routing
+queries will be faster if this pre-processing step is explicitly implemented
+with `gtfs_timetable()` prior to calling `gtfs_route()`. This is easy to
+demonstrate using the sample data:
+```{r timetable}
+gtfs <- extract_gtfs (f)
+from <- "Innsbrucker Platz"
+to <- "Alexanderplatz"
+system.time (gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday"))
+names (gtfs)
+gtfs <- gtfs_timetable (gtfs, day = "Sunday") # explicit pre-processing to extract timetable for Sunday
+names (gtfs)
+system.time (gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00"))
+```
+Note that the `day` parameter is used to extract the timetable, after which it
+is no longer required in the actual call to `gtfs_route()`.
+
+
+## 2.1. Routing by mode of transport
+
+It is also possible to filter by desired mode of transport. This is done by
+matching the pattern to those given in the `route_short_name` column of the
+`gtfs$route` table:
+```{r gtfs_route_table-fakey, eval = FALSE}
+head (gtfs$route)
+```
+```{r gtfs_route_table, echo = FALSE}
+knitr::kable (head (gtfs$route))
+```
+
+These short names will differ for each GTFS, with the two primary train systems
+in Berlin being the underground trains denoted "U" (although not always
+travelling underground), and street-level trains denoted "S". The default route
+from `r from` to `r to` above was via two "U" services.  We can also specify
+that we'd prefer to travel by "S" services, noting that the `route_pattern =
+"S"` specifies a `route_short_name` that *starts with* (`"^"`) "S":
+```{r route3-fakey, eval = FALSE}
+gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", route_pattern = "^S")
+```
+```{r route3, echo = FALSE, eval = TRUE}
+knitr::kable (gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", route_pattern = "^S"))
+```
+
+## 2.2. Routing for earliest arrivals or earliest departures
+
+The above route with the "S" services leaves one minute later, and arrives two
+minutes later. Importantly, `gtfs_route()` searches by default for the service
+which arrives at the nominated destination station at the earliest time. This
+may not always be the first available service departing from the nominated start
+station. Routing with the earliest *departing* service, instead of the earliest
+*arriving* service, can be specified with the binary `earliest_arrival`
+parameter:
+```{r route4a-fakey, eval = FALSE}
+from <- "Alexanderplatz"
+to <- "Pankow"
+gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", earliest_arrival = FALSE)
+```
+```{r route4a, eval = TRUE, echo = FALSE}
+from <- "Alexanderplatz"
+to <- "Pankow"
+r1 <- gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday")
+r2 <- gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", earliest_arrival = FALSE)
+knitr::kable (r2)
+```
+
+And the earliest-departing route arrives at `r to` at 
+`r r2$arrival_time [nrow (r1)]`, departing `r from` at 
+`r r2$departure_time [1]`. In contrast, the earliest-arriving service is:
+```{r route4b-fakey, eval = FALSE}
+gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", earliest_arrival = TRUE)
+```
+```{r route4b, eval = TRUE, echo = FALSE}
+knitr::kable (r1)
+```
+
+The service departs at `r r1$departure_time [1]`, and arrives at 
+`r r1$arrival_time [nrow (r1)]`. Importantly, queries for earliest-arriving
+services require two full routing runs, whereas earliest-departing services can
+be executed in a single run. This, bulk queries for analytic purposes will
+generally be up to twice as first with `earliest_arrival = FALSE`.
+
+
+# 3. Median Timetables
 
