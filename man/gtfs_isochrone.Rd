@@ -44,3 +44,19 @@ square matrix of distances between nodes
 Calculate a single isochrone from a given start station, returning the list
 of all stations reachable to the specified \code{end_time}.
 }
+\examples{
+berlin_gtfs_to_zip ()
+f <- file.path (tempdir (), "vbb.zip")
+g <- extract_gtfs (f)
+g <- gtfs_timetable (g)
+from <- "Alexanderplatz"
+start_time <- 12 * 3600 + 600
+end_time <- start_time + 600
+ic <- gtfs_isochrone (g,
+                      from = from,
+                      start_time = start_time,
+                      end_time = end_time)
+\dontrun{
+plot (ic)
+}
+}
