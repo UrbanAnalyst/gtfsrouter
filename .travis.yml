@@ -52,8 +52,7 @@ r_packages:
       - covr
 
 after_success:
-    - Rscript -e "covr::codecov(function_exclusions=c('plot.gtfs_isochrone'), "\
-                "line_exlusions=list('R/go_home_work.R'))"
+    - Rscript -e "covr::package_coverage(line_exclusions = 'R/go_home_work.R', function_exclusions='plot.gtfs_isochrone')"
 
 before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
 deploy:

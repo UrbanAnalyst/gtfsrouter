@@ -40,7 +40,7 @@ convert_time <- function (my_time)
             stop ("Don't know how to parse time vectors of length ",
                   length (my_time))
     } else
-        stop ("Time is of unknown class")
+        stop ("Time is of unknown class") # nocov - TODO: Cover that
 
     return (my_time)
 }
