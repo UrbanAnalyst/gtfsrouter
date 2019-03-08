@@ -4,9 +4,9 @@
 \alias{gtfs_route}
 \title{gtfs_route}
 \usage{
-gtfs_route(gtfs, from, to, start_time, day = NULL,
-  route_pattern = NULL, routing_type = "first_depart",
-  include_ids = FALSE, max_transfers = NA, quiet = FALSE)
+gtfs_route(gtfs, from, to, start_time = NULL, day = NULL,
+  route_pattern = NULL, earliest_arrival = TRUE, include_ids = FALSE,
+  max_transfers = NA, quiet = FALSE)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
@@ -19,7 +19,7 @@ efficient queries, pre-processed with \link{gtfs_timetable}.}
 \item{start_time}{Desired departure time at \code{from} station, either in seconds
 after midnight, a vector of two or three integers (hours, minutes) or (hours,
 minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
-\pkg{lubridate}.}
+\pkg{lubridate}. If not provided, current time is used.}
 
 \item{day}{Day of the week on which to calculate route, either as an
 unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
@@ -32,11 +32,11 @@ example, "^U" for routes starting with "U" (as commonly used for underground
 or subway routes. (Parameter not used at all if \code{gtfs} has already been
 prepared with \link{gtfs_timetable}.)}
 
-\item{routing_type}{If \code{"first_depart"} (default), calculates the route
-departing with the first available service from the nominated start station.
-Any other value will calculate the route that arrives at the nominated
-station on the earliest available service, which may not necessarily be the
-first-departing service.}
+\item{earliest_arrival}{If \code{FALSE}, routing will be with the first-departing
+service, which may not provide the earliest arrival at the \code{to} station. This
+may nevertheless be useful for bulk queries, as earliest arrival searches
+require two routing queries, while earliest departure searches require just
+one, and so will be generally twice as fast.}
 
 \item{include_ids}{If \code{TRUE}, result will include columns containing
 GTFS-specific identifiers for routes, trips, and stops.}

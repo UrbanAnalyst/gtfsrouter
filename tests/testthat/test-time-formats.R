@@ -54,11 +54,7 @@ test_that("convert-time", {
               expect_error (route6 <- gtfs_route (gt, from = from, to = to,
                                                   start_time = "blah",
                                                   quiet = TRUE),
-                            "Time is of unknown class")
-              expect_error (route6 <- gtfs_route (gt, from = from, to = to,
-                                                  start_time = NULL,
-                                                  quiet = TRUE),
-                            "Time is of unknown class")
+                            "Unrecognized time format")
              })
 
 test_that ("day param", {

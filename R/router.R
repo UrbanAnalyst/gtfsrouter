@@ -20,11 +20,11 @@
 #' example, "^U" for routes starting with "U" (as commonly used for underground
 #' or subway routes. (Parameter not used at all if `gtfs` has already been
 #' prepared with \link{gtfs_timetable}.)
-#' @param routing_type If `"first_depart"` (default), calculates the route
-#' departing with the first available service from the nominated start station.
-#' Any other value will calculate the route that arrives at the nominated
-#' station on the earliest available service, which may not necessarily be the
-#' first-departing service.
+#' @param earliest_arrival If `FALSE`, routing will be with the first-departing
+#' service, which may not provide the earliest arrival at the `to` station. This
+#' may nevertheless be useful for bulk queries, as earliest arrival searches
+#' require two routing queries, while earliest departure searches require just
+#' one, and so will be generally twice as fast.
 #' @param include_ids If `TRUE`, result will include columns containing
 #' GTFS-specific identifiers for routes, trips, and stops.
 #' @param max_transfers If not `NA`, specify a maximum number of transfers
@@ -66,7 +66,7 @@
 #'
 #' @export 
 gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
-                        route_pattern = NULL, routing_type = "first_depart",
+                        route_pattern = NULL, earliest_arrival = TRUE,
                         include_ids = FALSE, max_transfers = NA, quiet = FALSE)
 {
     # no visible binding note:
@@ -93,7 +93,7 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
     res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time,
                         include_ids, max_transfers)
 
-    if (!routing_type == "first_depart")
+    if (earliest_arrival)
     {
         arrival_time <- max_arrival_time (res)
         gtfs_cp$timetable <- reverse_timetable (gtfs_cp$timetable, arrival_time)
@@ -130,6 +130,7 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
     res <- do.call (rbind, lapply (trip_ids, function (i)
                                    map_one_trip (gtfs, route, i)))
     res <- res [order (res$departure_time), ]
+    rownames (res) <- seq (nrow (res))
 
     # Then insert routes and trip headsigns
     index <- match (res$trip_id, gtfs$trips [, trip_id])

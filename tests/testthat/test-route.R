@@ -143,7 +143,7 @@ test_that ("route_pattern", {
                # There is no U-bahn connection all the way to Hbf
 })
 
-test_that ("routing_type", {
+test_that ("earliest_arrival", {
                f <- file.path (tempdir (), "vbb.zip")
                expect_silent (g <- extract_gtfs (f))
                from <- "Schonlein" # U-bahn station, not "S"
@@ -155,15 +155,10 @@ test_that ("routing_type", {
                expect_silent (route2 <- gtfs_route (g, from = from, to = to,
                                                     start_time = start_time,
                                                     day = 3,
-                                                    routing_type = "aaa"))
-               # These 2 are equal because the earliest departure is the
-               # earliest arrival in this case, but they are not identical
-               # because the row names differ:
-               expect_true (!identical (rownames (route), rownames (route2)))
-               expect_identical (names (route), names (route2))
-               chk <- sapply (seq (ncol (route)), function (i)
-                              identical (route [, i], route2 [, i]))
-               expect_true (all (chk))
+                                                    earliest_arrival = FALSE))
+               # These 2 are identical because the earliest departure is the
+               # earliest arrival in this case:
+               expect_identical (route, route2)
 })
 
 test_that ("max_transfers", {
