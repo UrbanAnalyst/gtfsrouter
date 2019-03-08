@@ -14,7 +14,7 @@ website](https://atfutures.github.io/gtfs-router/) for full details.
 ## Installation
 
 To install:
-```{r remotes, eval=FALSE}
+```{r remotes, eval=FALSE, message = FALSE}
 remotes::install_github("atfutures/gtfs-router")
 ```
 ```{r load_all, echo = FALSE, message = FALSE}
