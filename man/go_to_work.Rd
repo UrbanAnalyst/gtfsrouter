@@ -4,7 +4,11 @@
 \alias{go_to_work}
 \title{go_to_work}
 \usage{
-go_to_work()
+go_to_work(wait = 0)
+}
+\arguments{
+\item{wait}{An integer specifying the n-th next service. That is, \code{wait = n}
+will return the n-th available service after the next immediate service.}
 }
 \value{
 A \code{data.frame} specifying the next available route from work to home.
@@ -38,4 +42,14 @@ nevertheless typically quite large, and both the \link{go_home} and
 \link{go_to_work} functions may take some time to execute. Most of this time
 is devoted to loading the data in to the current workspace and as such is
 largley unavoidable.
+}
+\examples{
+\dontrun{
+Sys.setenv ("gtfs_home" = "<my home station>")
+Sys.setenv ("gtfs_work" = "<my work station>")
+Sys.setenv ("gtfs_data" = "/full/path/to/gtfs.zip")
+process_gtfs_local () # If not already done
+go_to_work () # next available service
+go_to_work (3) # Wait until third service after that
+}
 }

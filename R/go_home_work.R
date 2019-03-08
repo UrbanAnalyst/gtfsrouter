@@ -4,6 +4,9 @@
 #' locations of locally-stored GTFS data to route from work to home locationn
 #' with next available service.
 #'
+#' @param wait An integer specifying the n-th next service. That is, `wait = n`
+#' will return the n-th available service after the next immediate service.
+#'
 #' @details This function, and the complementary function \link{go_to_work},
 #' requires three local environmental variables specifying the names of home and
 #' work stations, and the location on local storage of the GTFS data set to be
@@ -29,10 +32,19 @@
 #' largley unavoidable.
 #'
 #' @return A `data.frame` specifying the next available route from work to home.
+#' @examples
+#' \dontrun{
+#' Sys.setenv ("gtfs_home" = "<my home station>")
+#' Sys.setenv ("gtfs_work" = "<my work station>")
+#' Sys.setenv ("gtfs_data" = "/full/path/to/gtfs.zip")
+#' process_gtfs_local () # If not already done
+#' go_home () # next available service
+#' go_home (3) # Wait until third service after that
+#' }
 #' @export
-go_home <- function ()
+go_home <- function (wait = 0)
 {
-    go_home_work (home = TRUE)
+    go_home_work (home = TRUE, wait = wait)
 }
 
 #' go_to_work
@@ -41,25 +53,51 @@ go_home <- function ()
 #' locations of locally-stored GTFS data to route from home to work locationn
 #' with next available service.
 #'
+#' @inherit go_home return params 
 #' @inherit go_home return details 
 #'
 #' @return A `data.frame` specifying the next available route from work to home.
+#' @examples
+#' \dontrun{
+#' Sys.setenv ("gtfs_home" = "<my home station>")
+#' Sys.setenv ("gtfs_work" = "<my work station>")
+#' Sys.setenv ("gtfs_data" = "/full/path/to/gtfs.zip")
+#' process_gtfs_local () # If not already done
+#' go_to_work () # next available service
+#' go_to_work (3) # Wait until third service after that
+#' }
 #' @export
-go_to_work <- function ()
+go_to_work <- function (wait = 0)
 {
-    go_home_work (home = FALSE)
+    go_home_work (home = FALSE, wait = wait)
 }
 
-go_home_work <- function (home = TRUE)
+go_home_work <- function (home = TRUE, wait)
 {
     vars <- get_envvars ()
     fname <- get_rds_name (vars$file)
     gtfs <- readRDS (fname)
     suppressMessages (gtfs <- gtfs_timetable (gtfs))
     if (home)
-        gtfs_route (gtfs, from = vars$work, to = vars$home)
-    else
-        gtfs_route (gtfs, from = vars$home, to = vars$work)
+    {
+        from <- vars$work
+        to <- vars$home
+    } else
+    {
+        from <- vars$home
+        to <- vars$work
+    }
+    res <- gtfs_route (gtfs, from = vars$work, to = vars$home)
+    if (wait > 0)
+    {
+        for (i in seq (wait))
+        {
+            depart <- convert_time (res$departure_time [1]) + 1
+            res <- gtfs_route (gtfs, from = vars$work, to = vars$home,
+                               start_time = depart)
+        }
+    }
+    return (res)
 }
 
 get_envvars <- function ()
