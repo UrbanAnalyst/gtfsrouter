@@ -15,5 +15,6 @@ data-raw/
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^.*.zip$
+^.*.Rds$
 vbb/
 ^.*.png$

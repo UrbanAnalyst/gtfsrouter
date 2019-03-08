@@ -83,7 +83,7 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE)
 
     if (is.null (day))
     {
-        day <- tolower (strftime (Sys.time (), "%A"))
+        day <- strftime (Sys.time (), "%A")
         if (!quiet)
             message ("Day not specified; extracting timetable for ", day)
     } else if (is.numeric (day))
