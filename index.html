@@ -83,22 +83,22 @@
 <p>To install:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"atfutures/gtfs-router"</span>)</a></code></pre></div>
 <pre><code>##   
-─  installing *source* package ‘gtfsrouter’ ...
+─  installing *source* package ‘gtfsrouter’ ... (363ms)
 ## 
   
    ** libs
 ## 
   
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c RcppExports.cpp -o RcppExports.o
+   g++ -std=gnu++11 -I/home/travis/R-bin/lib/R/include -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c RcppExports.cpp -o RcppExports.o
 ## 
   
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c convert-time.cpp -o convert-time.o
+   g++ -std=gnu++11 -I/home/travis/R-bin/lib/R/include -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c convert-time.cpp -o convert-time.o
 ## 
   
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c csa-isochrone.cpp -o csa-isochrone.o
+   g++ -std=gnu++11 -I/home/travis/R-bin/lib/R/include -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c csa-isochrone.cpp -o csa-isochrone.o
 ## 
   
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c csa-median-timetable.cpp -o csa-median-timetable.o
+   g++ -std=gnu++11 -I/home/travis/R-bin/lib/R/include -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c csa-median-timetable.cpp -o csa-median-timetable.o
 ## 
   
    csa-median-timetable.cpp: In function ‘Rcpp::DataFrame rcpp_median_graph(Rcpp::DataFrame, Rcpp::DataFrame)’:
@@ -113,10 +113,10 @@
 ##                                                 ^
 ## 
   
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c csa-timetable.cpp -o csa-timetable.o
+   g++ -std=gnu++11 -I/home/travis/R-bin/lib/R/include -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c csa-timetable.cpp -o csa-timetable.o
 ## 
   
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c csa.cpp -o csa.o
+   g++ -std=gnu++11 -I/home/travis/R-bin/lib/R/include -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c csa.cpp -o csa.o
 ## 
   
    csa.cpp: In function ‘void csa::check_end_stations(std::unordered_set&lt;long unsigned int&gt;&amp;, const size_t&amp;, const int&amp;, CSA_Return&amp;)’:
@@ -131,16 +131,16 @@
 ##                                            ^
 ## 
   
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c dijkstra.cpp -o dijkstra.o
+   g++ -std=gnu++11 -I/home/travis/R-bin/lib/R/include -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c dijkstra.cpp -o dijkstra.o
 ## 
   
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c graph.cpp -o graph.o
+   g++ -std=gnu++11 -I/home/travis/R-bin/lib/R/include -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include   -fpic  -g -O2 -UNDEBUG -Wall -pedantic -g -O0 -c graph.cpp -o graph.o
 ## 
   
    g++ -std=gnu++11 -shared -L/home/travis/R-bin/lib/R/lib -L/home/travis/R-bin/lib -o gtfsrouter.so RcppExports.o convert-time.o csa-isochrone.o csa-median-timetable.o csa-timetable.o csa.o dijkstra.o graph.o -L/home/travis/R-bin/lib/R/lib -lR
 ## 
   
-   installing to /tmp/Rtmpa9PS3i/devtools_install_516448b91f7c/gtfsrouter/libs
+   installing to /tmp/RtmpHzccFt/devtools_install_4fcf3d94d494/gtfsrouter/libs
 ## 
   
 ─  DONE (gtfsrouter)
@@ -158,7 +158,7 @@
 <a class="sourceLine" id="cb5-2" data-line-number="2">tempfiles &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list.files">list.files</a></span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempdir</a></span> (), <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">filename &lt;-<span class="st"> </span>tempfiles [<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep</a></span> (<span class="st">"vbb.zip"</span>, tempfiles)]</a>
 <a class="sourceLine" id="cb5-4" data-line-number="4">filename</a></code></pre></div>
-<pre><code>## [1] "/tmp/Rtmpa9PS3i/vbb.zip"</code></pre>
+<pre><code>## [1] "/tmp/RtmpHzccFt/vbb.zip"</code></pre>
 <p>For normal package use, <code>filename</code> will specify the name of the local GTFS data stored as a single <code>.zip</code> file.</p>
 <div id="gtfs_route" class="section level3">
 <h3 class="hasAnchor">
