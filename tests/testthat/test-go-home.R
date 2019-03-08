@@ -23,6 +23,7 @@ test_that ("go home", {
 })
 
 test_that ("go to work", {
+               expect_silent (route1 <- go_home (start_time = "12:00:00"))
                expect_silent (route3 <- go_to_work (start_time = "12:00:00"))
                expect_equal (ncol (route3), 5)
                expect_equal (names (route3), c ("route_name", "trip_name",
