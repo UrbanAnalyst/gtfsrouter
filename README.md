@@ -9,7 +9,9 @@ WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.o
 # GTFS Router
 
 **R** package for routing and analysis with [GTFS (General Transit Feed
-Specification)](https://developers.google.com/transit/gtfs/) data.
+Specification)](https://developers.google.com/transit/gtfs/) data. See
+[the website](https://atfutures.github.io/gtfs-router/) for full
+details.
 
 ## Installation
 
@@ -42,7 +44,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/Rtmpz36DM4/vbb.zip"
+    ## [1] "/tmp/RtmpaIs9r4/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -105,8 +107,6 @@ Isochrone objects have their own plot method:
 ``` r
 plot (x)
 ```
-
-    ## Loading required namespace: mapview
 
 ![](./fig/isochrone.png)
 

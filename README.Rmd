@@ -8,7 +8,8 @@
 # GTFS Router
 
 **R** package for routing and analysis with [GTFS (General Transit Feed
-Specification)](https://developers.google.com/transit/gtfs/) data. 
+Specification)](https://developers.google.com/transit/gtfs/) data. See [the
+website](https://atfutures.github.io/gtfs-router/) for full details.
 
 ## Installation
 
@@ -71,7 +72,7 @@ within a given time - can be extracted with the `gtfs_isochrone()` function,
 which returns a list of all stations reachable within the specified time period
 from the nominated station station.
 ```{r isochrone-exists, echo = FALSE}
-isochrone_exists <- file.exists ("isochrone.png")
+isochrone_exists <- file.exists ("./fig/isochrone.png")
 ```
 
 ```{r isochrone, eval = TRUE, message = FALSE}
@@ -98,7 +99,7 @@ plot (x)
 ```
 ```{r mapshot, eval = !isochrone_exists, echo = FALSE}
 m <- plot (x)
-mapview::mapshot (m, file = "isochrone.png")
+mapview::mapshot (m, file = "./fig/isochrone.png")
 ```
 ![](./fig/isochrone.png)
 

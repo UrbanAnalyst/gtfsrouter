@@ -3,6 +3,8 @@ warnings_are_errors: true
 sudo: required
 cache: packages
 
+r_check_args: --as-cran
+
 matrix:
     include:
         - os: linux
@@ -46,8 +48,14 @@ notifications:
     on_success: change
     on_failure: change
 
-r_github_packages:
-      - jimhester/covr
+r_packages:
+      - covr
 
 after_success:
     - Rscript -e "covr::codecov(function_exclusions=c('plot.gtfs_isochrone'))"
+
+before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
+deploy:
+      provider: script
+      script: Rscript -e 'pkgdown::deploy_site_github()'
+      skip_cleanup: true
