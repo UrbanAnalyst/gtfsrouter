@@ -17,6 +17,11 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r}
+options (warn = 1)
+```
+
+
 ```{r pkg-load, echo = FALSE, message = FALSE}
 library (gtfsrouter)
 #devtools::load_all (".", export_all = FALSE)
@@ -215,3 +220,6 @@ for analytic purposes will generally be up to twice as first with
 
 # 3. Median Timetables
 
+```{r}
+options (warn = 0)
+```

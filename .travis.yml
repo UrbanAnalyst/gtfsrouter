@@ -10,7 +10,7 @@ matrix:
         - os: linux
           r: release
           dist: trusty # 14.04
-          env: R_CODECOV=true
+          env: R_DEPLOY = true
         - os: linux
           r: devel
           dist: trusty
@@ -48,15 +48,16 @@ notifications:
 r_packages:
       - covr
 
-after_success:
-    - Rscript -e "covr::codecov(function_exclusions='plot.gtfs_isochrone')"
+#after_success:
+#    - Rscript -e "covr::codecov(function_exclusions='plot.gtfs_isochrone')"
 
 before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
 deploy:
-      provider: script
-      script: Rscript -e 'pkgdown::deploy_site_github()'
+    - provider: script
+      #script: Rscript -e 'pkgdown::deploy_site_github()'
+      script: Rscript -e "covr::codecov(function_exclusions='plot.gtfs_isochrone'); pkgdown::deploy_site_github()"
       skip_cleanup: true
       on:
-          condition: $R_CODECOV=true
+          condition: $R_DEPLOY = true
           #condition: $TRAVIS_OS_NAME=linux
           #R: release
