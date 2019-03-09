@@ -3,8 +3,11 @@ context("go home")
 is_appveyor <- Sys.getenv ("APPVEYOR") != "" # appevyor sets this envvar
 
 test_that("go home set up", {
-              expect_error (process_gtfs_local (),
-                            "This function requires environmental variables")
+              if (Sys.getenv ("gtfs_home") == "" |
+                  Sys.getenv ("gtfs_work") == "" |
+                  Sys.getenv ("gtfs_data") == "")
+                  expect_error (process_gtfs_local (),
+                                "This function requires environmental variables")
               f <- file.path (tempdir (), "doesnotexist.zip")
               Sys.setenv ("gtfs_home" = "Innsbrucker Platz")
               Sys.setenv ("gtfs_work" = "Alexanderplatz")
@@ -30,7 +33,7 @@ test_that ("go home", {
                expect_equal (ncol (route1), 5)
                expect_equal (names (route1), c ("route_name", "trip_name",
                                                 "stop_name",
-                                                "departure_time", "arrival_time"))
+                                                "arrival_time", "departure_time"))
 
                expect_silent (route2 <- go_home (wait = 3, start_time = "12:00:00"))
                expect_true (!identical (route1, route2))
@@ -43,6 +46,6 @@ test_that ("go to work", {
                expect_equal (ncol (route3), 5)
                expect_equal (names (route3), c ("route_name", "trip_name",
                                                "stop_name",
-                                               "departure_time", "arrival_time"))
+                                               "arrival_time", "departure_time"))
                expect_equal (route3$stop_name [1], route1$stop_name [nrow (route1)])
 })

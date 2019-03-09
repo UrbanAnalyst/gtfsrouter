@@ -80,7 +80,7 @@ test_that("route", {
               expect_equal (ncol (route), 5)
               expect_equal (names (route), c ("route_name", "trip_name",
                                               "stop_name",
-                                              "departure_time", "arrival_time"))
+                                              "arrival_time", "departure_time"))
               dep_t <- hms::parse_hms (route$departure_time)
               expect_true (all (diff (dep_t) > 0))
               arr_t <- hms::parse_hms (route$arrival_time)
@@ -95,7 +95,7 @@ test_that("route", {
               expect_equal (names (route2), c ("route_id", "route_name",
                                                "trip_id", "trip_name",
                                                "stop_id", "stop_name",
-                                               "departure_time", "arrival_time"))
+                                               "arrival_time", "departure_time"))
 
               # test data only go until 13:00, so:
               expect_error (route <- gtfs_route (gt, from = from, to = to,
