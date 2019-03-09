@@ -26,9 +26,6 @@ matrix:
           before_install: ''
           disable_homebrew: true
     allow_failures:
-        - os: linux
-          r: devel
-          dist: trusty
         - os: osx
           r: release
           before_install: ''
@@ -52,7 +49,7 @@ r_packages:
       - covr
 
 after_success:
-    - Rscript -e "covr::package_coverage(function_exclusions='plot.gtfs_isochrone')"
+    - Rscript -e "covr::codecov(function_exclusions='plot.gtfs_isochrone')"
 
 before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
 deploy:
