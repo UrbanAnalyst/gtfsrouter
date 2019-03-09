@@ -179,20 +179,38 @@ knitr::kable (r2)
 ```
 
 And the earliest-departing route arrives at `r to` at 
-`r r2$arrival_time [nrow (r1)]`, departing `r from` at 
+`r r2$arrival_time [nrow (r2)]`, departing `r from` at 
 `r r2$departure_time [1]`. In contrast, the earliest-arriving service is:
 ```{r route4b-fakey, eval = FALSE}
 gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", earliest_arrival = TRUE)
 ```
 ```{r route4b, eval = TRUE, echo = FALSE}
 knitr::kable (r1)
+diff_arrival <- gtfsrouter:::convert_time (r2$arrival_time [nrow (r2)]) -
+    gtfsrouter:::convert_time (r1$arrival_time [nrow (r1)])
+diff_depart <- gtfsrouter:::convert_time (r1$departure_time [1]) -
+    gtfsrouter:::convert_time (r2$departure_time [1])
+mm <- floor (diff_depart / 60)
+ss <- diff_depart - mm * 60
+diff_depart <- paste0 (mm, "min, ", ss, "s")
+
+diff_total <- (gtfsrouter:::convert_time (r2$arrival_time [nrow (r2)]) -
+    gtfsrouter:::convert_time (r2$departure_time [1])) -
+    (gtfsrouter:::convert_time (r1$arrival_time [nrow (r1)]) -
+     gtfsrouter:::convert_time (r1$departure_time [1]))
+mm <- floor (diff_total / 60)
+ss <- diff_total - mm * 60
+diff_total <- paste0 (mm, "min, ", ss, "s")
 ```
 
-The service departs at `r r1$departure_time [1]`, and arrives at 
-`r r1$arrival_time [nrow (r1)]`. Importantly, queries for earliest-arriving
-services require two full routing runs, whereas earliest-departing services can
-be executed in a single run. This, bulk queries for analytic purposes will
-generally be up to twice as first with `earliest_arrival = FALSE`.
+This service departs `r diff_depart` later at `r r1$departure_time [1]`, and
+arrives `r diff_arrival` seconds earlier at `r r1$arrival_time [nrow (r1)]`. The
+earliest-arriving service thus entails `r diff_total` less travel time than the
+earliest departing service.  It is nevertheless important to note that queries
+for earliest-arriving services require two full routing runs, whereas
+earliest-departing services can be executed in a single run. This, bulk queries
+for analytic purposes will generally be up to twice as first with
+`earliest_arrival = FALSE`.
 
 
 # 3. Median Timetables
