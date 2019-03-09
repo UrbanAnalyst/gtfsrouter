@@ -1,11 +1,26 @@
 context("go home")
 
+is_appveyor <- Sys.getenv ("APPVEYOR") != "" # appevyor sets this envvar
+
 test_that("go home set up", {
-              berlin_gtfs_to_zip()
-              f <- file.path (tempdir (), "vbb.zip")
+              expect_error (process_gtfs_local (),
+                            "This function requires environmental variables")
+              f <- file.path (tempdir (), "doesnotexist.zip")
               Sys.setenv ("gtfs_home" = "Innsbrucker Platz")
               Sys.setenv ("gtfs_work" = "Alexanderplatz")
               Sys.setenv ("gtfs_data" = f)
+              if (!is_appveyor)
+                  expect_error (process_gtfs_local (),
+                                paste0 ("File ", f, " specified by environmental ",
+                                        "variable 'gtfs_data' does not exist"))
+              berlin_gtfs_to_zip()
+              f <- file.path (tempdir (), "vbb.zip")
+              Sys.setenv ("gtfs_data" = f)
+
+              expect_error (route1 <- go_home (),
+                            paste0 ("This function requires the GTFS data ",
+                                    "to be pre-processed"))
+
               expect_silent (process_gtfs_local ())
 })
 

@@ -94,7 +94,7 @@ go_home_work <- function (home = TRUE, wait, start_time)
         to <- vars$work
     }
     if (missing (start_time))
-        start_time = NULL
+        start_time = NULL # nocov
     res <- gtfs_route (gtfs, from = from, to = to, start_time = start_time)
     if (wait > 0)
     {
