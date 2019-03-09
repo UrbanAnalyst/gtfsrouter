@@ -59,6 +59,6 @@ deploy:
     skip_cleanup: true
     on:
         branch: master
-        condition: $R_DEPLOY = true
+        condition: $R_DEPLOY = "true"
         #condition: $TRAVIS_OS_NAME=linux
         #R: release
