@@ -144,7 +144,7 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
     col_order <- c ("route_id", "route_name",
                     "trip_id", "trip_name",
                     "stop_id", "stop_name",
-                    "departure_time", "arrival_time")
+                    "arrival_time", "departure_time")
     if (!include_ids)
         col_order <- col_order [c (2, 4, 6:8)]
     res <- res [, col_order]

@@ -18,58 +18,8 @@ details.
 To install:
 
 ``` r
-remotes::install_github("atfutures/gtfs-router")
+#remotes::install_github("atfutures/gtfs-router")
 ```
-
-    ##   
-    ─  installing *source* package ‘gtfsrouter’ ...
-    ## 
-      
-       ** libs
-    ## 
-      
-       make[1]: Entering directory '/data/mega/code/repos/atfutures/gtfs-router/src'
-    ## 
-      
-       make[1]: Leaving directory '/data/mega/code/repos/atfutures/gtfs-router/src'
-    ## 
-      
-       make[1]: Entering directory '/data/mega/code/repos/atfutures/gtfs-router/src'
-    ##    ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c RcppExports.cpp -o RcppExports.o
-    ## 
-      
-       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c convert-time.cpp -o convert-time.o
-    ## 
-      
-       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c csa-isochrone.cpp -o csa-isochrone.o
-    ## 
-      
-       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c csa-median-timetable.cpp -o csa-median-timetable.o
-    ## 
-      
-       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c csa-timetable.cpp -o csa-timetable.o
-    ## 
-      
-       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c csa.cpp -o csa.o
-    ## 
-      
-       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c dijkstra.cpp -o dijkstra.o
-    ## 
-      
-       ccache clang++ -std=gnu++11 -I"/usr/include/R/" -DNDEBUG  -I"/usr/lib/R/library/Rcpp/include" -D_FORTIFY_SOURCE=2   -fpic  -O -Wall -pedantic -c graph.cpp -o graph.o
-    ## 
-      
-       ccache clang++ -std=gnu++11 -shared -L/usr/lib64/R/lib -Wl,-O1,--sort-common,--as-needed,-z,relro,-z,now -o gtfsrouter.so RcppExports.o convert-time.o csa-isochrone.o csa-median-timetable.o csa-timetable.o csa.o dijkstra.o graph.o -L/usr/lib64/R/lib -lR
-    ## 
-      
-       make[1]: Leaving directory '/data/mega/code/repos/atfutures/gtfs-router/src'
-    ## 
-      
-       installing to /tmp/RtmphAgm8o/devtools_install_7feb157a603d/gtfsrouter/libs
-    ## 
-      
-    ─  DONE (gtfsrouter)
-    ## 
 
 To load the package and check the version:
 
@@ -94,7 +44,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmphAgm8o/vbb.zip"
+    ## [1] "/tmp/RtmppotNfz/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -113,18 +63,18 @@ gtfs_route (gtfs,
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
 
-| route\_name | trip\_name       | stop\_name                      | departure\_time | arrival\_time |
-| :---------- | :--------------- | :------------------------------ | :-------------- | :------------ |
-| U8          | U Paracelsus-Bad | U Schonleinstr. (Berlin)        | 12:04:00        | 12:04:00      |
-| U8          | U Paracelsus-Bad | U Kottbusser Tor (Berlin)       | 12:06:00        | 12:06:00      |
-| U8          | U Paracelsus-Bad | U Moritzplatz (Berlin)          | 12:08:00        | 12:08:00      |
-| U8          | U Paracelsus-Bad | U Heinrich-Heine-Str. (Berlin)  | 12:09:30        | 12:09:30      |
-| U8          | U Paracelsus-Bad | S+U Jannowitzbrucke (Berlin)    | 12:10:30        | 12:10:30      |
-| S5          | S Westkreuz      | S+U Jannowitzbrucke (Berlin)    | 12:15:54        | 12:15:24      |
-| S5          | S Westkreuz      | S+U Alexanderplatz Bhf (Berlin) | 12:18:12        | 12:17:24      |
-| S5          | S Westkreuz      | S Hackescher Markt (Berlin)     | 12:19:54        | 12:19:24      |
-| S5          | S Westkreuz      | S+U Friedrichstr. Bhf (Berlin)  | 12:22:12        | 12:21:24      |
-| S5          | S Westkreuz      | S+U Berlin Hauptbahnhof         | 12:24:42        | 12:24:06      |
+| route\_name | trip\_name       | stop\_name                      | arrival\_time | departure\_time |
+| :---------- | :--------------- | :------------------------------ | :------------ | :-------------- |
+| U8          | U Paracelsus-Bad | U Schonleinstr. (Berlin)        | 12:04:00      | 12:04:00        |
+| U8          | U Paracelsus-Bad | U Kottbusser Tor (Berlin)       | 12:06:00      | 12:06:00        |
+| U8          | U Paracelsus-Bad | U Moritzplatz (Berlin)          | 12:08:00      | 12:08:00        |
+| U8          | U Paracelsus-Bad | U Heinrich-Heine-Str. (Berlin)  | 12:09:30      | 12:09:30        |
+| U8          | U Paracelsus-Bad | S+U Jannowitzbrucke (Berlin)    | 12:10:30      | 12:10:30        |
+| S5          | S Westkreuz      | S+U Jannowitzbrucke (Berlin)    | 12:15:24      | 12:15:54        |
+| S5          | S Westkreuz      | S+U Alexanderplatz Bhf (Berlin) | 12:17:24      | 12:18:12        |
+| S5          | S Westkreuz      | S Hackescher Markt (Berlin)     | 12:19:24      | 12:19:54        |
+| S5          | S Westkreuz      | S+U Friedrichstr. Bhf (Berlin)  | 12:21:24      | 12:22:12        |
+| S5          | S Westkreuz      | S+U Berlin Hauptbahnhof         | 12:24:06      | 12:24:42        |
 
 ### gtfs\_isochrone
 
