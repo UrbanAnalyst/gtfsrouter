@@ -58,7 +58,7 @@ deploy:
     script: Rscript -e "covr::codecov(function_exclusions='plot.gtfs_isochrone'); pkgdown::deploy_site_github()"
     skip_cleanup: true
     on:
-        branch: master
-        condition: $R_DEPLOY = "true"
+        all_branches: true
+        condition: "$R_DEPLOY=true"
         #condition: $TRAVIS_OS_NAME=linux
         #R: release

@@ -29,12 +29,14 @@ library (gtfsrouter)
 
 # 1 Background: GTFS and other R packages
 
-GTFS stands for General Transit Feed Specification. It began life in 2005 as the
-"Google Transit Feed Specification," which was renamed to "General" in 2009.  A
-GTFS data set consists of several comma-delimited (`.csv`) files detailing
-routes, stops, trips, transfers, and other aspects, all bundled in a single
-`.zip`-compressed archive file. For full details, see the relevant [google
-developer site](https://developers.google.com/transit/gtfs/).
+GTFS - General Transit Feed Specification - began life in 2005 as the "Google
+Transit Feed Specification," and was renamed to "General" in 2009.  It provides
+a standardised scheme for representing data on public transport services,
+routes, frequencies, and timetables. A GTFS data set consists of several
+comma-delimited (`.csv`) files detailing routes, stops, trips, transfers, and
+other aspects, all bundled in a single `.zip`-compressed archive file. For full
+details, see the relevant [google developer
+site](https://developers.google.com/transit/gtfs/).
 
 There are currently two other **R** packages which handle GTFS data:
 
@@ -50,25 +52,18 @@ There are currently two other **R** packages which handle GTFS data:
    features dataframes."
 
 The one thing neither of these packages enable is the use of GTFS data for
-transit routing, which is where the `gtfsrouter` package comes in. Beyond
-enabling A-to-B routing, the package also provides various functions for the
-statistical analysis of GTFS data sets. It does this through converting the full
-timetable contained in a GTFS data set into a so-called "median timetable"
-representing the median service frequencies at every stop, and the median travel
-times between each pair of stops. This vignette is accordingly divided into two
-major sections: routing and median timetables, respectively describing functions
-for A-to-B routing, and larger-scale statistical analyses.
-
-Functionality in both cases is demonstrated through the sample data set included
-with the package, provided by the "Verkehrsverbund Berlin-Brandenburg" (VBB; or
-Transport Network Berlin-Brandenburg). The `berlin_gtfs` data represents a
-reduced version of the full GTFS data, containing only six tables, and a
-timetable reduced to the single hour between 12:00-13:00. Like all GTFS
-software including [`tidytransit`](https://github.com/r-transit/tidytransit),
-this package is designed to work directly with GTFS data in `.zip`-archived
-format, and so includes a helper function, `berlin_gtfs_to_zip()`, which exports
-the internal data set to a locally-stored `.zip` archive in the `tempdir()` of
-the current **R** session. These data can be exported and re-imported with:
+transit routing. The `gtfsrouter` package enables both one-to-one and
+one-to-many routing.  Functionality is demonstrated here through the sample data
+set included with the package, provided by the "Verkehrsverbund
+Berlin-Brandenburg" (VBB; or Transport Network Berlin-Brandenburg). The
+`berlin_gtfs` data represents a reduced version of the full GTFS data,
+containing only six tables, and a timetable reduced to the single hour between
+12:00-13:00. Like all GTFS software including
+[`tidytransit`](https://github.com/r-transit/tidytransit), this package is
+designed to work directly with GTFS data in `.zip`-archived format, and so
+includes a helper function, `berlin_gtfs_to_zip()`, which exports the internal
+data set to a locally-stored `.zip` archive in the `tempdir()` of the current
+**R** session. These data can be exported and re-imported with:
 ```{r berlin_gtfs}
 berlin_gtfs_to_zip()
 f <- file.path (tempdir (), "vbb.zip")
@@ -79,7 +74,6 @@ That simply re-creates the original package data, `berlin_gtfs` (although the
 extracted data differ through having a couple of additional attributes defining
 it as a `gtfs` object).
      
-
 
 
 # 2. Routing
@@ -218,7 +212,7 @@ for analytic purposes will generally be up to twice as first with
 `earliest_arrival = FALSE`.
 
 
-# 3. Median Timetables
+# 3. Isochrones
 
 ```{r}
 options (warn = 0)
