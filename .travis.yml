@@ -57,8 +57,11 @@ deploy:
     #script: Rscript -e 'pkgdown::deploy_site_github()'
     script: Rscript -e "covr::codecov(function_exclusions='plot.gtfs_isochrone'); pkgdown::deploy_site_github()"
     skip_cleanup: true
-    on:
-        all_branches: true
-        condition: $TRAVIS_OS_NAME=linux
-        condition: $R_DEPLOY=true
-        condition: r=release
+    # TODO: This does not work, why? Tried all possible permutations, and
+    # followed everything on travis conditional deploy guidelines, but either
+    # none deploy or all. See commits on 9-10 March 2019.
+    #on: 
+    #    all_branches: true
+    #    condition: $TRAVIS_OS_NAME=linux
+    #    condition: $R_DEPLOY=true
+    #    condition: r=release
