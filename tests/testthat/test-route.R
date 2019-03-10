@@ -116,6 +116,7 @@ test_that("route without timetable", {
                                                   quiet = TRUE))
               expect_silent (route2 <- gtfs_route (g, from = from, to = to,
                                                   start_time = start_time,
+                                                  day = 3,
                                                   quiet = TRUE))
               expect_identical (route, route2)
 })
