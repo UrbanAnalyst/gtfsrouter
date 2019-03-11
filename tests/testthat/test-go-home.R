@@ -1,6 +1,8 @@
 context("go home")
 
 is_appveyor <- Sys.getenv ("APPVEYOR") != "" # appevyor sets this envvar
+test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
+             identical (Sys.getenv ("TRAVIS"), "true"))
 
 test_that("go home set up", {
               if (Sys.getenv ("gtfs_home") == "" |
@@ -12,7 +14,7 @@ test_that("go home set up", {
               Sys.setenv ("gtfs_home" = "Innsbrucker Platz")
               Sys.setenv ("gtfs_work" = "Alexanderplatz")
               Sys.setenv ("gtfs_data" = f)
-              if (!is_appveyor)
+              if (test_all)
                   expect_error (process_gtfs_local (),
                                 paste0 ("File ", f, " specified by environmental ",
                                         "variable 'gtfs_data' does not exist"))
