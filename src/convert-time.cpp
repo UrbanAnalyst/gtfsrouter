@@ -4,11 +4,18 @@
 
 // ----------  Functions to convert start time: ----------
 
-bool time_is_standard (const std::string &hms)
+bool time_is_hhmmss (const std::string &hms) // "HH:MM:SS"
 {
-    // stardard is HH:MM:SS
     bool check = false;
     if (hms.size () == 8 && std::count (hms.begin(), hms.end(), ':') == 2)
+        check = true;
+    return check;
+}
+
+bool time_is_hhmm (const std::string &hms) // "HH:MM"
+{
+    bool check = false;
+    if (hms.size () == 5 && std::count (hms.begin(), hms.end(), ':') == 1)
         check = true;
     return check;
 }
@@ -24,8 +31,7 @@ bool time_is_lubridate (const std::string &hms)
     return check;
 }
 
-// std is "HH:MM:SS"
-int convert_time_std (std::string hms)
+int convert_time_hhmmss (std::string hms)
 {
     const std::string delim = ":";
     unsigned int ipos = static_cast <unsigned int> (hms.find (delim.c_str ()));
@@ -44,6 +50,17 @@ int convert_time_std (std::string hms)
     return 3600 * atoi (h.c_str ()) +
         60 * atoi (m.c_str ()) +
         atoi (s.c_str ());
+}
+
+int convert_time_hhmm (std::string hms)
+{
+    const std::string delim = ":";
+    unsigned int ipos = static_cast <unsigned int> (hms.find (delim.c_str ()));
+    std::string h = hms.substr (0, ipos), m, s;
+    hms = hms.substr (ipos + 1, hms.length () - ipos - 1);
+
+    return 3600 * atoi (h.c_str ()) +
+        60 * atoi (hms.c_str ());
 }
 
 // lubridate format is "00H 00M 00S"
@@ -71,8 +88,10 @@ int rcpp_convert_time (const std::string &hms)
     int time;
     std::string hms_cp = hms;
 
-    if (time_is_standard (hms_cp))
-        time = convert_time_std (hms_cp);
+    if (time_is_hhmmss (hms_cp))
+        time = convert_time_hhmmss (hms_cp);
+    else if (time_is_hhmm (hms_cp))
+        time = convert_time_hhmm (hms_cp);
     else if (time_is_lubridate (hms_cp))
         time = convert_time_lubridate (hms_cp);
     else // already checked in R before passing to this fn

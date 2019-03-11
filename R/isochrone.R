@@ -52,6 +52,7 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     departure_time <- NULL
 
     start_time <- convert_time (start_time)
+    end_time <- convert_time (end_time)
     gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time, ]
     if (nrow (gtfs_cp$timetable) == 0)
         stop ("There are no scheduled services after that time.")
