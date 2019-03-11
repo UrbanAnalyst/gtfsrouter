@@ -269,10 +269,20 @@ directions (in and out of a city).
 The object returned from the `gtfs_isochrone()` function also has its own plot
 method, which automatically opens a browser tab, and displays the start and end
 points (in green and red, respectively), all intermediate points, and the lines
-of the routes travelled. A static example is shown below:
+of the routes travelled. This uses the `mapview` package which must be installed
+for this to work. A static example is shown below:
 
+```{r isochrone-exists, echo = FALSE}
+isochrone_exists <- file.exists ("./fig/isochrone.png")
+```
 ```{r isochrone-plot, eval = FALSE}
 plot (ic)
 ```
-![](../fig/isochrone.png)
+```{r isochrone-mapshot, eval = !isochrone_exists, echo = FALSE}
+m <- plot (x)
+if (!dir.exists ("fig"))
+    dir.create ("fig")
+mapview::mapshot (m, file = "./fig/isochrone.png")
+```
+![](./fig/isochrone.png)
 
