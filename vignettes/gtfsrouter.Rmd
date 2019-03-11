@@ -17,10 +17,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r}
-options (warn = 1)
-```
-
 
 ```{r pkg-load, echo = FALSE, message = FALSE}
 library (gtfsrouter)
@@ -214,6 +210,3 @@ for analytic purposes will generally be up to twice as first with
 
 # 3. Isochrones
 
-```{r}
-options (warn = 0)
-```

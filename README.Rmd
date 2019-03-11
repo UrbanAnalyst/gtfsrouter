@@ -4,6 +4,10 @@
 [![Project Status: WIP](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
 
+```{r, echo = FALSE}
+options (warn = 1)
+```
+
 
 # GTFS Router
 
@@ -119,3 +123,6 @@ The VBB is strictly schedule-only, so has no `"frequencies.txt"` file (this file
 defines "service periods", and overrides any schedule information during the
 specified times).
 
+```{r, echo = FALSE}
+options (warn = 0)
+```
