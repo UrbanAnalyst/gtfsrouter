@@ -44,6 +44,16 @@ test_that("convert-time", {
                                                   quiet = TRUE))
               expect_identical (route1, route5)
 
+              expect_silent (route6 <- gtfs_route (gt, from = from, to = to,
+                                                  start_time = "12:02:00",
+                                                  quiet = TRUE))
+              expect_identical (route1, route6)
+
+              expect_silent (route7 <- gtfs_route (gt, from = from, to = to,
+                                                  start_time = "12:02",
+                                                  quiet = TRUE))
+              expect_identical (route1, route7)
+
               # ------- errors
               start_time <- c (12, 2, 0, 0)
               expect_error (route6 <- gtfs_route (gt, from = from, to = to,
