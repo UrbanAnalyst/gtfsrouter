@@ -279,7 +279,7 @@ isochrone_exists <- file.exists ("./fig/isochrone.png")
 plot (ic)
 ```
 ```{r isochrone-mapshot, eval = !isochrone_exists, echo = FALSE}
-m <- plot (x)
+m <- plot (ic)
 if (!dir.exists ("fig"))
     dir.create ("fig")
 mapview::mapshot (m, file = "./fig/isochrone.png")
