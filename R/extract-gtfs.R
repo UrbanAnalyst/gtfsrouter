@@ -33,8 +33,8 @@ extract_gtfs <- function (filename = NULL)
 
     for (f in flist$Name)
     {
-        fout <- data.table::fread (cmd = paste0 ("unzip -p \"", filename,
-                                                 "\" \"", f, "\""),
+        fout <- data.table::fread (cmd = paste0 ("unzip -p ", filename,
+                                                 " \"", f, "\""),
                                    integer64 = "character",
                                    showProgress = FALSE)
         assign (gsub (".txt", "", basename (f)), fout, pos = -1)
