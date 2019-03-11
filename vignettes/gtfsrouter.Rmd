@@ -217,6 +217,9 @@ for next available services to "home" and "work" stations. These functions
 require some initial set-up through specifying environmental variables, but once
 done can be executed as single calls from any **R** session to return the next
 available service.
+```{r home-work-fakey1, eval = FALSE}
+go_home ()
+```
 ```{r home-work-setup, echo = FALSE}
 Sys.setenv ("gtfs_home" = "Innsbrucker Platz")
 Sys.setenv ("gtfs_work" = "Alexanderplatz")
@@ -224,9 +227,25 @@ Sys.setenv ("gtfs_data" = file.path (tempdir (), "vbb.zip"))
 process_gtfs_local () # If not already done
 go_home (start_time = "12:20") # next available service
 ```
-```{r home-work-fakey1, eval = FALSE}
-go_home ()
+Successfully calling that function requires setting three environmental
+variables:
+```{r, home-work-setup2, eval = FALSE}
+Sys.setenv ("gtfs_home" = "<my home station>")
+Sys.setenv ("gtfs_work" = "<my work station>")
+Sys.setenv ("gtfs_data" = "/full/path/to/gtfs.zip")
 ```
+along with executing the single command:
+```{r, home-work-setup3, eval = FALSE}
+process_gtfs_local ()
+```
+This command attempts to reduce the size of the locally-stored GTFS data to the
+minimum required for local routing, and saves the result as an internal `.Rds`
+object in the same location as the `gtfs_data` environmental variable. Having
+done that, `go_home()` will search for the next available service from the
+nominated work station to the nominated home station, while `go_to_work()` will
+search for connections in the other direction.
+
+
 
 
 

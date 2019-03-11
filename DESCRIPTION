@@ -17,6 +17,7 @@ Imports:
     Rcpp (>= 0.12.6)
 Suggests:
     alphahull,
+    here,
     hms,
     lubridate,
     lwgeom,
