@@ -1,0 +1,44 @@
+title: gtfsrouter
+
+templates:
+  params:
+    bootswatch: cerulean
+
+reference:
+  - title: Package doc
+    contents:
+    - gtfsrouter-package
+  - title: The Main Functions
+    contents:
+    - gtfs_route
+    - go_home
+    - go_to_work
+    - gtfs_isochrone
+  - title: Data Extraction and Pre-Processing
+    contents:
+    - extract_gtfs
+    - berlin_gtfs_to_zip
+    - gtfs_timetable
+    - process_gtfs_local
+  - title: Package data
+    contents:
+    - berlin_gtfs
+
+articles:
+  - title: The gtfsrouter package
+    contents:
+    - gtfsrouter
+
+navbar:
+  title: gtfsrouter
+  type: default
+  left:
+  - text: Home
+    href: index.html
+  - text: Vignettes
+    href: articles/index.html
+  - text: Functions
+    href: reference/index.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/ATFutures/gtfs-router

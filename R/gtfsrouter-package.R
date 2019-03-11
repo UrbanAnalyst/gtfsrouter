@@ -1,7 +1,20 @@
 #' gtfsrouter
 #'
-#' Find the quickest route between two points at a particular start time with
-#' GTFS feed.
+#' Routing engine for GTFS (General Transit Feed Specification) data, including
+#' one-to-one and one-to-many routing routines.
+#'
+#' @section Main Functions:
+#' \itemize{
+#' \item [gtfs_route()]: Route between given start and end stations using a
+#' nominated GTFS data set.
+#' \item [go_home()]: Automatic routing between work and home stations specified
+#' with local environmental variables
+#' \item [go_to_work()]: Automatic routing between work and home stations specified
+#' with local environmental variables
+#' \item [gtfs_isochrone()]: One-to-many routing from a nominated start station
+#' to all stations reachable within a specified travel duration.
+#' }
+#'
 #' @name gtfsrouter
 #' @docType package
 #' @importFrom Rcpp evalCpp
