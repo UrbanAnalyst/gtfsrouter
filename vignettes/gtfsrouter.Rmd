@@ -19,8 +19,8 @@ vignette: >
 
 
 ```{r pkg-load, echo = FALSE, message = FALSE}
-#library (gtfsrouter)
-devtools::load_all (".", export_all = FALSE)
+library (gtfsrouter)
+#devtools::load_all (".", export_all = FALSE)
 ```
 
 # 1 Background: GTFS and other R packages
@@ -227,6 +227,13 @@ Sys.setenv ("gtfs_data" = file.path (tempdir (), "vbb.zip"))
 process_gtfs_local () # If not already done
 go_home (start_time = "12:20") # next available service
 ```
+The complentary function, `go_to_work()` routes in the reverse direction. These
+functions are intended to allow real-time queries of public transport schedules
+from within the comfort of an **R** session, and will generally be much quicker
+-- and hopefully easier -- than the arguably burdensome necessity of switching
+attention from productive **R** programming to the usual app or website
+otherwise needed to answer the simple question of when I ought to leave today?
+
 Successfully calling that function requires setting three environmental
 variables:
 ```{r, home-work-setup2, eval = FALSE}
@@ -234,7 +241,7 @@ Sys.setenv ("gtfs_home" = "<my home station>")
 Sys.setenv ("gtfs_work" = "<my work station>")
 Sys.setenv ("gtfs_data" = "/full/path/to/gtfs.zip")
 ```
-along with executing the single command:
+along with execution of the single command:
 ```{r, home-work-setup3, eval = FALSE}
 process_gtfs_local ()
 ```
@@ -245,7 +252,30 @@ done that, `go_home()` will search for the next available service from the
 nominated work station to the nominated home station, while `go_to_work()` will
 search for connections in the other direction.
 
+An even easier way to use these functions is to automatically load those
+environmental variables at the start of each **R** session, which can be
+acheived simply by creating a file named `.Renviron` in the user's root
+directory (or opening if it already exists), and pasting or appending the
+definitions to that file - in this case, without the **R**-specific
+`Sys.setenv()` calls:
+```{bash Renviron, eval = FALSE}
+gtfs_home = "<my home station>"
+gtfs_work = "<my work station>"
+gtfs_data = "/full/path/to/gtfs.zip"
+```
+Of course, this function will only route using locally-stored data, so it is up
+to the user to ensure their local copy of `gtfs.zip` is kept up to date.
 
+The functions include one additional feature. Having found the next service with
+`go_home()`, I may suspect that I can keep working until the following service.
+The simple parameter `wait` enables searching for that following service:
+```{r home-work-fakey2, eval = FALSE}
+go_home (wait = 1)
+```
+```{r home-work2, echo = FALSE}
+go_home (start_time = "12:20", wait = 1)
+```
+The service after that can be retrieved with `go_home (wait = 2)`, and so on.
 
 
 
@@ -324,7 +354,7 @@ plot (ic)
 ```
 ```{r isochrone-mapshot, eval = !isochrone_exists, echo = FALSE}
 m <- plot (ic)
-if (!dir.exists (fdir)
+if (!dir.exists (fdir))
     dir.create (fdir)
 mapview::mapshot (m, file = fig_name)
 ```
