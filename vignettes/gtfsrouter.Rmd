@@ -210,3 +210,69 @@ for analytic purposes will generally be up to twice as first with
 
 # 3. Isochrones
 
+Isochrones are points or lines of equal time. In the present context, the
+function
+[`gtfs_isochrone()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html)
+calculates an isochrone from a nominated start station. The function returns
+details of start, intermediate, and end points for the isochrone, where the end
+points represent the further points reachable on each route departing from the
+nominated station, with all intermediate points being stored in as `mid_points`.
+All stops are representing in [Simple Features
+(sf)](https://cran.r-project.org/package=sf) format, and this function
+accordingly requires the `sf` package to be installed.  As with routing, the
+function also requires initial extraction of GTFS data and, for faster queries,
+explicit conversion to
+[`gtfs_timetable()`](https://atfutures.github.io/gtfs-router/reference/gtfs_timetable.html)
+format.
+
+```{r extract-again, eval = FALSE}
+berlin_gtfs_to_zip ()
+f <- file.path (tempdir (), "vbb.zip")
+gtfs <- extract_gtfs (f)
+gtfs <- gtfs_timetable (gtfs, day = 3)
+```
+Whereas routing requires start and end *stations* (along with a start time),
+isochrones require specifying start and end *times* (along with a start
+station). The following code returns the isochrone of all stations reachable in
+5 minutes from "Alexanderplatz", departing at 12:00.
+```{r isochrone}
+from <- "Alexanderplatz"
+start_time <- "12:05"
+end_time <- "12:10"
+ic <- gtfs_isochrone (gtfs,
+                      from = from,
+                      start_time = start_time,
+                      end_time = end_time)
+```
+Note that the isochrone will be calculated out to five minutes after the first
+service to depart from Alexander Platz *after* 12:00. If, for example, this
+first service actually departs at 12:02, then the isochrones will define the
+range of all services leaving that station and travelling until 12:07. This
+function returns an object of class `gtfs_isochrone`, which has the following
+structure:
+```{r}
+str (ic)
+```
+As mentioned above, the `start_point` item defines the single start point for
+the isochrone; the `mid_points` include stops which all routes pass through on
+their way to the terminal points reachable within the specified time range; and
+`end_points` defines those terminal, isochrone points. The return object also
+includes information on the non-convex ("alpha") hull defining the boundary of
+the terminal points (see the [`alphahull`
+package](https://cran.r-project.org/package=alphahull) for details), and
+geometric lines representing the actual routes taken. Finally, the `hull` time
+also quantifies its area and width-to-length ratio. The latter is informative,
+as higher values generally indicate a greater reachable area, while lower values
+are typically indicative of a radial system primarily serving transport in two
+directions (in and out of a city).
+
+The object returned from the `gtfs_isochrone()` function also has its own plot
+method, which automatically opens a browser tab, and displays the start and end
+points (in green and red, respectively), all intermediate points, and the lines
+of the routes travelled. A static example is shown below:
+
+```{r isochrone-plot, eval = FALSE}
+plot (ic)
+```
+![](../fig/isochrone.png)
+
