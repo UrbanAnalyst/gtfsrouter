@@ -19,8 +19,8 @@ vignette: >
 
 
 ```{r pkg-load, echo = FALSE, message = FALSE}
-library (gtfsrouter)
-#devtools::load_all (".", export_all = FALSE)
+#library (gtfsrouter)
+devtools::load_all (".", export_all = FALSE)
 ```
 
 # 1 Background: GTFS and other R packages
@@ -126,7 +126,7 @@ Note that the `day` parameter is used to extract the timetable, after which it
 is no longer required in the actual call to `gtfs_route()`.
 
 
-## 2.1. Routing by mode of transport
+## 2.2. Routing by mode of transport
 
 It is also possible to filter by desired mode of transport. This is done by
 matching the pattern to those given in the `route_short_name` column of the
@@ -151,7 +151,7 @@ gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday",
 knitr::kable (gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", route_pattern = "^S"))
 ```
 
-## 2.2. Routing for earliest arrivals or earliest departures
+## 2.3. Routing for earliest arrivals or earliest departures
 
 The above route with the "S" services leaves one minute later, and arrives two
 minutes later. Importantly, `gtfs_route()` searches by default for the service
@@ -208,7 +208,30 @@ for analytic purposes will generally be up to twice as first with
 `earliest_arrival = FALSE`.
 
 
-# 3. Isochrones
+# 3. Convenience Functions: `go_home()` and `go_to_work()`
+
+The `gtfsrouter` package is intended both to enable statistical analyses of GTFS
+data sets, as well as for personal, pragmatic purposes. In the latter regard,
+the package provides two "convenience" functions to allow single-call queries
+for next available services to "home" and "work" stations. These functions
+require some initial set-up through specifying environmental variables, but once
+done can be executed as single calls from any **R** session to return the next
+available service.
+```{r home-work-setup, echo = FALSE}
+Sys.setenv ("gtfs_home" = "Innsbrucker Platz")
+Sys.setenv ("gtfs_work" = "Alexanderplatz")
+Sys.setenv ("gtfs_data" = file.path (tempdir (), "vbb.zip"))
+process_gtfs_local () # If not already done
+go_home (start_time = "12:20") # next available service
+```
+```{r home-work-fakey1, eval = FALSE}
+go_home ()
+```
+
+
+
+
+# 4. Isochrones
 
 Isochrones are points or lines of equal time. In the present context, the
 function
@@ -273,16 +296,21 @@ of the routes travelled. This uses the `mapview` package which must be installed
 for this to work. A static example is shown below:
 
 ```{r isochrone-exists, echo = FALSE}
-isochrone_exists <- file.exists ("./fig/isochrone.png")
+fdir <- file.path (here::here (), "fig")
+fig_name <- file.path (fdir, "isochrone.png")
+isochrone_exists <- file.exists (fig_name)
 ```
 ```{r isochrone-plot, eval = FALSE}
 plot (ic)
 ```
 ```{r isochrone-mapshot, eval = !isochrone_exists, echo = FALSE}
 m <- plot (ic)
-if (!dir.exists ("fig"))
-    dir.create ("fig")
-mapview::mapshot (m, file = "./fig/isochrone.png")
+if (!dir.exists (fdir)
+    dir.create (fdir)
+mapview::mapshot (m, file = fig_name)
 ```
-![](./fig/isochrone.png)
+```{r isochrone-mapshot-plot, echo = FALSE, out.width = "100%"}
+knitr::include_graphics (fig_name)
+```
+
 
