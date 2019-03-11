@@ -303,7 +303,7 @@ void csa::extract_final_trip (const CSA_Outputs &csa_out,
         time.resize (time.size () - 1);
         trip.resize (trip.size () - 1);
         // trip values don't exist for start stations of each route, so
-        for (int j = 1; j < trip.size (); j++)
+        for (size_t j = 1; j < trip.size (); j++)
             if (trip [j] == INFINITE_INT)
                 trip [j] = trip [j - 1];
     }

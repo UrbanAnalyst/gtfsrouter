@@ -60,8 +60,8 @@ struct CSA_Outputs
 
 struct CSA_Return
 {
-    int end_station;
-    size_t earliest_time;
+    size_t end_station;
+    int earliest_time;
 };
 
 namespace csa {
