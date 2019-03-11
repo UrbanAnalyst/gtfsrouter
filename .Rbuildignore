@@ -10,6 +10,7 @@
 ^vignettes/makefile$
 docs/
 data-raw/
+scripts/
 ^_pkgdown\.yml$
 ^appveyor\.yml$
 ^.*\.Rproj$
