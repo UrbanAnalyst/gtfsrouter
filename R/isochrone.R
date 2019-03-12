@@ -183,7 +183,7 @@ isohull <- function (x, hull_alpha)
     xy <- lapply (x, function (i)
                   as.matrix (i [, c ("stop_lon", "stop_lat")]))
     xy <- do.call (rbind, xy)
-    if (nrow (xy) < 3)
+    if (length (which (!duplicated (xy))) < 3)
         return (NULL) # nocov
     hull <- get_ahull (xy, alpha = hull_alpha)
     if (nrow (hull) < 3)
