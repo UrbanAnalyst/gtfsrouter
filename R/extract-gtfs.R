@@ -44,6 +44,23 @@ extract_gtfs <- function (filename = NULL)
     arrival_time <- departure_time <- stop_id <- min_transfer_time <- 
         from_stop_id <- to_stop_id <- trip_id <- `:=` <- NULL
 
+    # NYC stop_id values have a base ID along with two repeated versions with either
+    # "N" or "S" appended. These latter are redundant. First reduce the "stops"
+    # table:
+    remove_terminal_sn <- function (stop_ids)
+    {
+        last_char <- substr (stop_ids, nchar (stop_ids), nchar (stop_ids))
+        index <- which (last_char == "N" | last_char == "S")
+        if (length (index) > 0)
+            stop_ids [index] <- substr (stop_ids [index], 1,
+                                        nchar (stop_ids [index]) - 1) # nocov
+        return (stop_ids)
+    }
+    stop_ids <- remove_terminal_sn (stops [, stop_id])
+    index <- which (!duplicated (stop_ids))
+    stops <- stops [index, ]
+    stop_times [, stop_id := remove_terminal_sn (stop_times [, stop_id])]
+
     stop_times [, arrival_time := rcpp_time_to_seconds (arrival_time)]
     stop_times [, departure_time := rcpp_time_to_seconds (departure_time)]
     stop_times [, trip_id := paste0 (trip_id)]
