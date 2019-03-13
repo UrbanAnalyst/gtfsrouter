@@ -110,37 +110,6 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         const int start_time,
         const int max_transfers);
 
-// ---- csa-median-timetable.cpp
-struct Median_Vectors
-{
-    std::vector <int> depart_time, duration;
-};
-
-struct Median_Outputs
-{
-    std::vector <int> start_station, end_station,
-        duration_min, duration_median, duration_max,
-        interval_min, interval_median, interval_max;
-};
-
-namespace median_timetable {
-
-void fill_tt_inputs (Rcpp::DataFrame &full_timetable,
-    Timetable_Outputs &tt_out);
-void fill_timetable_services (const Timetable_Outputs &tt_in,
-        std::unordered_map <std::string, Median_Vectors> &tt_vectors);
-void fill_outputs (const std::unordered_map <std::string, Median_Vectors> &tt_vecs,
-        Median_Outputs &med_out);
-void fill_graph_inputs (Rcpp::DataFrame &timetable,
-    Median_Outputs &gr_in);
-
-} // end namespace median-timetable
-Rcpp::DataFrame rcpp_median_timetable (Rcpp::DataFrame full_timetable);
-Rcpp::DataFrame rcpp_median_graph (Rcpp::DataFrame timetable,
-        Rcpp::DataFrame transfers);
-Rcpp::DataFrame rcpp_median_dijkstra (int nverts, Rcpp::DataFrame graph,
-        int v0);
-
 // ---- csa-isochrone.cpp
 Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,

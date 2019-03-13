@@ -29,36 +29,6 @@ rcpp_csa_isochrone <- function(timetable, transfers, nstations, ntrips, start_st
     .Call(`_gtfsrouter_rcpp_csa_isochrone`, timetable, transfers, nstations, ntrips, start_stations, start_time, end_time)
 }
 
-#' rcpp_median_timetable
-#'
-#' Constructs and returns a table with:
-#' 1. "times", including the (min, median, max) times required to travel
-#'     between the nominated pairs of stations; and
-#' 2. "intervals", containing (min, median, max) service intervals leaving the
-#'     first nominated station travelling to the second.
-#' @noRd
-rcpp_median_timetable <- function(full_timetable) {
-    .Call(`_gtfsrouter_rcpp_median_timetable`, full_timetable)
-}
-
-#' rcpp_median_graph
-#'
-#' Makes a graph of edges quantifying transfer pairs and median durations. This
-#' has to be added to the actual median timetable graph to generate the full
-#' graph.
-#' @noRd
-rcpp_median_graph <- function(timetable, transfers) {
-    .Call(`_gtfsrouter_rcpp_median_graph`, timetable, transfers)
-}
-
-#' rcpp_median_dijkstra
-#'
-#' Run one dijkstra from the median timetable graph
-#' @noRd
-rcpp_median_dijkstra <- function(nverts, graph, v0) {
-    .Call(`_gtfsrouter_rcpp_median_dijkstra`, nverts, graph, v0)
-}
-
 #' rcpp_make_timetable
 #'
 #' Make timetable from GTFS stop_times. Both stop_ids and trip_ids are vectors
