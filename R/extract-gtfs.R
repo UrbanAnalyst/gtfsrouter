@@ -51,9 +51,10 @@ extract_gtfs <- function (filename = NULL)
     {
         last_char <- substr (stop_ids, nchar (stop_ids), nchar (stop_ids))
         index <- which (last_char == "N" | last_char == "S")
-        if (length (index) > 0)
+        if (length (index) > 0) # nocov start
             stop_ids [index] <- substr (stop_ids [index], 1,
-                                        nchar (stop_ids [index]) - 1) # nocov
+                                        nchar (stop_ids [index]) - 1)
+        # nocov end
         return (stop_ids)
     }
     stop_ids <- remove_terminal_sn (stops [, stop_id])
