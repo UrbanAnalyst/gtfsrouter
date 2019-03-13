@@ -18,7 +18,7 @@ details.
 To install:
 
 ``` r
-#remotes::install_github("atfutures/gtfs-router")
+remotes::install_github("atfutures/gtfs-router")
 ```
 
 To load the package and check the version:
@@ -44,7 +44,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmppotNfz/vbb.zip"
+    ## [1] "/tmp/RtmpIyZQ6C/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -108,7 +108,7 @@ Isochrone objects have their own plot method:
 plot (x)
 ```
 
-![](./fig/isochrone.png)
+![](./vignettes/isochrone.png)
 
 The isochrone hull also quantifies its total area and width-to-length
 ratio.

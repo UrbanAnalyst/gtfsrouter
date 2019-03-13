@@ -8,9 +8,6 @@ output:
         toc_float: true
         number_sections: false
         theme: flatly
-header-includes: 
-    - \usepackage{tikz}
-    - \usetikzlibrary{arrows}
 vignette: >
   %\VignetteIndexEntry{gtfsrouter}
   %\VignetteEngine{knitr::rmarkdown}
