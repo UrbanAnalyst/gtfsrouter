@@ -1,12 +1,13 @@
 Package: gtfsrouter
-Title: Quickest Route with GTFS Feed
+Title: Routing with GTFS (General Transit Feed Specification) data
 Version: 0.0.1
 Authors@R: c(
     person("Mark", "Padgham",
             email="mark.padgham@email.com",
             role=c("aut", "cre")))
-Description: Find the quickest route between two points at a particular start
-    time with GTFS feed.
+Description: Use GTFS (General Transit Feed Specification) data for routing from
+    nominated start and end stations, and for extracting isochrones from
+    nominated start station.
 License: GPL-3
 Depends: R (>= 2.10)
 Imports:
