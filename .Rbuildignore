@@ -18,4 +18,3 @@ scripts/
 ^.*.zip$
 ^.*.Rds$
 vbb/
-^.*.png$
