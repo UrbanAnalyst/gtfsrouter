@@ -72,7 +72,7 @@ within a given time - can be extracted with the `gtfs_isochrone()` function,
 which returns a list of all stations reachable within the specified time period
 from the nominated station station.
 ```{r isochrone-exists, echo = FALSE}
-isochrone_exists <- file.exists ("./fig/isochrone.png")
+isochrone_exists <- file.exists ("./vignettes/isochrone.png")
 ```
 
 ```{r isochrone, eval = TRUE, message = FALSE}
@@ -99,11 +99,9 @@ plot (x)
 ```
 ```{r mapshot, eval = !isochrone_exists, echo = FALSE}
 m <- plot (x)
-if (!dir.exists ("fig"))
-    dir.create ("fig")
-mapview::mapshot (m, file = "./fig/isochrone.png")
+mapview::mapshot (m, file = "./vignettes/isochrone.png")
 ```
-![](./fig/isochrone.png)
+![](./vignettes/isochrone.png)
 
 The isochrone hull also quantifies its total area and width-to-length ratio.
 

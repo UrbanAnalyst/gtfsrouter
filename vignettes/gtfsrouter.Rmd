@@ -345,8 +345,7 @@ of the routes travelled. This uses the `mapview` package which must be installed
 for this to work. A static example is shown below:
 
 ```{r isochrone-exists, echo = FALSE}
-fdir <- file.path (here::here (), "fig")
-fig_name <- file.path (fdir, "isochrone.png")
+fig_name <- "isochrone.png"
 isochrone_exists <- file.exists (fig_name)
 ```
 ```{r isochrone-plot, eval = FALSE}
@@ -354,8 +353,6 @@ plot (ic)
 ```
 ```{r isochrone-mapshot, eval = !isochrone_exists, echo = FALSE}
 m <- plot (ic)
-if (!dir.exists (fdir))
-    dir.create (fdir)
 mapview::mapshot (m, file = fig_name)
 ```
 ```{r isochrone-mapshot-plot, echo = FALSE, out.width = "100%"}
