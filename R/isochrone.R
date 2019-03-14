@@ -20,7 +20,14 @@
 #'
 #' @inheritParams gtfs_route
 #'
-#' @return square matrix of distances between nodes
+#' @return An object of class `gtfs_isochrone`, including \pkg{sf}-formatted
+#' points representing the `from` station (`start_point`), the terminal end
+#' stations (`end_points`), and all intermediate stations (`mid_points`), along
+#' with lines representing the individual routes. A non-convex ("alpha") hull is
+#' also returned (as an \pkg{sf} `POLYGON` object), including measures of area
+#' and "elongation", which equals zero for a circle, and increases towards one
+#' for more elongated shapes.
+#'
 #' @examples
 #' berlin_gtfs_to_zip ()
 #' f <- file.path (tempdir (), "vbb.zip")
@@ -194,10 +201,11 @@ isohull <- function (x, hull_alpha)
     bdry <- sf::st_polygon (list (as.matrix (hull [, 2:3])))
     geometry <- sf::st_sfc (bdry, crs = 4326)
     sf::st_sf (area = sf::st_area (geometry),
-               wl_ratio = hull_ratio (geometry),
+               elongation = 1 - hull_ratio (geometry),
                geometry = geometry)
 }
 
+# ratio of lengths of minor / major axes of the hull
 hull_ratio <- function (x)
 {
     xy <- sf::st_coordinates (x)

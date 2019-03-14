@@ -16,5 +16,5 @@ scripts/
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^.*.zip$
-^.*.Rds$
 vbb/
+^vbb*
