@@ -9,7 +9,7 @@ Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostat
 
 # GTFS Router
 
-**R** package for routing and analysis with [GTFS (General Transit Feed
+**R** package for routing [GTFS (General Transit Feed
 Specification)](https://developers.google.com/transit/gtfs/) data. See
 [the website](https://atfutures.github.io/gtfs-router/) for full
 details.
@@ -33,8 +33,8 @@ packageVersion("gtfsrouter")
 
 ## Main functions
 
-The main functions can be demonstrated with sample data from Berlin (the
-Verkehrverbund Berlin Brandenburg, or VBB), included with the package.
+The main functions can be demonstrated with sample data included with
+the package from Berlin (the Verkehrverbund Berlin Brandenburg, or VBB).
 GTFS data are always stored as `.zip` files, and these sample data can
 be written to local storage with the function `berlin_gtfs_to_zip()`.
 
@@ -45,7 +45,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpqdlLQ4/vbb.zip"
+    ## [1] "/tmp/RtmpmpviP5/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
