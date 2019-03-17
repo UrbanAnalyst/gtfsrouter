@@ -9,7 +9,7 @@ Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostat
 
 # GTFS Router
 
-**R** package for routing [GTFS (General Transit Feed
+**R** package for routing with [GTFS (General Transit Feed
 Specification)](https://developers.google.com/transit/gtfs/) data. See
 [the website](https://atfutures.github.io/gtfs-router/) for full
 details.
@@ -45,7 +45,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpmpviP5/vbb.zip"
+    ## [1] "/tmp/Rtmpw9QswQ/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -64,26 +64,25 @@ gtfs_route (gtfs,
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
 
-| route\_name | trip\_name       | stop\_name                      | arrival\_time | departure\_time |
-| :---------- | :--------------- | :------------------------------ | :------------ | :-------------- |
-| U8          | U Paracelsus-Bad | U Schonleinstr. (Berlin)        | 12:04:00      | 12:04:00        |
-| U8          | U Paracelsus-Bad | U Kottbusser Tor (Berlin)       | 12:06:00      | 12:06:00        |
-| U8          | U Paracelsus-Bad | U Moritzplatz (Berlin)          | 12:08:00      | 12:08:00        |
-| U8          | U Paracelsus-Bad | U Heinrich-Heine-Str. (Berlin)  | 12:09:30      | 12:09:30        |
-| U8          | U Paracelsus-Bad | S+U Jannowitzbrucke (Berlin)    | 12:10:30      | 12:10:30        |
-| S5          | S Westkreuz      | S+U Jannowitzbrucke (Berlin)    | 12:15:24      | 12:15:54        |
-| S5          | S Westkreuz      | S+U Alexanderplatz Bhf (Berlin) | 12:17:24      | 12:18:12        |
-| S5          | S Westkreuz      | S Hackescher Markt (Berlin)     | 12:19:24      | 12:19:54        |
-| S5          | S Westkreuz      | S+U Friedrichstr. Bhf (Berlin)  | 12:21:24      | 12:22:12        |
-| S5          | S Westkreuz      | S+U Berlin Hauptbahnhof         | 12:24:06      | 12:24:42        |
+| route\_name | trip\_name    | stop\_name                      | arrival\_time | departure\_time |
+| :---------- | :------------ | :------------------------------ | :------------ | :-------------- |
+| U8          | S+U Wittenau  | U Schonleinstr. (Berlin)        | 12:09:00      | 12:09:00        |
+| U8          | S+U Wittenau  | U Kottbusser Tor (Berlin)       | 12:11:00      | 12:11:00        |
+| U8          | S+U Wittenau  | U Moritzplatz (Berlin)          | 12:13:00      | 12:13:00        |
+| U8          | S+U Wittenau  | U Heinrich-Heine-Str. (Berlin)  | 12:14:30      | 12:14:30        |
+| U8          | S+U Wittenau  | S+U Jannowitzbrucke (Berlin)    | 12:15:30      | 12:15:30        |
+| S3          | S Spandau Bhf | S+U Jannowitzbrucke (Berlin)    | 12:20:54      | 12:21:24        |
+| S3          | S Spandau Bhf | S+U Alexanderplatz Bhf (Berlin) | 12:22:54      | 12:23:42        |
+| S3          | S Spandau Bhf | S Hackescher Markt (Berlin)     | 12:24:54      | 12:25:24        |
+| S3          | S Spandau Bhf | S+U Friedrichstr. Bhf (Berlin)  | 12:26:54      | 12:27:42        |
+| S3          | S Spandau Bhf | S+U Berlin Hauptbahnhof         | 12:29:36      | 12:30:12        |
 
 ### gtfs\_isochrone
 
 Isochrones from a nominated station - lines delineating the range
 reachable within a given time - can be extracted with the
 `gtfs_isochrone()` function, which returns a list of all stations
-reachable within the specified time period from the nominated station
-station.
+reachable within the specified time period from the nominated station.
 
 ``` r
 gtfs <- extract_gtfs (filename)

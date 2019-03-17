@@ -8,7 +8,7 @@
 
 # GTFS Router
 
-**R** package for routing [GTFS (General Transit Feed
+**R** package for routing with [GTFS (General Transit Feed
 Specification)](https://developers.google.com/transit/gtfs/) data. See [the
 website](https://atfutures.github.io/gtfs-router/) for full details.
 
@@ -71,7 +71,7 @@ knitr::kable (r)
 Isochrones from a nominated station - lines delineating the range reachable
 within a given time - can be extracted with the `gtfs_isochrone()` function,
 which returns a list of all stations reachable within the specified time period
-from the nominated station station.
+from the nominated station.
 ```{r isochrone-exists, echo = FALSE}
 isochrone_exists <- file.exists ("./vignettes/isochrone.png")
 ```
