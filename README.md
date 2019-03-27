@@ -6,6 +6,8 @@ Status](https://ci.appveyor.com/api/projects/status/github/ATFutures/gtfs-router
 [![Project Status:
 Active](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/gtfsrouter)](https://cran.r-project.org/package=gtfsrouter)
+[![CRAN
+Downloads](http://cranlogs.r-pkg.org/badges/grand-total/gtfsrouter?color=orange)](https://cran.r-project.org/package=gtfsrouter)
 
 # GTFS Router
 
@@ -45,7 +47,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/Rtmpw9QswQ/vbb.zip"
+    ## [1] "/tmp/Rtmpz6vX0h/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -64,18 +66,18 @@ gtfs_route (gtfs,
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
 
-| route\_name | trip\_name    | stop\_name                      | arrival\_time | departure\_time |
-| :---------- | :------------ | :------------------------------ | :------------ | :-------------- |
-| U8          | S+U Wittenau  | U Schonleinstr. (Berlin)        | 12:09:00      | 12:09:00        |
-| U8          | S+U Wittenau  | U Kottbusser Tor (Berlin)       | 12:11:00      | 12:11:00        |
-| U8          | S+U Wittenau  | U Moritzplatz (Berlin)          | 12:13:00      | 12:13:00        |
-| U8          | S+U Wittenau  | U Heinrich-Heine-Str. (Berlin)  | 12:14:30      | 12:14:30        |
-| U8          | S+U Wittenau  | S+U Jannowitzbrucke (Berlin)    | 12:15:30      | 12:15:30        |
-| S3          | S Spandau Bhf | S+U Jannowitzbrucke (Berlin)    | 12:20:54      | 12:21:24        |
-| S3          | S Spandau Bhf | S+U Alexanderplatz Bhf (Berlin) | 12:22:54      | 12:23:42        |
-| S3          | S Spandau Bhf | S Hackescher Markt (Berlin)     | 12:24:54      | 12:25:24        |
-| S3          | S Spandau Bhf | S+U Friedrichstr. Bhf (Berlin)  | 12:26:54      | 12:27:42        |
-| S3          | S Spandau Bhf | S+U Berlin Hauptbahnhof         | 12:29:36      | 12:30:12        |
+| route\_name | trip\_name       | stop\_name                      | arrival\_time | departure\_time |
+| :---------- | :--------------- | :------------------------------ | :------------ | :-------------- |
+| U8          | U Paracelsus-Bad | U Schonleinstr. (Berlin)        | 12:04:00      | 12:04:00        |
+| U8          | U Paracelsus-Bad | U Kottbusser Tor (Berlin)       | 12:06:00      | 12:06:00        |
+| U8          | U Paracelsus-Bad | U Moritzplatz (Berlin)          | 12:08:00      | 12:08:00        |
+| U8          | U Paracelsus-Bad | U Heinrich-Heine-Str. (Berlin)  | 12:09:30      | 12:09:30        |
+| U8          | U Paracelsus-Bad | S+U Jannowitzbrucke (Berlin)    | 12:10:30      | 12:10:30        |
+| S5          | S Westkreuz      | S+U Jannowitzbrucke (Berlin)    | 12:15:24      | 12:15:54        |
+| S5          | S Westkreuz      | S+U Alexanderplatz Bhf (Berlin) | 12:17:24      | 12:18:12        |
+| S5          | S Westkreuz      | S Hackescher Markt (Berlin)     | 12:19:24      | 12:19:54        |
+| S5          | S Westkreuz      | S+U Friedrichstr. Bhf (Berlin)  | 12:21:24      | 12:22:12        |
+| S5          | S Westkreuz      | S+U Berlin Hauptbahnhof         | 12:24:06      | 12:24:42        |
 
 ### gtfs\_isochrone
 
