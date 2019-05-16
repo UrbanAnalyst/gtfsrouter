@@ -32,7 +32,7 @@ test_that("extract", {
               expect_equal (names (g), nms)
 
               files <- file.path (tempdir (), paste0 (nms, ".txt"))
-              files <- files [-1]
+              #files <- files [-1]
               for (f in files)
                   writeLines ("a", f)
               f2 <- file.path (tempdir (), "vbb2.zip")
