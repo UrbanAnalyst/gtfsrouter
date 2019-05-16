@@ -61,10 +61,13 @@ make_timetable <- function (gtfs)
     # the vectors of stop_ids and trip_ids.
 
     # translate transfer stations into indices
-    index <- match (gtfs$transfers [, from_stop_id], stop_ids)
-    gtfs$transfers <- gtfs$transfers [, from_stop_id := index]
-    index <- match (gtfs$transfers [, to_stop_id], stop_ids)
-    gtfs$transfers <- gtfs$transfers [, to_stop_id := index]
+    if ("transfers" %in% names (gtfs))
+    {
+        index <- match (gtfs$transfers [, from_stop_id], stop_ids)
+        gtfs$transfers <- gtfs$transfers [, from_stop_id := index]
+        index <- match (gtfs$transfers [, to_stop_id], stop_ids)
+        gtfs$transfers <- gtfs$transfers [, to_stop_id := index]
+    }
 
     # order the timetable by departure_time
     tt <- tt [order (tt$departure_time), ]

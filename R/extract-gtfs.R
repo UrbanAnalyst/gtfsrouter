@@ -111,7 +111,7 @@ type_missing <- function (flist, type)
     
     if (!any (grepl (type, flist$Name)))
     {
-        warning (paste ("This feed contains no", type))
+        warning (paste ("This feed contains no", type), call. = FALSE)
         ret <- TRUE
     }
 
