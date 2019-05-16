@@ -133,8 +133,12 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
     rownames (res) <- seq (nrow (res))
 
     # Then insert routes and trip headsigns
-    index <- match (res$trip_id, gtfs$trips [, trip_id])
-    res$trip_name <- gtfs$trips [index, trip_headsign]
+    res$trip_name <- NA_character_
+    if ("trip_headsign" %in% names (gtfs$trips))
+    {
+        index <- match (res$trip_id, gtfs$trips [, trip_id])
+        res$trip_name <- gtfs$trips [index, trip_headsign]
+    }
 
     index <- match (res$trip_id, gtfs$trips [, trip_id])
     res$route_id <- gtfs$trips [index, route_id]
@@ -148,6 +152,9 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
     if (!include_ids)
         col_order <- col_order [c (2, 4, 6:8)]
     res <- res [, col_order]
+
+    if (all (is.na (res$trip_name)))
+        res$trip_name <- NULL
 
     return (res)
 }
