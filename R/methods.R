@@ -20,4 +20,8 @@ summary.gtfs <- function (object, ...)
     message (msg, "object with the following tables and ",
              "respective numbers of entries in each:")
     print (vapply (object, nrow, numeric (1)))
+    if (!"transfers" %in% names (object))
+        message ("Note: This feed contains no transfers.txt table")
+    if (!"calendar" %in% names (object))
+        message ("Note: This feed contains no calendar.txt table")
 }

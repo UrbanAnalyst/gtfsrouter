@@ -22,6 +22,16 @@ test_that ("extract", {
                                     fcalendar))
               expect_warning (g <- extract_gtfs (f_cut),
                               "This feed contains no transfers.txt")
+
+              x <- capture.output (summary (g))
+              expect_equal (length (x), 2)
+              nms <- strsplit (x [1], "[[:space:]]+") [[1]]
+              nms <- nms [which (!nms == "")]
+              vals <- as.numeric (strsplit (x [2], "[[:space:]]+") [[1]])
+              vals <- vals [!is.na (vals)]
+              names (vals) <- nms
+              expect_identical (vals, vapply (g, nrow, numeric (1)))
+              expect_true (!"transfers" %in% names (vals))
               invisible (file.remove (f_cut))
 
               chk <- zip (f_cut,
@@ -29,6 +39,16 @@ test_that ("extract", {
                                     ftransfers))
               expect_warning (g <- extract_gtfs (f_cut),
                               "This feed contains no calendar.txt")
+
+              x <- capture.output (summary (g))
+              expect_equal (length (x), 2)
+              nms <- strsplit (x [1], "[[:space:]]+") [[1]]
+              nms <- nms [which (!nms == "")]
+              vals <- as.numeric (strsplit (x [2], "[[:space:]]+") [[1]])
+              vals <- vals [!is.na (vals)]
+              names (vals) <- nms
+              expect_identical (vals, vapply (g, nrow, numeric (1)))
+              expect_true (!"calendar" %in% names (vals))
               invisible (file.remove (f_cut))
 })
 
@@ -37,15 +57,30 @@ test_that("summary", {
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
               expect_silent (g <- extract_gtfs (f))
-              expect_message (summary (g))
-              n <- vapply (g, nrow, numeric (1))
-              expect_identical (summary (g), n)
-              expect_true (length (summary (g)) == length (g))
 
+              x <- capture.output (summary (g))
+              expect_equal (length (x), 2)
+              nms <- strsplit (x [1], "[[:space:]]+") [[1]]
+              nms <- nms [which (!nms == "")]
+              vals <- as.numeric (strsplit (x [2], "[[:space:]]+") [[1]])
+              vals <- vals [!is.na (vals)]
+              names (vals) <- nms
+              expect_identical (vals, vapply (g, nrow, numeric (1)))
+})
+
+test_that ("timetable summary", {
+              berlin_gtfs_to_zip ()
+              f <- file.path (tempdir (), "vbb.zip")
+              expect_true (file.exists (f))
+              expect_silent (g <- extract_gtfs (f))
               gt <- gtfs_timetable (g, day = 3)
-              expect_message (summary (gt))
-              nt <- vapply (gt, nrow, numeric (1))
-              expect_identical (summary (gt), nt)
-              expect_true (length (summary (gt)) >
-                           length (summary (g)))
+
+              x <- capture.output (summary (gt))
+              #expect_equal (length (x), 2)
+              nms <- strsplit (x [1], "[[:space:]]+") [[1]]
+              nms <- nms [which (!nms == "")]
+              vals <- as.numeric (strsplit (x [2], "[[:space:]]+") [[1]])
+              vals <- vals [!is.na (vals)]
+              names (vals) <- nms
+              #expect_identical (vals, vapply (gt, nrow, numeric (1)))
 })
