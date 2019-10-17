@@ -18,3 +18,4 @@ scripts/
 ^.*.zip$
 vbb/
 ^vbb*
+^codemeta\.json$
