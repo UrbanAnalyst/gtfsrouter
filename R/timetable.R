@@ -6,7 +6,11 @@
 #' @param day Day of the week on which to calculate route, either as an
 #' unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
 #' between 1 = Sunday and 7 = Saturday. If not given, the current day will be
-#' used.
+#' used - unless the following 'date' parameter is give.
+#' @param date Some systems do not specify days of the week within their
+#' 'calendar' table; rather they provide full timetables for specified calendar
+#' dates via a 'calendar_date' table. Providing a date here as a single 8-digit
+#' number representing 'yyyymmdd' will filter the data to the specified date.
 #' @param route_pattern Using only those routes matching given pattern, for
 #' example, "^U" for routes starting with "U" (as commonly used for underground
 #' or subway routes.
@@ -24,7 +28,7 @@
 #' @inherit gtfs_route return examples
 #'
 #' @export
-gtfs_timetable <- function (gtfs, day = NULL, route_pattern = NULL,
+gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
                             quiet = FALSE)
 {
     # IMPORTANT: data.table works entirely by reference, so all operations
@@ -34,7 +38,10 @@ gtfs_timetable <- function (gtfs, day = NULL, route_pattern = NULL,
 
     if (!attr (gtfs_cp, "filtered"))
     {
-        gtfs_cp <- filter_by_day (gtfs_cp, day, quiet = quiet)
+        if (!is.null (day))
+            gtfs_cp <- filter_by_day (gtfs_cp, day, quiet = quiet)
+        else if (!is.null (date))
+            gtfs_cp <- filter_by_date (gtfs_cp, date)
         if (!is.null (route_pattern))
             gtfs_cp <- filter_by_route (gtfs_cp, route_pattern)
         attr (gtfs_cp, "filtered") <- TRUE
@@ -53,8 +60,10 @@ make_timetable <- function (gtfs)
     # no visible binding notes
     stop_id <- trip_id <- stop_ids <- from_stop_id <- to_stop_id <- NULL
 
-    stop_ids <- unique (gtfs$stops [, stop_id])
-    trip_ids <- unique (gtfs$trips [, trip_id])
+    stop_ids <- force_char (unique (gtfs$stops [, stop_id]))
+    trip_ids <- force_char (unique (gtfs$trips [, trip_id]))
+    gtfs$stop_times [, trip_id := force_char (trip_id)]
+    gtfs$stop_times [, stop_id := force_char (stop_id)]
     tt <- rcpp_make_timetable (gtfs$stop_times, stop_ids, trip_ids)
     # tt has [departure/arrival_station, departure/arrival_time,
     # trip_id], where the station and trip values are 1-based indices into
@@ -111,6 +120,27 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE)
                      which (gtfs$calendar [, get (i)] == 1))
     index <- sort (unique (do.call (c, index)))
     service_id <- gtfs$calendar [index, ] [, service_id]
+    index <- which (gtfs$trips [, service_id] %in% service_id)
+    gtfs$trips <- gtfs$trips [index, ]
+    index <- which (gtfs$stop_times [, trip_id] %in% gtfs$trips [, trip_id])
+    gtfs$stop_times <- gtfs$stop_times [index, ]
+
+    return (gtfs)
+}
+
+filter_by_date <- function (gtfs, date = NULL)
+{
+    if (is.null (date))
+        stop ("An explicit date must be specified in order to filter by date")
+
+    # no visible binding notes
+    trip_id <- NULL
+
+    index <- which (gtfs$calendar_dates$date == date)
+    if (length (index) == 0)
+        stop ("date does not match any values in the provided GTFS data")
+
+    service_id <- gtfs$calendar_dates [index, ] [, service_id]
     index <- which (gtfs$trips [, service_id] %in% service_id)
     gtfs$trips <- gtfs$trips [index, ]
     index <- which (gtfs$stop_times [, trip_id] %in% gtfs$trips [, trip_id])

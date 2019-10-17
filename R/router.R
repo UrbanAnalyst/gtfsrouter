@@ -100,8 +100,12 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
         start_stns <- station_name_to_ids (to, gtfs_cp) # reversed!
         end_stns <- station_name_to_ids (from, gtfs_cp)
         start_time <- 0
-        res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time,
-                            include_ids, max_transfers)
+        res_e <- tryCatch (
+                           gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time,
+                                        include_ids, max_transfers),
+                           error = function (e) NULL)
+        if (!is.null (res_e))
+            res <- res_e
     }
     return (res)
 }

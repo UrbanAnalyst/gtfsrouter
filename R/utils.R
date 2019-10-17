@@ -63,3 +63,10 @@ zero_pad <- function (x)
     x [nchar (x) < 2] <- paste0 (0, x [nchar (x) < 2])
     return (x)
 }
+
+force_char <- function (x)
+{
+    if (!is.character (x))
+        x <- paste0 (x)
+    return (x)
+}
