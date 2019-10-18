@@ -1,5 +1,8 @@
 {
-  "@context": ["https://doi.org/10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "gtfsrouter",
   "description": "Use GTFS (General Transit Feed Specification) data for routing from\n    nominated start and end stations, and for extracting isochrones from\n    nominated start station.",
@@ -7,7 +10,7 @@
   "codeRepository": "https://github.com/ATFutures/gtfs-router",
   "issueTracker": "https://github.com/ATFutures/gtfs-router/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.1.1",
+  "version": "0.0.1.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -213,9 +216,19 @@
     }
   ],
   "readme": "https://github.com/ATFutures/gtfs-router/blob/master/README.md",
-  "fileSize": "2414.747KB",
-  "contIntegration": ["https://travis-ci.org/ATFutures/gtfs-router", "https://ci.appveyor.com/project/ATFutures/gtfs-router", "https://codecov.io/gh/ATFutures/gtfs-router"],
+  "fileSize": "2414.805KB",
+  "contIntegration": [
+    "https://travis-ci.org/ATFutures/gtfs-router",
+    "https://ci.appveyor.com/project/ATFutures/gtfs-router",
+    "https://codecov.io/gh/ATFutures/gtfs-router"
+  ],
   "developmentStatus": "http://www.repostatus.org/#active",
-  "keywords": ["gtfs", "public-transportation", "router", "gtfs-router", "r-package"],
+  "keywords": [
+    "gtfs",
+    "public-transportation",
+    "router",
+    "gtfs-router",
+    "r-package"
+  ],
   "relatedLink": "https://CRAN.R-project.org/package=gtfsrouter"
 }
