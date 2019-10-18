@@ -38,10 +38,10 @@ gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
 
     if (!attr (gtfs_cp, "filtered"))
     {
-        if (!is.null (day))
-            gtfs_cp <- filter_by_day (gtfs_cp, day, quiet = quiet)
-        else if (!is.null (date))
+        if (!is.null (date))
             gtfs_cp <- filter_by_date (gtfs_cp, date)
+        else # default day = NULL to current day
+            gtfs_cp <- filter_by_day (gtfs_cp, day, quiet = quiet)
         if (!is.null (route_pattern))
             gtfs_cp <- filter_by_route (gtfs_cp, route_pattern)
         attr (gtfs_cp, "filtered") <- TRUE
