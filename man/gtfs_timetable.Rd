@@ -4,7 +4,8 @@
 \alias{gtfs_timetable}
 \title{gtfs_timetable}
 \usage{
-gtfs_timetable(gtfs, day = NULL, route_pattern = NULL, quiet = FALSE)
+gtfs_timetable(gtfs, day = NULL, date = NULL, route_pattern = NULL,
+  quiet = FALSE)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs}.}
@@ -12,7 +13,12 @@ gtfs_timetable(gtfs, day = NULL, route_pattern = NULL, quiet = FALSE)
 \item{day}{Day of the week on which to calculate route, either as an
 unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
 between 1 = Sunday and 7 = Saturday. If not given, the current day will be
-used.}
+used - unless the following 'date' parameter is give.}
+
+\item{date}{Some systems do not specify days of the week within their
+'calendar' table; rather they provide full timetables for specified calendar
+dates via a 'calendar_date' table. Providing a date here as a single 8-digit
+number representing 'yyyymmdd' will filter the data to the specified date.}
 
 \item{route_pattern}{Using only those routes matching given pattern, for
 example, "^U" for routes starting with "U" (as commonly used for underground
