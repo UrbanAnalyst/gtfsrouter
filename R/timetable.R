@@ -38,6 +38,18 @@ gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
 
     if (!attr (gtfs_cp, "filtered"))
     {
+        if (is.null (date) & is.null (day))
+        {
+            # nocov start
+            if (!check_calendar (gtfs))
+                stop ("This appears to be a GTFS feed which uses a ",
+                      "'calendar_dates' table instead of 'calendar'.\n",
+                      "Please first construct timetable for a particular ",
+                      "date using 'gtfs_timetable(gtfs, date = <date>)'\n",
+                      "See https://developers.google.com/transit/gtfs/",
+                      "reference/#calendar_datestxt for details.")
+            # nocov end
+        }
         if (!is.null (date))
             gtfs_cp <- filter_by_date (gtfs_cp, date)
         else # default day = NULL to current day
@@ -53,6 +65,29 @@ gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
     }
 
     return (gtfs_cp)
+}
+
+# Some feeds like Paris use calendar_date table with explicit dates instead of
+# just calendar with days of week. This presumes such cases have empty
+# 'calendar' tables, and so just checks for that. The alternative specification
+# is described at:
+# https://developers.google.com/transit/gtfs/reference/#calendar_datestxt
+# ... note that it says nothing about what 'calendar' should hold in such cases,
+# so this just follows the current patterns appeared to be used in Paris, as per
+# issue #20.
+check_calendar <- function (gtfs)
+{
+    days <- c ("monday", "tuesday", "wednesday", "thursday",
+               "friday", "saturday", "sunday")
+    index <- which (tolower (names (gtfs$calendar)) %in% days)
+    #index <- match (days, tolower (names (gtfs$calendar)))
+    # note: data.table also has the ..index notation, but that raises "no
+    # visible binding" notes which can only be suppressed with `..index = NULL`,
+    # but that raises a DT warning; see DT issue #2988.
+    #tab <- as.integer (table (gtfs$calendar [, index, with = FALSE]))
+    tab <- as.matrix (gtfs$calendar [, index, with = FALSE])
+    tab <- as.integer (table (tab))
+    length (tab) > 1
 }
 
 make_timetable <- function (gtfs)

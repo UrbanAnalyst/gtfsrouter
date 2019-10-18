@@ -77,7 +77,8 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
     gtfs_cp <- data.table::copy (gtfs)
 
     if (!"timetable" %in% names (gtfs_cp))
-        gtfs_cp <- gtfs_timetable (gtfs_cp, day, route_pattern, quiet = quiet)
+        gtfs_cp <- gtfs_timetable (gtfs_cp, day = day,
+                                   route_pattern = route_pattern, quiet = quiet)
 
     if (is.null (start_time))
         start_time <- format (Sys.time (), "%H:%M:%S") # nocov
