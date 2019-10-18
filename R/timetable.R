@@ -47,7 +47,8 @@ gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
                       "Please first construct timetable for a particular ",
                       "date using 'gtfs_timetable(gtfs, date = <date>)'\n",
                       "See https://developers.google.com/transit/gtfs/",
-                      "reference/#calendar_datestxt for details.")
+                      "reference/#calendar_datestxt for details.",
+                      call = FALSE)
             # nocov end
         }
         if (!is.null (date))
