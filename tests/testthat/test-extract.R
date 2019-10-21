@@ -37,8 +37,8 @@ test_that ("extract", {
               chk <- zip (f_cut,
                           file = c (froutes, ftrips, fstop_times, fstops,
                                     ftransfers))
-              expect_warning (g <- extract_gtfs (f_cut),
-                              "This feed contains no calendar.txt")
+              # feed contains no calendar.txt, but should still read:
+              expect_silent (g <- extract_gtfs (f_cut))
 
               x <- capture.output (summary (g))
               expect_equal (length (x), 2)
