@@ -67,6 +67,6 @@ zero_pad <- function (x)
 force_char <- function (x)
 {
     if (!is.character (x))
-        x <- paste0 (x)
+        x <- paste0 (x) # nocov - not in test data
     return (x)
 }

@@ -21,8 +21,8 @@ extract_gtfs <- function (filename = NULL)
         stop ("filename ", filename, " does not exist")
 
     # suppress no visible binding for global variables notes:
-    arrival_time <- departure_time <- stop_id <- min_transfer_time <- 
-        from_stop_id <- to_stop_id <- trip_id <- `:=` <- 
+    arrival_time <- departure_time <- stop_id <- min_transfer_time <-
+        from_stop_id <- to_stop_id <- trip_id <- `:=` <- # nolint
         routes <- stops <- stop_times <- trips <- NULL
 
     flist <- utils::unzip (filename, list = TRUE)
@@ -37,7 +37,6 @@ extract_gtfs <- function (filename = NULL)
               "it must minimally contain\n  ",
               paste (need_these_files, collapse = ", "))
     missing_transfers <- type_missing (flist, "transfers")
-    missing_calendar <- type_missing (flist, "calendar")
 
     for (f in flist$Name)
     {
@@ -54,9 +53,9 @@ extract_gtfs <- function (filename = NULL)
               paste (need_these_files, collapse = ", "))
 
 
-    # NYC stop_id values have a base ID along with two repeated versions with either
-    # "N" or "S" appended. These latter are redundant. First reduce the "stops"
-    # table:
+    # NYC stop_id values have a base ID along with two repeated versions with
+    # either "N" or "S" appended. These latter are redundant. First reduce the
+    # "stops" table:
     remove_terminal_sn <- function (stop_ids)
     {
         last_char <- substr (stop_ids, nchar (stop_ids), nchar (stop_ids))
@@ -78,22 +77,23 @@ extract_gtfs <- function (filename = NULL)
 
     if (!missing_transfers)
     {
-        transfer = stop_times [, stop_id] %in% transfers [, from_stop_id]
-        #stop_times <- stop_times [, transfer := transfer] [order (departure_time)]
+        transfer <- stop_times [, stop_id] %in% transfers [, from_stop_id]
+        #stop_times <-
+        #stop_times [, transfer := transfer] [order (departure_time)]
         stop_times <- stop_times [, transfer := transfer]
 
         index <- which (transfers [, from_stop_id] %in% stop_times [, stop_id] &
                         transfers [, to_stop_id] %in% stop_times [, stop_id])
         transfers <- transfers [index, ]
-        transfers [, min_transfer_time := replace (min_transfer_time,
-                                                   is.na (min_transfer_time), 0)]
+        transfers [, min_transfer_time :=
+                   replace (min_transfer_time, is.na (min_transfer_time), 0)]
     }
 
     trips <- trips [, trip_id := paste0 (trip_id)]
 
     objs <- gsub (".txt", "", basename (flist$Name))
     # Note: **NOT** lapply (objs, get)!!
-    # https://stackoverflow.com/questions/18064602/why-do-i-need-to-wrap-get-in-a-dummy-function-within-a-j-lapply-call
+    # https://stackoverflow.com/questions/18064602/why-do-i-need-to-wrap-get-in-a-dummy-function-within-a-j-lapply-call #nolint
     res <- lapply (objs, function (i) get (i))
     names (res) <- objs
     attr (res, "filtered") <- FALSE
@@ -108,7 +108,7 @@ type_missing <- function (flist, type)
 {
     ret <- FALSE
     type <- paste0 (type, ".txt")
-    
+
     if (!any (grepl (type, flist$Name)))
     {
         warning (paste ("This feed contains no", type), call. = FALSE)

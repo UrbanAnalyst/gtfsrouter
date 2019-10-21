@@ -9,8 +9,8 @@
 #' nominated GTFS data set.
 #' \item [go_home()]: Automatic routing between work and home stations specified
 #' with local environmental variables
-#' \item [go_to_work()]: Automatic routing between work and home stations specified
-#' with local environmental variables
+#' \item [go_to_work()]: Automatic routing between work and home stations
+#' specified with local environmental variables
 #' \item [gtfs_isochrone()]: One-to-many routing from a nominated start station
 #' to all stations reachable within a specified travel duration.
 #' }
@@ -44,8 +44,8 @@ NULL
 #' \item transfers
 #' }
 #'
-#' @note Can be re-created with the script in 
+#' @note Can be re-created with the script in
 #' \url{https://github.com/ATFutures/gtfs-router/blob/master/data-raw/data-script.Rmd}.
+#'
 #' @inherit gtfs_route return examples
 NULL
-

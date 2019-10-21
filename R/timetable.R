@@ -52,7 +52,7 @@ gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
             # nocov end
         }
         if (!is.null (date))
-            gtfs_cp <- filter_by_date (gtfs_cp, date)
+            gtfs_cp <- filter_by_date (gtfs_cp, date) # nocov - not in test data
         else # default day = NULL to current day
             gtfs_cp <- filter_by_day (gtfs_cp, day, quiet = quiet)
         if (!is.null (route_pattern))
@@ -164,6 +164,7 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE)
     return (gtfs)
 }
 
+# nocov start - not in test data
 filter_by_date <- function (gtfs, date = NULL)
 {
     if (is.null (date))
@@ -184,6 +185,7 @@ filter_by_date <- function (gtfs, date = NULL)
 
     return (gtfs)
 }
+# nocov end
 
 filter_by_route <- function (gtfs, route_pattern = NULL)
 {
@@ -200,12 +202,12 @@ filter_by_route <- function (gtfs, route_pattern = NULL)
     gtfs$stop_times <- gtfs$stop_times [which (gtfs$stop_times [, trip_id] %in%
                                                gtfs$trips [, trip_id]), ]
 
-    gtfs$stops <- gtfs$stops [which (gtfs$stops [, stop_id] %in% 
+    gtfs$stops <- gtfs$stops [which (gtfs$stops [, stop_id] %in%
                                      gtfs$stop_times [, stop_id]), ]
 
-    index <- which ((gtfs$transfers [, from_stop_id] %in% 
+    index <- which ((gtfs$transfers [, from_stop_id] %in%
                      gtfs$stops [, stop_id]) &
-                    (gtfs$transfers [, to_stop_id] %in% 
+                    (gtfs$transfers [, to_stop_id] %in%
                      gtfs$stops [, stop_id]))
     gtfs$transfers <- gtfs$transfers [index, ]
 

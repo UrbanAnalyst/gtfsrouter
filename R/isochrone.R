@@ -43,9 +43,10 @@
 #' \dontrun{
 #' plot (ic)
 #' }
-#' @export 
+#' @export
 gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
-                            route_pattern = NULL, hull_alpha = 0.1, quiet = FALSE)
+                            route_pattern = NULL, hull_alpha = 0.1,
+                            quiet = FALSE)
 {
     requireNamespace ("geodist")
     requireNamespace ("lwgeom")
@@ -117,7 +118,8 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
         trips <- gtfs$trips [match (trip_ids [[i]], gtfs$trips [, trip_id]), ]
         data.frame (cbind (stops [, c ("stop_id", "stop_name", "parent_station",
                                        "stop_lon", "stop_lat")]),
-                    cbind (trips [, c ("route_id", "trip_id", "trip_headsign")]))
+                    cbind (trips [, c ("route_id", "trip_id",
+                                       "trip_headsign")]))
                    })
 
     list (isotrips = isotrips,
@@ -125,7 +127,8 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
           end_time = actual_start_time + end_time - start_time)
 }
 
-# convert list of data.frames of stops and trips into sf linestrings for each route
+# convert list of data.frames of stops and trips into sf linestrings for each
+# route
 route_to_linestring <- function (x)
 {
     # split each route into trip IDs
@@ -273,7 +276,8 @@ plot.gtfs_isochrone <- function (x, ...)
     m <- mapview::addFeatures (m, x$routes, colour = "blue")
     m <- mapview::addFeatures (m, x$start_point, radius = 5, color = "green")
     m <- mapview::addFeatures (m, x$end_points, radius = 4, color = "red",
-                               fill = TRUE, fillOpacity = 0.8, fillColor = "red")
+                               fill = TRUE, fillOpacity = 0.8,
+                               fillColor = "red")
 
     print (m)
     invisible (m)

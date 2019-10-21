@@ -47,24 +47,24 @@
 #' to <- "Alexanderplatz"
 #' start_time <- 12 * 3600 + 120 # 12:02
 #' route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time)
-#' 
+#'
 #' # Specify day of week
 #' route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time,
 #'                      day = "Sunday")
-#' 
+#'
 #' # specify travel by "U" = underground only
 #' route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time,
 #'                      day = "Sunday", route_pattern = "^U")
 #' # specify travel by "S" = street-level only (not underground)
 #' route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time,
 #'                      day = "Sunday", route_pattern = "^S")
-#' 
+#'
 #' # Route queries are generally faster if the GTFS data are pre-processed with
 #' # `gtfs_timetable()`:
 #' gt <- gtfs_timetable (gtfs, day = "Sunday", route_pattern = "^S")
 #' route <- gtfs_route (gt, from = from, to = to, start_time = start_time)
 #'
-#' @export 
+#' @export
 gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
                         route_pattern = NULL, earliest_arrival = TRUE,
                         include_ids = FALSE, max_transfers = NA, quiet = FALSE)
@@ -102,8 +102,8 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
         end_stns <- station_name_to_ids (from, gtfs_cp)
         start_time <- 0
         res_e <- tryCatch (
-                           gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time,
-                                        include_ids, max_transfers),
+                           gtfs_route1 (gtfs_cp, start_stns, end_stns,
+                                        start_time, include_ids, max_transfers),
                            error = function (e) NULL)
         if (!is.null (res_e))
             res <- res_e
@@ -159,7 +159,7 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
     res <- res [, col_order]
 
     if (all (is.na (res$trip_name)))
-        res$trip_name <- NULL
+        res$trip_name <- NULL # nocov
 
     return (res)
 }
@@ -190,11 +190,13 @@ map_one_trip <- function (gtfs, route, route_name = "")
 
     trip_stops <- gtfs$stop_times [trip_id == route_name, ]
     trip_stop_num <- match (trip_stops [, stop_id], gtfs$stop_ids [, stop_ids])
-    trip_stop_num <- trip_stop_num [which (trip_stop_num %in% route$stop_number)]
+    trip_stop_num <- trip_stop_num [which (trip_stop_num %in%
+                                           route$stop_number)]
     trip_stop_id <- gtfs$stop_ids [trip_stop_num, stop_ids]
     trip_stop_names <- gtfs$stops [match (trip_stop_id, gtfs$stops [, stop_id]),
                                    stop_name]
-    trip_stops <- trip_stops [which (trip_stops [, stop_id %in% trip_stop_id]), ]
+    trip_stops <- trip_stops [which (trip_stops [, stop_id %in%
+                                     trip_stop_id]), ]
     trip_stop_departure <- format_time (trip_stops [, departure_time])
     trip_stop_arrival <- format_time (trip_stops [, arrival_time])
     data.frame (trip_id = route_name,
