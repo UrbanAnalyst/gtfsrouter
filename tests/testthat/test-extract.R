@@ -10,6 +10,7 @@ test_that ("extract non gtfs", {
 
               msg <- paste0 (fz, " does not appear to be a GTFS file")
               expect_error (g <- extract_gtfs (fz), msg)
+              invisible (file.remove (fz))
 })
 
 test_that ("extract", {
