@@ -1,5 +1,17 @@
 context("summary")
 
+test_that ("extract non gtfs", {
+              f <- file.path (tempdir (), "junk.txt")
+              con <- file (f)
+              writeLines ("blah", con)
+              close (con)
+              fz <- file.path (tempdir (), "vbb.zip")
+              chk <- zip (fz, file = f)
+
+              msg <- paste0 (fz, " does not appear to be a GTFS file")
+              expect_error (g <- extract_gtfs (fz), msg)
+})
+
 test_that ("extract", {
               berlin_gtfs_to_zip ()
               f <- file.path (tempdir (), "vbb.zip")
