@@ -25,26 +25,31 @@ extract_gtfs <- function (filename = NULL)
         from_stop_id <- to_stop_id <- trip_id <- `:=` <- # nolint
         routes <- stops <- stop_times <- trips <- NULL
 
-    flist <- utils::unzip (filename, list = TRUE)
+    #flist <- utils::unzip (filename, list = TRUE)
+    # the fread(cmd = paste0 ("unzip -p ..")) stuff is not portable, and has
+    # issues on windows, so unzip all into tempdir and work from there
+    flist <- utils::unzip (filename, exdir = tempdir ())
 
     # GTFS **must** contain "agency", "stops", "routes", "trips", and
     # "stop_times", but "agency" is not used here, so
     need_these_files <- c ("routes", "stops", "stop_times", "trips")
     checks <- vapply (need_these_files, function (i)
-                      any (grepl (paste0 (i, ".txt"), flist$Name)), logical (1))
+                      any (grepl (paste0 (i, ".txt"), flist)), logical (1))
     if (!all (checks))
         stop (filename, " does not appear to be a GTFS file; ",
               "it must minimally contain\n  ",
               paste (need_these_files, collapse = ", "))
     missing_transfers <- type_missing (flist, "transfers")
 
-    for (f in flist$Name)
+    for (f in flist)
     {
-        fout <- data.table::fread (cmd = paste0 ("unzip -p ", filename,
-                                                 " \"", f, "\""),
-                                   integer64 = "character",
-                                   showProgress = FALSE)
+        #fout <- data.table::fread (cmd = paste0 ("unzip -p ", filename,
+        #                                         " \"", f, "\""),
+        #                           integer64 = "character",
+        #                           showProgress = FALSE)
+        fout <- data.table::fread (f, integer64 = "character")
         assign (gsub (".txt", "", basename (f)), fout, pos = -1)
+        chk <- file.remove (f)
     }
     if (nrow (routes) == 0 | nrow (stops) == 0 | nrow (stop_times) == 0 |
         nrow (trips) == 0)
@@ -91,7 +96,7 @@ extract_gtfs <- function (filename = NULL)
 
     trips <- trips [, trip_id := paste0 (trip_id)]
 
-    objs <- gsub (".txt", "", basename (flist$Name))
+    objs <- gsub (".txt", "", basename (flist))
     # Note: **NOT** lapply (objs, get)!!
     # https://stackoverflow.com/questions/18064602/why-do-i-need-to-wrap-get-in-a-dummy-function-within-a-j-lapply-call #nolint
     res <- lapply (objs, function (i) get (i))
@@ -109,7 +114,7 @@ type_missing <- function (flist, type)
     ret <- FALSE
     type <- paste0 (type, ".txt")
 
-    if (!any (grepl (type, flist$Name)))
+    if (!any (grepl (type, flist)))
     {
         warning (paste ("This feed contains no", type), call. = FALSE)
         ret <- TRUE
