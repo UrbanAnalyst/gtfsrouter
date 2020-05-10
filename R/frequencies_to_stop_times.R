@@ -12,11 +12,26 @@
 #' @export
 frequencies_to_stop_times <- function(gtfs)  
 {
+    # check if gtfs is a gtfs class of object
+    if (class(gtfs)[1] != "gtfs")
+        stop ("selected object does not appear to be a GTFS file")
+    
     # test if gtfs contains no empty `frequencies`
     if (!("frequencies" %in% names (gtfs)))
-        stop ("gtfs does not contains frequencies.txt")
+        stop ("selected gtfs does not contain frequencies")
     if (nrow (gtfs$frequencies) == 0)
-        stop ("frequencies.txt exists but it is empty")
+        stop ("frequencies table is empty")
+    
+    # frequencies must contain required columns:
+    # "trip_id" ,"start_time","end_time","headway_secs"
+    need_these_columns <- c("trip_id" ,"start_time","end_time","headway_secs")
+    checks <- vapply (need_these_columns, function (i)
+        any (grepl (i, names(gtfs$frequencies))), logical (1))
+
+    if (!all (checks))
+        stop ("frequencies must contain all required columns:\n  ",
+              paste (need_these_columns, collapse = ", "))
+
     
     # IMPORTANT: data.table works entirely by reference, so all operations
     # change original values unless first copied! This function thus returns a
@@ -41,7 +56,7 @@ frequencies_to_stop_times <- function(gtfs)
         
         # order frequencies table by trip_id and start_time
         frequencies_trip <- gtfs_cp$frequencies [order (trip_id, start_time)] [trip_id == trip]
-        
+
         # in case end_time of the previous period and start_time of the next are equal:
         frequencies_trip [end_time == data.table::shift (start_time, 1, type = "lead"), end_time := end_time - 1]
         
