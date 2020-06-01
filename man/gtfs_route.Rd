@@ -4,9 +4,18 @@
 \alias{gtfs_route}
 \title{gtfs_route}
 \usage{
-gtfs_route(gtfs, from, to, start_time = NULL, day = NULL,
-  route_pattern = NULL, earliest_arrival = TRUE, include_ids = FALSE,
-  max_transfers = NA, quiet = FALSE)
+gtfs_route(
+  gtfs,
+  from,
+  to,
+  start_time = NULL,
+  day = NULL,
+  route_pattern = NULL,
+  earliest_arrival = TRUE,
+  include_ids = FALSE,
+  max_transfers = NA,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more

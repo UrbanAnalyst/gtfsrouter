@@ -1,10 +1,10 @@
 #' extract_gtfs
 #'
-#' Extract "stop_times" and "transfers" table from a GTFS `zip` archive.
+#' Extract data from a GTFS `zip` archive.
 #'
 #' @param filename Name of GTFS archive
-#' @return List of 2 \pkg{data.table} objects, one for "stop_times" and one for
-#' "transfers"
+#' @return List of several \pkg{data.table} objects corresponding to the tables
+#' present in the nominated GTFS data set.
 #' @importFrom data.table :=
 #'
 #' @examples

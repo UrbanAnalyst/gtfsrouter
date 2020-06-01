@@ -4,8 +4,16 @@
 \alias{gtfs_isochrone}
 \title{gtfs_isochrone}
 \usage{
-gtfs_isochrone(gtfs, from, start_time, end_time, day = NULL,
-  route_pattern = NULL, hull_alpha = 0.1, quiet = FALSE)
+gtfs_isochrone(
+  gtfs,
+  from,
+  start_time,
+  end_time,
+  day = NULL,
+  route_pattern = NULL,
+  hull_alpha = 0.1,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more

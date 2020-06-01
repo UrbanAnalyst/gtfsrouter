@@ -10,11 +10,11 @@ extract_gtfs(filename = NULL)
 \item{filename}{Name of GTFS archive}
 }
 \value{
-List of 2 \pkg{data.table} objects, one for "stop_times" and one for
-"transfers"
+List of several \pkg{data.table} objects corresponding to the tables
+present in the nominated GTFS data set.
 }
 \description{
-Extract "stop_times" and "transfers" table from a GTFS \code{zip} archive.
+Extract data from a GTFS \code{zip} archive.
 }
 \examples{
 berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir

@@ -36,5 +36,5 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/ATFutures/gtfs-router
 BugReports: https://github.com/ATFutures/gtfs-router/issues
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Roxygen: list(markdown = TRUE)

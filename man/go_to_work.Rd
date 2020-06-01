@@ -36,7 +36,7 @@ each session, in which case the variables may be set with:
 \code{Sys.setenv ("gtfs_work" = "<my work station>")}
 \code{Sys.setenv ("gtfs_data" = "/full/path/to/gtfs.zip")}
 Alternatively, to set these automatically for each session, paste those lines
-into the file \code{~/.Renviron} - that is, a file named ".Renviron" in the user's
+into the file \verb{~/.Renviron} - that is, a file named ".Renviron" in the user's
 home directory.
 
 The \link{process_gtfs_local} function reduces the GTFS data set to the

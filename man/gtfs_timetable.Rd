@@ -4,8 +4,13 @@
 \alias{gtfs_timetable}
 \title{gtfs_timetable}
 \usage{
-gtfs_timetable(gtfs, day = NULL, date = NULL, route_pattern = NULL,
-  quiet = FALSE)
+gtfs_timetable(
+  gtfs,
+  day = NULL,
+  date = NULL,
+  route_pattern = NULL,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs}.}

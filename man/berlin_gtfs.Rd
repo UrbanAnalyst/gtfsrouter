@@ -4,7 +4,8 @@
 \name{berlin_gtfs}
 \alias{berlin_gtfs}
 \title{berlin_gtfs}
-\format{A list of five \pkg{data.table} items necessary for routing:
+\format{
+A list of five \pkg{data.table} items necessary for routing:
 \itemize{
 \item calendar
 \item routes
@@ -12,7 +13,8 @@
 \item stop_times
 \item stops
 \item transfers
-}}
+}
+}
 \value{
 square matrix of distances between nodes
 }
