@@ -224,7 +224,7 @@ Sys.setenv ("gtfs_data" = file.path (tempdir (), "vbb.zip"))
 process_gtfs_local () # If not already done
 go_home (start_time = "12:20") # next available service
 ```
-The complentary function, `go_to_work()` routes in the reverse direction. These
+The complementary function, `go_to_work()` routes in the reverse direction. These
 functions are intended to allow real-time queries of public transport schedules
 from within the comfort of an **R** session, and will generally be much quicker
 -- and hopefully easier -- than the arguably burdensome necessity of switching
@@ -251,7 +251,7 @@ search for connections in the other direction.
 
 An even easier way to use these functions is to automatically load those
 environmental variables at the start of each **R** session, which can be
-acheived simply by creating a file named `.Renviron` in the user's root
+achieved simply by creating a file named `.Renviron` in the user's root
 directory (or opening if it already exists), and pasting or appending the
 definitions to that file - in this case, without the **R**-specific
 `Sys.setenv()` calls:
