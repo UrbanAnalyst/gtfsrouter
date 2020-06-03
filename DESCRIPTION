@@ -4,7 +4,10 @@ Version: 0.0.1.003
 Authors@R: c(
     person("Mark", "Padgham",
             email="mark.padgham@email.com",
-            role=c("aut", "cre")))
+            role=c("aut", "cre")),
+    person(given = "Marcin", family = "Stepniak",
+           email = "marcinstepniak@ucm.es",
+           role = "aut", comment = c(ORCID = "0000-0002-6489-5443")))
 Description: Use GTFS (General Transit Feed Specification) data for routing from
     nominated start and end stations, and for extracting isochrones from
     nominated start station.
@@ -36,5 +39,5 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/ATFutures/gtfs-router
 BugReports: https://github.com/ATFutures/gtfs-router/issues
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Roxygen: list(markdown = TRUE)
