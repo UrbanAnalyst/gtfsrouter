@@ -10,9 +10,10 @@ frequencies_to_stop_times(gtfs)
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs}.}
 }
 \value{
-The input gtfs data with data from \code{frequencies} replaced by
-arrival_time and departure_time in \code{stop_times}
+The input GTFS data with data from the 'frequencies' table converted
+to equivalent 'arrival_time' and 'departure_time' values in \code{stop_times}.
 }
 \description{
-Convert gtfs frequencies to stop_times
+Convert a GTFS 'frequencies' table to equivalent 'stop_times' that can be
+used for routing.
 }
