@@ -44,7 +44,7 @@ minimal possible size necessary for local routing.  GTFS data are
 nevertheless typically quite large, and both the \link{go_home} and
 \link{go_to_work} functions may take some time to execute. Most of this time
 is devoted to loading the data in to the current workspace and as such is
-largley unavoidable.
+largely unavoidable.
 }
 \examples{
 \dontrun{
