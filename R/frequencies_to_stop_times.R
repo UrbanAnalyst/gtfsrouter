@@ -27,6 +27,9 @@ frequencies_to_stop_times <- function(gtfs)
     need_these_columns <- c("trip_id" ,"start_time","end_time","headway_secs")
     checks <- vapply (need_these_columns, function (i)
         any (grepl (i, names(gtfs$frequencies))), logical (1))
+    
+    arrival_time <- departure_time <- end_time <-
+        start_time <- stop_sequence <- trip_id <- trip_id_f <- NULL
 
     if (!all (checks))
         stop ("frequencies must contain all required columns:\n  ",
