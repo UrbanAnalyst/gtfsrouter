@@ -19,3 +19,4 @@ scripts/
 vbb/
 ^vbb*
 ^codemeta\.json$
+^\.github$
