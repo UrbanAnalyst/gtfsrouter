@@ -14,10 +14,10 @@
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.1",
+    "version": "4.0.0",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.1 (2019-07-05)",
+  "runtimePlatform": "R version 4.0.0 (2020-04-24)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -30,6 +30,13 @@
       "givenName": "Mark",
       "familyName": "Padgham",
       "email": "mark.padgham@email.com"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Marcin",
+      "familyName": "Stepniak",
+      "email": "marcinstepniak@ucm.es",
+      "@id": "https://orcid.org/0000-0002-6489-5443"
     }
   ],
   "contributor": {},
@@ -213,10 +220,14 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "https://sysreqs.r-hub.io/get/cxx11"
     }
   ],
   "readme": "https://github.com/ATFutures/gtfs-router/blob/master/README.md",
-  "fileSize": "874.265KB",
+  "fileSize": "53403.493KB",
   "contIntegration": [
     "https://travis-ci.org/ATFutures/gtfs-router",
     "https://ci.appveyor.com/project/ATFutures/gtfs-router",
@@ -230,5 +241,6 @@
     "gtfs-router",
     "r-package"
   ],
-  "relatedLink": "https://CRAN.R-project.org/package=gtfsrouter"
+  "relatedLink": "https://CRAN.R-project.org/package=gtfsrouter",
+  "releaseNotes": "https://github.com/ATFutures/gtfs-router/blob/master/NEWS.md"
 }
