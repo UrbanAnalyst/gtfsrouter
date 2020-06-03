@@ -18,7 +18,7 @@ A \code{data.frame} specifying the next available route from work to home.
 }
 \description{
 Use local environmental variables specifying home and work stations and
-locations of locally-stored GTFS data to route from home to work locationn
+locations of locally-stored GTFS data to route from home to work location
 with next available service.
 }
 \details{
@@ -44,7 +44,7 @@ minimal possible size necessary for local routing.  GTFS data are
 nevertheless typically quite large, and both the \link{go_home} and
 \link{go_to_work} functions may take some time to execute. Most of this time
 is devoted to loading the data in to the current workspace and as such is
-largley unavoidable.
+largely unavoidable.
 }
 \examples{
 \dontrun{
