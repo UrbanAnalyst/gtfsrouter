@@ -14,8 +14,8 @@ addons:
 matrix:
     include:
         - r: release
-          after_success:
-              - Rscript -e "covr::codecov(function_exclusions='plot.gtfs_isochrone')"
+          #after_success:
+          #    - Rscript -e "covr::codecov(function_exclusions='plot.gtfs_isochrone')"
           before_deploy: Rscript -e 'remotes::install_cran("pkgdown")'
           deploy:
               provider: script
@@ -38,5 +38,5 @@ notifications:
     on_success: change
     on_failure: change
 
-r_packages:
-      - covr
+    #r_packages:
+    #  - covr
