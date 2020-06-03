@@ -31,7 +31,7 @@
 #' nevertheless typically quite large, and both the \link{go_home} and
 #' \link{go_to_work} functions may take some time to execute. Most of this time
 #' is devoted to loading the data in to the current workspace and as such is
-#' largley unavoidable.
+#' largely unavoidable.
 #'
 #' @return A `data.frame` specifying the next available route from work to home.
 #' @examples
@@ -64,7 +64,7 @@ go_home <- function (wait = 0, start_time)
 #' go_to_work
 #'
 #' Use local environmental variables specifying home and work stations and
-#' locations of locally-stored GTFS data to route from home to work locationn
+#' locations of locally-stored GTFS data to route from home to work location
 #' with next available service.
 #'
 #' @inherit go_home return params
