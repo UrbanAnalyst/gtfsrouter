@@ -5,7 +5,9 @@
 #'
 #' @param gtfs A set of GTFS data returned from \link{extract_gtfs} or, for more
 #' efficient queries, pre-processed with \link{gtfs_timetable}.
-#' @param from Name of start station
+#' @param from Name, ID, or approximate (lon, lat) coordinates of start station
+#' (as `stop_name` or `stop_id` entry in the `stops` table, or a vector of two
+#' numeric values).
 #' @param start_time Desired departure time at `from` station, either in seconds
 #' after midnight, a vector of two or three integers (hours, minutes) or (hours,
 #' minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
