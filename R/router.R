@@ -171,7 +171,9 @@ station_name_to_ids <- function (stn_name, gtfs)
     # no visible binding notes:
     stop_name <- stop_id <- stop_ids <- stations <- NULL
 
-    ret <- gtfs$stops [grep (stn_name, gtfs$stops [, stop_name]), ] [, stop_id]
+
+    index <- grep (stn_name, gtfs$stops [, stop_name], fixed = TRUE)
+    ret <- gtfs$stops [index, ] [, stop_id]
     ret <- match (ret, gtfs$stop_ids [, stop_ids])
     if (length (ret) == 0)
         stop (stn_name, " does not match any stations")
