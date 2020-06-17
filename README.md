@@ -1,3 +1,5 @@
+[![R build
+status](https://github.com/atfutures/gtfs-router/workflows/R-CMD-check/badge.svg)](https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check)
 [![Build
 Status](https://travis-ci.org/ATFutures/gtfs-router.svg)](https://travis-ci.org/ATFutures/gtfs-router)
 [![AppVeyor Build
@@ -31,7 +33,7 @@ library(gtfsrouter)
 packageVersion("gtfsrouter")
 ```
 
-    ## [1] '0.0.1'
+    ## [1] '0.0.1.3'
 
 ## Main functions
 
@@ -47,7 +49,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/Rtmpz6vX0h/vbb.zip"
+    ## [1] "/tmp/Rtmphw1fa9/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
