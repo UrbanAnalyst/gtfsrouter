@@ -20,7 +20,9 @@ gtfs_isochrone(
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
 efficient queries, pre-processed with \link{gtfs_timetable}.}
 
-\item{from}{Name of start station}
+\item{from}{Name, ID, or approximate (lon, lat) coordinates of start station
+(as \code{stop_name} or \code{stop_id} entry in the \code{stops} table, or a vector of two
+numeric values).}
 
 \item{start_time}{Desired departure time at \code{from} station, either in seconds
 after midnight, a vector of two or three integers (hours, minutes) or (hours,

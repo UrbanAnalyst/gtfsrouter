@@ -5,8 +5,10 @@
 #'
 #' @param gtfs A set of GTFS data returned from \link{extract_gtfs} or, for more
 #' efficient queries, pre-processed with \link{gtfs_timetable}.
-#' @param from Name of start station
-#' @param to Name of end station
+#' @param from Name, ID, or approximate (lon, lat) coordinates of start station
+#' (as `stop_name` or `stop_id` entry in the `stops` table, or a vector of two
+#' numeric values).
+#' @param to Name or ID of end station
 #' @param start_time Desired departure time at `from` station, either in seconds
 #' after midnight, a vector of two or three integers (hours, minutes) or (hours,
 #' minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
@@ -177,7 +179,19 @@ station_name_to_ids <- function (stn_name, gtfs, from_to_are_ids)
 
 
     ret <- stn_name
-    if (!from_to_are_ids)
+    if (is.numeric (stn_name))
+    {
+        if (length (stn_name) != 2)
+            stop ("Numeric (from, to) values must have two values for (lon, lat)")
+        requireNamespace ("geodist")
+        names (stn_name) <- c ("lon", "lat")
+        d <- geodist::geodist (stn_name, gtfs$stops)
+        # One stop name can have several IDs, each of which need to be extracted
+        # here:
+        ret <- gtfs$stops [which.min (d), ] [, stop_name]
+        ret <- gtfs$stops [stop_name == ret, ] [, stop_id]
+    }
+    else if (!from_to_are_ids)
     {
         index <- grep (stn_name, gtfs$stops [, stop_name], fixed = TRUE)
         ret <- gtfs$stops [index, ] [, stop_id]
