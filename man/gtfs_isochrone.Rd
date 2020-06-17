@@ -10,6 +10,7 @@ gtfs_isochrone(
   start_time,
   end_time,
   day = NULL,
+  from_is_id = FALSE,
   route_pattern = NULL,
   hull_alpha = 0.1,
   quiet = FALSE
@@ -33,6 +34,10 @@ unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
 between 1 = Sunday and 7 = Saturday. If not given, the current day will be
 used. (Not used if \code{gtfs} has already been prepared with
 \link{gtfs_timetable}.)}
+
+\item{from_is_id}{Set to \code{TRUE} to enable \code{from} parameter to specify entry
+in \code{stop_id} rather than \code{stop_name} column of the \code{stops} table (same as
+\code{from_to_are_ids} parameter of \link{gtfs_route}).}
 
 \item{route_pattern}{Using only those routes matching given pattern, for
 example, "^U" for routes starting with "U" (as commonly used for underground
