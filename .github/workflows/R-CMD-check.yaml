@@ -67,6 +67,7 @@ jobs:
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
           install.packages("lwgeom") # not auto-installed with sf
+          install.packages("units") # not auto-installed with sf
         shell: Rscript {0}
 
       - name: Session info
