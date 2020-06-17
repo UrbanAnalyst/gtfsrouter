@@ -14,6 +14,7 @@ gtfs_route(
   earliest_arrival = TRUE,
   include_ids = FALSE,
   max_transfers = NA,
+  from_to_are_ids = FALSE,
   quiet = FALSE
 )
 }
@@ -52,6 +53,10 @@ GTFS-specific identifiers for routes, trips, and stops.}
 
 \item{max_transfers}{If not \code{NA}, specify a maximum number of transfers
 (including but not exceeding this number) for the route.}
+
+\item{from_to_are_ids}{Set to \code{TRUE} to enable \code{from} and \code{to} parameter to
+specify entries in \code{stop_id} rather than \code{stop_name} column of the \code{stops}
+table.}
 
 \item{quiet}{Set to \code{TRUE} to suppress screen messages (currently just
 regarding timetable construction).}

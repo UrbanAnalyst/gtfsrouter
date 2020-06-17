@@ -29,6 +29,9 @@
 #' GTFS-specific identifiers for routes, trips, and stops.
 #' @param max_transfers If not `NA`, specify a maximum number of transfers
 #' (including but not exceeding this number) for the route.
+#' @param from_to_are_ids Set to `TRUE` to enable `from` and `to` parameter to
+#' specify entries in `stop_id` rather than `stop_name` column of the `stops`
+#' table.
 #' @param quiet Set to `TRUE` to suppress screen messages (currently just
 #' regarding timetable construction).
 #'
@@ -67,7 +70,8 @@
 #' @export
 gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
                         route_pattern = NULL, earliest_arrival = TRUE,
-                        include_ids = FALSE, max_transfers = NA, quiet = FALSE)
+                        include_ids = FALSE, max_transfers = NA,
+                        from_to_are_ids = FALSE, quiet = FALSE)
 {
     # no visible binding note:
     departure_time <- NULL
@@ -88,8 +92,8 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
         stop ("There are no scheduled services after that time.")
 
     stations <- NULL # no visible binding note
-    start_stns <- station_name_to_ids (from, gtfs_cp)
-    end_stns <- station_name_to_ids (to, gtfs_cp)
+    start_stns <- station_name_to_ids (from, gtfs_cp, from_to_are_ids)
+    end_stns <- station_name_to_ids (to, gtfs_cp, from_to_are_ids)
 
     res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time,
                         include_ids, max_transfers)
@@ -98,8 +102,8 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
     {
         arrival_time <- max_arrival_time (res)
         gtfs_cp$timetable <- reverse_timetable (gtfs_cp$timetable, arrival_time)
-        start_stns <- station_name_to_ids (to, gtfs_cp) # reversed!
-        end_stns <- station_name_to_ids (from, gtfs_cp)
+        start_stns <- station_name_to_ids (to, gtfs_cp, from_to_are_ids) # reversed!
+        end_stns <- station_name_to_ids (from, gtfs_cp, from_to_are_ids)
         start_time <- 0
         res_e <- tryCatch (
                            gtfs_route1 (gtfs_cp, start_stns, end_stns,
@@ -166,14 +170,18 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
 
 # names generally match to multiple IDs, each of which is returned here, as
 # 0-indexed IDs into gtfs$stations
-station_name_to_ids <- function (stn_name, gtfs)
+station_name_to_ids <- function (stn_name, gtfs, from_to_are_ids)
 {
     # no visible binding notes:
     stop_name <- stop_id <- stop_ids <- stations <- NULL
 
 
-    index <- grep (stn_name, gtfs$stops [, stop_name], fixed = TRUE)
-    ret <- gtfs$stops [index, ] [, stop_id]
+    ret <- stn_name
+    if (!from_to_are_ids)
+    {
+        index <- grep (stn_name, gtfs$stops [, stop_name], fixed = TRUE)
+        ret <- gtfs$stops [index, ] [, stop_id]
+    }
     ret <- match (ret, gtfs$stop_ids [, stop_ids])
     if (length (ret) == 0)
         stop (stn_name, " does not match any stations")
