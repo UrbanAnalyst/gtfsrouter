@@ -11,6 +11,9 @@
 #' minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
 #' \pkg{lubridate}.
 #' @param end_time End time to calculate isochrone
+#' @param from_is_id Set to `TRUE` to enable `from` parameter to specify entry
+#' in `stop_id` rather than `stop_name` column of the `stops` table (same as
+#' `from_to_are_ids` parameter of \link{gtfs_route}).
 #' @param route_pattern Using only those routes matching given pattern, for
 #' example, "^U" for routes starting with "U" (as commonly used for underground
 #' or subway routes. (Parameter not used at all if `gtfs` has already been
@@ -45,8 +48,8 @@
 #' }
 #' @export
 gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
-                            route_pattern = NULL, hull_alpha = 0.1,
-                            quiet = FALSE)
+                            from_is_id = FALSE, route_pattern = NULL,
+                            hull_alpha = 0.1, quiet = FALSE)
 {
     requireNamespace ("geodist")
     requireNamespace ("lwgeom")
@@ -66,7 +69,7 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
         stop ("There are no scheduled services after that time.")
 
     stations <- NULL # no visible binding note
-    start_stns <- station_name_to_ids (from, gtfs_cp)
+    start_stns <- station_name_to_ids (from, gtfs_cp, from_is_id)
 
     isotrips <- get_isotrips (gtfs_cp, start_stns, start_time, end_time)
 
