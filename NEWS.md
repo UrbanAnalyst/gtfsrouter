@@ -13,4 +13,5 @@ Minor changes:
 - `gtfs_isochrone` accepts equivalent `stop_id` values via `from_is_id` parameter.
 - both `gtfs_route` and `gtfs_isochrone` accept (lon, lat) values for from and
   to stations.
+- `gtfs_isochrone` returns `stop_id` as well as `stop_name` values (#29).
 

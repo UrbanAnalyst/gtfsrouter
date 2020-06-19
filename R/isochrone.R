@@ -79,7 +79,10 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     xy <- as.numeric (isotrips$isotrips [[1]] [1, c ("stop_lon", "stop_lat")])
     startpt <- sf::st_sfc (sf::st_point (xy), crs = 4326)
     nm <- isotrips$isotrips [[1]] [1, "stop_name"]
-    startpt <- sf::st_sf ("stop_name" = nm, geometry = startpt)
+    id <- isotrips$isotrips [[1]] [1, "stop_id"]
+    startpt <- sf::st_sf ("stop_name" = nm,
+                          "stop_id" = id,
+                          geometry = startpt)
 
     hull <- NULL
     if (length (isotrips$isotrips) > 1)
@@ -177,7 +180,11 @@ route_endpoints <- function (x)
     g <- sf::st_as_sf (xy, coords = 1:2, crs = 4326)$geometry
     nms <- vapply (x, function (i)
                   i [nrow (i), "stop_name"], character (1))
-    sf::st_sf ("stop_name" = nms, geometry = g)
+    ids <- vapply (x, function (i)
+                  i [nrow (i), "stop_id"], character (1))
+    sf::st_sf ("stop_name" = nms,
+               "stop_id" = ids,
+               geometry = g)
 }
 
 route_midpoints <- function (x)
@@ -189,7 +196,11 @@ route_midpoints <- function (x)
     g <- sf::st_as_sf (xy, coords = 1:2, crs = 4326)$geometry
     nms <- lapply (x, function (i)
                   i [2:(nrow (i) - 1), "stop_name"])
-    sf::st_sf ("stop_name" = do.call (c, nms), geometry = g)
+    ids <- lapply (x, function (i)
+                  i [2:(nrow (i) - 1), "stop_id"])
+    sf::st_sf ("stop_name" = do.call (c, nms),
+               "stop_id" = do.call (c, ids),
+               geometry = g)
 }
 
 # x is isolines
