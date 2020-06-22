@@ -3,6 +3,7 @@
 #' Extract data from a GTFS `zip` archive.
 #'
 #' @param filename Name of GTFS archive
+#' @param quiet If `FALSE`, display progress information on screen
 #' @return List of several \pkg{data.table} objects corresponding to the tables
 #' present in the nominated GTFS data set.
 #' @importFrom data.table :=
@@ -13,7 +14,7 @@
 #' gtfs <- extract_gtfs (f)
 #'
 #' @export
-extract_gtfs <- function (filename = NULL)
+extract_gtfs <- function (filename = NULL, quiet = FALSE)
 {
     if (is.null (filename))
         stop ("filename must be given")
@@ -28,7 +29,14 @@ extract_gtfs <- function (filename = NULL)
     #flist <- utils::unzip (filename, list = TRUE)
     # the fread(cmd = paste0 ("unzip -p ..")) stuff is not portable, and has
     # issues on windows, so unzip all into tempdir and work from there
+
+    if (!quiet)
+        message (cli::symbol$play, cli::col_green (" Unzipping GTFS archive"),
+                 appendLF = FALSE)
     flist <- utils::unzip (filename, exdir = tempdir ())
+    if (!quiet)
+        message ("\r", cli::col_green (cli::symbol$tick,
+                                       " Unzipped GTFS archive  "))
 
     # GTFS **must** contain "agency", "stops", "routes", "trips", and
     # "stop_times", but "agency" is not used here, so
@@ -41,16 +49,21 @@ extract_gtfs <- function (filename = NULL)
               paste (need_these_files, collapse = ", "))
     missing_transfers <- type_missing (flist, "transfers")
 
-    for (f in flist)
+    if (!quiet)
+        message (cli::symbol$play, cli::col_green (" Extracting GTFS feed"),
+                 appendLF = FALSE)
+    for (f in seq (flist))
     {
-        #fout <- data.table::fread (cmd = paste0 ("unzip -p ", filename,
-        #                                         " \"", f, "\""),
-        #                           integer64 = "character",
-        #                           showProgress = FALSE)
-        fout <- data.table::fread (f, integer64 = "character")
-        assign (gsub (".txt", "", basename (f)), fout, pos = -1)
-        chk <- file.remove (f)
+        fout <- data.table::fread (flist [f],
+                                   integer64 = "character",
+                                   showProgress = FALSE)
+        assign (gsub (".txt", "", basename (flist [f])), fout, pos = -1)
+        chk <- file.remove (flist [f])
+
     }
+    if (!quiet)
+        message ("\r", cli::col_green (cli::symbol$tick, " Extracted GTFS feed "))
+
     if (nrow (routes) == 0 | nrow (stops) == 0 | nrow (stop_times) == 0 |
         nrow (trips) == 0)
         stop (filename, " does not appear to be a GTFS file; ",
@@ -76,9 +89,22 @@ extract_gtfs <- function (filename = NULL)
     stops <- stops [index, ]
     stop_times [, stop_id := remove_terminal_sn (stop_times [, stop_id])]
 
+    if (!quiet)
+        message (cli::symbol$play,
+                 cli::col_green (" Converting stop times to seconds"),
+                 appendLF = FALSE)
+
     stop_times [, arrival_time := rcpp_time_to_seconds (arrival_time)]
     stop_times [, departure_time := rcpp_time_to_seconds (departure_time)]
     stop_times [, trip_id := paste0 (trip_id)]
+
+    if (!quiet) {
+        message ("\r", cli::col_green (cli::symbol$tick,
+                                       " Converted stop times to seconds "))
+        message (cli::symbol$play,
+                 cli::col_green (" Converting transfer times to seconds"),
+                 appendLF = FALSE)
+    }
 
     if (!missing_transfers)
     {
@@ -93,6 +119,9 @@ extract_gtfs <- function (filename = NULL)
         transfers [, min_transfer_time :=
                    replace (min_transfer_time, is.na (min_transfer_time), 0)]
     }
+    if (!quiet)
+        message ("\r", cli::col_green (cli::symbol$tick,
+                                       " Converted transfer times to seconds "))
 
     trips <- trips [, trip_id := paste0 (trip_id)]
 

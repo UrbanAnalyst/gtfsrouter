@@ -1,6 +1,6 @@
 Package: gtfsrouter
 Title: Routing with GTFS (General Transit Feed Specification) Data
-Version: 0.0.1.009
+Version: 0.0.1.010
 Authors@R: c(
     person("Mark", "Padgham",
             email="mark.padgham@email.com",
@@ -14,6 +14,7 @@ Description: Use GTFS (General Transit Feed Specification) data for routing from
 License: GPL-3
 Depends: R (>= 2.10)
 Imports:
+    cli,
     data.table,
     methods,
     Rcpp (>= 0.12.6)

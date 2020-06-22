@@ -21,7 +21,7 @@ rcpp_time_to_seconds <- function(times) {
 #'
 #' Calculate isochrones using Connection Scan Algorithm for GTFS data. Works
 #' largely as rcpp_csa. Returns a list of integer vectors, with [i] holding
-#' sequences of stations on a given route, the end on being the terminal
+#' sequences of stations on a given route, the end one being the terminal
 #' isochrone point, and [i+1] holding correpsonding trip numbers.
 #'
 #' @noRd
