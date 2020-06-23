@@ -8,7 +8,7 @@ test_that("convert-time", {
               berlin_gtfs_to_zip ()
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
-              expect_silent (g <- extract_gtfs (f))
+              expect_silent (g <- extract_gtfs (f, quiet = TRUE))
               expect_silent (gt <- gtfs_timetable (g, quiet = TRUE))
               day <- strftime (Sys.time (), "%A")
               msg <- paste0 ("Day not specified; extracting timetable for ",
@@ -71,7 +71,7 @@ test_that ("day param", {
               berlin_gtfs_to_zip ()
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
-              expect_silent (g <- extract_gtfs (f))
+              expect_silent (g <- extract_gtfs (f, quiet = TRUE))
               expect_silent (gt <- gtfs_timetable (g, quiet = TRUE))
               expect_silent (gt <- gtfs_timetable (g, 1, quiet = FALSE))
               expect_error (gt <- gtfs_timetable (g, day = 1.1),

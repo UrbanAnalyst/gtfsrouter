@@ -170,7 +170,7 @@ process_gtfs_local <- function (expand = 2)
 {
     vars <- get_envvars ()
 
-    gtfs <- extract_gtfs (vars$file)
+    gtfs <- extract_gtfs (vars$file, quiet = TRUE)
     gtfs$agency <- NULL
     gtfs$calendar_dates <- NULL
     gtfs$shapes <- NULL

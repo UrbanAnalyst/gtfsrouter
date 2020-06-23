@@ -9,7 +9,7 @@ test_that("gtfs_isochrone", {
               berlin_gtfs_to_zip ()
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
-              expect_silent (g <- extract_gtfs (f))
+              expect_silent (g <- extract_gtfs (f, quiet = TRUE))
               expect_silent (g2 <- gtfs_timetable (g, day = 3, quiet = TRUE))
               start_time <- 12 * 3600 + 1200
               end_time <- start_time + 1200
@@ -45,7 +45,7 @@ test_that("isochrone errors", {
               berlin_gtfs_to_zip ()
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
-              expect_silent (g <- extract_gtfs (f))
+              expect_silent (g <- extract_gtfs (f, quiet = TRUE))
               expect_silent (g <- gtfs_timetable (g, quiet = TRUE))
               expect_error (
               ic <- gtfs_isochrone (g,
