@@ -4,10 +4,12 @@
 \alias{extract_gtfs}
 \title{extract_gtfs}
 \usage{
-extract_gtfs(filename = NULL)
+extract_gtfs(filename = NULL, quiet = FALSE)
 }
 \arguments{
 \item{filename}{Name of GTFS archive}
+
+\item{quiet}{If \code{FALSE}, display progress information on screen}
 }
 \value{
 List of several \pkg{data.table} objects corresponding to the tables
