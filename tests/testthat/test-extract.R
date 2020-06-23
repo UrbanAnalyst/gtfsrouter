@@ -22,7 +22,7 @@ test_that ("extract", {
               berlin_gtfs_to_zip ()
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
-              expect_silent (g <- extract_gtfs (f))
+              expect_message (g <- extract_gtfs (f, quiet = FALSE))
 
               # remove calendar and transfers from feed:
               unzip (file.path (tempdir (), "vbb.zip"), exdir = tempdir (),
@@ -56,7 +56,7 @@ test_that ("extract", {
                           file = c (froutes, ftrips, fstop_times, fstops,
                                     ftransfers))
               # feed contains no calendar.txt, but should still read:
-              expect_silent (g <- extract_gtfs (f_cut))
+              expect_silent (g <- extract_gtfs (f_cut, quiet = TRUE))
 
               x <- capture.output (summary (g))
               expect_equal (length (x), 2)
@@ -74,7 +74,7 @@ test_that("summary", {
               berlin_gtfs_to_zip ()
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
-              expect_silent (g <- extract_gtfs (f))
+              expect_silent (g <- extract_gtfs (f, quiet = TRUE))
 
               x <- capture.output (summary (g))
               expect_equal (length (x), 2)
@@ -90,7 +90,7 @@ test_that ("timetable summary", {
               berlin_gtfs_to_zip ()
               f <- file.path (tempdir (), "vbb.zip")
               expect_true (file.exists (f))
-              expect_silent (g <- extract_gtfs (f))
+              expect_silent (g <- extract_gtfs (f, quiet = TRUE))
               gt <- gtfs_timetable (g, day = 3)
 
               x <- capture.output (summary (gt))
