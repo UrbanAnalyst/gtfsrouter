@@ -20,9 +20,14 @@ reference:
     - berlin_gtfs_to_zip
     - gtfs_timetable
     - process_gtfs_local
+  - title: Data Augmentation
+    contents:
+    - frequencies_to_stop_times
+    - gtfs_transfer_table
   - title: Package data
     contents:
     - berlin_gtfs
+
 
 articles:
   - title: The gtfsrouter package
