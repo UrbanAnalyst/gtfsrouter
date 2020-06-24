@@ -46,6 +46,8 @@ gtfs_transfer_table <- function (gtfs, d_limit = 200, min_transfer_time = 120,
         transfer_times <- transfer_times / 1.111111
     }
 
+    transfer_times [transfer_times < min_transfer_time] <- min_transfer_time
+
     data.table::data.table (from_stop_id = transfers$from,
                             to_stop_id = transfers$to,
                             transfer_type = 2,
