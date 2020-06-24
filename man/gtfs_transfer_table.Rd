@@ -4,12 +4,22 @@
 \alias{gtfs_transfer_table}
 \title{gtfs_transfer_table}
 \usage{
-gtfs_transfer_table(gtfs, d_limit = 200, network = NULL, network_times = FALSE)
+gtfs_transfer_table(
+  gtfs,
+  d_limit = 200,
+  min_transfer_time = 120,
+  network = NULL,
+  network_times = FALSE
+)
 }
 \arguments{
 \item{gtfs}{A GTFS feed obtained from the \link{extract_gtfs} function.}
 
 \item{d_limit}{Upper straight-line distance limit in metres for transfers.}
+
+\item{min_transfer_time}{Minimum time in seconds for transfers; all values
+below this will be replaced with this value, particularly all those defining
+in-place transfers where stop longitudes and latitudes remain identical.}
 
 \item{network}{Optional Open Street Map representation of the street network
 encompassed by the GTFS feed (see Examples).}
