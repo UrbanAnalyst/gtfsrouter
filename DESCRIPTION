@@ -1,6 +1,6 @@
 Package: gtfsrouter
 Title: Routing with GTFS (General Transit Feed Specification) Data
-Version: 0.0.1.010
+Version: 0.0.1.011
 Authors@R: c(
     person("Mark", "Padgham",
             email="mark.padgham@email.com",
@@ -20,6 +20,8 @@ Imports:
     Rcpp (>= 0.12.6)
 Suggests:
     alphahull,
+    digest,
+    dodgr,
     geodist,
     here,
     hms,
@@ -27,6 +29,7 @@ Suggests:
     lwgeom,
     knitr,
     mapview,
+    pbapply,
     rmarkdown,
     sf,
     testthat
