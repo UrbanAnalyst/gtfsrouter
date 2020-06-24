@@ -112,12 +112,26 @@ The isochrone hull also quantifies its total area and width-to-length ratio.
 
 
 
-## GTFS Structure
+## Additional Functionality
 
-For background information, see [`gtfs.org`](http://gtfs.org), and particularly
-their [GTFS
+There are many ways to construct GTFS feeds. For background information, see
+[`gtfs.org`](http://gtfs.org), and particularly their [GTFS
 Examples](https://docs.google.com/document/d/16inL5BVcM1aU-_DcFJay_tC6Ni0wPa0nvQEstueG5k4/edit).
-The VBB is strictly schedule-only, so has no `"frequencies.txt"` file (this file
-defines "service periods", and overrides any schedule information during the
-specified times).
+
+Feeds may include a "frequencies.txt" table which defines "service periods",
+and overrides any schedule information during the specified times. The
+`gtfsrouter` package includes a function,
+[`frequencies_to_stop_times()`](https://atfutures.github.io/gtfs-router/reference/frequencies_to_stop_times.html),
+to convert "frequencies.txt" tables to equivalent "stop_times.txt" entries, to
+enable the feed to be used for routine.
+
+Feeds may also omit a "transfers.txt" table which otherwise defines transfer
+abilities and times between different services. Feeds without this table can
+generally not be used for routing, and they exclude the possibility of
+transferring between multiple services. The `gtfsrouter` package also includes
+a function,
+[`gtfs_transfer_table()`](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html),
+which can calculate a transfer table for a given feed, with transfer times
+calculated either using straight-line distances (the default), or using more
+realistic times routed through the underlying street network.
 
