@@ -4,6 +4,8 @@ Major changes:
 
 - New function `frequencies_to_stop_times` thanks to new co-author @stmarcin
 - Data without `transfers.txt` now load rather than error
+- New function `gtfs_transfer_table` makes transfer table for feeds which
+  contain no such table; see #14
 - Former errors in reading of `zip` archives on Windows OS fixed
 
 Minor changes:

@@ -145,7 +145,12 @@ type_missing <- function (flist, type)
 
     if (!any (grepl (type, flist)))
     {
-        warning (paste ("This feed contains no", type), call. = FALSE)
+        msg <- paste ("This feed contains no", type)
+        if (type == "transfers.txt")
+            msg <- paste (msg,
+                          "\n  A transfers.txt table may be constructed",
+                          "with the 'gtfs_transfer_table' function")
+        warning (msg, call. = FALSE)
         ret <- TRUE
     }
 
