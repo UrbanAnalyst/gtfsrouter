@@ -4,6 +4,9 @@
 #'
 #' @param gtfs A GTFS feed obtained from the \link{extract_gtfs} function.
 #' @param d_limit Upper straight-line distance limit in metres for transfers.
+#' @param min_transfer_time Minimum time in seconds for transfers; all values
+#' below this will be replaced with this value, particularly all those defining
+#' in-place transfers where stop longitudes and latitudes remain identical.
 #' @param network Optional Open Street Map representation of the street network
 #' encompassed by the GTFS feed (see Examples).
 #' @param network_times If `TRUE`, transfer times are calculated by routing
@@ -20,23 +23,20 @@
 #' library (dodgr)
 #' net <- dodgr_streetnet_sc (pts = gtfs$stops [, c ("stop_lon", "stop_lat")])
 #' }
-gtfs_transfer_table <- function (gtfs, d_limit = 200,
+gtfs_transfer_table <- function (gtfs, d_limit = 200, min_transfer_time = 120,
                                  network = NULL, network_times = FALSE) {
     if (is.null (network) & network_times)
         network <- dl_net (gtfs)
 
     stop_service <- join_service_id_to_stops (gtfs)
 
-    requireNamespace ("geodist")
-    d <- geodist::geodist (gtfs$stops [, c ("stop_lon", "stop_lat")],
-                           measure = "haversine")
-    transfers <- get_transfer_list (gtfs, stop_service, d, d_limit)
+    transfers <- get_transfer_list (gtfs, stop_service, d_limit)
 
-    if (network_times)
-        transfer_times <- get_network_times (network, transfers)
-    else {
+    if (network_times) {
         message ("The following stages may take some time. ",
                  "Please be patient.")
+        transfer_times <- get_network_times (network, transfers)
+    } else {
         xyf <- transfers [, c ("from_lon", "from_lat")]
         xyt <- transfers [, c ("to_lon", "to_lat")]
         transfer_times <- geodist::geodist (xyf, xyt, paired = TRUE,
@@ -80,18 +80,45 @@ join_service_id_to_stops <- function (gtfs) {
     return (stop_service)
 }
 
-get_transfer_list <- function (gtfs, stop_service, d, d_limit) {
+get_transfer_list <- function (gtfs, stop_service, d_limit) {
     message (cli::symbol$play,
              cli::col_green (" Finding neighbouring services for each stop"))
 
+    # reduce down to unique (lon, lat) pairs:
+    xy <- gtfs$stops [, c ("stop_lon", "stop_lat")]
+    xy_char <- paste0 (xy$stop_lon, "==", xy$stop_lat)
+    index <- which (!duplicated (xy_char))
+    index_back <- match (xy_char, xy_char [index])
+
+    stops <- gtfs$stops [index, ]
+    requireNamespace ("geodist")
+    d <- geodist::geodist (stops, measure = "haversine")
+
     requireNamespace ("pbapply")
-    transfers <- pbapply::pblapply (seq (nrow (gtfs$stops)), function (i) {
-        stopi <- gtfs$stops$stop_id [i]
-        nbs <- gtfs$stops$stop_id [which (d [i, ] < d_limit)]
+    transfers <- pbapply::pblapply (seq (nrow (stops)), function (i) {
+        stopi <- stops$stop_id [i]
+        nbs <- stops$stop_id [which (d [i, ] < d_limit)]
         services <- unique (stop_service$services [stop_service$stop_id == stopi])
         service_stops <- unique (stop_service$stop_id [stop_service$services %in% services])
         nbs [which (!nbs %in% service_stops)]
     })
+
+    transfers <- transfers [index_back]
+    message (cli::col_green (cli::symbol$tick,
+                             " Found neighbouring services for each stop"))
+
+    # Then append transfers to stops with same (lon, lat) pairs
+    # TODO: Check service IDs, and only include in-place transfers to different
+    # services.
+    message (cli::symbol$play,
+             cli::col_green (" Expanding to include in-place transfers"))
+    sxy <- paste0 (gtfs$stops$stop_lon, "==", gtfs$stops$stop_lat)
+    transfers <- pbapply::pblapply (transfers, function (i) {
+                    index <- which (gtfs$stops$stop_id %in% i)
+                    gtfs$stops$stop_id [which (sxy %in% sxy [index])]
+    })
+
+
 
     names (transfers) <- gtfs$stops$stop_id
     index <- which (vapply (transfers, function (i) length (i) > 0, logical (1)))
@@ -108,7 +135,7 @@ get_transfer_list <- function (gtfs, stop_service, d, d_limit) {
     transfers <- transfers [which (transfers$from != transfers$to), ]
 
     message (cli::col_green (cli::symbol$tick,
-                             " Found neighbouring services for each stop"))
+                             " Expanded to include in-place transfers"))
 
     return (transfers)
 }
