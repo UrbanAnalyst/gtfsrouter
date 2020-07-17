@@ -186,7 +186,7 @@ test_that("gtfs frequencies in gtfs_route", {
   
   #undebug(frequencies_to_stop_times)
   gtfs_freq <- frequencies_to_stop_times(gtfs)
-  gtfs_timetable <- gtfs_timetable(gtfs_freq, day = "Sunday")
+  gtfs_timetable <- gtfs_timetable(gtfs_freq, day = "Monday")
   r <- gtfs_route(gtfs_timetable, "Warschauer", "Prinzenstr", start_time = 8 * 3600 + 10*60)
   
   expect_equal(r[1, "arrival_time"], "08:10:00")
