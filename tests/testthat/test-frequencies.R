@@ -148,7 +148,7 @@ test_that ("gtfs with mixed frequencies", {
                  nrow(gtfs_freq4$stop_times[trip_id %in% trips_U3$trip_id]))
     # line with frequencies should have stop_times multiplied
     expect_lt(nrow(gtfs$stop_times[trip_id == sel_trip_id_U1]),
-              nrow(gtfs_freq4$stop_times[trip_id == sel_trip_id_U1]))
+              nrow(gtfs_freq4$stop_times[grepl(sel_trip_id_U1, trip_id)]))
 })
 
 test_that("gtfs frequencies in gtfs_route", {
@@ -184,7 +184,6 @@ test_that("gtfs frequencies in gtfs_route", {
     end_time = "09:00:00",
     headway_secs = 10 * 60)
   
-  #undebug(frequencies_to_stop_times)
   gtfs_freq <- frequencies_to_stop_times(gtfs)
   gtfs_timetable <- gtfs_timetable(gtfs_freq, day = "Monday")
   r <- gtfs_route(gtfs_timetable, "Warschauer", "Prinzenstr", start_time = 8 * 3600 + 10*60)
