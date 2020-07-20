@@ -5,19 +5,18 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "gtfsrouter",
-  "description": "Use GTFS (General Transit Feed Specification) data for routing from\n    nominated start and end stations, and for extracting isochrones from\n    nominated start station.",
-  "name": "gtfsrouter: Routing with GTFS (General Transit Feed Specification) Data",
+  "description": "Use GTFS (General Transit Feed Specification) data\n    for routing from nominated start and end stations, and for extracting\n    isochrones from nominated start station.",
+  "name": "gtfsrouter: Routing with GTFS (General Transit Feed Specification)\n    Data",
   "codeRepository": "https://github.com/ATFutures/gtfs-router",
   "issueTracker": "https://github.com/ATFutures/gtfs-router/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.1.15",
+  "version": "0.0.1.17",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "4.0.1",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.1 (2020-06-06)",
+  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -39,7 +38,14 @@
       "@id": "https://orcid.org/0000-0002-6489-5443"
     }
   ],
-  "contributor": {},
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Alexandra",
+      "familyName": "Kapp",
+      "email": "alk@mobilityinstitute.com"
+    }
+  ],
   "copyrightHolder": {},
   "funder": {},
   "maintainer": [
@@ -125,6 +131,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "knitr",
+      "name": "knitr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "lubridate",
       "name": "lubridate",
       "provider": {
@@ -146,18 +164,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=lwgeom"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "knitr",
-      "name": "knitr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=knitr"
     },
     {
       "@type": "SoftwareApplication",
@@ -275,12 +281,8 @@
     }
   ],
   "readme": "https://github.com/ATFutures/gtfs-router/blob/master/README.md",
-  "fileSize": "53408.42KB",
-  "contIntegration": [
-    "https://travis-ci.org/ATFutures/gtfs-router",
-    "https://ci.appveyor.com/project/ATFutures/gtfs-router",
-    "https://codecov.io/gh/ATFutures/gtfs-router"
-  ],
+  "fileSize": "60897.174KB",
+  "contIntegration": ["https://travis-ci.org/ATFutures/gtfs-router", "https://codecov.io/gh/ATFutures/gtfs-router"],
   "developmentStatus": "http://www.repostatus.org/#active",
   "keywords": [
     "gtfs",

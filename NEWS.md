@@ -2,7 +2,8 @@
 
 Major changes:
 
-- New function `frequencies_to_stop_times` thanks to new co-author @stmarcin
+- New function `frequencies_to_stop_times` thanks to new co-author @stmarcin,
+  and new contributor @AlexandraKapp
 - Data without `transfers.txt` now load rather than error
 - New function `gtfs_transfer_table` makes transfer table for feeds which
   contain no such table; see #14
@@ -16,4 +17,3 @@ Minor changes:
 - both `gtfs_route` and `gtfs_isochrone` accept (lon, lat) values for from and
   to stations.
 - `gtfs_isochrone` returns `stop_id` as well as `stop_name` values (#29).
-
