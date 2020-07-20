@@ -1,13 +1,16 @@
 Package: gtfsrouter
 Title: Routing with GTFS (General Transit Feed Specification) Data
-Version: 0.0.1.015
+Version: 0.0.1.016
 Authors@R: c(
     person("Mark", "Padgham",
             email="mark.padgham@email.com",
             role=c("aut", "cre")),
     person(given = "Marcin", family = "Stepniak",
            email = "marcinstepniak@ucm.es",
-           role = "aut", comment = c(ORCID = "0000-0002-6489-5443")))
+           role = "aut", comment = c(ORCID = "0000-0002-6489-5443")),
+    person(given = "Alexandra", family = "Kapp",
+            email = "alk@mobilityinstitute.com",
+            role = "ctb"))
 Description: Use GTFS (General Transit Feed Specification) data for routing from
     nominated start and end stations, and for extracting isochrones from
     nominated start station.

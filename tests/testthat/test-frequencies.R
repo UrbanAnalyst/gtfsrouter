@@ -148,5 +148,46 @@ test_that ("gtfs with mixed frequencies", {
                  nrow(gtfs_freq4$stop_times[trip_id %in% trips_U3$trip_id]))
     # line with frequencies should have stop_times multiplied
     expect_lt(nrow(gtfs$stop_times[trip_id == sel_trip_id_U1]),
-              nrow(gtfs_freq4$stop_times[trip_id == sel_trip_id_U1]))
+              nrow(gtfs_freq4$stop_times[grepl(sel_trip_id_U1, trip_id)]))
+})
+
+test_that("gtfs frequencies in gtfs_route", {
+  berlin_gtfs_to_zip()
+  f <- file.path(tempdir(), "vbb.zip")
+  expect_true(file.exists(f))
+  gtfs <- extract_gtfs(f)
+  
+  gtfs$routes <- gtfs$routes[route_short_name %in% c("U1", "U6")]
+  
+  # select only one route wich runs on mondays
+  trips_U1 <- gtfs$trips [(route_id %in% gtfs$routes[route_short_name == "U1"][["route_id"]] )
+                          & (service_id %in% gtfs$calendar[monday == "1"][["service_id"]])]
+  
+  sel_trip_id_U1 <- head(gtfs$stop_times [trip_id %in% trips_U1$trip_id,
+                                          .N,
+                                          by = "trip_id"
+  ][N == max(N), trip_id], 1)
+  
+  gtfs$trips <- gtfs$trips[trip_id %in% c(sel_trip_id_U1)]
+  
+  gtfs$calendar <- gtfs$calendar[service_id %in% gtfs$trips$service_id]
+  gtfs$stop_times <- gtfs$stop_times[trip_id %in% gtfs$trips$trip_id]
+  gtfs$stops <- gtfs$stops[stop_id %in% gtfs$stop_times$stop_id]
+  
+  gtfs$transfers <- gtfs$transfers[from_stop_id %in% gtfs$stops$stop_id &
+                                     to_stop_id %in% gtfs$stops$stop_id]
+  
+  # create frequencies for the route U1
+  gtfs$frequencies <- data.table::data.table(
+    trip_id = sel_trip_id_U1[1],
+    start_time = "08:00:00",
+    end_time = "09:00:00",
+    headway_secs = 10 * 60)
+  
+  gtfs_freq <- frequencies_to_stop_times(gtfs)
+  gtfs_timetable <- gtfs_timetable(gtfs_freq, day = "Monday")
+  r <- gtfs_route(gtfs_timetable, "Warschauer", "Prinzenstr", start_time = 8 * 3600 + 10*60)
+  
+  expect_equal(r[1, "arrival_time"], "08:10:00")
+  expect_equal(r[nrow(r), "arrival_time"], "08:17:30")
 })
