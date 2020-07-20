@@ -112,5 +112,13 @@ frequencies_to_stop_times <- function(gtfs)
     
     gtfs_cp$stop_times <- rbind (gtfs_cp$stop_times [!(trip_id) %in% gtfs_cp$frequencies$trip_id], stop_times)
     
+    trip_id_mapping <- unique(gtfs_cp$stop_times [, c("trip_id", "trip_id_f")])
+    gtfs_cp$trips <- merge(gtfs_cp$trips, trip_id_mapping, by = "trip_id", all.y = T)
+    gtfs_cp$trips$trip_id <- gtfs_cp$trips$trip_id_f
+    gtfs_cp$trips <- subset(gtfs_cp$trips, select= names(gtfs_cp$trips) != "trip_id_f") # rm trip_id_f
+    
+    gtfs_cp$stop_times$trip_id <- gtfs_cp$stop_times$trip_id_f
+    gtfs_cp$stop_times <- subset(gtfs_cp$stop_times, select= names(gtfs_cp$stop_times) != "trip_id_f") # rm trip_id_f
+    
     return (gtfs_cp)
 }
