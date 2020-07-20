@@ -21,3 +21,4 @@ vbb/
 ^codemeta\.json$
 ^\.github$
 ^\.pre-commit-config\.yaml$
+^temp*
