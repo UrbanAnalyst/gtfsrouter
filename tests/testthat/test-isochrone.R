@@ -54,3 +54,18 @@ test_that("isochrone errors", {
                                     end_time = 14 * 3600 + 2400),
                             "There are no scheduled services after that time")
              })
+
+
+test_that("isochrones work with integer stop_ids", {
+  
+  koeln_gtfs_to_zip ()
+  f <- file.path (tempdir (), "vrs.zip")
+  
+  g <- extract_gtfs (f)
+  g <- gtfs_timetable (g, day = "Monday")
+  
+  expect_silent(gtfs_isochrone (g,
+                              from = "Neumarkt",
+                              start_time = 14 * 3600 + 1200,
+                              end_time = 14 * 3600 + 2400))
+})

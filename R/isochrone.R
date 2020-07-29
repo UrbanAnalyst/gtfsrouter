@@ -181,7 +181,7 @@ route_endpoints <- function (x)
     nms <- vapply (x, function (i)
                   i [nrow (i), "stop_name"], character (1))
     ids <- vapply (x, function (i)
-                  as.character(i [nrow (i), "stop_id"]), character (1))
+                  i [nrow (i), "stop_id"], character (1))
     sf::st_sf ("stop_name" = nms,
                "stop_id" = ids,
                geometry = g)

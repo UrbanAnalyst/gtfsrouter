@@ -19,6 +19,27 @@ berlin_gtfs_to_zip <- function ()
     invisible (file.remove (flist))
 }
 
+#' koeln_gtfs_to_zip
+#'
+#' Write a zip archive of the internal package data, \link{koeln_gtfs} to
+#' a file named "vrs.zip" to `tempdir()`.
+#'
+#' @return Nothing
+#' @export
+koeln_gtfs_to_zip <- function ()
+{
+    flist <- c ("calendar.txt", "routes.txt", "trips.txt",
+                "stop_times.txt", "stops.txt", "transfers.txt")
+    f <- gtfsrouter::koeln_gtfs
+    chk <- sapply (flist, function (i)
+        data.table::fwrite (f [[strsplit (i, ".txt") [[1]] ]],
+                            file.path (tempdir (), i), quote = TRUE)
+    )
+    flist <- file.path (tempdir (), flist)
+    utils::zip (file.path (tempdir (), "vrs.zip"), files = flist, flags = "-q")
+    invisible (file.remove (flist))
+}
+
 convert_time <- function (my_time)
 {
     if (methods::is (my_time, "difftime") || methods::is (my_time, "Period"))
