@@ -65,7 +65,7 @@ test_that("isochrones work with integer stop_ids", {
   g <- gtfs_timetable (g, day = "Monday")
   
   expect_silent(gtfs_isochrone (g,
-                              from = "Neumarkt",
-                              start_time = 14 * 3600 + 1200,
-                              end_time = 14 * 3600 + 2400))
+                              from = "Dom / Hbf",
+                              start_time = 12 * 3600 + 1200,
+                              end_time = 12 * 3600 + 2400))
 })
