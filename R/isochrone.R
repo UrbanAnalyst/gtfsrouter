@@ -108,13 +108,14 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
     stns <- rcpp_csa_isochrone (gtfs$timetable, gtfs$transfers,
                                 nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
                                 start_stns, start_time, end_time)
-    if (length (stns) < 2)
+    
         stop ("No isochrone possible") # nocov
 
     actual_start_time <- as.numeric (stns [length (stns)])
 
-    index <- 2 * 1:((length (stns) - 1) / 2) - 1
+    index <- 3 * 1:((length (stns) - 1) / 3) - 2
     trips <- stns [index + 1]
+    arrival_times <- stns [index + 2]
     stns <- stns [index]
 
     stop_ids <- lapply (stns, function (i) gtfs$stop_ids [i] [, stop_ids])
@@ -124,10 +125,13 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
                    {
         stops <- gtfs$stops [match (stop_ids [[i]], gtfs$stops [, stop_id]), ]
         trips <- gtfs$trips [match (trip_ids [[i]], gtfs$trips [, trip_id]), ]
+        
         data.frame (cbind (stops [, c ("stop_id", "stop_name", "parent_station",
                                        "stop_lon", "stop_lat")]),
                     cbind (trips [, c ("route_id", "trip_id",
-                                       "trip_headsign")]))
+                                       "trip_headsign")]),
+                    cbind("duration" = (arrival_times[[i]] - arrival_times[[i]][1]) / 60),
+                    cbind ("arrival_time" = arrival_times[[i]]))
                    })
 
     list (isotrips = isotrips,
@@ -182,8 +186,11 @@ route_endpoints <- function (x)
                   i [nrow (i), "stop_name"], character (1))
     ids <- vapply (x, function (i)
                   i [nrow (i), "stop_id"], character (1))
+    duration <- vapply (x, function (i)
+        i [nrow (i), "duration"], numeric(1))
     sf::st_sf ("stop_name" = nms,
                "stop_id" = ids,
+               "duration" = duration,
                geometry = g)
 }
 
@@ -198,8 +205,12 @@ route_midpoints <- function (x)
                   i [2:(nrow (i) - 1), "stop_name"])
     ids <- lapply (x, function (i)
                   i [2:(nrow (i) - 1), "stop_id"])
+    duration <- lapply (x, function (i)
+        i [2:(nrow (i) - 1), "duration"])
+    
     sf::st_sf ("stop_name" = do.call (c, nms),
                "stop_id" = do.call (c, ids),
+               "duration" = do.call (c, duration),
                geometry = g)
 }
 
