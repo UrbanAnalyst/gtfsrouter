@@ -15,42 +15,13 @@ A list of five \pkg{data.table} items necessary for routing:
 \item transfers
 }
 }
-\value{
-square matrix of distances between nodes
-}
 \description{
-Sample GTFS data from Verkehrsverbund Berlin-Brandenburg street, reduced to U
+Sample GTFS data from Verkehrsverbund Rhein-Sieg (VRS), reduced to U
 and S Bahn only (underground and overground trains), and between the hours of
 12:00-13:00. Only those components of the GTFS data necessary for routing
 have been retained. Note that non-ASCII characters have been removed from
 these data, so umlauts are simply removed and eszetts become "ss". The
 package will nevertheless work with full GTFS feeds and non-ASCII (UTF-8)
 characters.
-}
-\examples{
-berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir
-f <- file.path (tempdir (), "vbb.zip") # name of feed
-gtfs <- extract_gtfs (f)
-from <- "Innsbrucker Platz" # U-bahn station, not "S"
-to <- "Alexanderplatz"
-start_time <- 12 * 3600 + 120 # 12:02
-route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time)
-
-# Specify day of week
-route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time,
-                     day = "Sunday")
-
-# specify travel by "U" = underground only
-route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time,
-                     day = "Sunday", route_pattern = "^U")
-# specify travel by "S" = street-level only (not underground)
-route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time,
-                     day = "Sunday", route_pattern = "^S")
-
-# Route queries are generally faster if the GTFS data are pre-processed with
-# `gtfs_timetable()`:
-gt <- gtfs_timetable (gtfs, day = "Sunday", route_pattern = "^S")
-route <- gtfs_route (gt, from = from, to = to, start_time = start_time)
-
 }
 \keyword{datasets}
