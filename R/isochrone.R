@@ -189,9 +189,14 @@ route_endpoints <- function (x)
                   i [nrow (i), "stop_id"], character (1))
     duration <- vapply (x, function (i)
         i [nrow (i), "duration"], numeric(1))
+    transfers <- vapply (x, function (i){
+        i[, "transfers"] <- i$trip_id != shift(i$trip_id, 1L, type = "lag")
+        return(length(i [i$transfers == T, "transfers"]))
+        }, numeric(1))
     sf::st_sf ("stop_name" = nms,
                "stop_id" = ids,
                "duration" = duration,
+               "transfers" = transfers,
                geometry = g)
 }
 
@@ -209,7 +214,8 @@ route_midpoints <- function (x)
     duration <- lapply (x, function (i)
         i [2:(nrow (i) - 1), "duration"])
     transfers <- lapply (x, function (i) {
-        i[, "transfers"] <- i$trip_id != shift(i$trip_id, 1L, fill = i$trip_id[1], type = "lag")
+        i[, "transfers"] <- i$trip_id != shift(i$trip_id, 1L, type = "lag")
+        i[is.na(i$transfers), ] <- FALSE # set start stop and potential NA trip_ids to transfers = FALSE
         i[i$transfers == T, "transfers"]  <- c(1:(length(i [i$transfers == T, "transfers"])))
         for(j in 0: length(i$transfers)) {
             i[j, "transfers"] <- max(i[1:j, "transfers"], na.rm = T)
