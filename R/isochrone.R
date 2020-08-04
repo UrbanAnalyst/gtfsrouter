@@ -109,6 +109,7 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
                                 nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
                                 start_stns, start_time, end_time)
     
+    if (length (stns) < 2)
         stop ("No isochrone possible") # nocov
 
     actual_start_time <- as.numeric (stns [length (stns)])
@@ -207,10 +208,20 @@ route_midpoints <- function (x)
                   i [2:(nrow (i) - 1), "stop_id"])
     duration <- lapply (x, function (i)
         i [2:(nrow (i) - 1), "duration"])
+    transfers <- lapply (x, function (i) {
+        i[, "transfers"] <- i$trip_id != shift(i$trip_id, 1L, fill = i$trip_id[1], type = "lag")
+        i[i$transfers == T, "transfers"]  <- c(1:(length(i [i$transfers == T, "transfers"])))
+        for(j in 0: length(i$transfers)) {
+            i[j, "transfers"] <- max(i[1:j, "transfers"], na.rm = T)
+        }
+        return ( i [2:(nrow (i) - 1), "transfers"])
+        
+    })
     
     sf::st_sf ("stop_name" = do.call (c, nms),
                "stop_id" = do.call (c, ids),
                "duration" = do.call (c, duration),
+               "transfers" = do.call(c, transfers),
                geometry = g)
 }
 
