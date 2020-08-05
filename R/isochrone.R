@@ -109,7 +109,6 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
     stns <- rcpp_csa_isochrone (gtfs$timetable, gtfs$transfers,
                                 nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
                                 start_stns, start_time, end_time)
-    
     if (length (stns) < 2)
         stop ("No isochrone possible") # nocov
 
@@ -127,7 +126,6 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
                    {
         stops <- gtfs$stops [match (stop_ids [[i]], gtfs$stops [, stop_id]), ]
         trips <- gtfs$trips [match (trip_ids [[i]], gtfs$trips [, trip_id]), ]
-        
         data.frame (cbind (stops [, c ("stop_id", "stop_name", "parent_station",
                                        "stop_lon", "stop_lat")]),
                     cbind (trips [, c ("route_id", "trip_id",
