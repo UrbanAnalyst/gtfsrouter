@@ -160,21 +160,16 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         size_t i = es;
         trip_out.push_back (static_cast <int> (current_trip [i]));
         end_station_out.push_back (static_cast <int> (i));
-        
         while (i < INFINITE_INT)
-           
         {
             time = prev_arrival_time[static_cast <int> (i)];
-            
             if (time < INFINITE_INT) 
                 end_times_out.push_back (static_cast <int> (time));
-            
             i = prev_stn [static_cast <size_t> (i)];
             end_station_out.push_back (static_cast <int> (i));
             
-            if (i < INFINITE_INT) {
+            if (i < INFINITE_INT) 
                 trip_out.push_back (static_cast <int> (current_trip [i]));
-            }
         }
         
         end_station_out.resize (end_station_out.size () - 1);
