@@ -92,6 +92,10 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL)
         # nocov end
         return (stop_ids)
     }
+    if (storage.mode(stops$stop_id) != "character") {
+        stops$stop_id <- as.character(stops$stop_id)
+    }
+    
     stops [, stop_id := remove_terminal_sn (stops [, stop_id], stn_suffixes)]
 
     index <- which (!duplicated (stops [, stop_id]))
