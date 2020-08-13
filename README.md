@@ -137,3 +137,129 @@ package also includes a function,
 which can calculate a transfer table for a given feed, with transfer
 times calculated either using straight-line distances (the default), or
 using more realistic times routed through the underlying street network.
+
+## Contributors
+
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+This project uses the [`allcontributor` package](https://github.com/mpadge/allcontributor) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+
+## Code
+
+<table>
+
+<tr>
+<td align="center">
+<a href="https://github.com/mpadge">
+<img src="https://avatars1.githubusercontent.com/u/6697851?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/commits?author=mpadge">mpadge</a>
+</td>
+<td align="center">
+<a href="https://github.com/AlexandraKapp">
+<img src="https://avatars0.githubusercontent.com/u/18367515?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/commits?author=AlexandraKapp">AlexandraKapp</a>
+</td>
+<td align="center">
+<a href="https://github.com/stmarcin">
+<img src="https://avatars2.githubusercontent.com/u/11378350?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/commits?author=stmarcin">stmarcin</a>
+</td>
+</tr>
+
+</table>
+
+
+## Issue Authors
+
+<table>
+
+<tr>
+<td align="center">
+<a href="https://github.com/polettif">
+<img src="https://avatars3.githubusercontent.com/u/17431069?u=757eac2821736acbb02e7c90b456411d256d5780&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Apolettif">polettif</a>
+</td>
+<td align="center">
+<a href="https://github.com/tbuckl">
+<img src="https://avatars1.githubusercontent.com/u/98956?u=9580c2ee3c03cbbe44ac8180b0f6a6725b0415f0&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Atbuckl">tbuckl</a>
+</td>
+<td align="center">
+<a href="https://github.com/sridharraman">
+<img src="https://avatars0.githubusercontent.com/u/570692?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Asridharraman">sridharraman</a>
+</td>
+<td align="center">
+<a href="https://github.com/tuesd4y">
+<img src="https://avatars2.githubusercontent.com/u/13107179?u=cfcc7852d1bed6e2b17fa3f985cebf743c43b299&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Atuesd4y">tuesd4y</a>
+</td>
+<td align="center">
+<a href="https://github.com/luukvdmeer">
+<img src="https://avatars2.githubusercontent.com/u/26540305?u=c576e87314499815cbf698b7781ee58fd1d773e2&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aluukvdmeer">luukvdmeer</a>
+</td>
+<td align="center">
+<a href="https://github.com/Robinlovelace">
+<img src="https://avatars3.githubusercontent.com/u/1825120?u=461318c239e721dc40668e4b0ce6cc47731328ac&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3ARobinlovelace">Robinlovelace</a>
+</td>
+<td align="center">
+<a href="https://github.com/orlandoandradeb">
+<img src="https://avatars0.githubusercontent.com/u/48104481?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aorlandoandradeb">orlandoandradeb</a>
+</td>
+</tr>
+
+
+<tr>
+<td align="center">
+<a href="https://github.com/Maxime2506">
+<img src="https://avatars3.githubusercontent.com/u/54989587?u=6d2c848ee0c7d8a2841d47791c30eec1cab35470&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3AMaxime2506">Maxime2506</a>
+</td>
+<td align="center">
+<a href="https://github.com/chinhqho">
+<img src="https://avatars0.githubusercontent.com/u/47441312?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Achinhqho">chinhqho</a>
+</td>
+<td align="center">
+<a href="https://github.com/federicotallis">
+<img src="https://avatars3.githubusercontent.com/u/25511806?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Afedericotallis">federicotallis</a>
+</td>
+<td align="center">
+<a href="https://github.com/rafapereirabr">
+<img src="https://avatars1.githubusercontent.com/u/7448421?u=bd52fb822944dafabebd61d286bc80d183234d20&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Arafapereirabr">rafapereirabr</a>
+</td>
+<td align="center">
+<a href="https://github.com/loanho23">
+<img src="https://avatars1.githubusercontent.com/u/48426365?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aloanho23">loanho23</a>
+</td>
+</tr>
+
+</table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->

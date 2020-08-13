@@ -179,6 +179,10 @@ filter_by_date <- function (gtfs, date = NULL)
 
     service_id <- gtfs$calendar_dates [index, ] [, service_id]
     index <- which (gtfs$trips [, service_id] %in% service_id)
+    if (length (index) == 0)
+        stop ("The date restricts service_ids to [",
+              paste0 (service_id, collapse = ", "),
+              "] yet there are not trips for those service_ids")
     gtfs$trips <- gtfs$trips [index, ]
     index <- which (gtfs$stop_times [, trip_id] %in% gtfs$trips [, trip_id])
     gtfs$stop_times <- gtfs$stop_times [index, ]
