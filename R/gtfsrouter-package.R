@@ -49,29 +49,3 @@ NULL
 #'
 #' @inherit gtfs_route return examples
 NULL
-
-
-#' koeln_gtfs
-#'
-#' Sample GTFS data from Verkehrsverbund Rhein-Sieg (VRS), reduced to U
-#' and S Bahn only (underground and overground trains), and between the hours of
-#' 12:00-13:00. Only those components of the GTFS data necessary for routing
-#' have been retained. Note that non-ASCII characters have been removed from
-#' these data, so umlauts are simply removed and eszetts become "ss". The
-#' package will nevertheless work with full GTFS feeds and non-ASCII (UTF-8)
-#' characters.
-#'
-#' @name koeln_gtfs
-#' @docType data
-#' @keywords datasets
-#' @format A list of five \pkg{data.table} items necessary for routing:
-#' \itemize{
-#' \item calendar
-#' \item routes
-#' \item trips
-#' \item stop_times
-#' \item stops
-#' \item transfers
-#' }
-#'
-NULL
