@@ -19,7 +19,6 @@ berlin_gtfs_to_zip <- function ()
     invisible (file.remove (flist))
 }
 
-
 convert_time <- function (my_time)
 {
     if (methods::is (my_time, "difftime") || methods::is (my_time, "Period"))
