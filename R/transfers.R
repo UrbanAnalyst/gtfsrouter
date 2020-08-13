@@ -94,7 +94,8 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
 
     stops <- gtfs$stops [index, ]
     requireNamespace ("geodist")
-    d <- geodist::geodist (stops, measure = "haversine")
+    d <- geodist::geodist (stops [, c ("stop_lon", "stop_lat")],
+                           measure = "haversine")
 
     requireNamespace ("pbapply")
     transfers <- pbapply::pblapply (seq (nrow (stops)), function (i) {
