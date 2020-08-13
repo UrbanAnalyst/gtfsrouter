@@ -4,6 +4,10 @@
 #'
 #' @param filename Name of GTFS archive
 #' @param quiet If `FALSE`, display progress information on screen
+#' @param stn_suffixes Any values provided will be removed from terminal
+#' characters of station IDs. Useful for feeds like NYC for which some stations
+#' are appended with values of "N" and "S" to indicate directions. Specifying
+#' `stn_suffixes = c ("N", "S")` will automatically remove these suffixes.
 #' @return List of several \pkg{data.table} objects corresponding to the tables
 #' present in the nominated GTFS data set.
 #' @importFrom data.table :=
@@ -14,12 +18,14 @@
 #' gtfs <- extract_gtfs (f)
 #'
 #' @export
-extract_gtfs <- function (filename = NULL, quiet = FALSE)
+extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL)
 {
     if (is.null (filename))
         stop ("filename must be given")
     if (!file.exists (filename))
         stop ("filename ", filename, " does not exist")
+    if (!(is.null (stn_suffixes) | is.character (stn_suffixes)))
+        stop ("stn_suffixes must be a character vector")
 
     # suppress no visible binding for global variables notes:
     arrival_time <- departure_time <- stop_id <- min_transfer_time <-
@@ -74,20 +80,24 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE)
     # NYC stop_id values have a base ID along with two repeated versions with
     # either "N" or "S" appended. These latter are redundant. First reduce the
     # "stops" table:
-    remove_terminal_sn <- function (stop_ids)
+    remove_terminal_sn <- function (stop_ids, stn_suffixes)
     {
-        last_char <- substr (stop_ids, nchar (stop_ids), nchar (stop_ids))
-        index <- which (last_char == "N" | last_char == "S")
-        if (length (index) > 0) # nocov start
-            stop_ids [index] <- substr (stop_ids [index], 1,
-                                        nchar (stop_ids [index]) - 1)
+        if (!is.null (stn_suffixes)) {
+            for (i in stn_suffixes) {
+                index <- grep (paste0 (i, "$"), stop_ids)
+                if (length (index) > 0)
+                    stop_ids [index] <- gsub (paste0 (i, "$"), "", stop_ids [index])
+            }
+        }
         # nocov end
         return (stop_ids)
     }
-    stop_ids <- remove_terminal_sn (stops [, stop_id])
-    index <- which (!duplicated (stop_ids))
+    stops [, stop_id := remove_terminal_sn (stops [, stop_id], stn_suffixes)]
+
+    index <- which (!duplicated (stops [, stop_id]))
     stops <- stops [index, ]
-    stop_times [, stop_id := remove_terminal_sn (stop_times [, stop_id])]
+    stop_times [, stop_id := remove_terminal_sn (stop_times [, stop_id],
+                                                 stn_suffixes)]
 
     if (!quiet)
         message (cli::symbol$play,

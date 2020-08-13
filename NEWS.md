@@ -11,6 +11,9 @@ Major changes:
 
 Minor changes:
 
+- `extract_gtfs` has new parameter, `stn_suffixes`, to enable specification of
+  any suffixes to be optionally removed from station IDs (#37; thanks to
+  AlexandraKapp).
 - Bug fix in station name matches in `gtfs_route` fn (see #26)
 - `gtfs_route` accepts `stop_id` values as well as `stop_name` (see #26)
 - `gtfs_isochrone` accepts equivalent `stop_id` values via `from_is_id` parameter.
