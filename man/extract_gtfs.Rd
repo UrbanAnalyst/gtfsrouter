@@ -4,12 +4,17 @@
 \alias{extract_gtfs}
 \title{extract_gtfs}
 \usage{
-extract_gtfs(filename = NULL, quiet = FALSE)
+extract_gtfs(filename = NULL, quiet = FALSE, stn_suffixes = NULL)
 }
 \arguments{
 \item{filename}{Name of GTFS archive}
 
 \item{quiet}{If \code{FALSE}, display progress information on screen}
+
+\item{stn_suffixes}{Any values provided will be removed from terminal
+characters of station IDs. Useful for feeds like NYC for which some stations
+are appended with values of "N" and "S" to indicate directions. Specifying
+\code{stn_suffixes = c ("N", "S")} will automatically remove these suffixes.}
 }
 \value{
 List of several \pkg{data.table} objects corresponding to the tables
