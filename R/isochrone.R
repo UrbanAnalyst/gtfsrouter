@@ -105,9 +105,11 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
     # no visible binding note:
     stop_id <- trip_id <- NULL
 
+    # start_stns are converted to 0-based; all other 1-based indices are
+    # converted in C++ code:
     stns <- rcpp_csa_isochrone (gtfs$timetable, gtfs$transfers,
                                 nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
-                                start_stns, start_time, end_time)
+                                start_stns - 1, start_time, end_time)
     if (length (stns) < 2)
         stop ("No isochrone possible") # nocov
 
