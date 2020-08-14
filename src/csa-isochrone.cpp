@@ -64,6 +64,11 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     for (size_t i = 0; i < start_stations.size (); i++)
     {
         earliest_connection [start_stations [i]] = start_time;
+        // The following lines add transfer stations to the list of initial
+        // starting stations, but this should NOT be done, because the algorithm
+        // needs a single root path to start, and this effectively starts with
+        // multiple root paths.
+        /*
         if (transfer_map.find (start_stations [i]) !=
                 transfer_map.end ())
         {
@@ -76,6 +81,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                 earliest_connection [t.first] = start_time;
             }
         }
+        */
     }
 
     // main CSA loop
@@ -92,6 +98,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     std::unordered_set <size_t> end_stations;
     bool start_time_found = false;
     int actual_start_time = INFINITE_INT, actual_end_time = INFINITE_INT;
+
     for (size_t i = 0; i < n; i++)
     {
         if (departure_time [i] < start_time)

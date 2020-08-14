@@ -108,6 +108,12 @@ make_timetable <- function (gtfs)
     # translate transfer stations into indices
     if ("transfers" %in% names (gtfs))
     {
+        # feed may have been filtered, so not all transfer stations may be in
+        # feed - these are first removed
+        index <- which (gtfs$transfers$from_stop_id %in% stop_ids &
+                        gtfs$transfers$to_stop_id %in% stop_ids)
+        gtfs$transfers <- gtfs$transfers [index, ]
+
         index <- match (gtfs$transfers [, from_stop_id], stop_ids)
         gtfs$transfers <- gtfs$transfers [, from_stop_id := index]
         index <- match (gtfs$transfers [, to_stop_id], stop_ids)
