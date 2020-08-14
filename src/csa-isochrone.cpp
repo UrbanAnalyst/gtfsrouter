@@ -7,6 +7,8 @@
 //' sequences of stations on a given route, the end one being the terminal
 //' isochrone point, and [i+1] holding correpsonding trip numbers.
 //'
+//' All elements of all data are 1-indexed
+//'
 //' @noRd
 // [[Rcpp::export]]
 Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
@@ -31,16 +33,14 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     std::unordered_map <size_t, std::unordered_map <size_t, int> > transfer_map;
     std::vector <size_t> trans_from = transfers ["from_stop_id"],
         trans_to = transfers ["to_stop_id"];
-    for (auto i: trans_from) i--;
-    for (auto i: trans_to) i--;
 
     std::vector <int> trans_time = transfers ["min_transfer_time"];
     for (size_t i = 0; i < static_cast <size_t> (transfers.nrow ()); i++)
+    {
         if (trans_from [i] != trans_to [i])
         {
             std::unordered_map <size_t, int> transfer_pair; // station, time
-            if (transfer_map.find (trans_from [i]) ==
-                    transfer_map.end ())
+            if (transfer_map.find (trans_from [i]) == transfer_map.end ())
             {
                 transfer_pair.clear ();
                 transfer_pair.emplace (trans_to [i], trans_time [i]);
@@ -49,9 +49,10 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             {
                 transfer_pair = transfer_map.at (trans_from [i]);
                 transfer_pair.emplace (trans_to [i], trans_time [i]);
-                transfer_map [trans_from [i] ] = transfer_pair;
+                transfer_map [trans_from [i]] = transfer_pair;
             }
         }
+    }
 
     // set transfer times from first connection; the prev and current vars are
     // used in the main loop below.
@@ -82,9 +83,6 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     const std::vector <size_t> departure_station = timetable ["departure_station"],
         arrival_station = timetable ["arrival_station"],
         trip_id = timetable ["trip_id"];
-    for (auto i: departure_station) i--;
-    for (auto i: arrival_station) i--;
-    for (auto i: trip_id) i--;
     const std::vector <int> departure_time = timetable ["departure_time"],
         arrival_time = timetable ["arrival_time"];
 
