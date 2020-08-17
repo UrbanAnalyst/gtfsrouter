@@ -27,8 +27,9 @@
 #'
 #' @return An object of class `gtfs_isochrone`, including \pkg{sf}-formatted
 #' points representing the `from` station (`start_point`), the terminal end
-#' stations (`end_points`), and all intermediate stations (`mid_points`), along
-#' with lines representing the individual routes. A non-convex ("alpha") hull is
+#' stations (`end_points`), and all intermediate stations (`mid_points`) each with
+#' the earliest possible arrival time, along with lines representing the individual routes. 
+#' A non-convex ("alpha") hull is
 #' also returned (as an \pkg{sf} `POLYGON` object), including measures of area
 #' and "elongation", which equals zero for a circle, and increases towards one
 #' for more elongated shapes.
@@ -113,8 +114,9 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
 
     actual_start_time <- as.numeric (stns [length (stns)])
 
-    index <- 2 * 1:((length (stns) - 1) / 2) - 1
+    index <- 3 * 1:((length (stns) - 1) / 3) - 2
     trips <- stns [index + 1]
+    earliest_arrival <- stns [index + 2]
     stns <- stns [index]
 
     stop_ids <- lapply (stns, function (i) gtfs$stop_ids [i] [, stop_ids])
@@ -127,7 +129,8 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
         data.frame (cbind (stops [, c ("stop_id", "stop_name", "parent_station",
                                        "stop_lon", "stop_lat")]),
                     cbind (trips [, c ("route_id", "trip_id",
-                                       "trip_headsign")]))
+                                       "trip_headsign")]),
+                    cbind ("earliest_arrival" = c(actual_start_time, earliest_arrival[[i]])))
                    })
 
     list (isotrips = isotrips,
@@ -182,8 +185,12 @@ route_endpoints <- function (x)
                   i [nrow (i), "stop_name"], character (1))
     ids <- vapply (x, function (i)
                   i [nrow (i), "stop_id"], character (1))
+    earliest_arrival <- vapply (x, function (i)
+        i [nrow (i), "earliest_arrival"], numeric(1))
+
     sf::st_sf ("stop_name" = nms,
                "stop_id" = ids,
+               "earliest_arrival" = earliest_arrival,
                geometry = g)
 }
 
@@ -198,8 +205,11 @@ route_midpoints <- function (x)
                   i [2:(nrow (i) - 1), "stop_name"])
     ids <- lapply (x, function (i)
                   i [2:(nrow (i) - 1), "stop_id"])
+    earliest_arrival <- lapply (x, function (i)
+        i [2:(nrow (i) - 1), "earliest_arrival"])
     sf::st_sf ("stop_name" = do.call (c, nms),
                "stop_id" = do.call (c, ids),
+               "earliest_arrival" = do.call (c, earliest_arrival),
                geometry = g)
 }
 
