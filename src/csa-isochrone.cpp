@@ -7,6 +7,8 @@
 //' sequences of stations on a given route, the end one being the terminal
 //' isochrone point, and [i+1] holding correpsonding trip numbers.
 //'
+//' All elements of all data are 1-indexed
+//'
 //' @noRd
 // [[Rcpp::export]]
 Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
@@ -17,26 +19,28 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         const int start_time, const int end_time)
 {
     // make start and end stations into std::unordered_sets to allow
-    // constant-time lookup. stations at this point are 1-based R indices, but
-    // that doesn't matter here.
+    // constant-time lookup. stations are submitted as 0-based, while all other
+    // values in timetable and transfers table are 1-based R indices, so all are
+    // converted below to 0-based.
     std::unordered_set <size_t> start_stations_set;
-    for (auto i: start_stations)
-        start_stations_set.emplace (i);
+    for (auto s: start_stations)
+        start_stations_set.emplace (s);
 
     const size_t n = static_cast <size_t> (timetable.nrow ());
 
     // convert transfers into a map from start to (end, transfer_time). Transfer
-    // indices are also 1-based here.
+    // indices are also converted to 0-based:
     std::unordered_map <size_t, std::unordered_map <size_t, int> > transfer_map;
     std::vector <size_t> trans_from = transfers ["from_stop_id"],
         trans_to = transfers ["to_stop_id"];
+
     std::vector <int> trans_time = transfers ["min_transfer_time"];
     for (size_t i = 0; i < static_cast <size_t> (transfers.nrow ()); i++)
+    {
         if (trans_from [i] != trans_to [i])
         {
             std::unordered_map <size_t, int> transfer_pair; // station, time
-            if (transfer_map.find (trans_from [i]) ==
-                    transfer_map.end ())
+            if (transfer_map.find (trans_from [i]) == transfer_map.end ())
             {
                 transfer_pair.clear ();
                 transfer_pair.emplace (trans_to [i], trans_time [i]);
@@ -45,9 +49,10 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             {
                 transfer_pair = transfer_map.at (trans_from [i]);
                 transfer_pair.emplace (trans_to [i], trans_time [i]);
-                transfer_map [trans_from [i] ] = transfer_pair;
+                transfer_map [trans_from [i]] = transfer_pair;
             }
         }
+    }
 
     // set transfer times from first connection; the prev and current vars are
     // used in the main loop below.
@@ -56,19 +61,28 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         prev_arrival_time (nstations + 1, INFINITE_INT);
     std::vector <size_t> prev_stn (nstations + 1, INFINITE_INT),
         current_trip (nstations + 1, INFINITE_INT);
+
     for (size_t i = 0; i < start_stations.size (); i++)
     {
         earliest_connection [start_stations [i]] = start_time;
+        // The following lines add transfer stations to the list of initial
+        // starting stations, but this should NOT be done, because the algorithm
+        // needs a single root path to start, and this effectively starts with
+        // multiple root paths.
+        /*
         if (transfer_map.find (start_stations [i]) !=
                 transfer_map.end ())
         {
             std::unordered_map <size_t, int> transfer_pair =
                 transfer_map.at (start_stations [i]);
-            // Don't penalise these first footpaths:
             for (auto t: transfer_pair)
-                earliest_connection [t.first] = start_time;
+            {
+                // Don't penalise these first footpaths:
                 //earliest_connection [t.first] = start_time + t.second;
+                earliest_connection [t.first] = start_time;
+            }
         }
+        */
     }
 
     // main CSA loop
@@ -82,9 +96,10 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     std::vector <bool> is_connected (ntrips, false);
 
     // trip connections:
-    std::unordered_set <size_t> end_stations, transfer_stations;
+    std::unordered_set <size_t> end_stations;
     bool start_time_found = false;
     int actual_start_time = INFINITE_INT, actual_end_time = INFINITE_INT;
+
     for (size_t i = 0; i < n; i++)
     {
         if (departure_time [i] < start_time)
@@ -149,7 +164,6 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             is_connected [trip_id [i]] = true;
         }
     }
-
    
     Rcpp::List res (3 * end_stations.size () + 1);
     size_t count = 0;

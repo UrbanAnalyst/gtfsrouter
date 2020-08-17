@@ -108,6 +108,12 @@ make_timetable <- function (gtfs)
     # translate transfer stations into indices
     if ("transfers" %in% names (gtfs))
     {
+        # feed may have been filtered, so not all transfer stations may be in
+        # feed - these are first removed
+        index <- which (gtfs$transfers$from_stop_id %in% stop_ids &
+                        gtfs$transfers$to_stop_id %in% stop_ids)
+        gtfs$transfers <- gtfs$transfers [index, ]
+
         index <- match (gtfs$transfers [, from_stop_id], stop_ids)
         gtfs$transfers <- gtfs$transfers [, from_stop_id := index]
         index <- match (gtfs$transfers [, to_stop_id], stop_ids)
@@ -176,12 +182,22 @@ filter_by_date <- function (gtfs, date = NULL)
     index <- which (gtfs$calendar_dates$date == date)
     if (length (index) == 0)
         stop ("date does not match any values in the provided GTFS data")
-
-    service_id <- gtfs$calendar_dates [index, ] [, service_id]
-    index <- which (gtfs$trips [, service_id] %in% service_id)
-    gtfs$trips <- gtfs$trips [index, ]
-    index <- which (gtfs$stop_times [, trip_id] %in% gtfs$trips [, trip_id])
-    gtfs$stop_times <- gtfs$stop_times [index, ]
+    exception_type <- gtfs$calendar_dates$exception_type [index]
+    # exception_type = 1: Service *added* for specified date
+    #                  2: Service *removed* for specified date
+    # https://developers.google.com/transit/gtfs/reference#calendar_datestxt
+    index <- index [exception_type != 2]
+    if (length (index) > 0) {
+        service_id <- gtfs$calendar_dates [index, ] [, service_id]
+        index <- which (gtfs$trips [, service_id] %in% service_id)
+        if (length (index) == 0)
+            stop ("The date restricts service_ids to [",
+                  paste0 (service_id, collapse = ", "),
+                  "] yet there are not trips for those service_ids")
+        gtfs$trips <- gtfs$trips [index, ]
+        index <- which (gtfs$stop_times [, trip_id] %in% gtfs$trips [, trip_id])
+        gtfs$stop_times <- gtfs$stop_times [index, ]
+    }
 
     return (gtfs)
 }
