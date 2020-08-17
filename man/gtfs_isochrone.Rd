@@ -55,8 +55,9 @@ regarding timetable construction).}
 \value{
 An object of class \code{gtfs_isochrone}, including \pkg{sf}-formatted
 points representing the \code{from} station (\code{start_point}), the terminal end
-stations (\code{end_points}), and all intermediate stations (\code{mid_points}), along
-with lines representing the individual routes. A non-convex ("alpha") hull is
+stations (\code{end_points}), and all intermediate stations (\code{mid_points}) each with
+the earliest possible arrival time, along with lines representing the individual routes.
+A non-convex ("alpha") hull is
 also returned (as an \pkg{sf} \code{POLYGON} object), including measures of area
 and "elongation", which equals zero for a circle, and increases towards one
 for more elongated shapes.
