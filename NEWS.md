@@ -1,4 +1,4 @@
-#v 0.0.1.00x
+#v 0.0.2
 
 Major changes:
 
@@ -7,7 +7,6 @@ Major changes:
 - Data without `transfers.txt` now load rather than error
 - New function `gtfs_transfer_table` makes transfer table for feeds which
   contain no such table; see #14
-- Former errors in reading of `zip` archives on Windows OS fixed
 
 Minor changes:
 
@@ -20,3 +19,5 @@ Minor changes:
 - both `gtfs_route` and `gtfs_isochrone` accept (lon, lat) values for from and
   to stations.
 - `gtfs_isochrone` returns `stop_id` as well as `stop_name` values (#29).
+- `gtfs_isochrone` returns `arrival_time` for all mid-points (#30, #36; thanks to @AlexandraKapp)
+- Former errors in reading of `zip` archives on Windows OS fixed
