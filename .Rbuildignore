@@ -22,3 +22,5 @@ vbb/
 ^\.github$
 ^\.pre-commit-config\.yaml$
 ^temp*
+WORDLIST$
+precommit/
