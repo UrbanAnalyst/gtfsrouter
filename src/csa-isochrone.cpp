@@ -176,7 +176,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         end_station_out.push_back (static_cast <int> (i));
         while (i < INFINITE_INT)
         {
-            time = prev_arrival_time[static_cast <int> (i)];
+            time = prev_arrival_time [i];
             if (time < INFINITE_INT) 
                 end_times_out.push_back (static_cast <int> (time));
             i = prev_stn [static_cast <size_t> (i)];
