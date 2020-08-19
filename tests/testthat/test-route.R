@@ -179,3 +179,17 @@ test_that ("max_transfers", {
                                      max_transfers = 1),
                              "No route found between the nominated stations")
 })
+
+test_that ("multiple routes", {
+               f <- file.path (tempdir (), "vbb.zip")
+               expect_silent (g <- extract_gtfs (f, quiet = TRUE))
+               from <- c ("Schonlein",  "Innsbrucker Platz")
+               to <- c ("Berlin Hauptbahnhof", "Alexanderplatz")
+               start_time <- 12 * 3600 + 120 # 12:02
+               expect_silent (route <- gtfs_route (g, from = from, to = to,
+                                                    start_time = start_time,
+                                                    day = 3))
+               expect_is (route, "list")
+               expect_length (route, 2)
+               expect_true (all (vapply (route, function (i) is.data.frame (i), logical (1))))
+})
