@@ -5,10 +5,10 @@
 #'
 #' @param gtfs A set of GTFS data returned from \link{extract_gtfs} or, for more
 #' efficient queries, pre-processed with \link{gtfs_timetable}.
-#' @param from Name, ID, or approximate (lon, lat) coordinates of start station
-#' (as `stop_name` or `stop_id` entry in the `stops` table, or a vector of two
-#' numeric values).
-#' @param to Name or ID of end station
+#' @param from Names, IDs, or approximate (lon, lat) coordinates of start
+#' stations (as `stop_name` or `stop_id` entry in the `stops` table, or a vector
+#' of two numeric values). See Note.
+#' @param to Corresponding Names, IDs, or coordinates of end station.
 #' @param start_time Desired departure time at `from` station, either in seconds
 #' after midnight, a vector of two or three integers (hours, minutes) or (hours,
 #' minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
@@ -39,10 +39,14 @@
 #'
 #' @note This function will by default calculate the route that departs on the
 #' first available service after the specified `start_time`, although this may
-#' arrive later than subsequent services. If the earliest arriving route is
-#' desired, ...
+#' arrive later than subsequent services. The earliest arriving route can be
+#' obtained with the 
+#' desired, 
 #'
-#' @return square matrix of distances between nodes
+#' @return For single (from, to) values, a `data.frame` describing the route,
+#' with each row representing one stop. For multiple (from, to) values, a list
+#' of `data.frames`, each of which describes one route between the i'th start
+#' and end stations (`from` and `to` values).
 #'
 #' @examples
 #' berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir
@@ -75,6 +79,9 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
                         include_ids = FALSE, max_transfers = NA,
                         from_to_are_ids = FALSE, quiet = FALSE)
 {
+    if (length (from) != length (to))
+        stop ("from and to must have the same length")
+
     # no visible binding note:
     departure_time <- NULL
 
@@ -93,22 +100,41 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
     if (nrow (gtfs_cp$timetable) == 0)
         stop ("There are no scheduled services after that time.")
 
-    stations <- NULL # no visible binding note
-    start_stns <- station_name_to_ids (from, gtfs_cp, from_to_are_ids)
-    end_stns <- station_name_to_ids (to, gtfs_cp, from_to_are_ids)
+    res <- lapply (seq (from), function (i)
+                   gtfs_route1 (gtfs_cp, from [i], to [i], start_time,
+                                include_ids, max_transfers,
+                                earliest_arrival, from_to_are_ids)
+                   )
 
-    res <- gtfs_route1 (gtfs_cp, start_stns, end_stns, start_time,
-                        include_ids, max_transfers)
+    if (length (res) == 1) {
+        res <- res [[1]]
+    } else {
+        names (res) <- paste0 (from, " --> ", to)
+    }
+
+    return (res)
+}
+
+gtfs_route1 <- function (gtfs, from, to, start_time,
+                         include_ids, max_transfers,
+                         earliest_arrival, from_to_are_ids) {
+
+    stations <- NULL # no visible binding note
+    start_stns <- station_name_to_ids (from, gtfs, from_to_are_ids)
+    end_stns <- station_name_to_ids (to, gtfs, from_to_are_ids)
+
+    res <- gtfs_csa (gtfs, start_stns, end_stns, start_time,
+                     include_ids, max_transfers)
 
     if (earliest_arrival)
     {
         arrival_time <- max_arrival_time (res)
-        gtfs_cp$timetable <- reverse_timetable (gtfs_cp$timetable, arrival_time)
-        start_stns <- station_name_to_ids (to, gtfs_cp, from_to_are_ids) # reversed!
-        end_stns <- station_name_to_ids (from, gtfs_cp, from_to_are_ids)
+        gtfs$timetable <- reverse_timetable (gtfs$timetable, arrival_time)
+        start_stns <- station_name_to_ids (to, gtfs, from_to_are_ids) # reversed!
+        end_stns <- station_name_to_ids (from, gtfs, from_to_are_ids)
         start_time <- 0
         res_e <- tryCatch (
-                           gtfs_route1 (gtfs_cp, start_stns, end_stns,
+                           gtfs_route1 (gtfs, start_stns, end_stns,
                                         start_time, include_ids, max_transfers),
                            error = function (e) NULL)
         if (!is.null (res_e))
@@ -117,8 +143,8 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
     return (res)
 }
 
-# core route calculation
-gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
+# core CSA routing calculation
+gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
                          include_ids, max_transfers)
 {
     # no visible binding note:
