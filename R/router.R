@@ -205,9 +205,15 @@ from_to_to_stations <- function (stns, gtfs, from_to_are_ids) {
     if (is.character (stns) | is.null (nrow (stns))) {
         ret <- lapply (stns, function (i)
                        unique (station_name_to_ids (i, gtfs, from_to_are_ids)))
-    } else if (!is.null (nrow (stns)) & nrow (stns) > 1) {
+    } else if (!is.null (nrow (stns))) {
         ret <- apply (stns, 1, function (i)
                       unique (station_name_to_ids (i, gtfs, from_to_are_ids)))
+        if (!is.list (ret)) # for single row stns
+            ret <- list (as.integer (ret))
+    } else if (is.numeric (stns) & length (stns) == 2) {
+        ret <- list (station_name_to_ids (stns, gtfs, from_to_are_ids))
+    } else {
+        stop ("from/to stations in unrecognised format")
     }
     return (ret)
 }
@@ -226,11 +232,16 @@ station_name_to_ids <- function (stn_name, gtfs, from_to_are_ids)
             stop ("Numeric (from, to) values must have two values for (lon, lat)")
         requireNamespace ("geodist")
         names (stn_name) <- c ("lon", "lat")
-        d <- geodist::geodist (stn_name, gtfs$stops)
+        # geodist may issue warning about inaccracy of defalt 'cheap' distance,
+        # but as we're only interested in the shortest distance, it can be used.
+        suppressMessages (
+            d <- geodist::geodist (stn_name, gtfs$stops)
+        )
         # One stop name can have several IDs, each of which need to be extracted
         # here:
-        ret <- gtfs$stops [which.min (d), ] [, stop_name]
-        ret <- gtfs$stops [stop_name == ret, ] [, stop_id]
+        this_stop <- gtfs$stops [which.min (d), ] [, stop_name]
+        index <- grep (this_stop, gtfs$stops [, stop_name], fixed = TRUE)
+        ret <- gtfs$stops [index, ] [, stop_id]
     }
     else if (!from_to_are_ids)
     {
