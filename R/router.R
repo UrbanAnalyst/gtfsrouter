@@ -100,8 +100,12 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
     if (nrow (gtfs_cp$timetable) == 0)
         stop ("There are no scheduled services after that time.")
 
-    res <- lapply (seq (from), function (i)
-                   gtfs_route1 (gtfs_cp, from [i], to [i], start_time,
+    start_stns <- from_to_to_stations (from, gtfs_cp, from_to_are_ids)
+    end_stns <- from_to_to_stations (to, gtfs_cp, from_to_are_ids)
+
+    res <- lapply (seq (start_stns), function (i)
+                   gtfs_route1 (gtfs_cp, start_stns [[i]], end_stns [[i]],
+                                start_time,
                                 include_ids, max_transfers,
                                 earliest_arrival, from_to_are_ids)
                    )
@@ -115,13 +119,11 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
     return (res)
 }
 
-gtfs_route1 <- function (gtfs, from, to, start_time,
+gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
                          include_ids, max_transfers,
                          earliest_arrival, from_to_are_ids) {
 
     stations <- NULL # no visible binding note
-    start_stns <- station_name_to_ids (from, gtfs, from_to_are_ids)
-    end_stns <- station_name_to_ids (to, gtfs, from_to_are_ids)
 
     res <- gtfs_csa (gtfs, start_stns, end_stns, start_time,
                      include_ids, max_transfers)
@@ -130,8 +132,10 @@ gtfs_route1 <- function (gtfs, from, to, start_time,
     {
         arrival_time <- max_arrival_time (res)
         gtfs$timetable <- reverse_timetable (gtfs$timetable, arrival_time)
-        start_stns <- station_name_to_ids (to, gtfs, from_to_are_ids) # reversed!
-        end_stns <- station_name_to_ids (from, gtfs, from_to_are_ids)
+        # reverse start and end stations:
+        temp <- start_stns
+        start_stns <- end_stns
+        end_stns <- temp
         start_time <- 0
         res_e <- tryCatch (
                            gtfs_route1 (gtfs, start_stns, end_stns,
@@ -196,13 +200,24 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
     return (res)
 }
 
+# convert from and to values to indices into gtfs$stations
+from_to_to_stations <- function (stns, gtfs, from_to_are_ids) {
+    if (is.character (stns) | is.null (nrow (stns))) {
+        ret <- lapply (stns, function (i)
+                       unique (station_name_to_ids (i, gtfs, from_to_are_ids)))
+    } else if (!is.null (nrow (from)) & nrow (from) > 1) {
+        ret <- apply (stns, 1, function (i)
+                      unique (station_name_to_ids (i, gtfs, from_to_are_ids)))
+    }
+    return (ret)
+}
+
 # names generally match to multiple IDs, each of which is returned here, as
 # 0-indexed IDs into gtfs$stations
 station_name_to_ids <- function (stn_name, gtfs, from_to_are_ids)
 {
     # no visible binding notes:
     stop_name <- stop_id <- stop_ids <- stations <- NULL
-
 
     ret <- stn_name
     if (is.numeric (stn_name))
