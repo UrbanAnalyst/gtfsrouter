@@ -201,5 +201,10 @@ test_that ("multiple routes", {
                expect_silent (route2 <- gtfs_route (g, from = from, to = to,
                                                     start_time = start_time,
                                                     day = 3))
+
+               # these are not identical, because the first only greps
+               # "Alexanderplatz" and so returns all U+S lines, while the 2nd
+               # gets `grep (...)[1]`, and so only matches one of these, which
+               # happens to be the S Bhf. 
                #expect_identical (unname (route), unname (route2))
 })
