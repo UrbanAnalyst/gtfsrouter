@@ -25,6 +25,19 @@ remotes::install_github("atfutures/gtfs-router")
 #devtools::load_all (".", export_all = FALSE)
 ```
 
+You can install latest stable version of `gtfsrouter` from CRAN with:
+```{r cran-installation, eval = FALSE}
+install.packages("gtfsrouter") # current CRAN version
+```
+Alternatively, current development versions can be installed using any of the
+following options:
+```{r gh-installation, eval = FALSE}
+# install.packages("remotes")
+remotes::install_git("https://git.sr.ht/~mpadge/gtfsrouter")
+remotes::install_bitbucket("atfutures/gtfsrouter")
+remotes::install_gitlab("atfutures1/gtfsrouter")
+remotes::install_github("ATFutures/gtfsrouter")
+```
 
 To load the package and check the version:
 ```{r pkg-version, eval=TRUE}
