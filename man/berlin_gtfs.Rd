@@ -16,7 +16,10 @@ A list of five \pkg{data.table} items necessary for routing:
 }
 }
 \value{
-square matrix of distances between nodes
+For single (from, to) values, a \code{data.frame} describing the route,
+with each row representing one stop. For multiple (from, to) values, a list
+of \code{data.frames}, each of which describes one route between the i'th start
+and end stations (\code{from} and \code{to} values).
 }
 \description{
 Sample GTFS data from Verkehrsverbund Berlin-Brandenburg street, reduced to U

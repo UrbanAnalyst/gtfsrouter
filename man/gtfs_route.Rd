@@ -22,11 +22,11 @@ gtfs_route(
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
 efficient queries, pre-processed with \link{gtfs_timetable}.}
 
-\item{from}{Name, ID, or approximate (lon, lat) coordinates of start station
-(as \code{stop_name} or \code{stop_id} entry in the \code{stops} table, or a vector of two
-numeric values).}
+\item{from}{Names, IDs, or approximate (lon, lat) coordinates of start
+stations (as \code{stop_name} or \code{stop_id} entry in the \code{stops} table, or a vector
+of two numeric values). See Note.}
 
-\item{to}{Name or ID of end station}
+\item{to}{Corresponding Names, IDs, or coordinates of end station.}
 
 \item{start_time}{Desired departure time at \code{from} station, either in seconds
 after midnight, a vector of two or three integers (hours, minutes) or (hours,
@@ -64,7 +64,10 @@ table.}
 regarding timetable construction).}
 }
 \value{
-square matrix of distances between nodes
+For single (from, to) values, a \code{data.frame} describing the route,
+with each row representing one stop. For multiple (from, to) values, a list
+of \code{data.frames}, each of which describes one route between the i'th start
+and end stations (\code{from} and \code{to} values).
 }
 \description{
 Calculate single route between a start and end station departing at or after
@@ -73,8 +76,9 @@ a specified time.
 \note{
 This function will by default calculate the route that departs on the
 first available service after the specified \code{start_time}, although this may
-arrive later than subsequent services. If the earliest arriving route is
-desired, ...
+arrive later than subsequent services. The earliest arriving route can be
+obtained with the
+desired,
 }
 \examples{
 berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir
