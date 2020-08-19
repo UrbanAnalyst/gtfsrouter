@@ -205,7 +205,7 @@ from_to_to_stations <- function (stns, gtfs, from_to_are_ids) {
     if (is.character (stns) | is.null (nrow (stns))) {
         ret <- lapply (stns, function (i)
                        unique (station_name_to_ids (i, gtfs, from_to_are_ids)))
-    } else if (!is.null (nrow (from)) & nrow (from) > 1) {
+    } else if (!is.null (nrow (stns)) & nrow (stns) > 1) {
         ret <- apply (stns, 1, function (i)
                       unique (station_name_to_ids (i, gtfs, from_to_are_ids)))
     }

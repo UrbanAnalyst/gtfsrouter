@@ -192,4 +192,14 @@ test_that ("multiple routes", {
                expect_is (route, "list")
                expect_length (route, 2)
                expect_true (all (vapply (route, function (i) is.data.frame (i), logical (1))))
+
+               # convert (from, to) to matrices of lon-lat:
+               from <- vapply (from, function (i) grep (i, g$stops$stop_name) [1], integer (1))
+               to <- vapply (to, function (i) grep (i, g$stops$stop_name) [1], integer (1))
+               from <- g$stops [from, c ("stop_lon", "stop_lat")]
+               to <- g$stops [to, c ("stop_lon", "stop_lat")]
+               expect_silent (route2 <- gtfs_route (g, from = from, to = to,
+                                                    start_time = start_time,
+                                                    day = 3))
+               #expect_identical (unname (route), unname (route2))
 })
