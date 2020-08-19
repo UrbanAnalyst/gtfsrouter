@@ -7,6 +7,8 @@ Major changes:
 - Data without `transfers.txt` now load rather than error
 - New function `gtfs_transfer_table` makes transfer table for feeds which
   contain no such table; see #14
+- Main `gtfs_route()` function now accepts multiple `from` and `to` values, and
+  returns a list of routes (see #28).
 
 Minor changes:
 
