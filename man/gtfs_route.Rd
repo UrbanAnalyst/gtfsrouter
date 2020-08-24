@@ -67,18 +67,18 @@ regarding timetable construction).}
 For single (from, to) values, a \code{data.frame} describing the route,
 with each row representing one stop. For multiple (from, to) values, a list
 of \code{data.frames}, each of which describes one route between the i'th start
-and end stations (\code{from} and \code{to} values).
+and end stations (\code{from} and \code{to} values). Origin and destination stations
+for which no route is possible return \code{NULL}.
 }
 \description{
 Calculate single route between a start and end station departing at or after
 a specified time.
 }
 \note{
-This function will by default calculate the route that departs on the
-first available service after the specified \code{start_time}, although this may
-arrive later than subsequent services. The earliest arriving route can be
-obtained with the
-desired,
+This function will by default calculate the route that arrives earliest
+at the specified destination, although this may depart later than the
+earliest departing service. Routes which depart at the earliest possible time
+can be calculated by setting \code{earliest_arrival = FALSE}.
 }
 \examples{
 berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir

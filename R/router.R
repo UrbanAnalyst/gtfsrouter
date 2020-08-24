@@ -37,16 +37,16 @@
 #' @param quiet Set to `TRUE` to suppress screen messages (currently just
 #' regarding timetable construction).
 #'
-#' @note This function will by default calculate the route that departs on the
-#' first available service after the specified `start_time`, although this may
-#' arrive later than subsequent services. The earliest arriving route can be
-#' obtained with the 
-#' desired, 
+#' @note This function will by default calculate the route that arrives earliest
+#' at the specified destination, although this may depart later than the
+#' earliest departing service. Routes which depart at the earliest possible time
+#' can be calculated by setting `earliest_arrival = FALSE`.
 #'
 #' @return For single (from, to) values, a `data.frame` describing the route,
 #' with each row representing one stop. For multiple (from, to) values, a list
 #' of `data.frames`, each of which describes one route between the i'th start
-#' and end stations (`from` and `to` values).
+#' and end stations (`from` and `to` values). Origin and destination stations
+#' for which no route is possible return `NULL`.
 #'
 #' @examples
 #' berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir
@@ -128,7 +128,7 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
     res <- gtfs_csa (gtfs, start_stns, end_stns, start_time,
                      include_ids, max_transfers)
 
-    if (earliest_arrival)
+    if (earliest_arrival & !is.null (res))
     {
         arrival_time <- max_arrival_time (res)
         gtfs$timetable <- reverse_timetable (gtfs$timetable, arrival_time)
@@ -138,8 +138,8 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
         end_stns <- temp
         start_time <- 0
         res_e <- tryCatch (
-                           gtfs_route1 (gtfs, start_stns, end_stns,
-                                        start_time, include_ids, max_transfers),
+                           gtfs_csa (gtfs, start_stns, end_stns,
+                                     start_time, include_ids, max_transfers),
                            error = function (e) NULL)
         if (!is.null (res_e))
             res <- res_e
@@ -160,7 +160,7 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
                        nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
                        start_stns, end_stns, start_time, max_transfers)
     if (nrow (route) == 0)
-        stop ("No route found between the nominated stations")
+        return (NULL)
 
     route$trip_id <- gtfs$trip_ids [, trip_ids] [route$trip_number]
 

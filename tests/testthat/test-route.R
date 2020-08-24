@@ -2,7 +2,6 @@ context("route")
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
              identical (Sys.getenv ("TRAVIS"), "true"))
-is_appveyor <- Sys.getenv ("APPVEYOR") != "" # appevyor sets this envvar
 
 
 test_that("extract", {
@@ -139,9 +138,8 @@ test_that ("route_pattern", {
                expect_silent (gt <- gtfs_timetable (g, day = 3,
                                                     route_pattern = "^U",
                                                     quiet = TRUE))
-               expect_error (route <- gtfs_route (gt, from = from, to = to,
-                                                  start_time = start_time),
-                             "No route found between the nominated stations")
+               expect_null (gtfs_route (gt, from = from, to = to,
+                                      start_time = start_time))
                # There is no U-bahn connection all the way to Hbf
 })
 
@@ -173,11 +171,10 @@ test_that ("max_transfers", {
                                                     start_time = start_time,
                                                     day = 3,
                                                     max_transfers = 2))
-               expect_error (route <- gtfs_route (g, from = from, to = to,
+               expect_null (route <- gtfs_route (g, from = from, to = to,
                                      start_time = start_time,
                                      day = 3,
-                                     max_transfers = 1),
-                             "No route found between the nominated stations")
+                                     max_transfers = 1)) # no route found
 })
 
 test_that ("multiple routes", {
