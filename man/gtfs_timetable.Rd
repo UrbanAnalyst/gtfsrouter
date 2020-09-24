@@ -23,7 +23,10 @@ used - unless the following 'date' parameter is give.}
 \item{date}{Some systems do not specify days of the week within their
 'calendar' table; rather they provide full timetables for specified calendar
 dates via a 'calendar_date' table. Providing a date here as a single 8-digit
-number representing 'yyyymmdd' will filter the data to the specified date.}
+number representing 'yyyymmdd' will filter the data to the specified date.
+Also the 'calendar' is scanned for services that operate
+on the selected date. Therefore also a merge of feeds that combine 'calendar'
+and 'calendar_dates' options is covered.}
 
 \item{route_pattern}{Using only those routes matching given pattern, for
 example, "^U" for routes starting with "U" (as commonly used for underground
