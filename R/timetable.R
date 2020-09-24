@@ -11,6 +11,9 @@
 #' 'calendar' table; rather they provide full timetables for specified calendar
 #' dates via a 'calendar_date' table. Providing a date here as a single 8-digit
 #' number representing 'yyyymmdd' will filter the data to the specified date.
+#' Also the 'calendar' is scanned for services that operate
+#' on the selected date. Therefore also a merge of feeds that combine 'calendar' 
+#' and 'calendar_dates' options is covered.
 #' @param route_pattern Using only those routes matching given pattern, for
 #' example, "^U" for routes starting with "U" (as commonly used for underground
 #' or subway routes.
@@ -178,17 +181,37 @@ filter_by_date <- function (gtfs, date = NULL)
 
     # no visible binding notes
     trip_id <- NULL
-
+    start_date <- NULL
+    end_date <- NULL
     index <- which (gtfs$calendar_dates$date == date)
-    if (length (index) == 0)
-        stop ("date does not match any values in the provided GTFS data")
+    
+    # get all service_ids in calendar.txt that are valid for the given date
+    day <- strftime(strptime(x = date, format = "%Y%m%d"), format = "%A")
+    if (is.na(day)) {
+        stop("Date is not provided in the proper format of yyyymmdd")
+    }
+    day <- tolower(day)
+    calendars_in_range <- gtfs$calendar[(start_date <= date) & (end_date >= date), ]
+    index_day <- lapply(day, function(i) {
+        which(calendars_in_range [, get(i)] == 1)
+    })
+    index_day <- sort(unique(do.call(c, index_day)))
+    
+    if (length(index) == 0 & length(index_day) == 0) {
+        stop("date does not match any values in the provided GTFS data")
+    }
     exception_type <- gtfs$calendar_dates$exception_type [index]
     # exception_type = 1: Service *added* for specified date
     #                  2: Service *removed* for specified date
     # https://developers.google.com/transit/gtfs/reference#calendar_datestxt
     index <- index [exception_type != 2]
-    if (length (index) > 0) {
+    service_id <- c()
+    if (length (index) > 0)
         service_id <- gtfs$calendar_dates [index, ] [, service_id]
+    # Find indices of all services on nominated days that are within start and end date of calendar
+    if (length (index_day) > 0)
+        service_id <- c(service_id, gtfs$calendar [index_day, ] [, service_id])
+    if (length(service_id > 0)) {
         index <- which (gtfs$trips [, service_id] %in% service_id)
         if (length (index) == 0)
             stop ("The date restricts service_ids to [",
