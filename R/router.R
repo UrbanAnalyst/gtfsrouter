@@ -264,10 +264,16 @@ map_one_trip <- function (gtfs, route, route_name = "")
     trip_id <- stop_id <- stop_ids <- stop_name <-
         departure_time <- arrival_time <- NULL
 
+    this_route <- route [route$trip_id == route_name, ]
+
     trip_stops <- gtfs$stop_times [trip_id == route_name, ]
+    # some lines are circular, and may have two entries for same start/end
+    # stations.
+    trip_stops <- trip_stops [trip_stops$departure_time >= min (this_route$time), ]
+
     trip_stop_num <- match (trip_stops [, stop_id], gtfs$stop_ids [, stop_ids])
     trip_stop_num <- trip_stop_num [which (trip_stop_num %in%
-                                           route$stop_number)]
+                                           this_route$stop_number)]
     trip_stop_id <- gtfs$stop_ids [trip_stop_num, stop_ids]
     trip_stop_names <- gtfs$stops [match (trip_stop_id, gtfs$stops [, stop_id]),
                                    stop_name]
