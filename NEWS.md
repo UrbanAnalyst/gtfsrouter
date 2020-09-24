@@ -1,5 +1,10 @@
 # v 0.0.3.00x
 
+Major changes:
+
+- New function, `gtfs_route_headway` to calculate headways for entire routes
+  between any nominated points (see #43)
+
 
 # v 0.0.3
 
