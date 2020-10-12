@@ -167,14 +167,15 @@ test_that ("max_transfers", {
                from <- "Innsbrucker Platz" # U-bahn station, not "S"
                to <- "Alexanderplatz"
                start_time <- 12 * 3600 + 120 # 12:02
-               expect_silent (route <- gtfs_route (g, from = from, to = to,
+               expect_silent (route1 <- gtfs_route (g, from = from, to = to,
                                                     start_time = start_time,
                                                     day = 3,
                                                     max_transfers = 2))
-               expect_null (route <- gtfs_route (g, from = from, to = to,
-                                     start_time = start_time,
-                                     day = 3,
-                                     max_transfers = 1)) # no route found
+               expect_silent (route2 <- gtfs_route (g, from = from, to = to,
+                                                    start_time = start_time,
+                                                    day = 3,
+                                                    max_transfers = 1)) # not possible
+               expect_identical (route1, route2)
 })
 
 test_that ("multiple routes", {
