@@ -1,5 +1,9 @@
 # v 0.0.4.00x
 
+Minor changes:
+
+- Fix bug with `max_transfers` parameter of `gtfs_route()` function (see #47)
+
 # v 0.0.4
 
 Major changes:
