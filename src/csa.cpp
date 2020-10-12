@@ -3,7 +3,7 @@
 //' rcpp_csa
 //'
 //' Connection Scan Algorithm for GTFS data. The timetable has 
-//' [deparutre_station, arrival_station, departure_time, arrival_time,
+//' [departure_station, arrival_station, departure_time, arrival_time,
 //'     trip_id],
 //' with all entries as integer values, including times in seconds after
 //' 00:00:00. The station and trip IDs can be mapped back on to actual station
@@ -189,7 +189,7 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
 
         // main connection scan:
         if (((csa_out.earliest_connection [csa_in.departure_station [i] ] <= csa_in.departure_time [i]) &&
-                    csa_out.n_transfers [csa_in.departure_station [i] ] < csa_pars.max_transfers) ||
+                    csa_out.n_transfers [csa_in.departure_station [i] ] <= csa_pars.max_transfers) ||
                 is_connected [csa_in.trip_id [i]])
         {
             if (csa_in.arrival_time [i] < csa_out.earliest_connection [csa_in.arrival_station [i] ])
