@@ -26,6 +26,7 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         const int start_time,
         const int max_transfers)
 {
+
     CSA_Parameters csa_pars;
     csa::fill_csa_pars (csa_pars, max_transfers, start_time,
             static_cast <size_t> (timetable.nrow ()), ntrips, nstations);
@@ -69,9 +70,15 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
     return res;
 }
 
-void csa::fill_csa_pars (CSA_Parameters &csa_pars, int max_transfers, int start_time,
-        size_t timetable_size, size_t ntrips, size_t nstations)
+void csa::fill_csa_pars (
+        CSA_Parameters &csa_pars,
+        int max_transfers,
+        int start_time,
+        size_t timetable_size,
+        size_t ntrips,
+        size_t nstations)
 {
+
     csa_pars.max_transfers = max_transfers;
     csa_pars.start_time = start_time;
     csa_pars.timetable_size = timetable_size;
@@ -81,20 +88,24 @@ void csa::fill_csa_pars (CSA_Parameters &csa_pars, int max_transfers, int start_
 
 // make start and end stations into std::unordered_sets to allow constant-time
 // lookup.
-void csa::make_station_sets (const std::vector <size_t> &start_stations,
+void csa::make_station_sets (
+        const std::vector <size_t> &start_stations,
         const std::vector <size_t> &end_stations,
         std::unordered_set <size_t> &start_stations_set,
         std::unordered_set <size_t> &end_stations_set)
 {
+
     for (auto i: start_stations)
         start_stations_set.emplace (i);
     for (auto i: end_stations)
         end_stations_set.emplace (i);
 }
 
-void csa::csa_in_from_df (Rcpp::DataFrame &timetable,
+void csa::csa_in_from_df (
+        Rcpp::DataFrame &timetable,
         CSA_Inputs &csa_in)
 {
+
     csa_in.departure_station = Rcpp::as <std::vector <size_t> > (
             timetable ["departure_station"]);
     csa_in.arrival_station = Rcpp::as <std::vector <size_t> > (
@@ -108,9 +119,11 @@ void csa::csa_in_from_df (Rcpp::DataFrame &timetable,
 }
 
 // convert transfers into a map from start to (end, transfer_time).
-void csa::make_transfer_map (TransferMapType &transfer_map,
+void csa::make_transfer_map (
+        TransferMapType &transfer_map,
         Rcpp::DataFrame &transfers)
 {
+
     transfer_map.clear ();
     std::vector <size_t> trans_from = transfers ["from_stop_id"],
         trans_to = transfers ["to_stop_id"];
@@ -140,6 +153,7 @@ void csa::get_earliest_connection (
         const TransferMapType &transfer_map,
         std::vector <int> &earliest_connection)
 {
+
     for (size_t i = 0; i < start_stations.size (); i++)
     {
         earliest_connection [start_stations [i]] = start_time;
@@ -156,18 +170,23 @@ void csa::get_earliest_connection (
     }
 }
 
-CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
+CSA_Return csa::main_csa_loop (
+        const CSA_Parameters &csa_pars,
         const std::unordered_set <size_t> &start_stations_set,
         std::unordered_set <size_t> &end_stations_set,
         const CSA_Inputs &csa_in,
         CSA_Outputs &csa_out)
 {
+
     CSA_Return csa_ret;
     csa_ret.earliest_time = INFINITE_INT;
     csa_ret.end_station = INFINITE_INT;
 
     std::vector <bool> is_connected (csa_pars.ntrips, false);
 
+    const size_t n = csa_out.earliest_connection.size ();
+    CSA_Outputs csa_out_candidate (n);
+    
     // trip connections:
     for (size_t i = 0; i < csa_pars.timetable_size; i++)
     {
@@ -180,7 +199,8 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
                 csa_in.arrival_time [i] <= csa_out.earliest_connection [csa_in.arrival_station [i] ])
         {
             is_connected [csa_in.trip_id [i] ] = true;
-            csa::fill_one_csa_out (csa_out, csa_in, csa_in.arrival_station [i], i);
+            csa::fill_one_csa_out (csa_out, csa_out_candidate,
+                    csa_in, csa_in.arrival_station [i], i);
         }
 
         // main connection scan:
@@ -190,7 +210,8 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
         {
             if (csa_in.arrival_time [i] <= csa_out.earliest_connection [csa_in.arrival_station [i] ])
             {
-                csa::fill_one_csa_out (csa_out, csa_in, csa_in.arrival_station [i], i);
+                csa::fill_one_csa_out (csa_out, csa_out_candidate,
+                        csa_in, csa_in.arrival_station [i], i);
 
                 csa_out.n_transfers [csa_in.arrival_station [i] ] =
                     csa_out.n_transfers [csa_in.departure_station [i] ];
@@ -231,8 +252,12 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
  * \param i index into station of csa_out for the connecting service csa_in
  * \param j index into csa_in
  */
-void csa::fill_one_csa_out (CSA_Outputs &csa_out, const CSA_Inputs &csa_in,
-        const size_t &i, const size_t &j)
+void csa::fill_one_csa_out (
+        CSA_Outputs &csa_out,
+        CSA_Outputs &csa_out_candidate,
+        const CSA_Inputs &csa_in,
+        const size_t &i,
+        const size_t &j)
 {
     bool fill_vals = (csa_out.earliest_connection [i] == INFINITE_INT);
     if (!fill_vals) {
@@ -250,10 +275,13 @@ void csa::fill_one_csa_out (CSA_Outputs &csa_out, const CSA_Inputs &csa_in,
     }
 }
 
-void csa::check_end_stations (std::unordered_set <size_t> &end_stations_set,
-        const size_t &arrival_station, const int &arrival_time,
+void csa::check_end_stations (
+        std::unordered_set <size_t> &end_stations_set,
+        const size_t &arrival_station,
+        const int &arrival_time,
         CSA_Return &csa_ret)
 {
+
     if (end_stations_set.find (arrival_station) != end_stations_set.end ())
     {
         if (arrival_time < csa_ret.earliest_time)
@@ -265,9 +293,12 @@ void csa::check_end_stations (std::unordered_set <size_t> &end_stations_set,
     }
 }
 
-size_t csa::get_route_length (const CSA_Outputs &csa_out,
-        const CSA_Parameters &csa_pars, const size_t &end_stn)
+size_t csa::get_route_length (
+        const CSA_Outputs &csa_out,
+        const CSA_Parameters &csa_pars,
+        const size_t &end_stn)
 {
+
     size_t count = 1;
     size_t i = end_stn;
     while (i < INFINITE_INT)
@@ -281,12 +312,14 @@ size_t csa::get_route_length (const CSA_Outputs &csa_out,
     return count;
 }
 
-void csa::extract_final_trip (const CSA_Outputs &csa_out,
+void csa::extract_final_trip (
+        const CSA_Outputs &csa_out,
         const CSA_Return &csa_ret,
         std::vector <size_t> &end_station,
         std::vector <size_t> &trip,
         std::vector <int> &time)
 {
+
     size_t i = csa_ret.end_station;
     if (i > csa_out.current_trip.size ()) // No route able to be found
     {
