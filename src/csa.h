@@ -112,6 +112,7 @@ CSA_Return main_csa_loop (
 
 void fill_one_csa_out (
         CSA_Outputs &csa_out,
+        CSA_Outputs &csa_out_candidate,
         const CSA_Inputs &csa_in,
         const size_t &i, const size_t &j);
 
