@@ -181,7 +181,7 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
         // add all departures from start_stations_set:
         if (start_stations_set.find (csa_in.departure_station [i]) !=
                 start_stations_set.end () &&
-                csa_in.arrival_time [i] < csa_out.earliest_connection [csa_in.arrival_station [i] ])
+                csa_in.arrival_time [i] <= csa_out.earliest_connection [csa_in.arrival_station [i] ])
         {
             is_connected [csa_in.trip_id [i] ] = true;
             csa::fill_one_csa_out (csa_out, csa_in, csa_in.arrival_station [i], i);
@@ -192,7 +192,7 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
                     csa_out.n_transfers [csa_in.departure_station [i] ] <= csa_pars.max_transfers) ||
                 is_connected [csa_in.trip_id [i]])
         {
-            if (csa_in.arrival_time [i] < csa_out.earliest_connection [csa_in.arrival_station [i] ])
+            if (csa_in.arrival_time [i] <= csa_out.earliest_connection [csa_in.arrival_station [i] ])
             {
                 csa::fill_one_csa_out (csa_out, csa_in, csa_in.arrival_station [i], i);
 
@@ -208,7 +208,7 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
                 {
                     size_t trans_dest = t.first;
                     int ttime = csa_in.arrival_time [i] + t.second;
-                    if (ttime < csa_out.earliest_connection [trans_dest] &&
+                    if (ttime <= csa_out.earliest_connection [trans_dest] &&
                             csa_out.n_transfers [trans_dest] <= csa_pars.max_transfers)
                     {
                         // modified version of fill_one_csa_out:
@@ -231,13 +231,27 @@ CSA_Return csa::main_csa_loop (const CSA_Parameters &csa_pars,
     return csa_ret;
 }
 
+/*!
+ * \param i index into station of csa_out for the connecting service csa_in
+ * \param j index into csa_in
+ */
 void csa::fill_one_csa_out (CSA_Outputs &csa_out, const CSA_Inputs &csa_in,
         const size_t &i, const size_t &j)
 {
-    csa_out.earliest_connection [i] = csa_in.arrival_time [j];
-    csa_out.current_trip [i] = csa_in.trip_id [j];
-    csa_out.prev_stn [i] = csa_in.departure_station [j];
-    csa_out.prev_time [i] = csa_in.departure_time [j];
+    bool fill_vals = (csa_out.earliest_connection [i] == INFINITE_INT);
+    if (!fill_vals) {
+        if (csa_in.arrival_time [j] == csa_out.earliest_connection [i] &&
+                csa_in.trip_id [j] == csa_out.current_trip [i]) {
+            fill_vals = true;
+        }
+    }
+
+    if (fill_vals) {
+        csa_out.earliest_connection [i] = csa_in.arrival_time [j];
+        csa_out.current_trip [i] = csa_in.trip_id [j];
+        csa_out.prev_stn [i] = csa_in.departure_station [j];
+        csa_out.prev_time [i] = csa_in.departure_time [j];
+    }
 }
 
 void csa::check_end_stations (std::unordered_set <size_t> &end_stations_set,

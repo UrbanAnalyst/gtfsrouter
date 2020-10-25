@@ -45,7 +45,7 @@ rcpp_make_timetable <- function(stop_times, stop_ids, trip_ids) {
 #' rcpp_csa
 #'
 #' Connection Scan Algorithm for GTFS data. The timetable has 
-#' [deparutre_station, arrival_station, departure_time, arrival_time,
+#' [departure_station, arrival_station, departure_time, arrival_time,
 #'     trip_id],
 #' with all entries as integer values, including times in seconds after
 #' 00:00:00. The station and trip IDs can be mapped back on to actual station
