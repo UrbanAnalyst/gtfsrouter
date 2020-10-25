@@ -39,12 +39,8 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
 
     // The csa_out vectors use nstations + 1 because it's 1-indexed throughout,
     // and the first element is ignored.
-    CSA_Outputs csa_out;
-    csa_out.earliest_connection.resize (csa_pars.nstations + 1, INFINITE_INT);
-    csa_out.n_transfers.resize (csa_pars.nstations + 1, 0);
-    csa_out.prev_time.resize (csa_pars.nstations + 1, INFINITE_INT);
-    csa_out.prev_stn.resize (csa_pars.nstations + 1, INFINITE_INT);
-    csa_out.current_trip.resize (csa_pars.nstations + 1, INFINITE_INT);
+    const size_t n = csa_pars.nstations + 1;
+    CSA_Outputs csa_out (n);
 
     csa::get_earliest_connection (start_stations, csa_pars.start_time,
             csa_in.transfer_map, csa_out.earliest_connection);

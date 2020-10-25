@@ -52,10 +52,19 @@ struct CSA_Inputs
     TransferMapType transfer_map;
 };
 
-struct CSA_Outputs
+class CSA_Outputs
 {
-    std::vector <int> earliest_connection, prev_time, n_transfers;
-    std::vector <size_t> prev_stn, current_trip;
+    public:
+        std::vector <int> earliest_connection, prev_time, n_transfers;
+        std::vector <size_t> prev_stn, current_trip;
+
+        CSA_Outputs (const size_t n) {
+            earliest_connection.resize (n, INFINITE_INT);
+            prev_time.resize (n, INFINITE_INT);
+            n_transfers.resize (n, 0);
+            prev_stn.resize (n, INFINITE_INT);
+            current_trip.resize (n, INFINITE_INT);
+        }
 };
 
 struct CSA_Return
