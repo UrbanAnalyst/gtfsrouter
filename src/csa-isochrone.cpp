@@ -165,6 +165,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     {
         std::vector <int> trip_out, end_station_out, end_times_out;
         size_t i = es;
+        int prev_time; // holds original departure time at end
         trip_out.push_back (static_cast <int> (csa_iso.current_trip [i]));
         end_station_out.push_back (static_cast <int> (i));
         while (i < INFINITE_INT)
@@ -172,6 +173,8 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             time = csa_iso.prev_arrival_time [i];
             if (time < INFINITE_INT) 
                 end_times_out.push_back (static_cast <int> (time));
+            if (csa_iso.prev_time [i] < INFINITE_INT)
+                prev_time = csa_iso.prev_time [i];
             i = csa_iso.prev_stn [static_cast <size_t> (i)];
             end_station_out.push_back (static_cast <int> (i));
             
@@ -180,6 +183,9 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         }
         
         end_station_out.resize (end_station_out.size () - 1);
+
+        end_times_out.push_back (prev_time);
+
         std::reverse (end_station_out.begin (), end_station_out.end ());
         std::reverse (end_times_out.begin (), end_times_out.end ());
         std::reverse (trip_out.begin (), trip_out.end ());

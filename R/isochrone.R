@@ -134,7 +134,7 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
                                        "stop_lon", "stop_lat")]),
                     cbind (trips [, c ("route_id", "trip_id",
                                        "trip_headsign")]),
-                    cbind ("earliest_arrival" = c(actual_start_time, earliest_arrival[[i]])))
+                    cbind ("earliest_arrival" = earliest_arrival[[i]]))
                    })
 
     list (isotrips = isotrips,
