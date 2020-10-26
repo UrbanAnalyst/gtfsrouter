@@ -124,9 +124,9 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                 if (!start_time_found)
                 {
                     actual_start_time = departure_time [i];
-                    // The following is a fudge to just stop scanning at that
-                    // specified time:
-                    actual_end_time = 2 * (actual_start_time - start_time) + end_time;
+                    // Scan up until twice the isochrone duration from the
+                    // actual start time:
+                    actual_end_time = 2 * (end_time - start_time) + actual_start_time;
                     start_time_found = true;
                 }
             }
