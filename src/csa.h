@@ -159,13 +159,12 @@ void extract_final_trip (
 namespace csaiso {
 
 void fill_one_csa_iso (
-        const std::vector <size_t> &departure_station,
-        const std::vector <size_t> &arrival_station,
-        const std::vector <size_t> &trip_id,
-        const std::vector <int> &departure_time,
-        const std::vector <int> &arrival_time,
-        CSA_Iso &csa_iso,
-        const size_t &i);
+        const size_t &departure_station,
+        const size_t &arrival_station,
+        const size_t &trip_id,
+        const int &departure_time,
+        const int &arrival_time,
+        CSA_Iso &csa_iso);
 
 } // end namespace csaido
 
