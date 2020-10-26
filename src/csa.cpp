@@ -184,9 +184,6 @@ CSA_Return csa::main_csa_loop (
 
     std::vector <bool> is_connected (csa_pars.ntrips, false);
 
-    const size_t n = csa_out.earliest_connection.size ();
-    CSA_Outputs csa_out_candidate (n);
-    
     // trip connections:
     for (size_t i = 0; i < csa_pars.timetable_size; i++)
     {
@@ -199,8 +196,8 @@ CSA_Return csa::main_csa_loop (
                 csa_in.arrival_time [i] <= csa_out.earliest_connection [csa_in.arrival_station [i] ])
         {
             is_connected [csa_in.trip_id [i] ] = true;
-            csa::fill_one_csa_out (csa_out, csa_out_candidate,
-                    csa_in, csa_in.arrival_station [i], i);
+            csa::fill_one_csa_out (csa_out, csa_in,
+                    csa_in.arrival_station [i], i);
         }
 
         // main connection scan:
@@ -210,8 +207,8 @@ CSA_Return csa::main_csa_loop (
         {
             if (csa_in.arrival_time [i] <= csa_out.earliest_connection [csa_in.arrival_station [i] ])
             {
-                csa::fill_one_csa_out (csa_out, csa_out_candidate,
-                        csa_in, csa_in.arrival_station [i], i);
+                csa::fill_one_csa_out (csa_out, csa_in,
+                        csa_in.arrival_station [i], i);
 
                 csa_out.n_transfers [csa_in.arrival_station [i] ] =
                     csa_out.n_transfers [csa_in.departure_station [i] ];
@@ -254,17 +251,21 @@ CSA_Return csa::main_csa_loop (
  */
 void csa::fill_one_csa_out (
         CSA_Outputs &csa_out,
-        CSA_Outputs &csa_out_candidate,
         const CSA_Inputs &csa_in,
         const size_t &i,
         const size_t &j)
 {
-    bool fill_vals = (csa_out.earliest_connection [i] == INFINITE_INT);
+
+    bool fill_vals = (csa_in.arrival_time [j] < csa_out.earliest_connection [i]);
     if (!fill_vals) {
-        if (csa_in.arrival_time [j] == csa_out.earliest_connection [i] &&
-                csa_in.trip_id [j] == csa_out.current_trip [i]) {
-            fill_vals = true;
-        }
+        // service at that time already exists, so only replace if trip_id of
+        // csa_in is same as trip that connected to the departure station.
+        // This clause ensures connection remains on same service in cases of
+        // parallel services; see #48
+        const size_t this_stn = csa_in.departure_station [j];
+        const size_t prev_trip = csa_out.current_trip [this_stn];
+
+        fill_vals = (csa_in.trip_id [j] == prev_trip);
     }
 
     if (fill_vals) {
