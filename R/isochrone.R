@@ -196,8 +196,12 @@ route_endpoints <- function (x)
                   i [nrow (i), "stop_name"], character (1))
     ids <- vapply (x, function (i)
                   i [nrow (i), "stop_id"], character (1))
-    earliest_arrival <- vapply (x, function (i)
-        i [nrow (i), "earliest_arrival"], numeric(1))
+    arrival <- vapply (x, function (i)
+                       i [nrow (i), "earliest_arrival"],
+                       integer (1))
+    departure <- vapply (x, function (i)
+                        i$earliest_arrival [1],
+                        integer (1))
 
     transfers <- vapply (x, function (i) {
                              index <- seq (nrow (i)) [-1]
@@ -207,7 +211,9 @@ route_endpoints <- function (x)
 
     sf::st_sf ("stop_name" = nms,
                "stop_id" = ids,
-               "earliest_arrival" = earliest_arrival,
+               "departure" = hms::hms (departure),
+               "arrival" = hms::hms (arrival),
+               "duration" = hms::hms (arrival - departure),
                "transfers" = transfers,
                geometry = g)
 }
@@ -224,10 +230,10 @@ route_midpoints <- function (x)
     ids <- lapply (x, function (i)
                   i [2:(nrow (i) - 1), "stop_id"])
     earliest_arrival <- lapply (x, function (i)
-        i [2:(nrow (i) - 1), "earliest_arrival"])
+                                hms::hms (i [2:(nrow (i) - 1), "earliest_arrival"]))
     sf::st_sf ("stop_name" = do.call (c, nms),
                "stop_id" = do.call (c, ids),
-               "earliest_arrival" = do.call (c, earliest_arrival),
+               "arrival" = do.call (c, earliest_arrival),
                geometry = g)
 }
 
