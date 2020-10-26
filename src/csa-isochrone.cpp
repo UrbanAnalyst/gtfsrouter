@@ -110,7 +110,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         // add all departures from start_stations_set:
         if (start_stations_set.find (departure_station [i]) !=
                 start_stations_set.end () &&
-                arrival_time [i] < earliest_connection [arrival_station [i] ])
+                arrival_time [i] <= earliest_connection [arrival_station [i] ])
         {
             is_connected [trip_id [i] ] = true;
             earliest_connection [arrival_station [i] ] = arrival_time [i];
@@ -133,7 +133,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         if ((earliest_connection [departure_station [i] ] <= departure_time [i])
                 || is_connected [trip_id [i]])
         {
-            if (arrival_time [i] < earliest_connection [arrival_station [i] ])
+            if (arrival_time [i] <= earliest_connection [arrival_station [i] ])
             {
                 earliest_connection [arrival_station [i] ] = arrival_time [i];
                 prev_stn [arrival_station [i] ] = departure_station [i];
