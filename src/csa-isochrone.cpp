@@ -108,15 +108,18 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         {
             is_connected [trip_id [i] ] = true;
 
-            csaiso::fill_one_csa_iso (departure_station [i], arrival_station [i],
-                    trip_id [i], departure_time [i], arrival_time [i], csa_iso);
+            bool filled = csaiso::fill_one_csa_iso (departure_station [i],
+                    arrival_station [i], trip_id [i], departure_time [i],
+                    arrival_time [i], csa_iso);
             
-            end_stations.emplace (arrival_station [i]);
-            if (!start_time_found)
-            {
-                actual_start_time = departure_time [i];
-                actual_end_time = actual_start_time + end_time - start_time;
-                start_time_found = true;
+            if (filled) {
+                end_stations.emplace (arrival_station [i]);
+                if (!start_time_found)
+                {
+                    actual_start_time = departure_time [i];
+                    actual_end_time = actual_start_time + end_time - start_time;
+                    start_time_found = true;
+                }
             }
         }
 
@@ -126,11 +129,14 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         {
             if (arrival_time [i] <= csa_iso.earliest_connection [arrival_station [i] ])
             {
-                csaiso::fill_one_csa_iso (departure_station [i], arrival_station [i],
-                        trip_id [i], departure_time [i], arrival_time [i], csa_iso);
+                bool filled = csaiso::fill_one_csa_iso (departure_station [i],
+                        arrival_station [i], trip_id [i], departure_time [i],
+                        arrival_time [i], csa_iso);
 
-                end_stations.emplace (arrival_station [i]);
-                end_stations.erase (departure_station [i]);
+                if (filled) {
+                    end_stations.emplace (arrival_station [i]);
+                    end_stations.erase (departure_station [i]);
+                }
             }
 
             if (transfer_map.find (arrival_station [i]) != transfer_map.end ())
@@ -187,7 +193,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     return res;
 }
 
-void csaiso::fill_one_csa_iso (
+bool csaiso::fill_one_csa_iso (
         const size_t &departure_station,
         const size_t &arrival_station,
         const size_t &trip_id,
@@ -195,10 +201,27 @@ void csaiso::fill_one_csa_iso (
         const int &arrival_time,
         CSA_Iso &csa_iso) {
 
-    csa_iso.earliest_connection [arrival_station] = arrival_time;
-    csa_iso.current_trip [departure_station] = trip_id;
-    csa_iso.current_trip [arrival_station] = trip_id;
-    csa_iso.prev_stn [arrival_station] = departure_station;
-    csa_iso.prev_time [arrival_station] = departure_time;
-    csa_iso.prev_arrival_time [arrival_station] = arrival_time;
+    bool fill_vals = (arrival_time < csa_iso.earliest_connection [arrival_station]);
+    if (!fill_vals) {
+        // service at that time already exists, so only replace if trip_id of
+        // csa_in is same as trip that connected to the departure station.
+        // This clause ensures connection remains on same service in cases of
+        // parallel services; see #48 and equivalent code in csa.cpp
+        const size_t prev_trip = csa_iso.current_trip [departure_station];
+        fill_vals = (prev_trip < INFINITE_INT &&
+                trip_id == csa_iso.current_trip [departure_station]);
+    }
+
+    if (fill_vals) {
+        csa_iso.earliest_connection [arrival_station] = arrival_time;
+        csa_iso.current_trip [arrival_station] = trip_id;
+        csa_iso.prev_stn [arrival_station] = departure_station;
+        csa_iso.prev_time [arrival_station] = departure_time;
+        csa_iso.prev_arrival_time [arrival_station] = arrival_time;
+        // fill in trip_id from departure_station only for the start of trips:
+        if (csa_iso.current_trip [departure_station] == INFINITE_INT)
+            csa_iso.current_trip [departure_station] = trip_id;
+    }
+
+    return (fill_vals);
 }

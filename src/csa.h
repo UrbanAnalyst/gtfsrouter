@@ -158,7 +158,7 @@ void extract_final_trip (
 
 namespace csaiso {
 
-void fill_one_csa_iso (
+bool fill_one_csa_iso (
         const size_t &departure_station,
         const size_t &arrival_station,
         const size_t &trip_id,
