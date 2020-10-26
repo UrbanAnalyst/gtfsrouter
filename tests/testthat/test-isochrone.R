@@ -34,6 +34,8 @@ test_that("gtfs_isochrone", {
                                    "numeric", "numeric"))
               expected_col_names <- c("stop_name", "stop_id", "earliest_arrival", "geometry")
               expect_identical(names(ic$mid_points), expected_col_names)
+              expected_col_names <- c("stop_name", "stop_id", "earliest_arrival",
+                                      "transfers", "geometry")
               expect_identical(names(ic$end_points), expected_col_names)
 
               ic2 <- gtfs_isochrone (g,

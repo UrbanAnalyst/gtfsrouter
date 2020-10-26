@@ -199,9 +199,16 @@ route_endpoints <- function (x)
     earliest_arrival <- vapply (x, function (i)
         i [nrow (i), "earliest_arrival"], numeric(1))
 
+    transfers <- vapply (x, function (i) {
+                             index <- seq (nrow (i)) [-1]
+                             length (which (i$trip_id [index - 1] !=
+                                            i$trip_id [index])) },
+                         integer (1))
+
     sf::st_sf ("stop_name" = nms,
                "stop_id" = ids,
                "earliest_arrival" = earliest_arrival,
+               "transfers" = transfers,
                geometry = g)
 }
 
