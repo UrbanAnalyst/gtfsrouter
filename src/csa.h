@@ -156,6 +156,19 @@ void extract_final_trip (
 
 } // end namespace csa
 
+namespace csaiso {
+
+void fill_one_csa_iso (
+        const std::vector <size_t> &departure_station,
+        const std::vector <size_t> &arrival_station,
+        const std::vector <size_t> &trip_id,
+        const std::vector <int> &departure_time,
+        const std::vector <int> &arrival_time,
+        CSA_Iso &csa_iso,
+        const size_t &i);
+
+} // end namespace csaido
+
 Rcpp::DataFrame rcpp_csa (
         Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
