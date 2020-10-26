@@ -137,6 +137,13 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
                     cbind ("earliest_arrival" = earliest_arrival[[i]]))
                    })
 
+    # Then cut them down to within the alloted isochrone durations:
+    dur <- end_time - start_time
+    isotrips <- lapply (isotrips, function (i) {
+                            tdiff <- i$earliest_arrival - i$earliest_arrival [1]
+                            return (i [which (tdiff < dur), ])  })
+    isotrips <- isotrips [which (!duplicated (isotrips))]
+
     list (isotrips = isotrips,
           start_time = actual_start_time,
           end_time = actual_start_time + end_time - start_time)
