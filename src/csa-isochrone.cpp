@@ -108,8 +108,8 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         {
             is_connected [trip_id [i] ] = true;
 
-            csaiso::fill_one_csa_iso (departure_station, arrival_station,
-                    trip_id, departure_time, arrival_time, csa_iso, i);
+            csaiso::fill_one_csa_iso (departure_station [i], arrival_station [i],
+                    trip_id [i], departure_time [i], arrival_time [i], csa_iso);
             
             end_stations.emplace (arrival_station [i]);
             if (!start_time_found)
@@ -126,8 +126,8 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         {
             if (arrival_time [i] <= csa_iso.earliest_connection [arrival_station [i] ])
             {
-                csaiso::fill_one_csa_iso (departure_station, arrival_station,
-                        trip_id, departure_time, arrival_time, csa_iso, i);
+                csaiso::fill_one_csa_iso (departure_station [i], arrival_station [i],
+                        trip_id [i], departure_time [i], arrival_time [i], csa_iso);
 
                 end_stations.emplace (arrival_station [i]);
                 end_stations.erase (departure_station [i]);
@@ -188,18 +188,17 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
 }
 
 void csaiso::fill_one_csa_iso (
-        const std::vector <size_t> &departure_station,
-        const std::vector <size_t> &arrival_station,
-        const std::vector <size_t> &trip_id,
-        const std::vector <int> &departure_time,
-        const std::vector <int> &arrival_time,
-        CSA_Iso &csa_iso,
-        const size_t &i) {
+        const size_t &departure_station,
+        const size_t &arrival_station,
+        const size_t &trip_id,
+        const int &departure_time,
+        const int &arrival_time,
+        CSA_Iso &csa_iso) {
 
-    csa_iso.earliest_connection [arrival_station [i] ] = arrival_time [i];
-    csa_iso.current_trip [departure_station [i] ] = trip_id [i];
-    csa_iso.current_trip [arrival_station [i] ] = trip_id [i];
-    csa_iso.prev_stn [arrival_station [i] ] = departure_station [i];
-    csa_iso.prev_time [arrival_station [i] ] = departure_time [i];
-    csa_iso.prev_arrival_time [arrival_station [i] ] = arrival_time [i];
+    csa_iso.earliest_connection [arrival_station] = arrival_time;
+    csa_iso.current_trip [departure_station] = trip_id;
+    csa_iso.current_trip [arrival_station] = trip_id;
+    csa_iso.prev_stn [arrival_station] = departure_station;
+    csa_iso.prev_time [arrival_station] = departure_time;
+    csa_iso.prev_arrival_time [arrival_station] = arrival_time;
 }
