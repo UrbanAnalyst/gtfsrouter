@@ -55,13 +55,34 @@ struct CSA_Inputs
 class CSA_Outputs
 {
     public:
-        std::vector <int> earliest_connection, prev_time, n_transfers;
-        std::vector <size_t> prev_stn, current_trip;
+        std::vector <int> earliest_connection;
+        std::vector <int> prev_time;
+        std::vector <int> n_transfers;
+        std::vector <size_t> prev_stn;
+        std::vector <size_t> current_trip;
 
         CSA_Outputs (const size_t n) {
             earliest_connection.resize (n, INFINITE_INT);
             prev_time.resize (n, INFINITE_INT);
             n_transfers.resize (n, 0);
+            prev_stn.resize (n, INFINITE_INT);
+            current_trip.resize (n, INFINITE_INT);
+        }
+};
+
+class CSA_Iso
+{
+    public:
+        std::vector <int> earliest_connection;
+        std::vector <int> prev_time;
+        std::vector <int> prev_arrival_time;
+        std::vector <size_t> prev_stn;
+        std::vector <size_t> current_trip;
+
+        CSA_Iso (const size_t n) {
+            earliest_connection.resize (n, INFINITE_INT);
+            prev_time.resize (n, INFINITE_INT);
+            prev_arrival_time.resize (n, INFINITE_INT);
             prev_stn.resize (n, INFINITE_INT);
             current_trip.resize (n, INFINITE_INT);
         }

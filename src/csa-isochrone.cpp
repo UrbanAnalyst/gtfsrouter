@@ -54,17 +54,11 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         }
     }
 
-    // set transfer times from first connection; the prev and current vars are
-    // used in the main loop below.
-    std::vector <int> earliest_connection (nstations + 1, INFINITE_INT),
-        prev_time (nstations + 1, INFINITE_INT),
-        prev_arrival_time (nstations + 1, INFINITE_INT);
-    std::vector <size_t> prev_stn (nstations + 1, INFINITE_INT),
-        current_trip (nstations + 1, INFINITE_INT);
+    CSA_Iso csa_iso (nstations + 1);
 
     for (size_t i = 0; i < start_stations.size (); i++)
     {
-        earliest_connection [start_stations [i]] = start_time;
+        csa_iso.earliest_connection [start_stations [i]] = start_time;
         // The following lines add transfer stations to the list of initial
         // starting stations, but this should NOT be done, because the algorithm
         // needs a single root path to start, and this effectively starts with
@@ -110,15 +104,15 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         // add all departures from start_stations_set:
         if (start_stations_set.find (departure_station [i]) !=
                 start_stations_set.end () &&
-                arrival_time [i] <= earliest_connection [arrival_station [i] ])
+                arrival_time [i] <= csa_iso.earliest_connection [arrival_station [i] ])
         {
             is_connected [trip_id [i] ] = true;
-            earliest_connection [arrival_station [i] ] = arrival_time [i];
-            current_trip [departure_station [i] ] = trip_id [i];
-            current_trip [arrival_station [i] ] = trip_id [i];
-            prev_stn [arrival_station [i] ] = departure_station [i];
-            prev_time [arrival_station [i] ] = departure_time [i];
-            prev_arrival_time [arrival_station [i] ] = arrival_time [i];
+            csa_iso.earliest_connection [arrival_station [i] ] = arrival_time [i];
+            csa_iso.current_trip [departure_station [i] ] = trip_id [i];
+            csa_iso.current_trip [arrival_station [i] ] = trip_id [i];
+            csa_iso.prev_stn [arrival_station [i] ] = departure_station [i];
+            csa_iso.prev_time [arrival_station [i] ] = departure_time [i];
+            csa_iso.prev_arrival_time [arrival_station [i] ] = arrival_time [i];
             
             end_stations.emplace (arrival_station [i]);
             if (!start_time_found)
@@ -130,17 +124,17 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         }
 
         // main connection scan:
-        if ((earliest_connection [departure_station [i] ] <= departure_time [i])
+        if ((csa_iso.earliest_connection [departure_station [i] ] <= departure_time [i])
                 || is_connected [trip_id [i]])
         {
-            if (arrival_time [i] <= earliest_connection [arrival_station [i] ])
+            if (arrival_time [i] <= csa_iso.earliest_connection [arrival_station [i] ])
             {
-                earliest_connection [arrival_station [i] ] = arrival_time [i];
-                prev_stn [arrival_station [i] ] = departure_station [i];
-                prev_time [arrival_station [i] ] = departure_time [i];
-                prev_arrival_time [arrival_station [i] ] = arrival_time [i];
-                current_trip [arrival_station [i] ] = trip_id [i];
-                current_trip [departure_station [i] ] = trip_id [i];
+                csa_iso.earliest_connection [arrival_station [i] ] = arrival_time [i];
+                csa_iso.prev_stn [arrival_station [i] ] = departure_station [i];
+                csa_iso.prev_time [arrival_station [i] ] = departure_time [i];
+                csa_iso.prev_arrival_time [arrival_station [i] ] = arrival_time [i];
+                csa_iso.current_trip [arrival_station [i] ] = trip_id [i];
+                csa_iso.current_trip [departure_station [i] ] = trip_id [i];
 
                 end_stations.emplace (arrival_station [i]);
                 end_stations.erase (departure_station [i]);
@@ -152,12 +146,12 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                 {
                     size_t trans_dest = t.first;
                     int ttime = arrival_time [i] + t.second;
-                    if (ttime < earliest_connection [trans_dest])
+                    if (ttime < csa_iso.earliest_connection [trans_dest])
                     {
-                        earliest_connection [trans_dest] = ttime;
-                        prev_stn [trans_dest] = arrival_station [i];
-                        prev_time [trans_dest] = arrival_time [i];
-                        prev_arrival_time [trans_dest] = arrival_time [i];
+                        csa_iso.earliest_connection [trans_dest] = ttime;
+                        csa_iso.prev_stn [trans_dest] = arrival_station [i];
+                        csa_iso.prev_time [trans_dest] = arrival_time [i];
+                        csa_iso.prev_arrival_time [trans_dest] = arrival_time [i];
                     }
                 }
             }
@@ -172,18 +166,18 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     {
         std::vector <int> trip_out, end_station_out, end_times_out;
         size_t i = es;
-        trip_out.push_back (static_cast <int> (current_trip [i]));
+        trip_out.push_back (static_cast <int> (csa_iso.current_trip [i]));
         end_station_out.push_back (static_cast <int> (i));
         while (i < INFINITE_INT)
         {
-            time = prev_arrival_time [i];
+            time = csa_iso.prev_arrival_time [i];
             if (time < INFINITE_INT) 
                 end_times_out.push_back (static_cast <int> (time));
-            i = prev_stn [static_cast <size_t> (i)];
+            i = csa_iso.prev_stn [static_cast <size_t> (i)];
             end_station_out.push_back (static_cast <int> (i));
             
             if (i < INFINITE_INT) 
-                trip_out.push_back (static_cast <int> (current_trip [i]));
+                trip_out.push_back (static_cast <int> (csa_iso.current_trip [i]));
         }
         
         end_station_out.resize (end_station_out.size () - 1);
