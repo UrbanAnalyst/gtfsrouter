@@ -28,11 +28,11 @@
 #' @return An object of class `gtfs_isochrone`, including \pkg{sf}-formatted
 #' points representing the `from` station (`start_point`), the terminal end
 #' stations (`end_points`), and all intermediate stations (`mid_points`) each with
-#' the earliest possible arrival time, along with lines representing the individual routes. 
-#' A non-convex ("alpha") hull is
-#' also returned (as an \pkg{sf} `POLYGON` object), including measures of area
-#' and "elongation", which equals zero for a circle, and increases towards one
-#' for more elongated shapes.
+#' the earliest possible arrival time, along with lines representing the
+#' individual routes. A non-convex ("alpha") hull is also returned (as an
+#' \pkg{sf} `POLYGON` object), including measures of area and "elongation",
+#' which equals zero for a circle, and increases towards one for more elongated
+#' shapes.
 #'
 #' @examples
 #' berlin_gtfs_to_zip ()
