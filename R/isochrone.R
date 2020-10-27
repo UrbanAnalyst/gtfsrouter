@@ -221,16 +221,16 @@ route_endpoints <- function (x)
 route_midpoints <- function (x)
 {
     xy <- lapply (x, function (i)
-                  as.matrix (i [2:(nrow (i) - 1), c ("stop_lon", "stop_lat")]))
+                  as.matrix (i [-c (1, nrow (i)), c ("stop_lon", "stop_lat")]))
     xy <- do.call (rbind, xy)
     xy <- data.frame ("x" = xy [, 1], "y" = xy [, 2])
     g <- sf::st_as_sf (xy, coords = 1:2, crs = 4326)$geometry
     nms <- lapply (x, function (i)
-                  i [2:(nrow (i) - 1), "stop_name"])
+                  i [-c (1, nrow (i)), "stop_name"])
     ids <- lapply (x, function (i)
-                  i [2:(nrow (i) - 1), "stop_id"])
+                  i [-c (1, nrow (i)), "stop_id"])
 
-    arrival <- lapply (x, function (i) i$earliest_arrival [2:(nrow (i) - 1)])
+    arrival <- lapply (x, function (i) i$earliest_arrival [-c (1, nrow (i))])
     arrival <- hms::hms (do.call (c, arrival))
 
     departure <- lapply (x, function (i)
