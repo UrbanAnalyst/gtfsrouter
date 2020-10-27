@@ -32,11 +32,10 @@ test_that("gtfs_isochrone", {
               expect_identical (as.character (classes),
                                 c ("sf", "sf", "sf", "sfc_LINESTRING", "sf",
                                    "numeric", "numeric"))
-              expect_identical(names(ic$mid_points),
-                               c ("stop_name", "stop_id", "arrival", "geometry"))
-              expect_identical(names(ic$end_points), 
-                               c ("stop_name", "stop_id", "departure", "arrival",
-                                  "duration", "transfers", "geometry"))
+              cnames <- c ("stop_name", "stop_id", "departure", "arrival",
+                           "duration", "transfers", "geometry")
+              expect_identical (names (ic$mid_points), cnames)
+              expect_identical (names (ic$end_points), cnames)
 
               ic2 <- gtfs_isochrone (g,
                                     from = "Schonlein",

@@ -229,11 +229,26 @@ route_midpoints <- function (x)
                   i [2:(nrow (i) - 1), "stop_name"])
     ids <- lapply (x, function (i)
                   i [2:(nrow (i) - 1), "stop_id"])
-    earliest_arrival <- lapply (x, function (i)
-                                hms::hms (i [2:(nrow (i) - 1), "earliest_arrival"]))
+
+    arrival <- lapply (x, function (i) i$earliest_arrival [2:(nrow (i) - 1)])
+    arrival <- hms::hms (do.call (c, arrival))
+
+    departure <- lapply (x, function (i)
+                        rep (i$earliest_arrival [1], nrow (i) - 2))
+    departure <- hms::hms (do.call (c, departure))
+
+    duration <- hms::hms (as.integer (arrival - departure))
+
+    transfers <- lapply (x, function (i) {
+                             index <- match (i$trip_id, names (table (i$trip_id))) - 1
+                             cumsum (diff (sort (index [-length (index)])))   })
+
     sf::st_sf ("stop_name" = do.call (c, nms),
                "stop_id" = do.call (c, ids),
-               "arrival" = do.call (c, earliest_arrival),
+               "departure" = departure,
+               "arrival" = arrival,
+               "duration" = duration,
+               "transfers" = do.call (c, transfers),
                geometry = g)
 }
 
