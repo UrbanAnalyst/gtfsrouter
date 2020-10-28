@@ -165,8 +165,6 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                         csa_iso.elapsed_time [trans_dest] =
                             csa_iso.elapsed_time [arrival_station [i]] + t.second;
                         csa_iso.prev_stn [trans_dest] = arrival_station [i];
-                        csa_iso.prev_time [trans_dest] = arrival_time [i];
-                        csa_iso.prev_arrival_time [trans_dest] = arrival_time [i];
                         csa_iso.trip_start_time [trans_dest] =
                             csa_iso.trip_start_time [departure_station [i]];
                     }
@@ -191,16 +189,19 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         end_station_out.push_back (static_cast <int> (i));
         while (i < INFINITE_INT)
         {
-            time = csa_iso.prev_arrival_time [i];
+            //time = csa_iso.prev_arrival_time [i];
+            time = csa_iso.trip_start_time [i] + csa_iso.elapsed_time [i];
             if (time < INFINITE_INT && csa_iso.current_trip [i] < INFINITE_INT) {
                 end_times_out.push_back (static_cast <int> (time));
                 end_station_out.push_back (static_cast <int> (i));
                 trip_out.push_back (static_cast <int> (csa_iso.current_trip [i]));
 
-                if (csa_iso.prev_time [i] < INFINITE_INT)
-                    prev_time = csa_iso.prev_time [i];
+                //if (csa_iso.prev_time [i] < INFINITE_INT)
+                //    prev_time = csa_iso.prev_time [i];
             }
             i = csa_iso.prev_stn [static_cast <size_t> (i)];
+            if (i < INFINITE_INT)
+                prev_time = csa_iso.trip_start_time [i] + csa_iso.elapsed_time [i];
         }
         
         end_times_out.push_back (prev_time);
@@ -243,8 +244,6 @@ bool csaiso::fill_one_csa_iso (
             csa_iso.trip_start_time [departure_station];
         csa_iso.current_trip [arrival_station] = trip_id;
         csa_iso.prev_stn [arrival_station] = departure_station;
-        csa_iso.prev_time [arrival_station] = departure_time;
-        csa_iso.prev_arrival_time [arrival_station] = arrival_time;
         // fill in trip_id from departure_station only for the start of trips:
         if (csa_iso.current_trip [departure_station] == INFINITE_INT)
             csa_iso.current_trip [departure_station] = trip_id;

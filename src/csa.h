@@ -75,8 +75,6 @@ class CSA_Iso
     public:
         std::vector <int> earliest_connection;
         std::vector <int> elapsed_time;
-        std::vector <int> prev_time;
-        std::vector <int> prev_arrival_time;
         std::vector <int> trip_start_time;
         std::vector <size_t> prev_stn;
         std::vector <size_t> current_trip;
@@ -84,8 +82,6 @@ class CSA_Iso
         CSA_Iso (const size_t n) {
             earliest_connection.resize (n, INFINITE_INT);
             elapsed_time.resize (n, INFINITE_INT);
-            prev_time.resize (n, INFINITE_INT);
-            prev_arrival_time.resize (n, INFINITE_INT);
             trip_start_time.resize (n, INFINITE_INT);
             prev_stn.resize (n, INFINITE_INT);
             current_trip.resize (n, INFINITE_INT);
