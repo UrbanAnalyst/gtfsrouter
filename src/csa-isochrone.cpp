@@ -62,24 +62,6 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     for (size_t i = 0; i < start_stations.size (); i++)
     {
         csa_iso.earliest_connection [start_stations [i]] = start_time;
-        // The following lines add transfer stations to the list of initial
-        // starting stations, but this should NOT be done, because the algorithm
-        // needs a single root path to start, and this effectively starts with
-        // multiple root paths.
-        /*
-        if (transfer_map.find (start_stations [i]) !=
-                transfer_map.end ())
-        {
-            std::unordered_map <size_t, int> transfer_pair =
-                transfer_map.at (start_stations [i]);
-            for (auto t: transfer_pair)
-            {
-                // Don't penalise these first footpaths:
-                //earliest_connection [t.first] = start_time + t.second;
-                earliest_connection [t.first] = start_time;
-            }
-        }
-        */
     }
 
     // stations and trips are size_t because they're used as direct array indices.
@@ -113,11 +95,15 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             bool filled = csaiso::fill_one_csa_iso (departure_station [i],
                     arrival_station [i], trip_id [i], departure_time [i],
                     arrival_time [i], csa_iso);
-            csa_iso.trip_start_time [departure_station [i] ] = departure_time [i];
-            csa_iso.trip_start_time [arrival_station [i] ] = departure_time [i];
+            if (csa_iso.trip_start_time [departure_station [i]] == INFINITE_INT ||
+                    csa_iso.trip_start_time [departure_station [i]] < departure_time [i])
+                csa_iso.trip_start_time [departure_station [i] ] = departure_time [i];
+            if (csa_iso.trip_start_time [arrival_station [i]] == INFINITE_INT ||
+                    csa_iso.trip_start_time [arrival_station [i]] < departure_time [i])
+                csa_iso.trip_start_time [arrival_station [i] ] = departure_time [i];
             csa_iso.elapsed_time [departure_station [i]] = 0L;
             csa_iso.elapsed_time [arrival_station [i]] =
-                arrival_time [i] - departure_time [i];
+                arrival_time [i] - csa_iso.trip_start_time [departure_station [i]];
             
             if (filled) {
                 end_stations.emplace (arrival_station [i]);
@@ -236,9 +222,14 @@ bool csaiso::fill_one_csa_iso (
         const size_t prev_trip = csa_iso.current_trip [departure_station];
         fill_vals = (prev_trip < INFINITE_INT &&
                 trip_id == csa_iso.current_trip [departure_station]);
+
+        if (!fill_vals && csa_iso.trip_start_time [departure_station] < INFINITE_INT)
+            fill_vals = ((arrival_time - csa_iso.trip_start_time [departure_station]) <
+                    csa_iso.elapsed_time [arrival_station]);
     }
 
     if (fill_vals) {
+
         csa_iso.earliest_connection [arrival_station] = arrival_time;
         csa_iso.elapsed_time [arrival_station] = arrival_time -
             csa_iso.trip_start_time [departure_station];
@@ -248,8 +239,10 @@ bool csaiso::fill_one_csa_iso (
         if (csa_iso.current_trip [departure_station] == INFINITE_INT)
             csa_iso.current_trip [departure_station] = trip_id;
         // propagate trip start time from departure to arrival station:
-        csa_iso.trip_start_time [arrival_station] =
-            csa_iso.trip_start_time [departure_station];
+        if (csa_iso.trip_start_time [arrival_station] >
+                csa_iso.trip_start_time [departure_station])
+            csa_iso.trip_start_time [arrival_station] =
+                csa_iso.trip_start_time [departure_station];
     }
 
     return (fill_vals);
