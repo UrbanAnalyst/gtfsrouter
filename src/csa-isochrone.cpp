@@ -160,6 +160,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                     int ttime = arrival_time [i] + t.second;
                     if (ttime < csa_iso.earliest_connection [trans_dest])
                     {
+                        // Note: transfers do not have a current_trip value
                         csa_iso.earliest_connection [trans_dest] = ttime;
                         csa_iso.elapsed_time [trans_dest] =
                             csa_iso.elapsed_time [arrival_station [i]] + t.second;
@@ -183,24 +184,25 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         std::vector <int> trip_out, end_station_out, end_times_out;
         size_t i = es;
         int prev_time; // holds original departure time at end
+        if (csa_iso.current_trip [i] == INFINITE_INT)
+            continue;
+
         trip_out.push_back (static_cast <int> (csa_iso.current_trip [i]));
         end_station_out.push_back (static_cast <int> (i));
         while (i < INFINITE_INT)
         {
             time = csa_iso.prev_arrival_time [i];
-            if (time < INFINITE_INT) 
+            if (time < INFINITE_INT && csa_iso.current_trip [i] < INFINITE_INT) {
                 end_times_out.push_back (static_cast <int> (time));
-            if (csa_iso.prev_time [i] < INFINITE_INT)
-                prev_time = csa_iso.prev_time [i];
-            i = csa_iso.prev_stn [static_cast <size_t> (i)];
-            end_station_out.push_back (static_cast <int> (i));
-            
-            if (i < INFINITE_INT) 
+                end_station_out.push_back (static_cast <int> (i));
                 trip_out.push_back (static_cast <int> (csa_iso.current_trip [i]));
+
+                if (csa_iso.prev_time [i] < INFINITE_INT)
+                    prev_time = csa_iso.prev_time [i];
+            }
+            i = csa_iso.prev_stn [static_cast <size_t> (i)];
         }
         
-        end_station_out.resize (end_station_out.size () - 1);
-
         end_times_out.push_back (prev_time);
 
         std::reverse (end_station_out.begin (), end_station_out.end ());
