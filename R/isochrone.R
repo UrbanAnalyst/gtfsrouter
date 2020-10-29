@@ -16,10 +16,6 @@
 #' @param from_is_id Set to `TRUE` to enable `from` parameter to specify entry
 #' in `stop_id` rather than `stop_name` column of the `stops` table (same as
 #' `from_to_are_ids` parameter of \link{gtfs_route}).
-#' @param route_pattern Using only those routes matching given pattern, for
-#' example, "^U" for routes starting with "U" (as commonly used for underground
-#' or subway routes. (Parameter not used at all if `gtfs` has already been
-#' prepared with \link{gtfs_timetable}.)
 #' @param hull_alpha alpha value of non-convex hulls returned as part of result
 #' (see ?alphashape::ashape for details).
 #'

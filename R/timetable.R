@@ -16,7 +16,9 @@
 #' and 'calendar_dates' options is covered.
 #' @param route_pattern Using only those routes matching given pattern, for
 #' example, "^U" for routes starting with "U" (as commonly used for underground
-#' or subway routes.
+#' or subway routes. To negative the `route_pattern` -- that is, to include all
+#' routes except those matching the patter -- prepend the value with "!"; for
+#' example "!^U" with include all services except those starting with "U".
 #'
 #' @return The input data with an addition items, `timetable`, `stations`, and
 #' `trips`, containing data formatted for more efficient use with
@@ -232,7 +234,19 @@ filter_by_route <- function (gtfs, route_pattern = NULL)
     route_short_name <- route_id <- trip_id <- stop_id <-
         from_stop_id <- to_stop_id <- NULL
 
-    index <- grep (route_pattern, gtfs$routes [, route_short_name])
+    invert <- FALSE
+    if (substring (route_pattern, 1, 1) == "!") {
+        if (nchar (route_pattern) == 1)
+            stop ("Oh come on, route_pattern = '!' is silly")
+        invert <- TRUE
+        route_pattern <- substring (route_pattern, 2, nchar (route_pattern))
+    }
+    index <- grep (route_pattern,
+                   gtfs$routes [, route_short_name],
+                   invert = invert)
+    if (length (index) == 0)
+        stop ("There are no routes matching that pattern")
+
     gtfs$routes <- gtfs$routes [index, ]
 
     gtfs$trips <- gtfs$trips [which (gtfs$trips [, route_id] %in%

@@ -41,8 +41,11 @@ used. (Not used if \code{gtfs} has already been prepared with
 
 \item{route_pattern}{Using only those routes matching given pattern, for
 example, "^U" for routes starting with "U" (as commonly used for underground
-or subway routes. (Parameter not used at all if \code{gtfs} has already been
-prepared with \link{gtfs_timetable}.)}
+or subway routes. To negate the \code{route_pattern} -- that is, to include all
+routes except those matching the pattern -- prepend the value with "!"; for
+example "!^U" will include all services except those starting with "U". (This
+parameter is not used at all if \code{gtfs} has already been prepared with
+\link{gtfs_timetable}.)}
 
 \item{earliest_arrival}{If \code{FALSE}, routing will be with the first-departing
 service, which may not provide the earliest arrival at the \code{to} station. This
