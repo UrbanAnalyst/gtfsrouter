@@ -116,12 +116,12 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
     if (length (stns) < 2)
         stop ("No isochrone possible") # nocov
 
-    actual_start_time <- as.numeric (stns [length (stns)])
-
     index <- 3 * 1:((length (stns) - 1) / 3) - 2
     trips <- stns [index + 1]
     earliest_arrival <- stns [index + 2]
     stns <- stns [index]
+
+    actual_start_time <- min (vapply (earliest_arrival, min, integer (1)))
 
     stop_ids <- lapply (stns, function (i) gtfs$stop_ids [i] [, stop_ids])
     trip_ids <- lapply (trips, function (i) gtfs$trip_ids [i] [, trip_ids])

@@ -166,6 +166,15 @@ bool fill_one_csa_iso (
         const int &arrival_time,
         CSA_Iso &csa_iso);
 
+int find_actual_end_time (
+        const size_t &n,
+        const std::vector <int> &departure_time,
+        const std::vector <size_t> &departure_station,
+        const std::unordered_set <size_t> &start_stations_set,
+        const int &start_time,
+        const int &end_time
+        );
+
 } // end namespace csaido
 
 Rcpp::DataFrame rcpp_csa (
