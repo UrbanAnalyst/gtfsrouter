@@ -81,3 +81,31 @@ test_that ("day param", {
               expect_error (gt <- gtfs_timetable (g, day = NA),
                             "day must be a day of the week")
              })
+
+test_that ("date param", {
+  berlin_gtfs_to_zip ()
+  f <- file.path (tempdir (), "vbb.zip")
+  expect_true (file.exists (f))
+  expect_silent (g <- extract_gtfs (f, quiet = TRUE))
+  
+  # date not in feed
+  expect_error (gt <- gtfs_timetable (g, date = 20180128),
+                "date does not match any values in the provided GTFS data")
+  
+  # wrong date format
+  expect_error (gt <- gtfs_timetable (g, date = 1234),
+                "Date is not provided in the proper format of yyyymmdd")
+  expect_error (gt <- gtfs_timetable (g, date = "abc"),
+                "Date is not provided in the proper format of yyyymmdd")
+  
+  gt_day <- gtfs_timetable (g, day = "Monday", quiet = TRUE)
+  g$calendar_dates <- data.table::data.table(service_id = "1", date = 20190128, exception_type = 1)
+  g$calendar <- g$calendar[service_id != 1]
+  expect_silent (gt <- gtfs_timetable (g, date = 20190128, quiet = TRUE))
+  expect_identical(gt_day$timetable, gt$timetable)
+  
+  # sunday added to calendar_dates
+  g$calendar_dates <- data.table::data.table(service_id = "1", date = 2019017, exception_type = 1)
+  expect_silent (gt <- gtfs_timetable (g, date = 20190127, quiet = TRUE))
+  expect_false(identical(gt_day$timetable, gt$timetable))
+})
