@@ -153,46 +153,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         }
     }
    
-    Rcpp::List res (3 * end_stations.size ());
-    size_t count = 0;
-    int time;
-    for (auto es: end_stations)
-    {
-        std::vector <int> trip_out, end_station_out, end_times_out;
-        size_t i = es;
-        int prev_time; // holds original departure time at end
-        if (csa_iso.current_trip [i] == INFINITE_INT)
-            continue;
-
-        trip_out.push_back (static_cast <int> (csa_iso.current_trip [i]));
-        end_station_out.push_back (static_cast <int> (i));
-        while (i < INFINITE_INT)
-        {
-            //time = csa_iso.prev_arrival_time [i];
-            time = csa_iso.trip_start_time [i] + csa_iso.elapsed_time [i];
-            if (time < INFINITE_INT && csa_iso.current_trip [i] < INFINITE_INT) {
-                end_times_out.push_back (static_cast <int> (time));
-                end_station_out.push_back (static_cast <int> (i));
-                trip_out.push_back (static_cast <int> (csa_iso.current_trip [i]));
-
-                //if (csa_iso.prev_time [i] < INFINITE_INT)
-                //    prev_time = csa_iso.prev_time [i];
-            }
-            i = csa_iso.prev_stn [static_cast <size_t> (i)];
-            if (i < INFINITE_INT)
-                prev_time = csa_iso.trip_start_time [i] + csa_iso.elapsed_time [i];
-        }
-        
-        end_times_out.push_back (prev_time);
-
-        std::reverse (end_station_out.begin (), end_station_out.end ());
-        std::reverse (end_times_out.begin (), end_times_out.end ());
-        std::reverse (trip_out.begin (), trip_out.end ());
-
-        res (3 * count) = end_station_out;
-        res (3 * count + 1) = trip_out;
-        res (3 * count++ + 2) = end_times_out;
-    }
+    Rcpp::List res = csaiso::trace_back_isochrones (end_stations, csa_iso);
 
     return res;
 }
@@ -272,4 +233,53 @@ int csaiso::find_actual_end_time (
         actual_end_time = 2 * (end_time - start_time) + actual_start_time;
 
     return (actual_end_time);
+}
+
+Rcpp::List csaiso::trace_back_isochrones (
+        const std::unordered_set <size_t> &end_stations,
+        const CSA_Iso & csa_iso
+        )
+{
+    Rcpp::List res (3 * end_stations.size ());
+    size_t count = 0;
+    int time;
+    for (auto es: end_stations)
+    {
+        std::vector <int> trip_out, end_station_out, end_times_out;
+        size_t i = es;
+        int prev_time; // holds original departure time at end
+        if (csa_iso.current_trip [i] == INFINITE_INT)
+            continue;
+
+        trip_out.push_back (static_cast <int> (csa_iso.current_trip [i]));
+        end_station_out.push_back (static_cast <int> (i));
+        while (i < INFINITE_INT)
+        {
+            //time = csa_iso.prev_arrival_time [i];
+            time = csa_iso.trip_start_time [i] + csa_iso.elapsed_time [i];
+            if (time < INFINITE_INT && csa_iso.current_trip [i] < INFINITE_INT) {
+                end_times_out.push_back (static_cast <int> (time));
+                end_station_out.push_back (static_cast <int> (i));
+                trip_out.push_back (static_cast <int> (csa_iso.current_trip [i]));
+
+                //if (csa_iso.prev_time [i] < INFINITE_INT)
+                //    prev_time = csa_iso.prev_time [i];
+            }
+            i = csa_iso.prev_stn [static_cast <size_t> (i)];
+            if (i < INFINITE_INT)
+                prev_time = csa_iso.trip_start_time [i] + csa_iso.elapsed_time [i];
+        }
+        
+        end_times_out.push_back (prev_time);
+
+        std::reverse (end_station_out.begin (), end_station_out.end ());
+        std::reverse (end_times_out.begin (), end_times_out.end ());
+        std::reverse (trip_out.begin (), trip_out.end ());
+
+        res (3 * count) = end_station_out;
+        res (3 * count + 1) = trip_out;
+        res (3 * count++ + 2) = end_times_out;
+    }
+
+    return res;
 }
