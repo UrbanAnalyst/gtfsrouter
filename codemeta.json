@@ -10,13 +10,13 @@
   "codeRepository": "https://github.com/ATFutures/gtfs-router",
   "issueTracker": "https://github.com/ATFutures/gtfs-router/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.3.010",
+  "version": "0.0.4.033",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
+  "runtimePlatform": "R version 4.0.3 (2020-10-10)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -293,11 +293,8 @@
     }
   ],
   "readme": "https://github.com/ATFutures/gtfs-router/blob/master/README.md",
-  "fileSize": "7751.097KB",
-  "contIntegration": [
-    "https://travis-ci.org/ATFutures/gtfs-router",
-    "https://codecov.io/gh/ATFutures/gtfs-router"
-  ],
+  "fileSize": "7650.476KB",
+  "contIntegration": "https://codecov.io/gh/ATFutures/gtfs-router",
   "developmentStatus": "https://www.repostatus.org/#active",
   "keywords": [
     "gtfs",

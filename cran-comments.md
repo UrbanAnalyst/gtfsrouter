@@ -1,6 +1,4 @@
-# CRAN notes for gtfsrouter_0.0.2 submission
-
-This submission removes the previous NOTE generated on some CRAN systems.
+# CRAN notes for gtfsrouter_0.0.3 submission
 
 The submission generates no notes or warnings on:
 
