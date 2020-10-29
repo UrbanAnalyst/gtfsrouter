@@ -2,6 +2,9 @@
 
 Minor changes:
 
+- `route_pattern` arguments (to `gtfs_route/isochrone/timetable()` functions)
+  can now be used to exclude specified patterns by prefixing them with "!" (see
+  #53)
 - Fix bug with `max_transfers` parameter of `gtfs_route()` function (see #47)
 
 # v 0.0.4
