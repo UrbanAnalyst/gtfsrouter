@@ -119,16 +119,11 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
 
     actual_start_time <- min (vapply (earliest_arrival, min, integer (1)))
 
-    stop_ids <- lapply (stns, function (i) gtfs$stop_ids [i] [, stop_ids])
-    trip_ids <- lapply (trips, function (i) gtfs$trip_ids [i] [, trip_ids])
-
-    isotrips <- lapply (seq (stop_ids), function (i)
+    isotrips <- lapply (seq (stns), function (i)
                    {
-        stops <- gtfs$stops [match (stop_ids [[i]], gtfs$stops [, stop_id]), ]
-        trips <- gtfs$trips [match (trip_ids [[i]], gtfs$trips [, trip_id]), ]
-        data.frame (cbind (stops [, c ("stop_id", "stop_name", "parent_station",
+        data.frame (cbind (gtfs$stops [stns [[i]], c ("stop_id", "stop_name", "parent_station",
                                        "stop_lon", "stop_lat")]),
-                    cbind (trips [, c ("route_id", "trip_id",
+                    cbind (gtfs$trips [trips [[i]], c ("route_id", "trip_id",
                                        "trip_headsign")]),
                     cbind ("earliest_arrival" = earliest_arrival[[i]]))
                    })
