@@ -125,22 +125,35 @@ test_that ("route_pattern", {
                f <- file.path (tempdir (), "vbb.zip")
                expect_true (file.exists (f))
                expect_silent (g <- extract_gtfs (f, quiet = TRUE))
-               expect_silent (gt <- gtfs_timetable (g, day = 3,
-                                                    route_pattern = "^S",
-                                                    quiet = TRUE))
+               expect_silent (gt1 <- gtfs_timetable (g, day = 3,
+                                                     route_pattern = "^S",
+                                                     quiet = TRUE))
+               expect_true (all (substring (gt1$routes$route_short_name, 1, 1) == "S"))
                from <- "Schonlein" # U-bahn station, not "S"
                to <- "Berlin Hauptbahnhof"
                start_time <- 12 * 3600 + 120 # 12:02
-               expect_error (route <- gtfs_route (gt, from = from, to = to,
+               expect_error (route <- gtfs_route (gt1, from = from, to = to,
                                                   start_time = start_time),
                              "Schonlein does not match any stations")
 
-               expect_silent (gt <- gtfs_timetable (g, day = 3,
+               expect_silent (gt2 <- gtfs_timetable (g, day = 3,
                                                     route_pattern = "^U",
                                                     quiet = TRUE))
-               expect_null (gtfs_route (gt, from = from, to = to,
-                                      start_time = start_time))
+               expect_null (gtfs_route (gt2, from = from, to = to,
+                                        start_time = start_time))
                # There is no U-bahn connection all the way to Hbf
+
+               expect_error (gt <- gtfs_timetable (g, day = 3,
+                                                   route_pattern = "^!S"),
+                             "There are no routes matching that pattern")
+               expect_silent (gt3 <- gtfs_timetable (g, day = 3,
+                                                     route_pattern = "!^S"))
+               expect_true (!identical (gt1, gt3))
+               expect_true (all (substring (gt3$routes$route_short_name, 1, 1) != "S"))
+
+               expect_error (gt <- gtfs_timetable (g, day = 3,
+                                                   route_pattern = "!"),
+                             "Oh come on, route_pattern = '!' is silly")
 })
 
 test_that ("earliest_arrival", {

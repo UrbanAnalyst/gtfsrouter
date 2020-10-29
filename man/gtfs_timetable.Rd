@@ -30,7 +30,9 @@ and 'calendar_dates' options is covered.}
 
 \item{route_pattern}{Using only those routes matching given pattern, for
 example, "^U" for routes starting with "U" (as commonly used for underground
-or subway routes.}
+or subway routes. To negative the \code{route_pattern} -- that is, to include all
+routes except those matching the patter -- prepend the value with "!"; for
+example "!^U" with include all services except those starting with "U".}
 
 \item{quiet}{Set to \code{TRUE} to suppress screen messages (currently just
 regarding timetable construction).}

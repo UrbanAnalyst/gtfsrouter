@@ -43,8 +43,11 @@ in \code{stop_id} rather than \code{stop_name} column of the \code{stops} table 
 
 \item{route_pattern}{Using only those routes matching given pattern, for
 example, "^U" for routes starting with "U" (as commonly used for underground
-or subway routes. (Parameter not used at all if \code{gtfs} has already been
-prepared with \link{gtfs_timetable}.)}
+or subway routes. To negate the \code{route_pattern} -- that is, to include all
+routes except those matching the pattern -- prepend the value with "!"; for
+example "!^U" will include all services except those starting with "U". (This
+parameter is not used at all if \code{gtfs} has already been prepared with
+\link{gtfs_timetable}.)}
 
 \item{hull_alpha}{alpha value of non-convex hulls returned as part of result
 (see ?alphashape::ashape for details).}
