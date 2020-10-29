@@ -64,6 +64,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         csa_iso.earliest_connection [start_stations [i]] = start_time;
     }
 
+
     // stations and trips are size_t because they're used as direct array indices.
     const std::vector <size_t> departure_station = timetable ["departure_station"],
         arrival_station = timetable ["arrival_station"],
@@ -71,12 +72,13 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     const std::vector <int> departure_time = timetable ["departure_time"],
         arrival_time = timetable ["arrival_time"];
 
+    int actual_end_time = csaiso::find_actual_end_time (n, departure_time,
+            departure_station, start_stations_set, start_time, end_time);
+
     std::vector <bool> is_connected (ntrips, false);
 
     // trip connections:
     std::unordered_set <size_t> end_stations;
-    bool start_time_found = false;
-    int actual_start_time = INFINITE_INT, actual_end_time = INFINITE_INT;
 
     for (size_t i = 0; i < n; i++)
     {
@@ -105,17 +107,8 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             csa_iso.elapsed_time [arrival_station [i]] =
                 arrival_time [i] - csa_iso.trip_start_time [departure_station [i]];
             
-            if (filled) {
+            if (filled)
                 end_stations.emplace (arrival_station [i]);
-                if (!start_time_found)
-                {
-                    actual_start_time = departure_time [i];
-                    // Scan up until twice the isochrone duration from the
-                    // actual start time:
-                    actual_end_time = 2 * (end_time - start_time) + actual_start_time;
-                    start_time_found = true;
-                }
-            }
         }
 
         // main connection scan:
@@ -160,7 +153,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         }
     }
    
-    Rcpp::List res (3 * end_stations.size () + 1);
+    Rcpp::List res (3 * end_stations.size ());
     size_t count = 0;
     int time;
     for (auto es: end_stations)
@@ -200,7 +193,6 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         res (3 * count + 1) = trip_out;
         res (3 * count++ + 2) = end_times_out;
     }
-    res (static_cast <size_t> (res.length ()) - 1) = actual_start_time;
 
     return res;
 }
@@ -246,4 +238,38 @@ bool csaiso::fill_one_csa_iso (
     }
 
     return (fill_vals);
+}
+
+int csaiso::find_actual_end_time (
+        const size_t &n,
+        const std::vector <int> &departure_time,
+        const std::vector <size_t> &departure_station,
+        const std::unordered_set <size_t> &start_stations_set,
+        const int &start_time,
+        const int &end_time)
+{
+    // Find time of first departing service from one of the start_stations
+    bool found = false;
+    int actual_start_time = INFINITE_INT;
+    int actual_end_time = INFINITE_INT;
+    for (size_t i = 0; i < n; i++)
+    {
+        if (departure_time [i] < start_time)
+            continue; // # nocov - these lines already removed in R fn.
+
+        // add all departures from start_stations_set:
+        if (start_stations_set.find (departure_station [i]) !=
+                start_stations_set.end ())
+        {
+            actual_start_time = departure_time [i];
+            found = true;
+        }
+        if (found)
+            break;
+    }
+    // Scan up until twice the isochrone duration from the actual start time:
+    if (actual_start_time < INFINITE_INT)
+        actual_end_time = 2 * (end_time - start_time) + actual_start_time;
+
+    return (actual_end_time);
 }
