@@ -146,7 +146,7 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
 
     list (isotrips = isotrips,
           start_time = actual_start_time,
-          end_time = actual_start_time + end_time - start_time)
+          end_time = as.integer (actual_start_time + end_time - start_time))
 }
 
 # convert list of data.frames of stops and trips into sf linestrings for each
