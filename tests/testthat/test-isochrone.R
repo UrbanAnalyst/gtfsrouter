@@ -31,10 +31,11 @@ test_that("gtfs_isochrone", {
               classes <- sapply (ic, function (i) class (i) [1])
               expect_identical (as.character (classes),
                                 c ("sf", "sf", "sf", "sfc_LINESTRING", "sf",
-                                   "numeric", "numeric"))
-              expected_col_names <- c("stop_name", "stop_id", "earliest_arrival", "geometry")
-              expect_identical(names(ic$mid_points), expected_col_names)
-              expect_identical(names(ic$end_points), expected_col_names)
+                                   "integer", "integer"))
+              cnames <- c ("stop_name", "stop_id", "departure", "arrival",
+                           "duration", "transfers", "geometry")
+              expect_identical (names (ic$mid_points), cnames)
+              expect_identical (names (ic$end_points), cnames)
 
               ic2 <- gtfs_isochrone (g,
                                     from = "Schonlein",

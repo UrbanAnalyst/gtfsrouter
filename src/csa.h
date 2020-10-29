@@ -52,10 +52,40 @@ struct CSA_Inputs
     TransferMapType transfer_map;
 };
 
-struct CSA_Outputs
+class CSA_Outputs
 {
-    std::vector <int> earliest_connection, prev_time, n_transfers;
-    std::vector <size_t> prev_stn, current_trip;
+    public:
+        std::vector <int> earliest_connection;
+        std::vector <int> prev_time;
+        std::vector <int> n_transfers;
+        std::vector <size_t> prev_stn;
+        std::vector <size_t> current_trip;
+
+        CSA_Outputs (const size_t n) {
+            earliest_connection.resize (n, INFINITE_INT);
+            prev_time.resize (n, INFINITE_INT);
+            n_transfers.resize (n, 0);
+            prev_stn.resize (n, INFINITE_INT);
+            current_trip.resize (n, INFINITE_INT);
+        }
+};
+
+class CSA_Iso
+{
+    public:
+        std::vector <int> earliest_connection;
+        std::vector <int> elapsed_time;
+        std::vector <int> trip_start_time;
+        std::vector <size_t> prev_stn;
+        std::vector <size_t> current_trip;
+
+        CSA_Iso (const size_t n) {
+            earliest_connection.resize (n, INFINITE_INT);
+            elapsed_time.resize (n, INFINITE_INT);
+            trip_start_time.resize (n, INFINITE_INT);
+            prev_stn.resize (n, INFINITE_INT);
+            current_trip.resize (n, INFINITE_INT);
+        }
 };
 
 struct CSA_Return
@@ -66,34 +96,59 @@ struct CSA_Return
 
 namespace csa {
 
-void fill_csa_pars (CSA_Parameters &csa_pars, int max_transfers, int start_time,
-        size_t timetable_size, size_t ntrips, size_t nstations);
-void make_station_sets (const std::vector <size_t> &start_stations,
+void fill_csa_pars (
+        CSA_Parameters &csa_pars,
+        int max_transfers,
+        int start_time,
+        size_t timetable_size,
+        size_t ntrips,
+        size_t nstations);
+
+void make_station_sets (
+        const std::vector <size_t> &start_stations,
         const std::vector <size_t> &end_stations,
         std::unordered_set <size_t> &start_stations_set,
         std::unordered_set <size_t> &end_stations_set);
-void csa_in_from_df (Rcpp::DataFrame &timetable,
+
+void csa_in_from_df (
+        Rcpp::DataFrame &timetable,
         CSA_Inputs &csa_in);
-void make_transfer_map (TransferMapType &transfer_map,
+
+void make_transfer_map (
+        TransferMapType &transfer_map,
         Rcpp::DataFrame &transfers);
+
 void get_earliest_connection (
         const std::vector <size_t> &start_stations,
         const int &start_time,
         const TransferMapType &transfer_map,
         std::vector <int> &earliest_connection);
-CSA_Return main_csa_loop (const CSA_Parameters &csa_pars,
+
+CSA_Return main_csa_loop (
+        const CSA_Parameters &csa_pars,
         const std::unordered_set <size_t> &start_stations_set,
         std::unordered_set <size_t> &end_stations_set,
         const CSA_Inputs &csa_inputs,
         CSA_Outputs &csa_out);
-void fill_one_csa_out (CSA_Outputs &csa_out, const CSA_Inputs &csa_in,
+
+void fill_one_csa_out (
+        CSA_Outputs &csa_out,
+        const CSA_Inputs &csa_in,
         const size_t &i, const size_t &j);
-void check_end_stations (std::unordered_set <size_t> &end_stations_set,
-        const size_t &arrival_station, const int &arrival_time,
+
+void check_end_stations (
+        std::unordered_set <size_t> &end_stations_set,
+        const size_t &arrival_station,
+        const int &arrival_time,
         CSA_Return &csa_ret);
-size_t get_route_length (const CSA_Outputs &csa_out,
-        const CSA_Parameters &csa_pars, const size_t &end_stn);
-void extract_final_trip (const CSA_Outputs &csa_out,
+
+size_t get_route_length (
+        const CSA_Outputs &csa_out,
+        const CSA_Parameters &csa_pars,
+        const size_t &end_stn);
+
+void extract_final_trip (
+        const CSA_Outputs &csa_out,
         const CSA_Return &csa_ret,
         std::vector <size_t> &end_station,
         std::vector <size_t> &trip,
@@ -101,7 +156,29 @@ void extract_final_trip (const CSA_Outputs &csa_out,
 
 } // end namespace csa
 
-Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
+namespace csaiso {
+
+bool fill_one_csa_iso (
+        const size_t &departure_station,
+        const size_t &arrival_station,
+        const size_t &trip_id,
+        const int &departure_time,
+        const int &arrival_time,
+        CSA_Iso &csa_iso);
+
+int find_actual_end_time (
+        const size_t &n,
+        const std::vector <int> &departure_time,
+        const std::vector <size_t> &departure_station,
+        const std::unordered_set <size_t> &start_stations_set,
+        const int &start_time,
+        const int &end_time
+        );
+
+} // end namespace csaido
+
+Rcpp::DataFrame rcpp_csa (
+        Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const size_t nstations,
         const size_t ntrips,
@@ -111,7 +188,8 @@ Rcpp::DataFrame rcpp_csa (Rcpp::DataFrame timetable,
         const int max_transfers);
 
 // ---- csa-isochrone.cpp
-Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
+Rcpp::List rcpp_csa_isochrone (
+        Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const size_t nstations,
         const size_t ntrips,
