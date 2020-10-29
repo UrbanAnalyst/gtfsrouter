@@ -175,6 +175,11 @@ int find_actual_end_time (
         const int &end_time
         );
 
+Rcpp::List trace_back_isochrones (
+        const std::unordered_set <size_t> &end_stations,
+        const CSA_Iso & csa_iso
+        );
+
 } // end namespace csaido
 
 Rcpp::DataFrame rcpp_csa (
