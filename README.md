@@ -55,7 +55,7 @@ be written to local storage with the function `berlin_gtfs_to_zip()`.
     filename <- tempfiles [grep ("vbb.zip", tempfiles)]
     filename
 
-    ## [1] "/tmp/RtmpTBb3Po/vbb.zip"
+    ## [1] "/tmp/RtmpDlmZ9p/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -148,8 +148,8 @@ Contributors
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-This project uses the [`allcontributor`
-package](https://github.com/mpadge/allcontributor) following the
+This project uses the [`allcontributors`
+package](https://github.com/mpadge/allcontributors) following the
 [all-contributors](https://allcontributors.org) specification.
 Contributions of any kind are welcome!
 
@@ -248,7 +248,7 @@ Issue Authors
 </td>
 <td align="center">
 <a href="https://github.com/rafapereirabr">
-<img src="https://avatars1.githubusercontent.com/u/7448421?u=bd52fb822944dafabebd61d286bc80d183234d20&v=4" width="100px;" alt=""/>
+<img src="https://avatars0.githubusercontent.com/u/7448421?u=9a760f26e72cd66150784babc5da6862e7775542&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Arafapereirabr">rafapereirabr</a>
 </td>
