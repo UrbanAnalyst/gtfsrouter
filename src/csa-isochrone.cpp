@@ -57,7 +57,6 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
 
     std::vector <bool> is_connected (ntrips, false);
 
-    // trip connections:
     std::unordered_set <size_t> end_stations;
 
     for (size_t i = 0; i < nrows; i++)
@@ -72,23 +71,26 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                 start_stations_set.end () &&
                 arrival_time [i] <= csa_iso.earliest_connection [arrival_station [i] ])
         {
-            is_connected [trip_id [i] ] = true;
-
             bool filled = csaiso::fill_one_csa_iso (departure_station [i],
                     arrival_station [i], trip_id [i], departure_time [i],
                     arrival_time [i], csa_iso);
-            if (csa_iso.trip_start_time [departure_station [i]] == INFINITE_INT ||
-                    csa_iso.trip_start_time [departure_station [i]] < departure_time [i])
-                csa_iso.trip_start_time [departure_station [i] ] = departure_time [i];
-            if (csa_iso.trip_start_time [arrival_station [i]] == INFINITE_INT ||
-                    csa_iso.trip_start_time [arrival_station [i]] < departure_time [i])
-                csa_iso.trip_start_time [arrival_station [i] ] = departure_time [i];
-            csa_iso.elapsed_time [departure_station [i]] = 0L;
-            csa_iso.elapsed_time [arrival_station [i]] =
-                arrival_time [i] - csa_iso.trip_start_time [departure_station [i]];
-            
+
             if (filled)
+            {
+                is_connected [trip_id [i] ] = true;
+
+                if (csa_iso.trip_start_time [departure_station [i]] == INFINITE_INT ||
+                        csa_iso.trip_start_time [departure_station [i]] < departure_time [i])
+                    csa_iso.trip_start_time [departure_station [i] ] = departure_time [i];
+                if (csa_iso.trip_start_time [arrival_station [i]] == INFINITE_INT ||
+                        csa_iso.trip_start_time [arrival_station [i]] < departure_time [i])
+                    csa_iso.trip_start_time [arrival_station [i] ] = departure_time [i];
+                csa_iso.elapsed_time [departure_station [i]] = 0L;
+                csa_iso.elapsed_time [arrival_station [i]] =
+                    arrival_time [i] - csa_iso.trip_start_time [departure_station [i]];
+            
                 end_stations.emplace (arrival_station [i]);
+            }
         }
 
         // main connection scan:
