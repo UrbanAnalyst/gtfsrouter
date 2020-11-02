@@ -175,6 +175,14 @@ void extract_final_trip (
 
 namespace csaiso {
 
+bool fill_one_start_stn (
+        const size_t &departure_station,
+        const size_t &arrival_station,
+        const size_t &trip_id,
+        const int &departure_time,
+        const int &arrival_time,
+        CSA_Iso &csa_iso);
+
 bool fill_one_csa_iso (
         const size_t &departure_station,
         const size_t &arrival_station,
