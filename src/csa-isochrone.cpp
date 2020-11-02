@@ -29,33 +29,15 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     for (auto s: start_stations)
         start_stations_set.emplace (s);
 
-    const size_t n = static_cast <size_t> (timetable.nrow ());
+    const size_t nrows = static_cast <size_t> (timetable.nrow ());
 
     // convert transfers into a map from start to (end, transfer_time). Transfer
-    // indices are also converted to 0-based:
+    // indices are 1-based.
     std::unordered_map <size_t, std::unordered_map <size_t, int> > transfer_map;
-    std::vector <size_t> trans_from = transfers ["from_stop_id"],
-        trans_to = transfers ["to_stop_id"];
-
-    std::vector <int> trans_time = transfers ["min_transfer_time"];
-    for (size_t i = 0; i < static_cast <size_t> (transfers.nrow ()); i++)
-    {
-        if (trans_from [i] != trans_to [i])
-        {
-            std::unordered_map <size_t, int> transfer_pair; // station, time
-            if (transfer_map.find (trans_from [i]) == transfer_map.end ())
-            {
-                transfer_pair.clear ();
-                transfer_pair.emplace (trans_to [i], trans_time [i]);
-                transfer_map.emplace (trans_from [i], transfer_pair);
-            } else
-            {
-                transfer_pair = transfer_map.at (trans_from [i]);
-                transfer_pair.emplace (trans_to [i], trans_time [i]);
-                transfer_map [trans_from [i]] = transfer_pair;
-            }
-        }
-    }
+    csaiso::make_transfer_map (transfer_map,
+            transfers ["from_stop_id"],
+            transfers ["to_stop_id"],
+            transfers ["min_transfer_time"]);
 
     CSA_Iso csa_iso (nstations + 1);
 
@@ -72,7 +54,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     const std::vector <int> departure_time = timetable ["departure_time"],
         arrival_time = timetable ["arrival_time"];
 
-    int actual_end_time = csaiso::find_actual_end_time (n, departure_time,
+    int actual_end_time = csaiso::find_actual_end_time (nrows, departure_time,
             departure_station, start_stations_set, start_time, end_time);
 
     std::vector <bool> is_connected (ntrips, false);
@@ -80,7 +62,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     // trip connections:
     std::unordered_set <size_t> end_stations;
 
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < nrows; i++)
     {
         if (departure_time [i] < start_time)
             continue; // # nocov - these lines already removed in R fn.
@@ -156,6 +138,34 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     Rcpp::List res = csaiso::trace_back_isochrones (end_stations, csa_iso);
 
     return res;
+}
+
+
+void csaiso::make_transfer_map (
+    std::unordered_map <size_t, std::unordered_map <size_t, int> > &transfer_map,
+    const std::vector <size_t> &trans_from,
+    const std::vector <size_t> &trans_to,
+    const std::vector <int> &trans_time
+        )
+{
+    for (size_t i = 0; i < static_cast <size_t> (trans_from.size ()); i++)
+    {
+        if (trans_from [i] != trans_to [i])
+        {
+            std::unordered_map <size_t, int> transfer_pair; // station, time
+            if (transfer_map.find (trans_from [i]) == transfer_map.end ())
+            {
+                transfer_pair.clear ();
+                transfer_pair.emplace (trans_to [i], trans_time [i]);
+                transfer_map.emplace (trans_from [i], transfer_pair);
+            } else
+            {
+                transfer_pair = transfer_map.at (trans_from [i]);
+                transfer_pair.emplace (trans_to [i], trans_time [i]);
+                transfer_map [trans_from [i]] = transfer_pair;
+            }
+        }
+    }
 }
 
 bool csaiso::fill_one_csa_iso (
