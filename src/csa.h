@@ -76,11 +76,14 @@ class CSA_Iso
      * Each station retains prev_stn, ntransfers, and elapsed_time. When a new
      * connection reaches a station, stats are compared with any existent ones,
      * and replaced if better, which by default means if elapsed_time is less.
-     * The `earliest_connection` value is used with transfers, which are not
-     * allowed to connect if departure is before this time.
+     * The `earliest_connection` value is used to flag whether services are
+     * connected, initially only with start_stations, then with transfers, which
+     * are not allowed to connect if departure is before this time.
      *
      * Both `prev_stn` and `current_trip` are then only used at the end to
      * retrace the paths taken to each end station.
+     *
+     * stations and trips are size_t because they're used as direct array indices.
      */
 
     public:

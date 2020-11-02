@@ -46,15 +46,13 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         csa_iso.earliest_connection [start_stations [i]] = start_time;
     }
 
-
-    // stations and trips are size_t because they're used as direct array indices.
     const std::vector <size_t> departure_station = timetable ["departure_station"],
         arrival_station = timetable ["arrival_station"],
         trip_id = timetable ["trip_id"];
     const std::vector <int> departure_time = timetable ["departure_time"],
         arrival_time = timetable ["arrival_time"];
 
-    int actual_end_time = csaiso::find_actual_end_time (nrows, departure_time,
+    const int actual_end_time = csaiso::find_actual_end_time (nrows, departure_time,
             departure_station, start_stations_set, start_time, end_time);
 
     std::vector <bool> is_connected (ntrips, false);
