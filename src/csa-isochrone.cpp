@@ -71,7 +71,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                 start_stations_set.end () &&
                 arrival_time [i] <= csa_iso.earliest_connection [arrival_station [i] ])
         {
-            bool filled = csaiso::fill_one_csa_iso (departure_station [i],
+            bool filled = csaiso::fill_one_start_stn (departure_station [i],
                     arrival_station [i], trip_id [i], departure_time [i],
                     arrival_time [i], csa_iso);
 
@@ -79,16 +79,6 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             {
                 is_connected [trip_id [i] ] = true;
 
-                if (csa_iso.trip_start_time [departure_station [i]] == INFINITE_INT ||
-                        csa_iso.trip_start_time [departure_station [i]] < departure_time [i])
-                    csa_iso.trip_start_time [departure_station [i] ] = departure_time [i];
-                if (csa_iso.trip_start_time [arrival_station [i]] == INFINITE_INT ||
-                        csa_iso.trip_start_time [arrival_station [i]] < departure_time [i])
-                    csa_iso.trip_start_time [arrival_station [i] ] = departure_time [i];
-                csa_iso.elapsed_time [departure_station [i]] = 0L;
-                csa_iso.elapsed_time [arrival_station [i]] =
-                    arrival_time [i] - csa_iso.trip_start_time [departure_station [i]];
-            
                 end_stations.emplace (arrival_station [i]);
             }
         }
@@ -166,6 +156,59 @@ void csaiso::make_transfer_map (
             }
         }
     }
+}
+
+bool csaiso::fill_one_start_stn (
+        const size_t &departure_station,
+        const size_t &arrival_station,
+        const size_t &trip_id,
+        const int &departure_time,
+        const int &arrival_time,
+        CSA_Iso &csa_iso) {
+
+    bool fill_vals = (arrival_time < csa_iso.earliest_connection [arrival_station]);
+    if (!fill_vals) {
+        // service at that time already exists, so only replace if trip_id of
+        // csa_in is same as trip that connected to the departure station.
+        // This clause ensures connection remains on same service in cases of
+        // parallel services; see #48 and equivalent code in csa.cpp
+        const size_t prev_trip = csa_iso.current_trip [departure_station];
+        fill_vals = (prev_trip < INFINITE_INT &&
+                trip_id == csa_iso.current_trip [departure_station]);
+
+        if (!fill_vals && csa_iso.trip_start_time [departure_station] < INFINITE_INT)
+            fill_vals = ((arrival_time - csa_iso.trip_start_time [departure_station]) <
+                    csa_iso.elapsed_time [arrival_station]);
+    }
+
+    if (fill_vals) {
+
+        csa_iso.earliest_connection [arrival_station] = arrival_time;
+        csa_iso.elapsed_time [arrival_station] = arrival_time -
+            csa_iso.trip_start_time [departure_station];
+        csa_iso.current_trip [arrival_station] = trip_id;
+        csa_iso.prev_stn [arrival_station] = departure_station;
+        // fill in trip_id from departure_station only for the start of trips:
+        if (csa_iso.current_trip [departure_station] == INFINITE_INT)
+            csa_iso.current_trip [departure_station] = trip_id;
+        // propagate trip start time from departure to arrival station:
+        if (csa_iso.trip_start_time [arrival_station] >
+                csa_iso.trip_start_time [departure_station])
+            csa_iso.trip_start_time [arrival_station] =
+                csa_iso.trip_start_time [departure_station];
+
+        if (csa_iso.trip_start_time [departure_station] == INFINITE_INT ||
+                csa_iso.trip_start_time [departure_station] < departure_time)
+            csa_iso.trip_start_time [departure_station ] = departure_time;
+        if (csa_iso.trip_start_time [arrival_station] == INFINITE_INT ||
+                csa_iso.trip_start_time [arrival_station] < departure_time)
+            csa_iso.trip_start_time [arrival_station ] = departure_time;
+        csa_iso.elapsed_time [departure_station] = 0L;
+        csa_iso.elapsed_time [arrival_station] =
+            arrival_time - csa_iso.trip_start_time [departure_station];
+    }
+
+    return (fill_vals);
 }
 
 bool csaiso::fill_one_csa_iso (
