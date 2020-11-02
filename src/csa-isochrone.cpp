@@ -185,7 +185,7 @@ bool csaiso::fill_one_start_stn (
 
         csa_iso.earliest_connection [arrival_station] = arrival_time;
         csa_iso.elapsed_time [arrival_station] = arrival_time -
-            csa_iso.trip_start_time [departure_station];
+            departure_time;
         csa_iso.current_trip [arrival_station] = trip_id;
         csa_iso.prev_stn [arrival_station] = departure_station;
         // fill in trip_id from departure_station only for the start of trips:
