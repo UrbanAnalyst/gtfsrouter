@@ -72,10 +72,23 @@ class CSA_Outputs
 
 class CSA_Iso
 {
+    /*
+     * Each station retains prev_stn, ntransfers, and elapsed_time. When a new
+     * connection reaches a station, stats are compared with any existent ones,
+     * and replaced if better, which by default means if elapsed_time is less.
+     * The `earliest_connection` value is used with transfers, which are not
+     * allowed to connect if departure is before this time.
+     *
+     * Both `prev_stn` and `current_trip` are then only used at the end to
+     * retrace the paths taken to each end station.
+     */
+
     public:
+
         std::vector <int> earliest_connection;
         std::vector <int> elapsed_time;
         std::vector <int> trip_start_time;
+        std::vector <int> ntransfers;
         std::vector <size_t> prev_stn;
         std::vector <size_t> current_trip;
 
@@ -83,6 +96,7 @@ class CSA_Iso
             earliest_connection.resize (n, INFINITE_INT);
             elapsed_time.resize (n, INFINITE_INT);
             trip_start_time.resize (n, INFINITE_INT);
+            ntransfers.resize (n, 0L);
             prev_stn.resize (n, INFINITE_INT);
             current_trip.resize (n, INFINITE_INT);
         }
@@ -173,6 +187,13 @@ int find_actual_end_time (
         const std::unordered_set <size_t> &start_stations_set,
         const int &start_time,
         const int &end_time
+        );
+
+void make_transfer_map (
+    std::unordered_map <size_t, std::unordered_map <size_t, int> > &transfer_map,
+    const std::vector <size_t> &trans_from,
+    const std::vector <size_t> &trans_to,
+    const std::vector <int> &trans_time
         );
 
 Rcpp::List trace_back_isochrones (
