@@ -55,7 +55,7 @@ be written to local storage with the function `berlin_gtfs_to_zip()`.
     filename <- tempfiles [grep ("vbb.zip", tempfiles)]
     filename
 
-    ## [1] "/tmp/RtmpDlmZ9p/vbb.zip"
+    ## [1] "/tmp/RtmpZERYeW/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -149,7 +149,7 @@ Contributors
 <!-- markdownlint-disable -->
 
 This project uses the [`allcontributors`
-package](https://github.com/mpadge/allcontributors) following the
+package](https://github.com/ropenscilabs/allcontributors) following the
 [all-contributors](https://allcontributors.org) specification.
 Contributions of any kind are welcome!
 
