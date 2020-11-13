@@ -105,6 +105,51 @@ class CSA_Iso
         }
 };
 
+class CSA_Iso2
+{
+    private:
+
+        struct Connections {
+            std::vector <size_t> prev_stn;
+            std::vector <int> departure_time, arrival_time,
+                trip, ntransfers, initial_depart;
+        };
+
+    public:
+
+        std::vector <bool> is_end_stn;
+        std::vector <int> earliest_departure;
+
+        std::vector <Connections> connections;
+
+        CSA_Iso2 (const size_t n) {
+            is_end_stn.resize (n, false);
+            earliest_departure.resize (n, INFINITE_INT);
+            connections.resize (n);
+        }
+
+        const size_t extend (const size_t n) {
+            const size_t s = connections [n].trip.size () + 1L;
+
+            connections [n].prev_stn.resize (s);
+            connections [n].departure_time.resize (s);
+            connections [n].arrival_time.resize (s);
+            connections [n].trip.resize (s);
+            connections [n].ntransfers.resize (s);
+            connections [n].initial_depart.resize (s);
+
+            connections [n].prev_stn [s - 1] = INFINITE_INT;
+            connections [n].departure_time [s - 1] = INFINITE_INT;
+            connections [n].arrival_time [s - 1] = INFINITE_INT;
+            connections [n].trip [s - 1] = INFINITE_INT;
+            connections [n].ntransfers [s - 1] = 0;
+            connections [n].initial_depart [s - 1] = INFINITE_INT;
+
+            return s;
+        }
+
+};
+
 struct CSA_Return
 {
     size_t end_station;
@@ -189,7 +234,9 @@ bool fill_one_csa_iso (
         const size_t &trip_id,
         const int &departure_time,
         const int &arrival_time,
-        CSA_Iso &csa_iso);
+        const int &isochrone,
+        const bool &is_start_stn,
+        CSA_Iso2 &csa_iso2);
 
 int find_actual_end_time (
         const size_t &n,
@@ -208,11 +255,16 @@ void make_transfer_map (
         );
 
 Rcpp::List trace_back_isochrones (
-        const std::unordered_set <size_t> &end_stations,
-        const CSA_Iso & csa_iso
+        const CSA_Iso2 & csa_iso2
         );
 
-} // end namespace csaido
+size_t trace_back_prev_index (
+        const CSA_Iso2 & csa_iso2,
+        const size_t & stn,
+        const size_t & departure_time
+        );
+
+} // end namespace csaiso
 
 Rcpp::DataFrame rcpp_csa (
         Rcpp::DataFrame timetable,
@@ -226,6 +278,14 @@ Rcpp::DataFrame rcpp_csa (
 
 // ---- csa-isochrone.cpp
 Rcpp::List rcpp_csa_isochrone (
+        Rcpp::DataFrame timetable,
+        Rcpp::DataFrame transfers,
+        const size_t nstations,
+        const size_t ntrips,
+        const std::vector <size_t> start_stations,
+        const int start_time, const int end_time);
+
+Rcpp::List rcpp_csa_isochrone2 (
         Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const size_t nstations,
