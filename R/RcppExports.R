@@ -17,6 +17,15 @@ rcpp_time_to_seconds <- function(times) {
     .Call(`_gtfsrouter_rcpp_time_to_seconds`, times)
 }
 
+#' Returns INFINITE_INT if there are no previous stations, so this can be used
+#' as a flag for start stations.
+#' @param stn Station from which previous station is to be traced
+#' @param departure_time Time of departure at that station, used to ensure that
+#' only previous stations with arrival times prior to that specified departure
+#' are selected. For end stations this departure_time is initially INF.
+#' @noRd
+NULL
+
 #' rcpp_csa_isochrone
 #'
 #' Calculate isochrones using Connection Scan Algorithm for GTFS data. Works
