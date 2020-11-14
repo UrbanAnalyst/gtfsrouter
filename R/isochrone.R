@@ -284,7 +284,7 @@ hull_ratio <- function (x)
 
 get_ahull <- function (x, alpha = alpha)
 {
-    x <- x [!duplicated (x), ]
+    x <- na.omit (x [!duplicated (x), ])
     alpha <- 0.1
     a <- data.frame (alphahull::ashape (x, alpha = alpha)$edges)
 
