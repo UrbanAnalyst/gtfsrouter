@@ -340,8 +340,6 @@ Rcpp::List csaiso::trace_back_isochrones (
 
     Rcpp::List res (3 * nend);
 
-    // TODO: Add prev_time to insert final values at isochrone start point
-
     count = 0;
     for (size_t es: end_stations)
     {
@@ -353,21 +351,35 @@ Rcpp::List csaiso::trace_back_isochrones (
         size_t prev_index = csaiso::trace_back_prev_index (csa_iso2, stn, INFINITE_INT);
 
         trip_out.push_back (csa_iso2.connections [stn].trip [prev_index]);
-        size_t departure_time = csa_iso2.connections [stn].arrival_time [prev_index];
-        end_times_out.push_back (departure_time);
+        size_t arrival_time = csa_iso2.connections [stn].arrival_time [prev_index];
+        end_times_out.push_back (arrival_time);
+
+        // Next 2 ultimately hold values for start station:
+        int departure_time = INFINITE_INT;
+        size_t departure_stn = INFINITE_INT;
+        size_t this_trip = INFINITE_INT;
 
         int temp = 0;
         while (prev_index < INFINITE_INT)
         {
             stn = csa_iso2.connections [stn].prev_stn [prev_index];
 
-            prev_index = csaiso::trace_back_prev_index (csa_iso2, stn, departure_time);
+            prev_index = csaiso::trace_back_prev_index (csa_iso2, stn, arrival_time);
 
             if (prev_index < INFINITE_INT)
             {
                 end_station_out.push_back (static_cast <int> (stn));
-                trip_out.push_back (csa_iso2.connections [stn].trip [prev_index]);
-                departure_time = csa_iso2.connections [stn].arrival_time [prev_index];
+                this_trip = csa_iso2.connections [stn].trip [prev_index];
+                trip_out.push_back (this_trip);
+                arrival_time = csa_iso2.connections [stn].arrival_time [prev_index];
+                end_times_out.push_back (arrival_time);
+
+                departure_time = csa_iso2.connections [stn].departure_time [prev_index];
+                departure_stn = csa_iso2.connections [stn].prev_stn [prev_index];
+            } else
+            {
+                end_station_out.push_back (departure_stn);
+                trip_out.push_back (this_trip);
                 end_times_out.push_back (departure_time);
             }
 
