@@ -23,8 +23,8 @@
 #'
 #' @return An object of class `gtfs_isochrone`, including \pkg{sf}-formatted
 #' points representing the `from` station (`start_point`), the terminal end
-#' stations (`end_points`), and all intermediate stations (`mid_points`) each with
-#' the earliest possible arrival time, along with lines representing the
+#' stations (`end_points`), and all intermediate stations (`mid_points`) each
+#' with the earliest possible arrival time, along with lines representing the
 #' individual routes. A non-convex ("alpha") hull is also returned (as an
 #' \pkg{sf} `POLYGON` object), including measures of area and "elongation",
 #' which equals zero for a circle, and increases towards one for more elongated
@@ -67,7 +67,7 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     if (nrow (gtfs_cp$timetable) == 0)
         stop ("There are no scheduled services after that time.")
 
-    stations <- NULL # no visible binding note
+    stations <- NULL # no visible binding note # nolint
     start_stns <- station_name_to_ids (from, gtfs_cp, from_is_id)
 
     isotrips <- get_isotrips (gtfs_cp, start_stns, start_time, end_time)
@@ -99,8 +99,7 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
 
 get_isotrips <- function (gtfs, start_stns, start_time, end_time)
 {
-    # no visible binding note:
-    stop_id <- trip_id <- NULL
+    stop_id <- trip_id <- NULL # no visible binding note:# nolint
 
     # the C++ function returns a single list with elements group in threes:
     # 1. End stations
@@ -121,10 +120,14 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
 
     isotrips <- lapply (seq (stns), function (i)
                    {
-        data.frame (cbind (gtfs$stops [stns [[i]], c ("stop_id", "stop_name", "parent_station",
-                                       "stop_lon", "stop_lat")]),
-                    cbind (gtfs$trips [trips [[i]], c ("route_id", "trip_id",
-                                       "trip_headsign")]),
+        data.frame (cbind (gtfs$stops [stns [[i]], c ("stop_id",
+                                                      "stop_name",
+                                                      "parent_station",
+                                                      "stop_lon",
+                                                      "stop_lat")]),
+                    cbind (gtfs$trips [trips [[i]], c ("route_id",
+                                                       "trip_id",
+                                                       "trip_headsign")]),
                     cbind ("earliest_arrival" = earliest_arrival[[i]]))
                    })
 
@@ -231,7 +234,8 @@ route_midpoints <- function (x)
     duration <- hms::hms (as.integer (arrival - departure))
 
     transfers <- lapply (x, function (i) {
-                             index <- match (i$trip_id, names (table (i$trip_id))) - 1
+                             index <- match (i$trip_id,
+                                             names (table (i$trip_id))) - 1
                              cumsum (diff (sort (index [-length (index)])))   })
 
     sf::st_sf ("stop_name" = do.call (c, nms),
