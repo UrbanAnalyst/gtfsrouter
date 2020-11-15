@@ -72,41 +72,6 @@ class CSA_Outputs
 
 class CSA_Iso
 {
-    /*
-     * Each station retains prev_stn, ntransfers, and elapsed_time. When a new
-     * connection reaches a station, stats are compared with any existent ones,
-     * and replaced if better, which by default means if elapsed_time is less.
-     * The `earliest_connection` value is used to flag whether services are
-     * connected, initially only with start_stations, then with transfers, which
-     * are not allowed to connect if departure is before this time.
-     *
-     * Both `prev_stn` and `current_trip` are then only used at the end to
-     * retrace the paths taken to each end station.
-     *
-     * stations and trips are size_t because they're used as direct array indices.
-     */
-
-    public:
-
-        std::vector <int> earliest_connection;
-        std::vector <int> elapsed_time;
-        std::vector <int> trip_start_time;
-        std::vector <int> ntransfers;
-        std::vector <size_t> prev_stn;
-        std::vector <size_t> current_trip;
-
-        CSA_Iso (const size_t n) {
-            earliest_connection.resize (n, INFINITE_INT);
-            elapsed_time.resize (n, INFINITE_INT);
-            trip_start_time.resize (n, INFINITE_INT);
-            ntransfers.resize (n, 0L);
-            prev_stn.resize (n, INFINITE_INT);
-            current_trip.resize (n, INFINITE_INT);
-        }
-};
-
-class CSA_Iso2
-{
     private:
 
         struct Connections {
@@ -122,7 +87,7 @@ class CSA_Iso2
 
         std::vector <Connections> connections;
 
-        CSA_Iso2 (const size_t n) {
+        CSA_Iso (const size_t n) {
             is_end_stn.resize (n, false);
             earliest_departure.resize (n, INFINITE_INT);
             connections.resize (n);
@@ -228,7 +193,7 @@ bool fill_one_csa_iso (
         const int &arrival_time,
         const int &isochrone,
         const bool &is_start_stn,
-        CSA_Iso2 &csa_iso2);
+        CSA_Iso &csa_iso);
 
 int find_actual_end_time (
         const size_t &n,
@@ -247,11 +212,11 @@ void make_transfer_map (
         );
 
 Rcpp::List trace_back_isochrones (
-        const CSA_Iso2 & csa_iso2
+        const CSA_Iso & csa_iso
         );
 
 size_t trace_back_prev_index (
-        const CSA_Iso2 & csa_iso2,
+        const CSA_Iso & csa_iso,
         const size_t & stn,
         const size_t & departure_time
         );
