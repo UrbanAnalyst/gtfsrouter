@@ -299,7 +299,7 @@ Rcpp::List csaiso::trace_back_isochrones (
         size_t this_trip = csa_iso.connections [stn].trip [prev_index];
 
         end_station_out.push_back (static_cast <int> (stn));
-        trip_out.push_back (csa_iso.connections [stn].trip [prev_index]);
+        trip_out.push_back (this_trip);
         end_times_out.push_back (arrival_time);
 
         int temp = 0;
@@ -326,8 +326,12 @@ Rcpp::List csaiso::trace_back_isochrones (
 
             } else
             {
+                end_station_out.push_back (departure_stn);
+                trip_out.push_back (this_trip);
+                end_times_out.push_back (departure_time);
+
                 // Fill values for start station of journey for which arrival
-                // times can not be compared
+                // times can not be compared, but departure_time is accurate
                 size_t prev_index = INFINITE_INT;
                 int ntransfers = INFINITE_INT;
                 departure_time = INFINITE_INT;
@@ -336,8 +340,16 @@ Rcpp::List csaiso::trace_back_isochrones (
                     if (csa_iso.connections [stn].departure_time [i] <= departure_time)
                     {
                         if (prev_index == INFINITE_INT ||
-                                csa_iso.connections [stn].departure_time [i] > departure_time ||
+                                (csa_iso.connections [stn].trip [i] == this_trip &&
+                                 csa_iso.connections [stn].departure_time [i] > departure_time) ||
                                 csa_iso.connections [stn].ntransfers [i] < ntransfers)
+                        {
+                            prev_index = i;
+                            ntransfers = csa_iso.connections [stn].ntransfers [i];
+                            departure_time = csa_iso.connections [stn].departure_time [i];
+                            departure_stn = csa_iso.connections [stn].prev_stn [i];
+                            this_trip = csa_iso.connections [stn].trip [i];
+                        } else if (csa_iso.connections [stn].trip [i] == this_trip)
                         {
                             prev_index = i;
                             ntransfers = csa_iso.connections [stn].ntransfers [i];
