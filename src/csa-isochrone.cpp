@@ -323,7 +323,6 @@ Rcpp::List csaiso::trace_back_isochrones (
 
                 departure_time = csa_iso.connections [stn].departure_time [prev_index];
                 departure_stn = csa_iso.connections [stn].prev_stn [prev_index];
-
             } else
             {
                 end_station_out.push_back (departure_stn);
@@ -360,14 +359,25 @@ Rcpp::List csaiso::trace_back_isochrones (
                     }
                 }
 
-                end_station_out.push_back (departure_stn);
-                trip_out.push_back (this_trip);
-                end_times_out.push_back (departure_time);
+                if (departure_stn != end_station_out.back ())
+                {
+                    end_station_out.push_back (departure_stn);
+                    trip_out.push_back (this_trip);
+                    end_times_out.push_back (departure_time);
+                }
             }
 
             temp++;
             if (temp > csa_iso.is_end_stn.size ())
                 Rcpp::stop ("backtrace has no end");
+        }
+
+        while (end_station_out [end_station_out.size () - 1] ==
+                end_station_out [end_station_out.size () - 2])
+        {
+            end_station_out.resize (end_station_out.size () - 1);
+            end_times_out.resize (end_times_out.size () - 1);
+            trip_out.resize (trip_out.size () - 1);
         }
 
         std::reverse (end_station_out.begin (), end_station_out.end ());
