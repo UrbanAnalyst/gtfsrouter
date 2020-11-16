@@ -289,26 +289,28 @@ Rcpp::List csaiso::trace_back_isochrones (
     for (size_t es: end_stations)
     {
         std::vector <int> trip_out, end_station_out, end_times_out;
-        size_t stn = es;
-
-        end_station_out.push_back (static_cast <int> (stn));
+        size_t stn = es; // stn is arrival_stn
 
         size_t prev_index = csaiso::trace_back_prev_index (csa_iso, stn, INFINITE_INT);
 
-        trip_out.push_back (csa_iso.connections [stn].trip [prev_index]);
         int arrival_time = csa_iso.connections [stn].arrival_time [prev_index];
-        end_times_out.push_back (arrival_time);
-
-        // Next 2 ultimately hold values for start station:
         int departure_time = csa_iso.connections [stn].departure_time [prev_index];
         size_t departure_stn = csa_iso.connections [stn].prev_stn [prev_index];
         size_t this_trip = csa_iso.connections [stn].trip [prev_index];
+
+        end_station_out.push_back (static_cast <int> (stn));
+        trip_out.push_back (csa_iso.connections [stn].trip [prev_index]);
+        end_times_out.push_back (arrival_time);
 
         int temp = 0;
         while (prev_index < INFINITE_INT)
         {
             stn = csa_iso.connections [stn].prev_stn [prev_index];
 
+            // stn is then the previous stn, while departure_time remains the
+            // time of the service departing from that station. Connecting
+            // services can only be traced back to those with arrival_time
+            // values at stn that are <= departure_time.
             prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time);
 
             if (prev_index < INFINITE_INT)
@@ -324,6 +326,28 @@ Rcpp::List csaiso::trace_back_isochrones (
 
             } else
             {
+                // Fill values for start station of journey for which arrival
+                // times can not be compared
+                size_t prev_index = INFINITE_INT;
+                int ntransfers = INFINITE_INT;
+                departure_time = INFINITE_INT;
+                for (size_t i = 0; i < csa_iso.connections [stn].prev_stn.size (); i++)
+                {
+                    if (csa_iso.connections [stn].departure_time [i] <= departure_time)
+                    {
+                        if (prev_index == INFINITE_INT ||
+                                csa_iso.connections [stn].departure_time [i] > departure_time ||
+                                csa_iso.connections [stn].ntransfers [i] < ntransfers)
+                        {
+                            prev_index = i;
+                            ntransfers = csa_iso.connections [stn].ntransfers [i];
+                            departure_time = csa_iso.connections [stn].departure_time [i];
+                            departure_stn = csa_iso.connections [stn].prev_stn [i];
+                            this_trip = csa_iso.connections [stn].trip [i];
+                        }
+                    }
+                }
+
                 end_station_out.push_back (departure_stn);
                 trip_out.push_back (this_trip);
                 end_times_out.push_back (departure_time);
@@ -350,7 +374,7 @@ Rcpp::List csaiso::trace_back_isochrones (
 //' as a flag for start stations.
 //' @param stn Station from which previous station is to be traced
 //' @param departure_time Time of departure at that station, used to ensure that
-//' only previous stations with arrival times prior to that specified departure
+//' only previous stations with arrival times <= that specified departure
 //' are selected. For end stations this departure_time is initially INF.
 //' @noRd
 size_t csaiso::trace_back_prev_index (
