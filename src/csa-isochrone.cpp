@@ -369,9 +369,9 @@ size_t csaiso::trace_back_prev_index (
         int this_journey = csa_iso.connections [stn].arrival_time [i] -
             csa_iso.connections [stn].initial_depart [i];
 
-        if ((this_journey < journey ||
-                (this_journey == journey && csa_iso.connections [stn].ntransfers [i] < ntransfers)) &&
-                csa_iso.connections [stn].arrival_time [i] < departure_time)
+        if (csa_iso.connections [stn].arrival_time [i] <= departure_time &&
+                (this_journey < journey ||
+                (this_journey == journey && csa_iso.connections [stn].ntransfers [i] < ntransfers)))
         {
             prev_index = i;
             ntransfers = csa_iso.connections [stn].ntransfers [i];
