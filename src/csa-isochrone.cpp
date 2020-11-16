@@ -301,8 +301,8 @@ Rcpp::List csaiso::trace_back_isochrones (
 
         // Next 2 ultimately hold values for start station:
         int departure_time = csa_iso.connections [stn].departure_time [prev_index];
-        size_t departure_stn = INFINITE_INT;
-        size_t this_trip = INFINITE_INT;
+        size_t departure_stn = csa_iso.connections [stn].prev_stn [prev_index];
+        size_t this_trip = csa_iso.connections [stn].trip [prev_index];
 
         int temp = 0;
         while (prev_index < INFINITE_INT)
