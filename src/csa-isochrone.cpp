@@ -296,11 +296,11 @@ Rcpp::List csaiso::trace_back_isochrones (
         size_t prev_index = csaiso::trace_back_prev_index (csa_iso, stn, INFINITE_INT);
 
         trip_out.push_back (csa_iso.connections [stn].trip [prev_index]);
-        size_t arrival_time = csa_iso.connections [stn].arrival_time [prev_index];
+        int arrival_time = csa_iso.connections [stn].arrival_time [prev_index];
         end_times_out.push_back (arrival_time);
 
         // Next 2 ultimately hold values for start station:
-        int departure_time = INFINITE_INT;
+        int departure_time = csa_iso.connections [stn].departure_time [prev_index];
         size_t departure_stn = INFINITE_INT;
         size_t this_trip = INFINITE_INT;
 
@@ -309,7 +309,7 @@ Rcpp::List csaiso::trace_back_isochrones (
         {
             stn = csa_iso.connections [stn].prev_stn [prev_index];
 
-            prev_index = csaiso::trace_back_prev_index (csa_iso, stn, arrival_time);
+            prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time);
 
             if (prev_index < INFINITE_INT)
             {
@@ -321,6 +321,7 @@ Rcpp::List csaiso::trace_back_isochrones (
 
                 departure_time = csa_iso.connections [stn].departure_time [prev_index];
                 departure_stn = csa_iso.connections [stn].prev_stn [prev_index];
+
             } else
             {
                 end_station_out.push_back (departure_stn);
@@ -359,21 +360,22 @@ size_t csaiso::trace_back_prev_index (
         )
 {
     int latest = -1L;
+    int journey = INFINITE_INT;
     size_t prev_index = INFINITE_INT;
     int ntransfers = INFINITE_INT;
 
     for (size_t i = 0; i < csa_iso.connections [stn].prev_stn.size (); i++)
     {
-        if (csa_iso.connections [stn].initial_depart [i] >= latest &&
+        int this_journey = csa_iso.connections [stn].arrival_time [i] -
+            csa_iso.connections [stn].initial_depart [i];
+
+        if ((this_journey < journey ||
+                (this_journey == journey && csa_iso.connections [stn].ntransfers [i] < ntransfers)) &&
                 csa_iso.connections [stn].arrival_time [i] < departure_time)
         {
-            latest = csa_iso.connections [stn].initial_depart [i];
             prev_index = i;
-            if (csa_iso.connections [stn].ntransfers [i] < ntransfers)
-            {
-                ntransfers = csa_iso.connections [stn].ntransfers [i];
-                prev_index = i;
-            }
+            ntransfers = csa_iso.connections [stn].ntransfers [i];
+            journey = this_journey;
         }
     }
 
