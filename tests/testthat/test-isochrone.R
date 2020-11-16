@@ -12,9 +12,9 @@ test_that("gtfs_isochrone", {
               expect_silent (g <- extract_gtfs (f, quiet = TRUE))
               expect_silent (g2 <- gtfs_timetable (g, day = 3, quiet = TRUE))
               start_time <- 12 * 3600 + 1200
-              end_time <- start_time + 1200
+              end_time <- start_time + 10 * 60
               ic <- gtfs_isochrone (g2,
-                                    from = "Schonlein",
+                                    from = "S+U Zoologischer Garten Bhf",
                                     start_time = start_time,
                                     end_time = end_time)
               expect_is (ic, c ("gtfs_isochrone", "list"))
@@ -38,9 +38,9 @@ test_that("gtfs_isochrone", {
               expect_identical (names (ic$end_points), cnames)
 
               ic2 <- gtfs_isochrone (g,
-                                    from = "Schonlein",
+                                    from = "S+U Zoologischer Garten Bhf",
                                     start_time = 12 * 3600 + 1200,
-                                    end_time = 12 * 3600 + 2400,
+                                    end_time = 12 * 3600 + 1200 + 10 * 60,
                                     day = 3)
               expect_identical (ic, ic2)
              })
