@@ -143,37 +143,10 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
           end_time = as.integer (actual_start_time + end_time - start_time))
 }
 
-# convert list of data.frames of stops and trips into sf linestrings for each
-# route
+# convert each isotrip to sf linestring
 route_to_linestring <- function (x)
 {
-    # split each route into trip IDs
-    xsp <- list ()
-    for (i in x)
-        xsp <- c (xsp, split (i, f = as.factor (i$trip_id)))
-    names (xsp) <- NULL
-    # remove the trip info so unique sequences of stops can be identified
-    xsp <- lapply (xsp, function (i) {
-                       i [c ("route_id", "trip_id", "trip_headsign")] <- NULL
-                       return (i)
-                   })
-    xsp <- xsp [!duplicated (xsp)]
-    lens <- vapply (xsp, nrow, numeric (1))
-    xsp <- xsp [which (lens > 1)]
-
-    # Then determine which sequences are sub-sequences of others already present
-    lens <- vapply (xsp, nrow, numeric (1))
-    xsp <- xsp [order (lens)]
-    # paste all sequences of stop_ids
-    stop_seqs <- vapply (xsp, function (i) paste0 (i$stop_id, collapse = ""),
-                         character (1))
-    # then find the longest sequence matching each - this can be done with a
-    # simple "max" because of the above ordering by length
-    index <- unlist (lapply (stop_seqs, function (i) max (grep (i, stop_seqs))))
-    xsp <- xsp [sort (unique (index))]
-
-    # Then convert to linestring geometries
-    xy <- lapply (xsp, function (i)
+    xy <- lapply (x, function (i)
                   sf::st_linestring (cbind (i$stop_lon, i$stop_lat)))
     sf::st_sfc (xy, crs = 4326)
 }
