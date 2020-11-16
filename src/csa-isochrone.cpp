@@ -50,9 +50,6 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     const int actual_end_time = csaiso::find_actual_end_time (nrows, departure_time,
             departure_station, start_stations_set, start_time, end_time);
 
-    //for (auto s: start_stations)
-    //    csa_iso.earliest_departure [s] = start_time;
-
     for (size_t i = 0; i < nrows; i++)
     {
         if (departure_time [i] < start_time)
