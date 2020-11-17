@@ -212,7 +212,8 @@ void make_transfer_map (
         );
 
 Rcpp::List trace_back_isochrones (
-        const CSA_Iso & csa_iso
+        const CSA_Iso & csa_iso,
+        const std::unordered_set <size_t> & start_stations_set
         );
 
 size_t trace_back_prev_index (
