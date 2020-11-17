@@ -165,6 +165,7 @@ bool csaiso::fill_one_csa_iso (
 
     bool fill_vals = false;
     int earliest = -1L;
+    int prev_trip = -1L;
     int ntransfers = INFINITE_INT;
     int latest_depart = -1L;
 
@@ -177,16 +178,17 @@ bool csaiso::fill_one_csa_iso (
         {
             const int this_depart =
                 csa_iso.connections [departure_station].initial_depart [i];
-            if (this_depart < INFINITE_INT && this_depart > latest_depart)
-                latest_depart = this_depart;
             if (this_depart < INFINITE_INT)
             {
+                if (this_depart > latest_depart)
+                    latest_depart = this_depart;
                 if ((arrival_time - this_depart) <= isochrone)
                 {
                     fill_vals = true;
                     if (this_depart > earliest)
                     {
                         earliest = this_depart;
+                        prev_trip = csa_iso.connections [departure_station].trip [i];
                         if (csa_iso.connections [departure_station].ntransfers [i] < ntransfers)
                             ntransfers = csa_iso.connections [departure_station].ntransfers [i];
                     }
@@ -225,6 +227,11 @@ bool csaiso::fill_one_csa_iso (
         csa_iso.earliest_departure [arrival_station] = departure_time;
     } else
     {
+        // Trip changes happen here mostly when services departing before the
+        // nominated start time catch up with other services, so fastest trips
+        // change services at same stop.
+        if (trip_id != prev_trip)
+            ntransfers++;
         csa_iso.connections [arrival_station].ntransfers [s] = ntransfers;
         csa_iso.connections [arrival_station].initial_depart [s] = earliest;
     }
@@ -291,7 +298,7 @@ Rcpp::List csaiso::trace_back_isochrones (
         std::vector <int> trip_out, end_station_out, end_times_out;
         size_t stn = es; // stn is arrival_stn
 
-        size_t prev_index = csaiso::trace_back_prev_index (csa_iso, stn, INFINITE_INT);
+        size_t prev_index = csaiso::trace_back_prev_index (csa_iso, stn, INFINITE_INT, INFINITE_INT);
 
         int arrival_time = csa_iso.connections [stn].arrival_time [prev_index];
         int departure_time = csa_iso.connections [stn].departure_time [prev_index];
@@ -311,7 +318,7 @@ Rcpp::List csaiso::trace_back_isochrones (
             // time of the service departing from that station. Connecting
             // services can only be traced back to those with arrival_time
             // values at stn that are <= departure_time.
-            prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time);
+            prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip);
 
             if (prev_index < INFINITE_INT)
             {
@@ -402,26 +409,31 @@ Rcpp::List csaiso::trace_back_isochrones (
 size_t csaiso::trace_back_prev_index (
         const CSA_Iso & csa_iso,
         const size_t & stn,
-        const size_t & departure_time
+        const size_t & departure_time,
+        const int & trip_id
         )
 {
     int latest = -1L;
-    int journey = INFINITE_INT;
     size_t prev_index = INFINITE_INT;
     int ntransfers = INFINITE_INT;
 
     for (size_t i = 0; i < csa_iso.connections [stn].prev_stn.size (); i++)
     {
-        int this_journey = csa_iso.connections [stn].arrival_time [i] -
-            csa_iso.connections [stn].initial_depart [i];
-
         if (csa_iso.connections [stn].arrival_time [i] <= departure_time &&
-                (this_journey < journey ||
-                (this_journey == journey && csa_iso.connections [stn].ntransfers [i] < ntransfers)))
+                csa_iso.connections [stn].initial_depart [i] > latest)
         {
-            prev_index = i;
-            ntransfers = csa_iso.connections [stn].ntransfers [i];
-            journey = this_journey;
+            bool update = (trip_id == INFINITE_INT); // end stations
+            if (!update) // preferentially keep on same trip
+                update = (csa_iso.connections [stn].trip [i] == trip_id);
+            if (!update) // preferentially connect with fewest transfers
+                update = csa_iso.connections [stn].ntransfers [i] < ntransfers;
+
+            if (update)
+            {
+                prev_index = i;
+                latest = csa_iso.connections [stn].initial_depart [i];
+                ntransfers = csa_iso.connections [stn].ntransfers [i];
+            }
         }
     }
 

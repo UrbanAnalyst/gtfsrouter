@@ -218,7 +218,8 @@ Rcpp::List trace_back_isochrones (
 size_t trace_back_prev_index (
         const CSA_Iso & csa_iso,
         const size_t & stn,
-        const size_t & departure_time
+        const size_t & departure_time,
+        const int & trip_id
         );
 
 } // end namespace csaiso
