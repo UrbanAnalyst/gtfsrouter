@@ -119,7 +119,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         } // end if filled
     } // end for i over nrows of timetable
 
-    Rcpp::List res = csaiso::trace_back_isochrones (csa_iso);
+    Rcpp::List res = csaiso::trace_back_isochrones (csa_iso, start_stations_set);
 
     return res;
 }
@@ -274,7 +274,8 @@ int csaiso::find_actual_end_time (
 }
 
 Rcpp::List csaiso::trace_back_isochrones (
-        const CSA_Iso & csa_iso
+        const CSA_Iso & csa_iso,
+        const std::unordered_set <size_t> & start_stations_set
         )
 {
     const size_t nend = std::accumulate (csa_iso.is_end_stn.begin (),
@@ -379,8 +380,12 @@ Rcpp::List csaiso::trace_back_isochrones (
                 Rcpp::stop ("backtrace has no end");
         }
 
-        while (end_station_out [end_station_out.size () - 1] ==
-                end_station_out [end_station_out.size () - 2])
+        // Trips can start with initial journeys between different start
+        // stations, which can not be removed at the outset because the initial
+        // connections set appropriate initial departure times for all
+        // stations connected by such trips.
+        while (start_stations_set.find (end_station_out [end_station_out.size () - 2]) !=
+                start_stations_set.end ())
         {
             end_station_out.resize (end_station_out.size () - 1);
             end_times_out.resize (end_times_out.size () - 1);
