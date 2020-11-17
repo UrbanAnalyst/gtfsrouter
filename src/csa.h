@@ -223,6 +223,19 @@ size_t trace_back_prev_index (
         const int & trip_id
         );
 
+const bool is_transfer_in_isochrone (
+        const CSA_Iso & csa_iso,
+        const size_t & station,
+        const int & transfer_time,
+        const int & isochrone
+        );
+
+const bool is_transfer_quicker (
+        const CSA_Iso & csa_iso,
+        const size_t & station,
+        const int & transfer_time
+        );
+
 } // end namespace csaiso
 
 Rcpp::DataFrame rcpp_csa (

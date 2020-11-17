@@ -79,12 +79,16 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                     continue;
 
                 const int tr_time = arrival_time [i] + t.second;
-                const int journey = tr_time + csa_iso.earliest_departure [arrival_station [i]];
-                if (journey > isochrone_val)
+
+                if (!csaiso::is_transfer_in_isochrone (
+                        csa_iso, arrival_station [i], tr_time, isochrone_val))
                     continue;
 
-                if (tr_time < csa_iso.earliest_departure [trans_dest])
-                    csa_iso.earliest_departure [trans_dest] = tr_time;
+                if (!csaiso::is_transfer_quicker (
+                        csa_iso, trans_dest, tr_time))
+                    continue;
+                
+                csa_iso.earliest_departure [trans_dest] = tr_time;
 
                 const size_t s = csa_iso.extend (trans_dest);
 
@@ -97,13 +101,15 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                 int earliest = -1;
                 int ntransfers = INFINITE_INT;
 
-                for (size_t j = 0; j < csa_iso.connections [arrival_station [i]].initial_depart.size (); i++)
+                for (size_t j = 0; j < csa_iso.connections [arrival_station [i]].initial_depart.size (); j++)
                 {
-                    const int this_depart =
+                    const int this_initial =
                         csa_iso.connections [arrival_station [i]].initial_depart [j];
-                    if (this_depart > earliest)
+                    const int this_arrive =
+                        csa_iso.connections [arrival_station [i]].arrival_time [j];
+                    if (this_arrive <= arrival_time [i] && this_initial > earliest)
                     {
-                        earliest = this_depart;
+                        earliest = this_initial;
                         if (csa_iso.connections [arrival_station [i]].ntransfers [j] < ntransfers)
                         {
                             ntransfers =
@@ -111,9 +117,6 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                         }
                     }
                 }
-
-                if (ntransfers == INFINITE_INT)
-                    Rcpp::stop ("Transfer station has no previous connections; this should not happen.");
 
                 csa_iso.connections [trans_dest].ntransfers [s] = ntransfers;
                 csa_iso.connections [trans_dest].initial_depart [s] = earliest;
@@ -123,6 +126,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         } // end if filled
     } // end for i over nrows of timetable
 
+    Rcpp::Rcout << "***A***" << std::endl;
     Rcpp::List res = csaiso::trace_back_isochrones (csa_iso, start_stations_set);
 
     return res;
@@ -457,4 +461,32 @@ size_t csaiso::trace_back_prev_index (
     }
 
     return (prev_index);
+}
+
+// Return a dummy value of 0 for stations which have not yet been reached, so
+// they will be connected by transfer no matter what; otherwise return actual
+// minimal journey time to that station.
+const bool csaiso::is_transfer_in_isochrone (
+        const CSA_Iso & csa_iso,
+        const size_t & station,
+        const int & transfer_time,
+        const int & isochrone
+        )
+{
+    int journey = 0L;
+    if (csa_iso.earliest_departure [station] < INFINITE_INT)
+        journey = transfer_time - csa_iso.earliest_departure [station];
+
+    return (journey <= isochrone);
+}
+
+const bool csaiso::is_transfer_quicker (
+        const CSA_Iso & csa_iso,
+        const size_t & station,
+        const int & transfer_time
+        )
+{
+    const bool res = (transfer_time <= csa_iso.earliest_departure [station]);
+
+    return res;
 }
