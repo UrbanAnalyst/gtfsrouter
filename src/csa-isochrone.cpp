@@ -126,7 +126,6 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         } // end if filled
     } // end for i over nrows of timetable
 
-    Rcpp::Rcout << "***A***" << std::endl;
     Rcpp::List res = csaiso::trace_back_isochrones (csa_iso, start_stations_set);
 
     return res;
@@ -320,6 +319,7 @@ Rcpp::List csaiso::trace_back_isochrones (
         end_times_out.push_back (arrival_time);
 
         int temp = 0;
+
         while (prev_index < INFINITE_INT)
         {
             stn = csa_iso.connections [stn].prev_stn [prev_index];
@@ -330,43 +330,45 @@ Rcpp::List csaiso::trace_back_isochrones (
             // values at stn that are <= departure_time.
             prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip);
 
+            /*
+            trip_out.push_back (this_trip);
+            end_times_out.push_back (departure_time);
+
             if (prev_index < INFINITE_INT)
             {
                 this_trip = csa_iso.connections [stn].trip [prev_index];
                 arrival_time = csa_iso.connections [stn].arrival_time [prev_index];
 
                 end_station_out.push_back (static_cast <int> (stn));
-                trip_out.push_back (this_trip);
-                end_times_out.push_back (arrival_time);
 
                 departure_time = csa_iso.connections [stn].departure_time [prev_index];
                 departure_stn = csa_iso.connections [stn].prev_stn [prev_index];
             } else
             {
+                // Trace back to start station. departure_stn at that point is
+                // the one after the start station, so still need to trace back
+                // one further step, to insert original station and
+                // departure_time. departure_time at that point is from
                 end_station_out.push_back (departure_stn);
-                trip_out.push_back (this_trip);
-                end_times_out.push_back (departure_time);
 
-                // Fill values for start station of journey for which arrival
-                // times can not be compared, but departure_time is accurate
-                size_t prev_index = INFINITE_INT;
                 int ntransfers = INFINITE_INT;
-                departure_time = INFINITE_INT;
+                departure_time = -1;
                 for (size_t i = 0; i < csa_iso.connections [stn].prev_stn.size (); i++)
                 {
                     if (csa_iso.connections [stn].departure_time [i] <= departure_time)
                     {
-                        if (prev_index == INFINITE_INT ||
-                                (csa_iso.connections [stn].trip [i] == this_trip &&
-                                 csa_iso.connections [stn].departure_time [i] > departure_time) ||
-                                csa_iso.connections [stn].ntransfers [i] < ntransfers)
-                        {
-                            prev_index = i;
-                            ntransfers = csa_iso.connections [stn].ntransfers [i];
-                            departure_time = csa_iso.connections [stn].departure_time [i];
-                            departure_stn = csa_iso.connections [stn].prev_stn [i];
-                            this_trip = csa_iso.connections [stn].trip [i];
-                        } else if (csa_iso.connections [stn].trip [i] == this_trip)
+                        // Several OR expressions more clearly written as
+                        // independent steps:
+                        bool fill = (prev_index == INFINITE_INT);
+                        if (!fill)
+                            fill = (csa_iso.connections [stn].trip [i] == this_trip &&
+                                    csa_iso.connections [stn].departure_time [i] > departure_time);
+                        if (!fill)
+                            fill = (csa_iso.connections [stn].ntransfers [i] < ntransfers);
+                        if (!fill)
+                            fill = (csa_iso.connections [stn].trip [i] == this_trip);
+
+                        if (fill)
                         {
                             prev_index = i;
                             ntransfers = csa_iso.connections [stn].ntransfers [i];
@@ -384,6 +386,7 @@ Rcpp::List csaiso::trace_back_isochrones (
                     end_times_out.push_back (departure_time);
                 }
             }
+            */
 
             temp++;
             if (temp > csa_iso.is_end_stn.size ())
