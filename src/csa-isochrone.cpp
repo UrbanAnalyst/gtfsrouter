@@ -75,22 +75,22 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             for (auto t: transfer_map.at (arrival_station [i]))
             {
                 const size_t trans_dest = t.first;
-                if (trans_dest == departure_station [i]) // can happen
-                    continue;
-
                 const int tr_time = arrival_time [i] + t.second;
 
-                if (!csaiso::is_transfer_in_isochrone (
-                        csa_iso, arrival_station [i], tr_time, isochrone_val))
+                bool insert_transfer = (trans_dest != departure_station [i]);
+                if (!insert_transfer)
+                    insert_transfer = !csaiso::is_transfer_in_isochrone (
+                            csa_iso, arrival_station [i], tr_time, isochrone_val);
+                if (!insert_transfer)
+                    insert_transfer = !csaiso::is_transfer_quicker (
+                            csa_iso, trans_dest, tr_time);
+
+                if (!insert_transfer)
                     continue;
 
-                if (!csaiso::is_transfer_quicker (
-                        csa_iso, trans_dest, tr_time))
-                    continue;
-                
                 csa_iso.earliest_departure [trans_dest] = tr_time;
 
-                const size_t s = csa_iso.extend (trans_dest);
+                const size_t s = csa_iso.extend (trans_dest) - 1;
 
                 csa_iso.connections [trans_dest].prev_stn [s] = arrival_station [i];
                 csa_iso.connections [trans_dest].departure_time [s] = arrival_time [i];
@@ -330,10 +330,21 @@ Rcpp::List csaiso::trace_back_isochrones (
             // values at stn that are <= departure_time.
             prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip);
 
-            /*
             trip_out.push_back (this_trip);
             end_times_out.push_back (departure_time);
 
+            if (prev_index < INFINITE_INT)
+            {
+                this_trip = csa_iso.connections [stn].trip [prev_index];
+                arrival_time = csa_iso.connections [stn].arrival_time [prev_index];
+
+                end_station_out.push_back (static_cast <int> (stn));
+
+                departure_time = csa_iso.connections [stn].departure_time [prev_index];
+                departure_stn = csa_iso.connections [stn].prev_stn [prev_index];
+            }
+
+            /*
             if (prev_index < INFINITE_INT)
             {
                 this_trip = csa_iso.connections [stn].trip [prev_index];
@@ -392,11 +403,13 @@ Rcpp::List csaiso::trace_back_isochrones (
             if (temp > csa_iso.is_end_stn.size ())
                 Rcpp::stop ("backtrace has no end");
         }
+        end_station_out.push_back (departure_stn);
 
         // Trips can start with initial journeys between different start
         // stations, which can not be removed at the outset because the initial
         // connections set appropriate initial departure times for all
         // stations connected by such trips.
+        /*
         while (start_stations_set.find (end_station_out [end_station_out.size () - 2]) !=
                 start_stations_set.end ())
         {
@@ -404,6 +417,7 @@ Rcpp::List csaiso::trace_back_isochrones (
             end_times_out.resize (end_times_out.size () - 1);
             trip_out.resize (trip_out.size () - 1);
         }
+        */
 
         std::reverse (end_station_out.begin (), end_station_out.end ());
         std::reverse (end_times_out.begin (), end_times_out.end ());
