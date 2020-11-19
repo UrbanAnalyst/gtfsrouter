@@ -170,8 +170,7 @@ bool csaiso::fill_one_csa_iso (
         const bool &is_start_stn,
         CSA_Iso &csa_iso) {
 
-    bool fill_vals = false;
-    int earliest = -1L;
+    bool fill_vals = false, is_end_stn = false;
     int prev_trip = -1L;
     int ntransfers = INFINITE_INT;
     int latest_depart = -1L;
@@ -181,38 +180,71 @@ bool csaiso::fill_one_csa_iso (
         fill_vals = true;
     } else
     {
+        // The following code determines whether to insert the values as previous
+        // values for the arrival station, and IF NOT, whether the departure station
+        // is an end station for which the arrival time would exceed the isochrone
+        // duration. That can in turn only be determined by looping over all
+        // prior connections to the departure station because each one of those
+        // has unique initial departure and arrival times. Only if one pair of
+        // these would arrive at the departure station earlier than the
+        // isochrone value, yet at the arrival station later can the station be
+        // identified as an end station.
+
         for (size_t i = 0; i < csa_iso.connections [departure_station].initial_depart.size (); i++)
         {
-            const int this_depart =
-                csa_iso.connections [departure_station].initial_depart [i];
-            if (this_depart < INFINITE_INT)
+            const int prev_arrive =
+                csa_iso.connections [departure_station].arrival_time [i];
+            if (prev_arrive <= departure_time)
             {
-                if (this_depart > latest_depart)
-                    latest_depart = this_depart;
-                if ((arrival_time - this_depart) <= isochrone)
+                const int init_depart =
+                    csa_iso.connections [departure_station].initial_depart [i];
+                if ((arrival_time - init_depart) <= isochrone)
                 {
                     fill_vals = true;
-                    if (this_depart >= earliest)
+
+                    bool update = (init_depart >= latest_depart);
+                    // option to update to less transfers:
+                    //if (!update)
+                    //    update = (csa_iso.connections [departure_station].ntransfers [i] < ntransfers);
+
+                    if (update)
                     {
-                        earliest = this_depart;
+                        latest_depart = init_depart;
                         prev_trip = csa_iso.connections [departure_station].trip [i];
-                        if (csa_iso.connections [departure_station].ntransfers [i] < ntransfers)
-                            ntransfers = csa_iso.connections [departure_station].ntransfers [i];
+                        ntransfers = csa_iso.connections [departure_station].ntransfers [i];
                     }
+                } else if ((departure_time - init_depart) <= isochrone)
+                {
+                    is_end_stn = true;
                 }
             }
         }
 
-        if (csa_iso.is_end_stn [departure_station])
+        if (is_end_stn)
+        {
+            csa_iso.is_end_stn [departure_station] = true;
+        } else
+        {
             csa_iso.is_end_stn [departure_station] = false;
-        if (csa_iso.is_end_stn [arrival_station])
             csa_iso.is_end_stn [arrival_station] = false;
+        }
+
     }
+
+    // values are filled if:
+    // 1. Departure is a start station, OR
+    // 2. There have been previous connections to the departure station AND
+    //      arrival time minus any previous initial departure is <= isochrone
+    //
+    // End stations are those departure stations for which:
+    // 1. Values are NOT filled AND
+    // 2. They are not start stations AND
+    // 3. There has been a previous viable connection to the departure station.
 
     if (!fill_vals)
     {
-        if (!is_start_stn && latest_depart > 0)
-            csa_iso.is_end_stn [departure_station] = true;
+        //if (!is_start_stn && latest_depart > 0)
+        //    csa_iso.is_end_stn [departure_station] = true;
     } else
     {
         const size_t s = csa_iso.extend (arrival_station) - 1;
@@ -240,7 +272,7 @@ bool csaiso::fill_one_csa_iso (
                 ntransfers++;
 
             csa_iso.connections [arrival_station].ntransfers [s] = ntransfers;
-            csa_iso.connections [arrival_station].initial_depart [s] = earliest;
+            csa_iso.connections [arrival_station].initial_depart [s] = latest_depart;
         }
     }
 
