@@ -153,33 +153,30 @@ bool csaiso::fill_one_csa_iso (
          * previous trips are always matched with current trips where possible.
          */
 
-        for (size_t i = 0; i < csa_iso.connections [departure_station].initial_depart.size (); i++)
+        for (auto st: csa_iso.connections [departure_station].convec)
         {
-            const int prev_arrive =
-                csa_iso.connections [departure_station].arrival_time [i];
-            if (prev_arrive <= departure_time)
+            if (st.arrival_time <= departure_time)
             {
-                const int init_depart =
-                    csa_iso.connections [departure_station].initial_depart [i];
-                if ((arrival_time - init_depart) <= isochrone)
+                if ((arrival_time - st.initial_depart) <= isochrone)
                 {
                     fill_vals = true;
 
-                    bool update = (init_depart >= latest_depart);
+                    bool update = (st.initial_depart >= latest_depart);
+
                     // option to update to less transfers:
                     //if (!update)
                     //    update = (csa_iso.connections [departure_station].ntransfers [i] < ntransfers);
 
                     if (update)
                     {
-                        latest_depart = init_depart;
-                        prev_trip = csa_iso.connections [departure_station].trip [i];
-                        ntransfers = csa_iso.connections [departure_station].ntransfers [i];
+                        latest_depart = st.initial_depart;
+                        prev_trip = st.trip;
+                        ntransfers = st.ntransfers;
 
-                        if (csa_iso.connections [departure_station].trip [i] == trip_id)
+                        if (st.trip == trip_id)
                             break; // stay on same trip
                     }
-                } else if ((departure_time - init_depart) <= isochrone)
+                } else if ((departure_time - st.initial_depart) <= isochrone)
                 {
                     is_end_stn = true;
                 }
@@ -215,18 +212,18 @@ bool csaiso::fill_one_csa_iso (
     {
         const size_t s = csa_iso.extend (arrival_station) - 1;
 
-        csa_iso.connections [arrival_station].prev_stn [s] = departure_station;
-        csa_iso.connections [arrival_station].departure_time [s] = departure_time;
-        csa_iso.connections [arrival_station].arrival_time [s] = arrival_time;
-        csa_iso.connections [arrival_station].trip [s] = trip_id;
+        csa_iso.connections [arrival_station].convec [s].prev_stn = departure_station;
+        csa_iso.connections [arrival_station].convec [s].departure_time = departure_time;
+        csa_iso.connections [arrival_station].convec [s].arrival_time = arrival_time;
+        csa_iso.connections [arrival_station].convec [s].trip = trip_id;
 
         if (csa_iso.earliest_departure [arrival_station] > arrival_time)
             csa_iso.earliest_departure [arrival_station] = arrival_time;
 
         if (is_start_stn)
         {
-            csa_iso.connections [arrival_station].ntransfers [s] = 0L;
-            csa_iso.connections [arrival_station].initial_depart [s] = departure_time;
+            csa_iso.connections [arrival_station].convec [s].ntransfers = 0L;
+            csa_iso.connections [arrival_station].convec [s].initial_depart = departure_time;
             csa_iso.earliest_departure [departure_station] = departure_time;
             csa_iso.earliest_departure [arrival_station] = departure_time;
         } else
@@ -237,8 +234,8 @@ bool csaiso::fill_one_csa_iso (
             if (trip_id != prev_trip)
                 ntransfers++;
 
-            csa_iso.connections [arrival_station].ntransfers [s] = ntransfers;
-            csa_iso.connections [arrival_station].initial_depart [s] = latest_depart;
+            csa_iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
+            csa_iso.connections [arrival_station].convec [s].initial_depart = latest_depart;
         }
     }
 
@@ -272,34 +269,27 @@ void csaiso::fill_one_csa_transfer (
 
     const size_t s = csa_iso.extend (trans_dest) - 1;
 
-    csa_iso.connections [trans_dest].prev_stn [s] = arrival_station;
-    csa_iso.connections [trans_dest].departure_time [s] = arrival_time;
-    csa_iso.connections [trans_dest].arrival_time [s] = trans_time;
+    csa_iso.connections [trans_dest].convec [s].prev_stn = arrival_station;
+    csa_iso.connections [trans_dest].convec [s].departure_time = arrival_time;
+    csa_iso.connections [trans_dest].convec [s].arrival_time = trans_time;
 
     // Find the latest initial departure time for all services
     // connecting to arrival station:
     int earliest = -1;
     int ntransfers = INFINITE_INT;
 
-    for (size_t j = 0; j < csa_iso.connections [arrival_station].initial_depart.size (); j++)
+    for (auto st: csa_iso.connections [arrival_station].convec)
     {
-        const int this_initial =
-            csa_iso.connections [arrival_station].initial_depart [j];
-        const int this_arrive =
-            csa_iso.connections [arrival_station].arrival_time [j];
-        if (this_arrive <= arrival_time && this_initial > earliest)
+        if (st.arrival_time <= arrival_time && st.initial_depart > earliest)
         {
-            earliest = this_initial;
-            if (csa_iso.connections [arrival_station].ntransfers [j] < ntransfers)
-            {
-                ntransfers =
-                    csa_iso.connections [arrival_station].ntransfers [j];
-            }
+            earliest = st.initial_depart;
+            if (st.ntransfers < ntransfers)
+                ntransfers = st.ntransfers;
         }
     }
 
-    csa_iso.connections [trans_dest].ntransfers [s] = ntransfers;
-    csa_iso.connections [trans_dest].initial_depart [s] = earliest;
+    csa_iso.connections [trans_dest].convec [s].ntransfers = ntransfers;
+    csa_iso.connections [trans_dest].convec [s].initial_depart = earliest;
     if (earliest > csa_iso.earliest_departure [trans_dest])
         csa_iso.earliest_departure [trans_dest] = earliest;
 }
@@ -366,10 +356,10 @@ Rcpp::List csaiso::trace_back_isochrones (
 
         size_t prev_index = csaiso::trace_back_prev_index (csa_iso, stn, INFINITE_INT, INFINITE_INT);
 
-        int arrival_time = csa_iso.connections [stn].arrival_time [prev_index];
-        int departure_time = csa_iso.connections [stn].departure_time [prev_index];
-        size_t departure_stn = csa_iso.connections [stn].prev_stn [prev_index];
-        size_t this_trip = csa_iso.connections [stn].trip [prev_index];
+        int arrival_time = csa_iso.connections [stn].convec [prev_index].arrival_time;
+        int departure_time = csa_iso.connections [stn].convec [prev_index].departure_time;
+        size_t departure_stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
+        size_t this_trip = csa_iso.connections [stn].convec [prev_index].trip;
 
         end_station_out.push_back (static_cast <int> (stn));
         trip_out.push_back (this_trip);
@@ -379,7 +369,7 @@ Rcpp::List csaiso::trace_back_isochrones (
 
         while (prev_index < INFINITE_INT)
         {
-            stn = csa_iso.connections [stn].prev_stn [prev_index];
+            stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
 
             // stn is then the previous stn, while departure_time remains the
             // time of the service departing from that station. Connecting
@@ -392,13 +382,13 @@ Rcpp::List csaiso::trace_back_isochrones (
 
             if (prev_index < INFINITE_INT)
             {
-                this_trip = csa_iso.connections [stn].trip [prev_index];
-                arrival_time = csa_iso.connections [stn].arrival_time [prev_index];
+                this_trip = csa_iso.connections [stn].convec [prev_index].trip;
+                arrival_time = csa_iso.connections [stn].convec [prev_index].arrival_time;
 
                 end_station_out.push_back (static_cast <int> (stn));
 
-                departure_time = csa_iso.connections [stn].departure_time [prev_index];
-                departure_stn = csa_iso.connections [stn].prev_stn [prev_index];
+                departure_time = csa_iso.connections [stn].convec [prev_index].departure_time;
+                departure_stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
             }
 
             /*
@@ -506,10 +496,11 @@ size_t csaiso::trace_back_prev_index (
     size_t prev_index = INFINITE_INT;
     int ntransfers = INFINITE_INT;
 
-    for (size_t i = 0; i < csa_iso.connections [stn].prev_stn.size (); i++)
+    int index = 0;
+    for (auto st: csa_iso.connections [stn].convec)
     {
-        if (csa_iso.connections [stn].arrival_time [i] <= departure_time &&
-                csa_iso.connections [stn].initial_depart [i] > latest)
+        if (st.arrival_time <= departure_time &&
+                st.initial_depart > latest)
         {
             // ******** UPDATE RULES *******
             // These accord with the following sequential priorities
@@ -519,19 +510,20 @@ size_t csaiso::trace_back_prev_index (
             // 4. Number of transfers should be as few as possible
             bool update = (trip_id == INFINITE_INT); // end stations
             if (!update) // keep on same trip
-                update = (csa_iso.connections [stn].trip [i] == trip_id);
+                update = (st.trip == trip_id);
             if (!update) // leave as late as possible
-                update = (csa_iso.connections [stn].initial_depart [i] > latest);
+                update = (st.initial_depart > latest);
             if (!update) // connect with fewest transfers
-                update = (csa_iso.connections [stn].ntransfers [i] < ntransfers);
+                update = (st.ntransfers < ntransfers);
 
             if (update)
             {
-                prev_index = i;
-                latest = csa_iso.connections [stn].initial_depart [i];
-                ntransfers = csa_iso.connections [stn].ntransfers [i];
+                prev_index = index;
+                latest = st.initial_depart;
+                ntransfers = st.ntransfers;
             }
         }
+        index++;
     }
 
     return (prev_index);

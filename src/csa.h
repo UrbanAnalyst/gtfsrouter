@@ -74,10 +74,17 @@ class CSA_Iso
 {
     private:
 
-        struct Connections {
-            std::vector <size_t> prev_stn;
-            std::vector <int> departure_time, arrival_time,
-                trip, ntransfers, initial_depart;
+        struct OneCon {
+            size_t prev_stn;
+            int departure_time,
+                arrival_time,
+                trip,
+                ntransfers,
+                initial_depart;
+        };
+
+        struct ConVec {
+            std::vector <OneCon> convec;
         };
 
     public:
@@ -85,7 +92,7 @@ class CSA_Iso
         std::vector <bool> is_end_stn;
         std::vector <int> earliest_departure;
 
-        std::vector <Connections> connections;
+        std::vector <ConVec> connections;
 
         CSA_Iso (const size_t n) {
             is_end_stn.resize (n, false);
@@ -94,21 +101,16 @@ class CSA_Iso
         }
 
         const size_t extend (const size_t n) {
-            const size_t s = connections [n].trip.size () + 1L;
+            const size_t s = connections [n].convec.size () + 1L;
 
-            connections [n].prev_stn.resize (s);
-            connections [n].departure_time.resize (s);
-            connections [n].arrival_time.resize (s);
-            connections [n].trip.resize (s);
-            connections [n].ntransfers.resize (s);
-            connections [n].initial_depart.resize (s);
+            connections [n].convec.resize (s);
 
-            connections [n].prev_stn [s - 1] = INFINITE_INT;
-            connections [n].departure_time [s - 1] = INFINITE_INT;
-            connections [n].arrival_time [s - 1] = INFINITE_INT;
-            connections [n].trip [s - 1] = INFINITE_INT;
-            connections [n].ntransfers [s - 1] = 0;
-            connections [n].initial_depart [s - 1] = INFINITE_INT;
+            connections [n].convec.back ().prev_stn = INFINITE_INT;
+            connections [n].convec.back ().departure_time = INFINITE_INT;
+            connections [n].convec.back ().arrival_time = INFINITE_INT;
+            connections [n].convec.back ().trip = INFINITE_INT;
+            connections [n].convec.back ().ntransfers = 0;
+            connections [n].convec.back ().initial_depart = INFINITE_INT;
 
             return s;
         }
