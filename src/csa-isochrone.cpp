@@ -57,8 +57,8 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         if (departure_time [i] > actual_end_time)
             break;
 
-        const bool is_start_stn = start_stations_set.find (departure_station [i]) !=
-            start_stations_set.end ();
+        const bool is_start_stn = csaiso::is_start_stn (start_stations_set,
+                departure_station [i]);
 
         if (!is_start_stn &&
                 csa_iso.earliest_departure [departure_station [i]] < INFINITE_INT &&
@@ -76,9 +76,10 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             {
                 const size_t trans_dest = t.first;
                 const int trans_duration = t.second;
-                const bool chk = csaiso::fill_one_csa_transfer (departure_station [i],
-                        arrival_station [i], arrival_time [i], trans_dest,
-                        trans_duration, isochrone_val, csa_iso);
+                if (!csaiso::is_start_stn (start_stations_set, trans_dest))
+                    csaiso::fill_one_csa_transfer (departure_station [i],
+                            arrival_station [i], arrival_time [i], trans_dest,
+                            trans_duration, isochrone_val, csa_iso);
             } // end for t over transfer map
         } // end if filled
     } // end for i over nrows of timetable
@@ -245,7 +246,7 @@ bool csaiso::fill_one_csa_iso (
 }
 
 
-bool csaiso::fill_one_csa_transfer (
+void csaiso::fill_one_csa_transfer (
         const size_t &departure_station,
         const size_t &arrival_station,
         const int &arrival_time,
@@ -265,7 +266,7 @@ bool csaiso::fill_one_csa_transfer (
                 csa_iso, trans_dest, trans_time);
 
     if (!insert_transfer)
-        return false;
+        return;
 
     csa_iso.earliest_departure [trans_dest] = trans_time;
 
@@ -301,8 +302,6 @@ bool csaiso::fill_one_csa_transfer (
     csa_iso.connections [trans_dest].initial_depart [s] = earliest;
     if (earliest > csa_iso.earliest_departure [trans_dest])
         csa_iso.earliest_departure [trans_dest] = earliest;
-
-    return true;
 }
 
 int csaiso::find_actual_end_time (
@@ -564,4 +563,11 @@ const bool csaiso::is_transfer_quicker (
     const bool res = (transfer_time <= csa_iso.earliest_departure [station]);
 
     return res;
+}
+
+const bool csaiso::is_start_stn (
+    const std::unordered_set <size_t> &start_stations_set,
+    const size_t &stn)
+{
+    return start_stations_set.find (stn) != start_stations_set.end ();
 }
