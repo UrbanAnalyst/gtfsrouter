@@ -75,53 +75,10 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             for (auto t: transfer_map.at (arrival_station [i]))
             {
                 const size_t trans_dest = t.first;
-                const int tr_time = arrival_time [i] + t.second;
-
-                bool insert_transfer = (trans_dest != departure_station [i]);
-                if (!insert_transfer)
-                    insert_transfer = !csaiso::is_transfer_in_isochrone (
-                            csa_iso, arrival_station [i], tr_time, isochrone_val);
-                if (!insert_transfer)
-                    insert_transfer = !csaiso::is_transfer_quicker (
-                            csa_iso, trans_dest, tr_time);
-
-                if (!insert_transfer)
-                    continue;
-
-                csa_iso.earliest_departure [trans_dest] = tr_time;
-
-                const size_t s = csa_iso.extend (trans_dest) - 1;
-
-                csa_iso.connections [trans_dest].prev_stn [s] = arrival_station [i];
-                csa_iso.connections [trans_dest].departure_time [s] = arrival_time [i];
-                csa_iso.connections [trans_dest].arrival_time [s] = tr_time;
-
-                // Find the latest initial departure time for all services
-                // connecting to arrival station:
-                int earliest = -1;
-                int ntransfers = INFINITE_INT;
-
-                for (size_t j = 0; j < csa_iso.connections [arrival_station [i]].initial_depart.size (); j++)
-                {
-                    const int this_initial =
-                        csa_iso.connections [arrival_station [i]].initial_depart [j];
-                    const int this_arrive =
-                        csa_iso.connections [arrival_station [i]].arrival_time [j];
-                    if (this_arrive <= arrival_time [i] && this_initial > earliest)
-                    {
-                        earliest = this_initial;
-                        if (csa_iso.connections [arrival_station [i]].ntransfers [j] < ntransfers)
-                        {
-                            ntransfers =
-                                csa_iso.connections [arrival_station [i]].ntransfers [j];
-                        }
-                    }
-                }
-
-                csa_iso.connections [trans_dest].ntransfers [s] = ntransfers;
-                csa_iso.connections [trans_dest].initial_depart [s] = earliest;
-                if (earliest > csa_iso.earliest_departure [trans_dest])
-                    csa_iso.earliest_departure [trans_dest] = earliest;
+                const int trans_duration = t.second;
+                const bool chk = csaiso::fill_one_csa_transfer (departure_station [i],
+                        arrival_station [i], arrival_time [i], trans_dest,
+                        trans_duration, isochrone_val, csa_iso);
             } // end for t over transfer map
         } // end if filled
     } // end for i over nrows of timetable
@@ -285,6 +242,67 @@ bool csaiso::fill_one_csa_iso (
     }
 
     return fill_vals;
+}
+
+
+bool csaiso::fill_one_csa_transfer (
+        const size_t &departure_station,
+        const size_t &arrival_station,
+        const int &arrival_time,
+        const size_t &trans_dest,
+        const int &trans_duration,
+        const int &isochrone,
+        CSA_Iso &csa_iso)
+{
+    const int trans_time = arrival_time + trans_duration;
+
+    bool insert_transfer = (trans_dest != departure_station);
+    if (!insert_transfer)
+        insert_transfer = !csaiso::is_transfer_in_isochrone (
+                csa_iso, arrival_station, trans_time, isochrone);
+    if (!insert_transfer)
+        insert_transfer = !csaiso::is_transfer_quicker (
+                csa_iso, trans_dest, trans_time);
+
+    if (!insert_transfer)
+        return false;
+
+    csa_iso.earliest_departure [trans_dest] = trans_time;
+
+    const size_t s = csa_iso.extend (trans_dest) - 1;
+
+    csa_iso.connections [trans_dest].prev_stn [s] = arrival_station;
+    csa_iso.connections [trans_dest].departure_time [s] = arrival_time;
+    csa_iso.connections [trans_dest].arrival_time [s] = trans_time;
+
+    // Find the latest initial departure time for all services
+    // connecting to arrival station:
+    int earliest = -1;
+    int ntransfers = INFINITE_INT;
+
+    for (size_t j = 0; j < csa_iso.connections [arrival_station].initial_depart.size (); j++)
+    {
+        const int this_initial =
+            csa_iso.connections [arrival_station].initial_depart [j];
+        const int this_arrive =
+            csa_iso.connections [arrival_station].arrival_time [j];
+        if (this_arrive <= arrival_time && this_initial > earliest)
+        {
+            earliest = this_initial;
+            if (csa_iso.connections [arrival_station].ntransfers [j] < ntransfers)
+            {
+                ntransfers =
+                    csa_iso.connections [arrival_station].ntransfers [j];
+            }
+        }
+    }
+
+    csa_iso.connections [trans_dest].ntransfers [s] = ntransfers;
+    csa_iso.connections [trans_dest].initial_depart [s] = earliest;
+    if (earliest > csa_iso.earliest_departure [trans_dest])
+        csa_iso.earliest_departure [trans_dest] = earliest;
+
+    return true;
 }
 
 int csaiso::find_actual_end_time (
