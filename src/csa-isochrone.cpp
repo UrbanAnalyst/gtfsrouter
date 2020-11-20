@@ -161,14 +161,13 @@ bool csaiso::fill_one_csa_iso (
         for (auto st: csa_iso.connections [departure_station].convec)
         {
             bool fill_here = (st.arrival_time <= departure_time);
-
             if (fill_here)
                 fill_here = ((arrival_time - st.initial_depart) <= isochrone);
 
             if (fill_here)
                 not_end_stn = true;
             else if (!not_end_stn)
-                is_end_stn = ((departure_time - st.initial_depart) <= isochrone);
+                is_end_stn = is_end_stn || ((departure_time - st.initial_depart) <= isochrone);
 
             // fill_vals will remain true whenever any single fill_here is true
             fill_vals = fill_vals || fill_here;
@@ -255,12 +254,13 @@ void csaiso::fill_one_csa_transfer (
 {
     const int trans_time = arrival_time + trans_duration;
 
+    // Bunch of AND conditions separated for easy reading:
     bool insert_transfer = (trans_dest != departure_station);
-    if (!insert_transfer)
-        insert_transfer = !csaiso::is_transfer_in_isochrone (
+    if (insert_transfer)
+        insert_transfer = csaiso::is_transfer_in_isochrone (
                 csa_iso, arrival_station, trans_time, isochrone);
-    if (!insert_transfer)
-        insert_transfer = !csaiso::is_transfer_quicker (
+    if (insert_transfer)
+        insert_transfer = csaiso::is_transfer_quicker (
                 csa_iso, trans_dest, trans_time);
 
     if (!insert_transfer)
