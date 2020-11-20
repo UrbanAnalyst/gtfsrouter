@@ -180,15 +180,20 @@ bool csaiso::fill_one_csa_iso (
         fill_vals = true;
     } else
     {
-        // The following code determines whether to insert the values as previous
-        // values for the arrival station, and IF NOT, whether the departure station
-        // is an end station for which the arrival time would exceed the isochrone
-        // duration. That can in turn only be determined by looping over all
-        // prior connections to the departure station because each one of those
-        // has unique initial departure and arrival times. Only if one pair of
-        // these would arrive at the departure station earlier than the
-        // isochrone value, yet at the arrival station later can the station be
-        // identified as an end station.
+        /*  
+         * The following code determines whether to insert the values as previous
+         * values for the arrival station, and IF NOT, whether the departure station
+         * is an end station for which the arrival time would exceed the isochrone
+         * duration. That can in turn only be determined by looping over all
+         * prior connections to the departure station because each one of those
+         * has unique initial departure and arrival times. Only if one pair of
+         * these would arrive at the departure station earlier than the
+         * isochrone value, yet at the arrival station later can the station be
+         * identified as an end station.
+         *
+         * An additional important clause is trip-matching, to ensure that
+         * previous trips are always matched with current trips where possible.
+         */
 
         for (size_t i = 0; i < csa_iso.connections [departure_station].initial_depart.size (); i++)
         {
@@ -212,6 +217,9 @@ bool csaiso::fill_one_csa_iso (
                         latest_depart = init_depart;
                         prev_trip = csa_iso.connections [departure_station].trip [i];
                         ntransfers = csa_iso.connections [departure_station].ntransfers [i];
+
+                        if (csa_iso.connections [departure_station].trip [i] == trip_id)
+                            break; // stay on same trip
                     }
                 } else if ((departure_time - init_depart) <= isochrone)
                 {
