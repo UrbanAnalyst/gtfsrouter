@@ -76,10 +76,14 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             {
                 const size_t trans_dest = t.first;
                 const int trans_duration = t.second;
+
                 if (!csaiso::is_start_stn (start_stations_set, trans_dest))
+                {
                     csaiso::fill_one_csa_transfer (departure_station [i],
                             arrival_station [i], arrival_time [i], trans_dest,
                             trans_duration, isochrone_val, csa_iso);
+                }
+
             } // end for t over transfer map
         } // end if filled
     } // end for i over nrows of timetable
@@ -138,50 +142,61 @@ bool csaiso::fill_one_csa_iso (
         fill_vals = true;
     } else
     {
-        /*  
-         * The following code determines whether to insert the values as previous
-         * values for the arrival station, and IF NOT, whether the departure station
-         * is an end station for which the arrival time would exceed the isochrone
-         * duration. That can in turn only be determined by looping over all
-         * prior connections to the departure station because each one of those
-         * has unique initial departure and arrival times. Only if one pair of
-         * these would arrive at the departure station earlier than the
-         * isochrone value, yet at the arrival station later can the station be
-         * identified as an end station.
-         *
-         * An additional important clause is trip-matching, to ensure that
-         * previous trips are always matched with current trips where possible.
-         */
+        // Loop over previous connections to determine whether a viable
+        // connection exists. A single viable connection suffices to set
+        // fill_vals to true. A connection is viable if it arrives at departure
+        // station prior to nominated departure time, and arrives within
+        // isochrone time.
+        //
+        // This loop also determines whether a station is an end station, which
+        // happens if the arrival time would extend beyond the isochrone value.
+        // This requires one or more connections to meet this condition with no
+        // conditions failing it. That requires an additional bool variable,
+        // not_end_stn, which is set to true when any connection arrives within
+        // time, while is_end_stn is only set to true when one or more
+        // connections can reach the departure yet not arrival station. The
+        // final value of is_end_stn is then only true is also !not_end_stn.
 
+        bool not_end_stn = false;
         for (auto st: csa_iso.connections [departure_station].convec)
         {
-            if (st.arrival_time <= departure_time)
+            bool fill_here = (st.arrival_time <= departure_time);
+
+            if (fill_here)
+                fill_here = ((arrival_time - st.initial_depart) <= isochrone);
+
+            if (fill_here)
+                not_end_stn = true;
+            else if (!not_end_stn)
+                is_end_stn = ((departure_time - st.initial_depart) <= isochrone);
+
+            // fill_vals will remain true whenever any single fill_here is true
+            fill_vals = fill_vals || fill_here;
+
+            if (fill_vals)
             {
-                if ((arrival_time - st.initial_depart) <= isochrone)
+                // Need to determine whether this set of values for initial
+                // departure time and ntransfers is to be used to connect to
+                // subsequent trip. This is determined by whether:
+                // 1. Connection can remain on same trip;
+                // 2. If not, trip has shortest journey time;
+                // 3. If not, trip has fewest transfers
+                bool update = (st.trip == prev_trip);
+                if (!update)
+                    update = (st.initial_depart >= latest_depart);
+                if (!update)
+                    update = (st.ntransfers < ntransfers);
+
+                if (update)
                 {
-                    fill_vals = true;
-
-                    bool update = (st.initial_depart >= latest_depart);
-
-                    // option to update to less transfers:
-                    //if (!update)
-                    //    update = (csa_iso.connections [departure_station].ntransfers [i] < ntransfers);
-
-                    if (update)
-                    {
-                        latest_depart = st.initial_depart;
-                        prev_trip = st.trip;
-                        ntransfers = st.ntransfers;
-
-                        if (st.trip == trip_id)
-                            break; // stay on same trip
-                    }
-                } else if ((departure_time - st.initial_depart) <= isochrone)
-                {
-                    is_end_stn = true;
+                    latest_depart = st.initial_depart;
+                    prev_trip = st.trip;
+                    ntransfers = st.ntransfers;
                 }
             }
         }
+
+        is_end_stn = is_end_stn && !not_end_stn;
 
         if (is_end_stn)
         {
@@ -194,21 +209,7 @@ bool csaiso::fill_one_csa_iso (
 
     }
 
-    // values are filled if:
-    // 1. Departure is a start station, OR
-    // 2. There have been previous connections to the departure station AND
-    //      arrival time minus any previous initial departure is <= isochrone
-    //
-    // End stations are those departure stations for which:
-    // 1. Values are NOT filled AND
-    // 2. They are not start stations AND
-    // 3. There has been a previous viable connection to the departure station.
-
-    if (!fill_vals)
-    {
-        //if (!is_start_stn && latest_depart > 0)
-        //    csa_iso.is_end_stn [departure_station] = true;
-    } else
+    if (fill_vals)
     {
         const size_t s = csa_iso.extend (arrival_station) - 1;
 
