@@ -195,6 +195,15 @@ bool fill_one_csa_iso (
         const bool &is_start_stn,
         CSA_Iso &csa_iso);
 
+bool fill_one_csa_transfer (
+        const size_t &departure_station,
+        const size_t &arrival_station,
+        const int &arrival_time,
+        const size_t &trans_dest,
+        const int &trans_duration,
+        const int &isochrone,
+        CSA_Iso &csa_iso);
+
 int find_actual_end_time (
         const size_t &n,
         const std::vector <int> &departure_time,
