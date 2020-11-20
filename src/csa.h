@@ -195,7 +195,7 @@ bool fill_one_csa_iso (
         const bool &is_start_stn,
         CSA_Iso &csa_iso);
 
-bool fill_one_csa_transfer (
+void fill_one_csa_transfer (
         const size_t &departure_station,
         const size_t &arrival_station,
         const int &arrival_time,
@@ -244,6 +244,10 @@ const bool is_transfer_quicker (
         const size_t & station,
         const int & transfer_time
         );
+
+const bool is_start_stn (
+    const std::unordered_set <size_t> &start_stations_set,
+    const size_t &stn);
 
 } // end namespace csaiso
 
