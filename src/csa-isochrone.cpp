@@ -132,7 +132,7 @@ bool csaiso::fill_one_csa_iso (
         const bool &is_start_stn,
         CSA_Iso &csa_iso) {
 
-    bool fill_vals = false, is_end_stn = false;
+    bool fill_vals = false, is_end_stn = false, same_trip = false;
     int prev_trip = -1L;
     int ntransfers = INFINITE_INT;
     int latest_depart = -1L;
@@ -180,11 +180,18 @@ bool csaiso::fill_one_csa_iso (
                 // 1. Connection can remain on same trip;
                 // 2. If not, trip has shortest journey time;
                 // 3. If not, trip has fewest transfers
-                bool update = (st.trip == prev_trip);
-                if (!update)
-                    update = (st.initial_depart >= latest_depart);
-                if (!update)
+                same_trip = (st.trip == prev_trip);
+                bool update = same_trip;
+                if (same_trip)
+                    update = true;
+                else
+                {
                     update = (st.ntransfers < ntransfers);
+                    if (!update)
+                        update = (st.ntransfers == ntransfers);
+                    if (update)
+                        update = (st.initial_depart >= latest_depart);
+                }
 
                 if (update)
                 {
@@ -193,6 +200,8 @@ bool csaiso::fill_one_csa_iso (
                     ntransfers = st.ntransfers;
                 }
             }
+            if (same_trip)
+                break;
         }
 
         is_end_stn = is_end_stn && !not_end_stn;
@@ -231,7 +240,7 @@ bool csaiso::fill_one_csa_iso (
             // Trip changes happen here mostly when services departing before the
             // nominated start time catch up with other services, so fastest trips
             // change services at same stop.
-            if (trip_id != prev_trip)
+            if (!same_trip)
                 ntransfers++;
 
             csa_iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
@@ -281,15 +290,23 @@ void csaiso::fill_one_csa_transfer (
 
     for (auto st: csa_iso.connections [arrival_station].convec)
     {
-        if (st.arrival_time <= arrival_time && st.initial_depart > earliest)
+        if (st.arrival_time <= arrival_time);
         {
-            earliest = st.initial_depart;
-            if (st.ntransfers < ntransfers)
+            bool update = (st.ntransfers < ntransfers);
+            if (!update)
+                update = (st.ntransfers == ntransfers);
+            if (update)
+                update = (st.initial_depart >= earliest);
+
+            if (update)
+            {
                 ntransfers = st.ntransfers;
+                earliest = st.initial_depart;
+            }
         }
     }
 
-    csa_iso.connections [trans_dest].convec [s].ntransfers = ntransfers;
+    csa_iso.connections [trans_dest].convec [s].ntransfers = ntransfers + 1;
     csa_iso.connections [trans_dest].convec [s].initial_depart = earliest;
     if (earliest > csa_iso.earliest_departure [trans_dest])
         csa_iso.earliest_departure [trans_dest] = earliest;
