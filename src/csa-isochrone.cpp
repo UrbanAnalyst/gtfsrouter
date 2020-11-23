@@ -146,7 +146,7 @@ bool csaiso::fill_one_csa_iso (
     bool fill_vals = false, is_end_stn = false, same_trip = false;
     int prev_trip = -1L;
     int ntransfers = INFINITE_INT;
-    int latest_depart = -1L;
+    int latest_initial = -1L;
 
     size_t prev_index = INFINITE_INT;
 
@@ -193,16 +193,16 @@ bool csaiso::fill_one_csa_iso (
                 if (!same_trip)
                 {
                     if (!update)
-                        update = (st.initial_depart > latest_depart);
+                        update = (st.initial_depart > latest_initial);
                     if (!update)
                         update = (st.ntransfers < ntransfers);
                     if (!update && st.ntransfers == ntransfers)
-                        update = (st.initial_depart >= latest_depart);
+                        update = (st.initial_depart >= latest_initial);
                 }
 
                 if (update)
                 {
-                    latest_depart = st.initial_depart;
+                    latest_initial = st.initial_depart;
                     prev_trip = st.trip;
                     ntransfers = st.ntransfers;
                     prev_index = count;
@@ -260,7 +260,7 @@ bool csaiso::fill_one_csa_iso (
             ntransfers++;
 
         csa_iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
-        csa_iso.connections [arrival_station].convec [s].initial_depart = latest_depart;
+        csa_iso.connections [arrival_station].convec [s].initial_depart = latest_initial;
 
         if (prev_index < INFINITE_INT)
             csa_iso.prev_index [departure_station] = prev_index;
