@@ -124,13 +124,11 @@ void csaiso::make_transfer_map (
 
 //' Translate one timetable line into values at arrival station
 //'
-//' A timetable line simply says that a service left a departure station at a
-//' specified time. This function must also work out the best previous
-//' connections to that departure station. The procedure for that is described
-//' in the code. The best previous connection is then stored as a value of 
-//' `prev_index` at the departure station, pointing the values of `convec`
-//' representing the best connection to the departure station at that point in
-//' time.
+//' The trace_back function requires each connection to have a corresponding
+//' initial departure time and number of transfers. For each connection from a
+//' departure to an arrival station, these have to be worked out by looping over
+//' all connections to the departure station, and finding the best previous
+//' connection in order to copy respective values across.
 //'
 //' @noRd
 bool csaiso::fill_one_csa_iso (
@@ -147,7 +145,6 @@ bool csaiso::fill_one_csa_iso (
     int prev_trip = -1L;
     int ntransfers = INFINITE_INT;
     int latest_initial = -1L;
-    int shortest_journey = INFINITE_INT;
 
     if (is_start_stn)
     {
@@ -168,6 +165,7 @@ bool csaiso::fill_one_csa_iso (
         // final value of is_end_stn is then only true is also !not_end_stn.
 
         bool not_end_stn = false;
+        int shortest_journey = INFINITE_INT;
         for (auto st: csa_iso.connections [departure_station].convec)
         {
             bool fill_here = (st.arrival_time <= departure_time) &&
@@ -178,7 +176,8 @@ bool csaiso::fill_one_csa_iso (
             else if (!not_end_stn)
                 is_end_stn = is_end_stn || ((departure_time - st.initial_depart) <= isochrone);
             
-            // fill_vals will remain true whenever any single fill_here is true
+            // fill_vals will remain true whenever any single fill_here is true,
+            // while is_end_stn = true must imply that fill_vals is false.
             fill_vals = fill_vals || fill_here;
 
             if (fill_vals || is_end_stn)
@@ -288,7 +287,7 @@ void csaiso::fill_one_csa_transfer (
 
     // Find the latest initial departure time for all services
     // connecting to arrival station:
-    int earliest = -1;
+    int latest_initial = -1L;
     int ntransfers = INFINITE_INT;
     int shortest_journey = INFINITE_INT;
 
@@ -307,16 +306,14 @@ void csaiso::fill_one_csa_transfer (
             if (update)
             {
                 ntransfers = st.ntransfers;
-                earliest = st.initial_depart;
+                latest_initial = st.initial_depart;
                 shortest_journey = journey;
             }
         }
     }
 
     csa_iso.connections [trans_dest].convec [s].ntransfers = ntransfers + 1;
-    csa_iso.connections [trans_dest].convec [s].initial_depart = earliest;
-    if (earliest > csa_iso.earliest_departure [trans_dest])
-        csa_iso.earliest_departure [trans_dest] = earliest;
+    csa_iso.connections [trans_dest].convec [s].initial_depart = latest_initial;
 }
 
 int csaiso::find_actual_end_time (
