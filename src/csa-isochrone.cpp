@@ -142,11 +142,9 @@ bool csaiso::fill_one_csa_iso (
         fill_vals = true;
     } else
     {
-        // Loop over previous connections to determine whether a viable
-        // connection exists. A single viable connection suffices to set
-        // fill_vals to true. A connection is viable if it arrives at departure
-        // station prior to nominated departure time, and arrives within
-        // isochrone time.
+        // fill_vals determines whether a connection is viable, which is if it
+        // arrives at departure station prior to nominated departure time, and
+        // arrives within isochrone time.
         //
         // This loop also determines whether a station is an end station, which
         // happens if the arrival time would extend beyond the isochrone value.
@@ -160,9 +158,8 @@ bool csaiso::fill_one_csa_iso (
         bool not_end_stn = false;
         for (auto st: csa_iso.connections [departure_station].convec)
         {
-            bool fill_here = (st.arrival_time <= departure_time);
-            if (fill_here)
-                fill_here = ((arrival_time - st.initial_depart) <= isochrone);
+            bool fill_here = (st.arrival_time <= departure_time) &&
+                ((arrival_time - st.initial_depart) <= isochrone);
 
             if (fill_here)
                 not_end_stn = true;
@@ -174,12 +171,7 @@ bool csaiso::fill_one_csa_iso (
 
             if (fill_vals)
             {
-                // Need to determine whether this set of values for initial
-                // departure time and ntransfers is to be used to connect to
-                // subsequent trip. This is determined by whether:
-                // 1. Connection can remain on same trip;
-                // 2. If not, trip has shortest journey time;
-                // 3. If not, trip has fewest transfers
+                // work out whether to update the previous trip
                 same_trip = (st.trip == prev_trip);
                 bool update = same_trip;
                 if (!same_trip)
@@ -188,9 +180,8 @@ bool csaiso::fill_one_csa_iso (
                         update = (st.initial_depart > latest_depart);
                     if (!update)
                         update = (st.ntransfers < ntransfers);
-                    if (!update)
-                        update = (st.ntransfers == ntransfers) &&
-                            (st.initial_depart >= latest_depart);
+                    if (!update && st.ntransfers == ntransfers)
+                        update = (st.initial_depart >= latest_depart);
                 }
 
                 if (update)
@@ -219,6 +210,19 @@ bool csaiso::fill_one_csa_iso (
 
     if (!fill_vals)
         return false;
+
+    if (!same_trip) // insert dummy transfer
+    {
+        const size_t s = csa_iso.extend (arrival_station) - 1;
+        csa_iso.connections [arrival_station].convec [s].prev_stn = departure_station;
+        csa_iso.connections [arrival_station].convec [s].departure_time = departure_time;
+        csa_iso.connections [arrival_station].convec [s].arrival_time = departure_time;
+        csa_iso.connections [arrival_station].convec [s].trip = INFINITE_INT;
+        csa_iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
+        csa_iso.connections [arrival_station].convec [s].initial_depart = latest_depart;
+
+        ntransfers++;
+    }
 
     const size_t s = csa_iso.extend (arrival_station) - 1;
 
@@ -290,12 +294,14 @@ void csaiso::fill_one_csa_transfer (
 
     for (auto st: csa_iso.connections [arrival_station].convec)
     {
-        if (st.arrival_time <= arrival_time)
+        bool fill_here = (st.arrival_time <= arrival_time) &&
+            ((arrival_time - st.initial_depart) <= isochrone);
+        if (fill_here)
         {
-            bool update = (st.ntransfers < ntransfers);
+            bool update = (st.initial_depart > earliest);
             if (!update)
-                update = (st.ntransfers == ntransfers);
-            if (update)
+                update = (st.ntransfers < ntransfers);
+            if (!update && st.ntransfers == ntransfers)
                 update = (st.initial_depart >= earliest);
 
             if (update)
