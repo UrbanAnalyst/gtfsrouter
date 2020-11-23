@@ -234,6 +234,11 @@ size_t trace_back_prev_index (
         const int & trip_id
         );
 
+size_t trace_back_first (
+        const CSA_Iso & csa_iso,
+        const size_t & stn
+        );
+
 const bool is_transfer_in_isochrone (
         const CSA_Iso & csa_iso,
         const size_t & station,
