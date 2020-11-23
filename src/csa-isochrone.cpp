@@ -66,6 +66,10 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                 departure_time [i])
             continue;
 
+        if (csaiso::arrival_already_visited (csa_iso,
+                    departure_station [i], arrival_station [i]))
+            continue;
+
         bool filled = csaiso::fill_one_csa_iso (departure_station [i],
                 arrival_station [i], trip_id [i], departure_time [i],
                 arrival_time [i], isochrone_val, is_start_stn, csa_iso);
@@ -165,7 +169,6 @@ bool csaiso::fill_one_csa_iso (
         // final value of is_end_stn is then only true is also !not_end_stn.
 
         bool not_end_stn = false;
-        int shortest_journey = INFINITE_INT;
         for (auto st: csa_iso.connections [departure_station].convec)
         {
             bool fill_here = (st.arrival_time <= departure_time) &&
@@ -182,15 +185,13 @@ bool csaiso::fill_one_csa_iso (
 
             if (fill_vals || is_end_stn)
             {
-                const int journey = arrival_time - st.initial_depart;
-
                 same_trip = (st.trip == prev_trip);
                 bool update = same_trip;
                 if (!same_trip)
                 {
-                    update = (journey < shortest_journey);
+                    update = (st.initial_depart > latest_initial);
                     if (!update && st.ntransfers < ntransfers)
-                        update = (journey <= shortest_journey);
+                        update = (st.initial_depart == latest_initial);
                 }
 
                 if (update)
@@ -198,7 +199,6 @@ bool csaiso::fill_one_csa_iso (
                     latest_initial = st.initial_depart;
                     prev_trip = st.trip;
                     ntransfers = st.ntransfers;
-                    shortest_journey = journey;
                 }
             }
             if (same_trip)
@@ -289,7 +289,6 @@ void csaiso::fill_one_csa_transfer (
     // connecting to arrival station:
     int latest_initial = -1L;
     int ntransfers = INFINITE_INT;
-    int shortest_journey = INFINITE_INT;
 
     for (auto st: csa_iso.connections [arrival_station].convec)
     {
@@ -297,17 +296,14 @@ void csaiso::fill_one_csa_transfer (
             ((arrival_time - st.initial_depart) <= isochrone);
         if (fill_here)
         {
-            const int journey = trans_time - st.initial_depart;
-
-            bool update = (journey < shortest_journey);
+            bool update = (st.initial_depart > latest_initial);
             if (!update && st.ntransfers < ntransfers)
-                update = (journey <= shortest_journey);
+                update = (st.initial_depart == latest_initial);
 
             if (update)
             {
                 ntransfers = st.ntransfers;
                 latest_initial = st.initial_depart;
-                shortest_journey = journey;
             }
         }
     }
@@ -519,4 +515,25 @@ const bool csaiso::is_start_stn (
     const size_t &stn)
 {
     return start_stations_set.find (stn) != start_stations_set.end ();
+}
+
+// Is the arrival station already listed as a previous station of departure
+// station?
+//
+// Example: A previous connection A -> B has already been read.
+// On reading B -> A, first check that A (arrival_station) is not already a
+// prior station of B (departure_station), so check over all connections for
+// departure station (= B) to check that none of the listed "departure_station"
+// -- NOT arrival_station -- values are A.
+const bool csaiso::arrival_already_visited (
+        const CSA_Iso & csa_iso,
+        const size_t & departure_station,
+        const size_t & arrival_station)
+{
+    bool check = false;
+    for (auto st: csa_iso.connections [departure_station].convec)
+        if (st.prev_stn == arrival_station)
+            check = true;
+
+    return check;
 }

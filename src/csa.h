@@ -251,6 +251,11 @@ const bool is_start_stn (
     const std::unordered_set <size_t> &start_stations_set,
     const size_t &stn);
 
+const bool arrival_already_visited (
+        const CSA_Iso & csa_iso,
+        const size_t & departure_station,
+        const size_t & arrival_station);
+
 } // end namespace csaiso
 
 Rcpp::DataFrame rcpp_csa (
