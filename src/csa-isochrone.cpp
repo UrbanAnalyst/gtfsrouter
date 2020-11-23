@@ -282,13 +282,13 @@ void csaiso::fill_one_csa_transfer (
     const int trans_time = arrival_time + trans_duration;
 
     // Bunch of AND conditions separated for easy reading:
-    bool insert_transfer = (trans_dest != departure_station);
+    bool insert_transfer = (trans_dest != departure_station); // can happen
+    if (insert_transfer)
+        insert_transfer = csaiso::is_transfer_connected (
+                csa_iso, trans_dest, trans_time);
     if (insert_transfer)
         insert_transfer = csaiso::is_transfer_in_isochrone (
                 csa_iso, arrival_station, trans_time, isochrone);
-    if (insert_transfer)
-        insert_transfer = csaiso::is_transfer_quicker (
-                csa_iso, trans_dest, trans_time);
 
     if (!insert_transfer)
         return;
@@ -468,6 +468,17 @@ Rcpp::List csaiso::trace_back_isochrones (
     return res;
 }
 
+const bool csaiso::is_transfer_connected (
+        const CSA_Iso & csa_iso,
+        const size_t & station,
+        const int & transfer_time
+        )
+{
+    const bool res = (transfer_time <= csa_iso.earliest_departure [station]);
+
+    return res;
+}
+
 // Return a dummy value of 0 for stations which have not yet been reached, so
 // they will be connected by transfer no matter what; otherwise return actual
 // minimal journey time to that station.
@@ -483,17 +494,6 @@ const bool csaiso::is_transfer_in_isochrone (
         journey = transfer_time - csa_iso.earliest_departure [station];
 
     return (journey <= isochrone);
-}
-
-const bool csaiso::is_transfer_quicker (
-        const CSA_Iso & csa_iso,
-        const size_t & station,
-        const int & transfer_time
-        )
-{
-    const bool res = (transfer_time <= csa_iso.earliest_departure [station]);
-
-    return res;
 }
 
 const bool csaiso::is_start_stn (

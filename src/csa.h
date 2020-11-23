@@ -237,7 +237,7 @@ const bool is_transfer_in_isochrone (
         const int & isochrone
         );
 
-const bool is_transfer_quicker (
+const bool is_transfer_connected (
         const CSA_Iso & csa_iso,
         const size_t & station,
         const int & transfer_time
