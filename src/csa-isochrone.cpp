@@ -217,35 +217,35 @@ bool csaiso::fill_one_csa_iso (
 
     }
 
-    if (fill_vals)
+    if (!fill_vals)
+        return false;
+
+    const size_t s = csa_iso.extend (arrival_station) - 1;
+
+    csa_iso.connections [arrival_station].convec [s].prev_stn = departure_station;
+    csa_iso.connections [arrival_station].convec [s].departure_time = departure_time;
+    csa_iso.connections [arrival_station].convec [s].arrival_time = arrival_time;
+    csa_iso.connections [arrival_station].convec [s].trip = trip_id;
+
+    if (csa_iso.earliest_departure [arrival_station] > arrival_time)
+        csa_iso.earliest_departure [arrival_station] = arrival_time;
+
+    if (is_start_stn)
     {
-        const size_t s = csa_iso.extend (arrival_station) - 1;
+        csa_iso.connections [arrival_station].convec [s].ntransfers = 0L;
+        csa_iso.connections [arrival_station].convec [s].initial_depart = departure_time;
+        csa_iso.earliest_departure [departure_station] = departure_time;
+        csa_iso.earliest_departure [arrival_station] = departure_time;
+    } else
+    {
+        // Trip changes happen here mostly when services departing before the
+        // nominated start time catch up with other services, so fastest trips
+        // change services at same stop.
+        if (!same_trip)
+            ntransfers++;
 
-        csa_iso.connections [arrival_station].convec [s].prev_stn = departure_station;
-        csa_iso.connections [arrival_station].convec [s].departure_time = departure_time;
-        csa_iso.connections [arrival_station].convec [s].arrival_time = arrival_time;
-        csa_iso.connections [arrival_station].convec [s].trip = trip_id;
-
-        if (csa_iso.earliest_departure [arrival_station] > arrival_time)
-            csa_iso.earliest_departure [arrival_station] = arrival_time;
-
-        if (is_start_stn)
-        {
-            csa_iso.connections [arrival_station].convec [s].ntransfers = 0L;
-            csa_iso.connections [arrival_station].convec [s].initial_depart = departure_time;
-            csa_iso.earliest_departure [departure_station] = departure_time;
-            csa_iso.earliest_departure [arrival_station] = departure_time;
-        } else
-        {
-            // Trip changes happen here mostly when services departing before the
-            // nominated start time catch up with other services, so fastest trips
-            // change services at same stop.
-            if (!same_trip)
-                ntransfers++;
-
-            csa_iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
-            csa_iso.connections [arrival_station].convec [s].initial_depart = latest_depart;
-        }
+        csa_iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
+        csa_iso.connections [arrival_station].convec [s].initial_depart = latest_depart;
     }
 
     return fill_vals;
