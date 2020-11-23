@@ -92,14 +92,11 @@ class CSA_Iso
         std::vector <bool> is_end_stn;
         std::vector <int> earliest_departure;
 
-        std::vector <size_t> prev_index;
-
         std::vector <ConVec> connections;
 
         CSA_Iso (const size_t n) {
             is_end_stn.resize (n, false);
             earliest_departure.resize (n, INFINITE_INT);
-            prev_index.resize (n, INFINITE_INT);
             connections.resize (n);
         }
 
