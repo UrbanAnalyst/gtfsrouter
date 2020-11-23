@@ -179,11 +179,7 @@ bool csaiso::fill_one_csa_iso (
             else if (!not_end_stn)
                 is_end_stn = is_end_stn || ((departure_time - st.initial_depart) <= isochrone);
             
-            // fill_vals will remain true whenever any single fill_here is true,
-            // while is_end_stn = true must imply that fill_vals is false.
-            fill_vals = fill_vals || fill_here;
-
-            if (fill_vals || is_end_stn)
+            if (fill_here || is_end_stn)
             {
                 same_trip = (st.trip == prev_trip);
                 bool update = same_trip;
@@ -201,6 +197,11 @@ bool csaiso::fill_one_csa_iso (
                     ntransfers = st.ntransfers;
                 }
             }
+
+            // fill_vals will remain true whenever any single fill_here is true,
+            // while is_end_stn = true must imply that fill_vals is false.
+            fill_vals = fill_vals || fill_here;
+
             if (same_trip)
                 break;
 
