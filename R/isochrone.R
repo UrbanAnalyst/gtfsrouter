@@ -116,6 +116,15 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
     earliest_arrival <- stns [index + 2]
     stns <- stns [index]
 
+    # rm any notional end stations which are part of other journeys
+    end_stns <- vapply (stns, function (i) i [length (i)], integer (1))
+    non_end_stns <- unlist (lapply (stns, function (i) i [-length (i)]))
+    index <- which (!end_stns %in% non_end_stns)
+
+    trips <- stns [index]
+    earliest_arrival <- earliest_arrival [index]
+    stns <- stns [index]
+
     actual_start_time <- min (vapply (earliest_arrival, min, integer (1)))
 
     isotrips <- lapply (seq (stns), function (i)
