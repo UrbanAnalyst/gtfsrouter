@@ -182,15 +182,15 @@ bool csaiso::fill_one_csa_iso (
                 // 3. If not, trip has fewest transfers
                 same_trip = (st.trip == prev_trip);
                 bool update = same_trip;
-                if (same_trip)
-                    update = true;
-                else
+                if (!same_trip)
                 {
-                    update = (st.ntransfers < ntransfers);
                     if (!update)
-                        update = (st.ntransfers == ntransfers);
-                    if (update)
-                        update = (st.initial_depart >= latest_depart);
+                        update = (st.initial_depart > latest_depart);
+                    if (!update)
+                        update = (st.ntransfers < ntransfers);
+                    if (!update)
+                        update = (st.ntransfers == ntransfers) &&
+                            (st.initial_depart >= latest_depart);
                 }
 
                 if (update)
@@ -290,7 +290,7 @@ void csaiso::fill_one_csa_transfer (
 
     for (auto st: csa_iso.connections [arrival_station].convec)
     {
-        if (st.arrival_time <= arrival_time);
+        if (st.arrival_time <= arrival_time)
         {
             bool update = (st.ntransfers < ntransfers);
             if (!update)
