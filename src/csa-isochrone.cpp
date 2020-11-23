@@ -181,8 +181,7 @@ bool csaiso::fill_one_csa_iso (
             
             if (fill_here || is_end_stn)
             {
-                same_trip = (st.trip == prev_trip);
-                bool update = same_trip;
+                bool update = same_trip = (st.trip == prev_trip);
                 if (!same_trip)
                 {
                     update = (st.initial_depart > latest_initial);
@@ -204,7 +203,6 @@ bool csaiso::fill_one_csa_iso (
 
             if (same_trip)
                 break;
-
         }
 
         is_end_stn = is_end_stn && !not_end_stn;
