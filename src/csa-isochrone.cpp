@@ -472,10 +472,10 @@ size_t csaiso::trace_back_prev_index (
         const int & trip_id
         )
 {
-    int latest = -1L;
     size_t prev_index = INFINITE_INT;
     int ntransfers = INFINITE_INT;
     int shortest_journey = INFINITE_INT;
+    int latest_initial = -1l;
 
     int this_trip = trip_id;
 
@@ -484,21 +484,20 @@ size_t csaiso::trace_back_prev_index (
     {
         if (st.arrival_time <= departure_time)
         {
-            const int journey = departure_time - st.initial_depart;
-
             bool update = (st.trip == trip_id);
             if (!update)
-                update = (journey < shortest_journey);
-            if (!update && st.ntransfers < ntransfers)
-                update = (journey <= shortest_journey);
+            {
+                update = (st.initial_depart > latest_initial);
+                if (!update && st.ntransfers < ntransfers)
+                    update = (st.initial_depart == latest_initial);
+            }
 
             if (update)
             {
                 prev_index = index;
-                latest = st.initial_depart;
+                latest_initial = st.initial_depart;
                 ntransfers = st.ntransfers;
                 this_trip = st.trip;
-                shortest_journey = journey;
             }
         }
         index++;
