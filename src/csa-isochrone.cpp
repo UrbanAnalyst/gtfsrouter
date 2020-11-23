@@ -401,8 +401,8 @@ Rcpp::List csaiso::trace_back_isochrones (
         std::vector <int> trip_out, end_station_out, end_times_out;
         size_t stn = es; // stn is arrival_stn
 
-        //size_t prev_index = csaiso::trace_back_prev_index (csa_iso, stn, INFINITE_INT, INFINITE_INT);
-        size_t prev_index = csa_iso.prev_index [stn];
+        size_t prev_index = csaiso::trace_back_prev_index (csa_iso, stn, INFINITE_INT, INFINITE_INT);
+        //size_t prev_index = csa_iso.prev_index [stn];
 
         int arrival_time = csa_iso.connections [stn].convec [prev_index].arrival_time;
         int departure_time = csa_iso.connections [stn].convec [prev_index].departure_time;
@@ -419,7 +419,8 @@ Rcpp::List csaiso::trace_back_isochrones (
         {
             stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
 
-            prev_index = csa_iso.prev_index [stn];
+            //prev_index = csa_iso.prev_index [stn];
+            prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip);
 
             trip_out.push_back (this_trip);
             end_times_out.push_back (departure_time);
@@ -467,6 +468,50 @@ Rcpp::List csaiso::trace_back_isochrones (
 
     return res;
 }
+
+size_t csaiso::trace_back_prev_index (
+        const CSA_Iso & csa_iso,
+        const size_t & stn,
+        const size_t & departure_time,
+        const int & trip_id
+        )
+{
+    int latest = -1L;
+    size_t prev_index = INFINITE_INT;
+    int ntransfers = INFINITE_INT;
+
+    int this_trip = trip_id;
+
+    int index = 0;
+    for (auto st: csa_iso.connections [stn].convec)
+    {
+        // same update rules as initial fill_one_csa_iso fn
+        if (st.arrival_time <= departure_time)
+        {
+            bool update = (this_trip == INFINITE_INT); // end stations
+            if (!update) // keep on same trip
+                update = (st.trip == trip_id);
+            if (!update) // leave as late as possible
+                update = (st.initial_depart > latest);
+            if (!update) // connect with fewest transfers
+                update = (st.ntransfers < ntransfers);
+            if (!update && st.ntransfers == ntransfers)
+                update = (st.initial_depart >= latest);
+
+            if (update)
+            {
+                prev_index = index;
+                latest = st.initial_depart;
+                ntransfers = st.ntransfers;
+                this_trip = st.trip;
+            }
+        }
+        index++;
+    }
+
+    return (prev_index);
+}
+
 
 const bool csaiso::is_transfer_connected (
         const CSA_Iso & csa_iso,
