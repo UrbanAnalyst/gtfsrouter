@@ -371,7 +371,7 @@ Rcpp::List csaiso::trace_back_isochrones (
         std::vector <int> trip_out, end_station_out, end_times_out;
         size_t stn = es; // stn is arrival_stn
 
-        size_t prev_index = csaiso::trace_back_prev_index (csa_iso, stn, INFINITE_INT, INFINITE_INT);
+        size_t prev_index = csaiso::trace_back_first (csa_iso, stn);
 
         int arrival_time = csa_iso.connections [stn].convec [prev_index].arrival_time;
         int departure_time = csa_iso.connections [stn].convec [prev_index].departure_time;
@@ -437,6 +437,34 @@ Rcpp::List csaiso::trace_back_isochrones (
     return res;
 }
 
+// Trace back first connection from terminal station, which is simply the first
+// equal shortest connection to that stn
+size_t csaiso::trace_back_first (
+        const CSA_Iso & csa_iso,
+        const size_t & stn
+        )
+{
+    int latest_initial = -1L;
+    size_t prev_index = INFINITE_INT;
+    int shortest_journey = INFINITE_INT;
+
+    int index = 0;
+    for (auto st: csa_iso.connections [stn].convec)
+    {
+        const int journey = st.arrival_time - st.initial_depart;
+
+        if (journey < shortest_journey)
+        {
+            shortest_journey = journey;
+            prev_index = index;
+        }
+
+        index++;
+    }
+
+    return (prev_index);
+}
+
 size_t csaiso::trace_back_prev_index (
         const CSA_Iso & csa_iso,
         const size_t & stn,
@@ -454,7 +482,6 @@ size_t csaiso::trace_back_prev_index (
     int index = 0;
     for (auto st: csa_iso.connections [stn].convec)
     {
-        // same update rules as initial fill_one_csa_iso fn
         if (st.arrival_time <= departure_time)
         {
             const int journey = departure_time - st.initial_depart;
