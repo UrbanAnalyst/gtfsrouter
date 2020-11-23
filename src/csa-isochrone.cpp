@@ -411,23 +411,17 @@ Rcpp::List csaiso::trace_back_isochrones (
         }
         end_station_out.push_back (departure_stn);
 
-        // Trips can start with initial journeys between different start
-        // stations, which can not be removed at the outset because the initial
-        // connections set appropriate initial departure times for all
-        // stations connected by such trips.
-        /*
-        while (start_stations_set.find (end_station_out [end_station_out.size () - 2]) !=
-                start_stations_set.end ())
+        std::reverse (end_station_out.begin (), end_station_out.end ());
+        std::reverse (end_times_out.begin (), end_times_out.end ());
+        std::reverse (trip_out.begin (), trip_out.end ());
+
+        // trips can end with transfers which have to be removed here
+        while (trip_out.back () == INFINITE_INT)
         {
             end_station_out.resize (end_station_out.size () - 1);
             end_times_out.resize (end_times_out.size () - 1);
             trip_out.resize (trip_out.size () - 1);
         }
-        */
-
-        std::reverse (end_station_out.begin (), end_station_out.end ());
-        std::reverse (end_times_out.begin (), end_times_out.end ());
-        std::reverse (trip_out.begin (), trip_out.end ());
 
         res (3 * count) = end_station_out;
         res (3 * count + 1) = trip_out;
@@ -444,7 +438,6 @@ size_t csaiso::trace_back_first (
         const size_t & stn
         )
 {
-    int latest_initial = -1L;
     size_t prev_index = INFINITE_INT;
     int shortest_journey = INFINITE_INT;
 
@@ -474,7 +467,6 @@ size_t csaiso::trace_back_prev_index (
 {
     size_t prev_index = INFINITE_INT;
     int ntransfers = INFINITE_INT;
-    int shortest_journey = INFINITE_INT;
     int latest_initial = -1l;
 
     int this_trip = trip_id;
