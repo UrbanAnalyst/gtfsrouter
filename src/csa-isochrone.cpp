@@ -147,6 +147,7 @@ bool csaiso::fill_one_csa_iso (
     int prev_trip = -1L;
     int ntransfers = INFINITE_INT;
     int latest_initial = -1L;
+    int shortest_journey = INFINITE_INT;
 
     if (is_start_stn)
     {
@@ -182,15 +183,15 @@ bool csaiso::fill_one_csa_iso (
 
             if (fill_vals || is_end_stn)
             {
+                const int journey = arrival_time - st.initial_depart;
+
                 same_trip = (st.trip == prev_trip);
                 bool update = same_trip;
                 if (!same_trip)
                 {
-                    update = (st.initial_depart > latest_initial);
-                    if (!update)
-                        update = (st.ntransfers < ntransfers);
-                    if (!update && st.ntransfers == ntransfers)
-                        update = (st.initial_depart >= latest_initial);
+                    update = (journey < shortest_journey);
+                    if (!update && st.ntransfers < ntransfers)
+                        update = (journey <= shortest_journey);
                 }
 
                 if (update)
@@ -198,6 +199,7 @@ bool csaiso::fill_one_csa_iso (
                     latest_initial = st.initial_depart;
                     prev_trip = st.trip;
                     ntransfers = st.ntransfers;
+                    shortest_journey = journey;
                 }
             }
             if (same_trip)
@@ -288,6 +290,7 @@ void csaiso::fill_one_csa_transfer (
     // connecting to arrival station:
     int earliest = -1;
     int ntransfers = INFINITE_INT;
+    int shortest_journey = INFINITE_INT;
 
     for (auto st: csa_iso.connections [arrival_station].convec)
     {
@@ -295,16 +298,17 @@ void csaiso::fill_one_csa_transfer (
             ((arrival_time - st.initial_depart) <= isochrone);
         if (fill_here)
         {
-            bool update = (st.initial_depart > earliest);
-            if (!update)
-                update = (st.ntransfers < ntransfers);
-            if (!update && st.ntransfers == ntransfers)
-                update = (st.initial_depart >= earliest);
+            const int journey = trans_time - st.initial_depart;
+
+            bool update = (journey < shortest_journey);
+            if (!update && st.ntransfers < ntransfers)
+                update = (journey <= shortest_journey);
 
             if (update)
             {
                 ntransfers = st.ntransfers;
                 earliest = st.initial_depart;
+                shortest_journey = journey;
             }
         }
     }
@@ -376,7 +380,6 @@ Rcpp::List csaiso::trace_back_isochrones (
         size_t stn = es; // stn is arrival_stn
 
         size_t prev_index = csaiso::trace_back_prev_index (csa_iso, stn, INFINITE_INT, INFINITE_INT);
-        //size_t prev_index = csa_iso.prev_index [stn];
 
         int arrival_time = csa_iso.connections [stn].convec [prev_index].arrival_time;
         int departure_time = csa_iso.connections [stn].convec [prev_index].departure_time;
@@ -393,7 +396,6 @@ Rcpp::List csaiso::trace_back_isochrones (
         {
             stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
 
-            //prev_index = csa_iso.prev_index [stn];
             prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip);
 
             trip_out.push_back (this_trip);
@@ -453,6 +455,7 @@ size_t csaiso::trace_back_prev_index (
     int latest = -1L;
     size_t prev_index = INFINITE_INT;
     int ntransfers = INFINITE_INT;
+    int shortest_journey = INFINITE_INT;
 
     int this_trip = trip_id;
 
@@ -462,15 +465,13 @@ size_t csaiso::trace_back_prev_index (
         // same update rules as initial fill_one_csa_iso fn
         if (st.arrival_time <= departure_time)
         {
-            bool update = (this_trip == INFINITE_INT); // end stations
-            if (!update) // keep on same trip
-                update = (st.trip == trip_id);
-            if (!update) // leave as late as possible
-                update = (st.initial_depart > latest);
-            if (!update) // connect with fewest transfers
-                update = (st.ntransfers < ntransfers);
-            if (!update && st.ntransfers == ntransfers)
-                update = (st.initial_depart >= latest);
+            const int journey = departure_time - st.initial_depart;
+
+            bool update = (st.trip == trip_id);
+            if (!update)
+                update = (journey < shortest_journey);
+            if (!update && st.ntransfers < ntransfers)
+                update = (journey <= shortest_journey);
 
             if (update)
             {
@@ -478,6 +479,7 @@ size_t csaiso::trace_back_prev_index (
                 latest = st.initial_depart;
                 ntransfers = st.ntransfers;
                 this_trip = st.trip;
+                shortest_journey = journey;
             }
         }
         index++;
