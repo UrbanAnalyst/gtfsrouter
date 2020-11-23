@@ -122,6 +122,17 @@ void csaiso::make_transfer_map (
 }
 
 
+//' Translate one timetable line into values at arrival station
+//'
+//' A timetable line simply says that a service left a departure station at a
+//' specified time. This function must also work out the best previous
+//' connections to that departure station. The procedure for that is described
+//' in the code. The best previous connection is then stored as a value of 
+//' `prev_index` at the departure station, pointing the values of `convec`
+//' representing the best connection to the departure station at that point in
+//' time.
+//'
+//' @noRd
 bool csaiso::fill_one_csa_iso (
         const size_t &departure_station,
         const size_t &arrival_station,
@@ -136,6 +147,8 @@ bool csaiso::fill_one_csa_iso (
     int prev_trip = -1L;
     int ntransfers = INFINITE_INT;
     int latest_depart = -1L;
+
+    size_t prev_index = INFINITE_INT;
 
     if (is_start_stn)
     {
@@ -156,6 +169,7 @@ bool csaiso::fill_one_csa_iso (
         // final value of is_end_stn is then only true is also !not_end_stn.
 
         bool not_end_stn = false;
+        size_t count = 0;
         for (auto st: csa_iso.connections [departure_station].convec)
         {
             bool fill_here = (st.arrival_time <= departure_time) &&
@@ -169,9 +183,11 @@ bool csaiso::fill_one_csa_iso (
             // fill_vals will remain true whenever any single fill_here is true
             fill_vals = fill_vals || fill_here;
 
-            if (fill_vals)
+            if (fill_vals || is_end_stn)
             {
-                // work out whether to update the previous trip
+                // work out whether to update the previous trip. If
+                // is_end_station, trip is not updated, but prev_index is
+                // appropriately set to enable tracing back from those stations.
                 same_trip = (st.trip == prev_trip);
                 bool update = same_trip;
                 if (!same_trip)
@@ -189,10 +205,13 @@ bool csaiso::fill_one_csa_iso (
                     latest_depart = st.initial_depart;
                     prev_trip = st.trip;
                     ntransfers = st.ntransfers;
+                    prev_index = count;
                 }
             }
             if (same_trip)
                 break;
+
+            count++;
         }
 
         is_end_stn = is_end_stn && !not_end_stn;
@@ -208,21 +227,13 @@ bool csaiso::fill_one_csa_iso (
 
     }
 
+    if (!is_start_stn && prev_index < INFINITE_INT)
+    {
+        csa_iso.prev_index [departure_station] = prev_index;
+    }
+
     if (!fill_vals)
         return false;
-
-    if (!same_trip) // insert dummy transfer
-    {
-        const size_t s = csa_iso.extend (arrival_station) - 1;
-        csa_iso.connections [arrival_station].convec [s].prev_stn = departure_station;
-        csa_iso.connections [arrival_station].convec [s].departure_time = departure_time;
-        csa_iso.connections [arrival_station].convec [s].arrival_time = departure_time;
-        csa_iso.connections [arrival_station].convec [s].trip = INFINITE_INT;
-        csa_iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
-        csa_iso.connections [arrival_station].convec [s].initial_depart = latest_depart;
-
-        ntransfers++;
-    }
 
     const size_t s = csa_iso.extend (arrival_station) - 1;
 
@@ -250,6 +261,9 @@ bool csaiso::fill_one_csa_iso (
 
         csa_iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
         csa_iso.connections [arrival_station].convec [s].initial_depart = latest_depart;
+
+        if (prev_index < INFINITE_INT)
+            csa_iso.prev_index [departure_station] = prev_index;
     }
 
     return fill_vals;
@@ -292,6 +306,9 @@ void csaiso::fill_one_csa_transfer (
     int earliest = -1;
     int ntransfers = INFINITE_INT;
 
+    size_t prev_index = INFINITE_INT;
+
+    size_t count = 0;
     for (auto st: csa_iso.connections [arrival_station].convec)
     {
         bool fill_here = (st.arrival_time <= arrival_time) &&
@@ -308,14 +325,20 @@ void csaiso::fill_one_csa_transfer (
             {
                 ntransfers = st.ntransfers;
                 earliest = st.initial_depart;
+                prev_index = count;
             }
         }
+        count++;
     }
 
-    csa_iso.connections [trans_dest].convec [s].ntransfers = ntransfers + 1;
-    csa_iso.connections [trans_dest].convec [s].initial_depart = earliest;
-    if (earliest > csa_iso.earliest_departure [trans_dest])
-        csa_iso.earliest_departure [trans_dest] = earliest;
+    if (prev_index < INFINITE_INT)
+    {
+        csa_iso.connections [trans_dest].convec [s].ntransfers = ntransfers + 1;
+        csa_iso.connections [trans_dest].convec [s].initial_depart = earliest;
+        csa_iso.prev_index [arrival_station] = prev_index;
+        if (earliest > csa_iso.earliest_departure [trans_dest])
+            csa_iso.earliest_departure [trans_dest] = earliest;
+    }
 }
 
 int csaiso::find_actual_end_time (
@@ -378,7 +401,8 @@ Rcpp::List csaiso::trace_back_isochrones (
         std::vector <int> trip_out, end_station_out, end_times_out;
         size_t stn = es; // stn is arrival_stn
 
-        size_t prev_index = csaiso::trace_back_prev_index (csa_iso, stn, INFINITE_INT, INFINITE_INT);
+        //size_t prev_index = csaiso::trace_back_prev_index (csa_iso, stn, INFINITE_INT, INFINITE_INT);
+        size_t prev_index = csa_iso.prev_index [stn];
 
         int arrival_time = csa_iso.connections [stn].convec [prev_index].arrival_time;
         int departure_time = csa_iso.connections [stn].convec [prev_index].departure_time;
@@ -395,11 +419,7 @@ Rcpp::List csaiso::trace_back_isochrones (
         {
             stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
 
-            // stn is then the previous stn, while departure_time remains the
-            // time of the service departing from that station. Connecting
-            // services can only be traced back to those with arrival_time
-            // values at stn that are <= departure_time.
-            prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip);
+            prev_index = csa_iso.prev_index [stn];
 
             trip_out.push_back (this_trip);
             end_times_out.push_back (departure_time);
@@ -415,60 +435,6 @@ Rcpp::List csaiso::trace_back_isochrones (
                 departure_stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
             }
 
-            /*
-            if (prev_index < INFINITE_INT)
-            {
-                this_trip = csa_iso.connections [stn].trip [prev_index];
-                arrival_time = csa_iso.connections [stn].arrival_time [prev_index];
-
-                end_station_out.push_back (static_cast <int> (stn));
-
-                departure_time = csa_iso.connections [stn].departure_time [prev_index];
-                departure_stn = csa_iso.connections [stn].prev_stn [prev_index];
-            } else
-            {
-                // Trace back to start station. departure_stn at that point is
-                // the one after the start station, so still need to trace back
-                // one further step, to insert original station and
-                // departure_time. departure_time at that point is from
-                end_station_out.push_back (departure_stn);
-
-                int ntransfers = INFINITE_INT;
-                departure_time = -1;
-                for (size_t i = 0; i < csa_iso.connections [stn].prev_stn.size (); i++)
-                {
-                    if (csa_iso.connections [stn].departure_time [i] <= departure_time)
-                    {
-                        // Several OR expressions more clearly written as
-                        // independent steps:
-                        bool fill = (prev_index == INFINITE_INT);
-                        if (!fill)
-                            fill = (csa_iso.connections [stn].trip [i] == this_trip &&
-                                    csa_iso.connections [stn].departure_time [i] > departure_time);
-                        if (!fill)
-                            fill = (csa_iso.connections [stn].ntransfers [i] < ntransfers);
-                        if (!fill)
-                            fill = (csa_iso.connections [stn].trip [i] == this_trip);
-
-                        if (fill)
-                        {
-                            prev_index = i;
-                            ntransfers = csa_iso.connections [stn].ntransfers [i];
-                            departure_time = csa_iso.connections [stn].departure_time [i];
-                            departure_stn = csa_iso.connections [stn].prev_stn [i];
-                            this_trip = csa_iso.connections [stn].trip [i];
-                        }
-                    }
-                }
-
-                if (departure_stn != end_station_out.back ())
-                {
-                    end_station_out.push_back (departure_stn);
-                    trip_out.push_back (this_trip);
-                    end_times_out.push_back (departure_time);
-                }
-            }
-            */
 
             temp++;
             if (temp > csa_iso.is_end_stn.size ())
@@ -500,57 +466,6 @@ Rcpp::List csaiso::trace_back_isochrones (
     }
 
     return res;
-}
-
-//' Returns INFINITE_INT if there are no previous stations, so this can be used
-//' as a flag for start stations.
-//' @param stn Station from which previous station is to be traced
-//' @param departure_time Time of departure at that station, used to ensure that
-//' only previous stations with arrival times <= that specified departure
-//' are selected. For end stations this departure_time is initially INF.
-//' @noRd
-size_t csaiso::trace_back_prev_index (
-        const CSA_Iso & csa_iso,
-        const size_t & stn,
-        const size_t & departure_time,
-        const int & trip_id
-        )
-{
-    int latest = -1L;
-    size_t prev_index = INFINITE_INT;
-    int ntransfers = INFINITE_INT;
-
-    int index = 0;
-    for (auto st: csa_iso.connections [stn].convec)
-    {
-        if (st.arrival_time <= departure_time &&
-                st.initial_depart > latest)
-        {
-            // ******** UPDATE RULES *******
-            // These accord with the following sequential priorities
-            // 1. Station not yet reached
-            // 2. Trip number should remain the same
-            // 3. Initial departure time should be the latest possible
-            // 4. Number of transfers should be as few as possible
-            bool update = (trip_id == INFINITE_INT); // end stations
-            if (!update) // keep on same trip
-                update = (st.trip == trip_id);
-            if (!update) // leave as late as possible
-                update = (st.initial_depart > latest);
-            if (!update) // connect with fewest transfers
-                update = (st.ntransfers < ntransfers);
-
-            if (update)
-            {
-                prev_index = index;
-                latest = st.initial_depart;
-                ntransfers = st.ntransfers;
-            }
-        }
-        index++;
-    }
-
-    return (prev_index);
 }
 
 // Return a dummy value of 0 for stations which have not yet been reached, so

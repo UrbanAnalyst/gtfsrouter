@@ -92,11 +92,14 @@ class CSA_Iso
         std::vector <bool> is_end_stn;
         std::vector <int> earliest_departure;
 
+        std::vector <size_t> prev_index;
+
         std::vector <ConVec> connections;
 
         CSA_Iso (const size_t n) {
             is_end_stn.resize (n, false);
             earliest_departure.resize (n, INFINITE_INT);
+            prev_index.resize (n, INFINITE_INT);
             connections.resize (n);
         }
 
@@ -225,13 +228,6 @@ void make_transfer_map (
 Rcpp::List trace_back_isochrones (
         const CSA_Iso & csa_iso,
         const std::unordered_set <size_t> & start_stations_set
-        );
-
-size_t trace_back_prev_index (
-        const CSA_Iso & csa_iso,
-        const size_t & stn,
-        const size_t & departure_time,
-        const int & trip_id
         );
 
 const bool is_transfer_in_isochrone (
