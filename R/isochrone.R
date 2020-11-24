@@ -121,7 +121,7 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
     non_end_stns <- unlist (lapply (stns, function (i) i [-length (i)]))
     index <- which (!end_stns %in% non_end_stns)
 
-    trips <- stns [index]
+    trips <- trips [index]
     earliest_arrival <- earliest_arrival [index]
     stns <- stns [index]
 
