@@ -181,7 +181,7 @@ bool csaiso::fill_one_csa_iso (
             
             if (fill_here || is_end_stn)
             {
-                bool update = same_trip = (st.trip == prev_trip);
+                bool update = same_trip = (st.trip == trip_id);
                 if (!same_trip)
                 {
                     update = (st.initial_depart > latest_initial);
@@ -470,13 +470,14 @@ size_t csaiso::trace_back_prev_index (
     int latest_initial = -1l;
 
     int this_trip = trip_id;
+    bool same_trip = false;
 
     int index = 0;
     for (auto st: csa_iso.connections [stn].convec)
     {
         if (st.arrival_time <= departure_time)
         {
-            bool update = (st.trip == trip_id);
+            bool update = same_trip = (st.trip == trip_id);
             if (!update)
             {
                 update = (st.initial_depart > latest_initial);
@@ -492,6 +493,9 @@ size_t csaiso::trace_back_prev_index (
                 this_trip = st.trip;
             }
         }
+        if (same_trip)
+            break;
+
         index++;
     }
 
