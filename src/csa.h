@@ -286,12 +286,5 @@ Rcpp::List rcpp_csa_isochrone (
         const size_t nstations,
         const size_t ntrips,
         const std::vector <size_t> start_stations,
-        const int start_time, const int end_time);
-
-Rcpp::List rcpp_csa_isochrone2 (
-        Rcpp::DataFrame timetable,
-        Rcpp::DataFrame transfers,
-        const size_t nstations,
-        const size_t ntrips,
-        const std::vector <size_t> start_stations,
-        const int start_time, const int end_time);
+        const int start_time,
+        const int end_time);
