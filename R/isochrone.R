@@ -222,9 +222,19 @@ route_midpoints <- function (x)
 
     duration <- hms::hms (as.integer (arrival - departure))
 
+    # transfers have NA for within-station transfers, but may also just change
+    # trip if at same stop_id. The second while loop is necessary because
+    # multi-stage transfers do occassionally arise.
     transfers <- lapply (x, function (i) {
                              index <- match (i$trip_id,
                                              names (table (i$trip_id))) - 1
+                             while (is.na (index [length (index)]))
+                                 index [length (index)] <-
+                                     index [length (index) - 1]
+                             while (any (is.na (index))) {
+                                 i2 <- which (is.na (index))
+                                 index [i2] <- index [i2 + 1]
+                             }
                              cumsum (diff (sort (index [-length (index)])))   })
 
     sf::st_sf ("stop_name" = do.call (c, nms),
