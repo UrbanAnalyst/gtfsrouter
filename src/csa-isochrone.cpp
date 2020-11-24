@@ -432,9 +432,12 @@ Rcpp::List csaiso::trace_back_isochrones (
             trip_out.resize (trip_out.size () - 1);
         }
 
-        res (3 * count) = end_station_out;
-        res (3 * count + 1) = trip_out;
-        res (3 * count++ + 2) = end_times_out;
+        if (trip_out.size () > 1)
+        {
+            res (3 * count) = end_station_out;
+            res (3 * count + 1) = trip_out;
+            res (3 * count++ + 2) = end_times_out;
+        }
     }
 
     return res;
