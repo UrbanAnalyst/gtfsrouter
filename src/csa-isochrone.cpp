@@ -467,7 +467,6 @@ size_t csaiso::trace_back_prev_index (
     int ntransfers = INFINITE_INT;
     int latest_initial = -1l;
 
-    int this_trip = trip_id;
     bool same_trip = false;
 
     int index = 0;
@@ -487,7 +486,6 @@ size_t csaiso::trace_back_prev_index (
                 prev_index = index;
                 latest_initial = st.initial_depart;
                 ntransfers = st.ntransfers;
-                this_trip = st.trip;
             }
         }
         if (same_trip)
