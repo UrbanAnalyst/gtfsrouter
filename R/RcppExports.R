@@ -17,12 +17,14 @@ rcpp_time_to_seconds <- function(times) {
     .Call(`_gtfsrouter_rcpp_time_to_seconds`, times)
 }
 
-#' Returns INFINITE_INT if there are no previous stations, so this can be used
-#' as a flag for start stations.
-#' @param stn Station from which previous station is to be traced
-#' @param departure_time Time of departure at that station, used to ensure that
-#' only previous stations with arrival times prior to that specified departure
-#' are selected. For end stations this departure_time is initially INF.
+#' Translate one timetable line into values at arrival station
+#'
+#' The trace_back function requires each connection to have a corresponding
+#' initial departure time and number of transfers. For each connection from a
+#' departure to an arrival station, these have to be worked out by looping over
+#' all connections to the departure station, and finding the best previous
+#' connection in order to copy respective values across.
+#'
 #' @noRd
 NULL
 
@@ -36,8 +38,8 @@ NULL
 #' All elements of all data are 1-indexed
 #'
 #' @noRd
-rcpp_csa_isochrone <- function(timetable, transfers, nstations, ntrips, start_stations, start_time, end_time) {
-    .Call(`_gtfsrouter_rcpp_csa_isochrone`, timetable, transfers, nstations, ntrips, start_stations, start_time, end_time)
+rcpp_csa_isochrone <- function(timetable, transfers, nstations, ntrips, start_stations, start_time, end_time, minimise_transfers) {
+    .Call(`_gtfsrouter_rcpp_csa_isochrone`, timetable, transfers, nstations, ntrips, start_stations, start_time, end_time, minimise_transfers)
 }
 
 #' rcpp_make_timetable
