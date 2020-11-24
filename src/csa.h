@@ -227,6 +227,11 @@ Rcpp::List trace_back_isochrones (
         const std::unordered_set <size_t> & start_stations_set
         );
 
+size_t trace_back_first (
+        const CSA_Iso & csa_iso,
+        const size_t & stn
+        );
+
 size_t trace_back_prev_index (
         const CSA_Iso & csa_iso,
         const size_t & stn,
@@ -234,10 +239,11 @@ size_t trace_back_prev_index (
         const int & trip_id
         );
 
-size_t trace_back_first (
-        const CSA_Iso & csa_iso,
-        const size_t & stn
-        );
+bool update_best_connection (
+        const int & this_initial,
+        const int & latest_initial,
+        const int & this_transfers,
+        const int & min_transfers);
 
 const bool is_transfer_in_isochrone (
         const CSA_Iso & csa_iso,

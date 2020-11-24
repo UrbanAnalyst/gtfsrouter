@@ -184,9 +184,8 @@ bool csaiso::fill_one_csa_iso (
                 bool update = same_trip = (st.trip == trip_id);
                 if (!same_trip)
                 {
-                    update = (st.initial_depart > latest_initial);
-                    if (!update && st.ntransfers < ntransfers)
-                        update = (st.initial_depart == latest_initial);
+                    update = csaiso::update_best_connection (st.initial_depart,
+                            latest_initial, st.ntransfers, ntransfers);
                 }
 
                 if (update)
@@ -295,9 +294,8 @@ void csaiso::fill_one_csa_transfer (
             ((arrival_time - st.initial_depart) <= isochrone);
         if (fill_here)
         {
-            bool update = (st.initial_depart > latest_initial);
-            if (!update && st.ntransfers < ntransfers)
-                update = (st.initial_depart == latest_initial);
+            const bool update = csaiso::update_best_connection (st.initial_depart,
+                    latest_initial, st.ntransfers, ntransfers);
 
             if (update)
             {
@@ -480,9 +478,8 @@ size_t csaiso::trace_back_prev_index (
             bool update = same_trip = (st.trip == trip_id);
             if (!update)
             {
-                update = (st.initial_depart > latest_initial);
-                if (!update && st.ntransfers < ntransfers)
-                    update = (st.initial_depart == latest_initial);
+                update = csaiso::update_best_connection (st.initial_depart,
+                        latest_initial, st.ntransfers, ntransfers);
             }
 
             if (update)
@@ -500,6 +497,19 @@ size_t csaiso::trace_back_prev_index (
     }
 
     return (prev_index);
+}
+
+bool csaiso::update_best_connection (
+        const int & this_initial,
+        const int & latest_initial,
+        const int & this_transfers,
+        const int & min_transfers)
+{
+    bool update = (this_initial > latest_initial);
+    if (!update && this_transfers < min_transfers)
+        update = (this_initial == latest_initial);
+
+    return update;
 }
 
 
