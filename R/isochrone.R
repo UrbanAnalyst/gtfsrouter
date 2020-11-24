@@ -16,6 +16,9 @@
 #' @param from_is_id Set to `TRUE` to enable `from` parameter to specify entry
 #' in `stop_id` rather than `stop_name` column of the `stops` table (same as
 #' `from_to_are_ids` parameter of \link{gtfs_route}).
+#' @param minimise_transfers If `TRUE`, isochrones are calculated with
+#' minimal-transfer connections to each end point, even if those connections are
+#' slower than alternative connections with transfers.
 #' @param hull_alpha alpha value of non-convex hulls returned as part of result
 #' (see ?alphashape::ashape for details).
 #'
@@ -48,6 +51,7 @@
 #' @export
 gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
                             from_is_id = FALSE, route_pattern = NULL,
+                            minimise_transfers = FALSE,
                             hull_alpha = 0.1, quiet = FALSE)
 {
     requireNamespace ("geodist")
@@ -70,7 +74,8 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     stations <- NULL # no visible binding note # nolint
     start_stns <- station_name_to_ids (from, gtfs_cp, from_is_id)
 
-    isotrips <- get_isotrips (gtfs_cp, start_stns, start_time, end_time)
+    isotrips <- get_isotrips (gtfs_cp, start_stns, start_time, end_time,
+                              minimise_transfers)
 
     routes <- route_to_linestring (isotrips$isotrips)
     xy <- as.numeric (isotrips$isotrips [[1]] [1, c ("stop_lon", "stop_lat")])
@@ -97,7 +102,8 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
     return (res)
 }
 
-get_isotrips <- function (gtfs, start_stns, start_time, end_time)
+get_isotrips <- function (gtfs, start_stns, start_time, end_time,
+                          minimise_transfers = FALSE)
 {
     stop_id <- trip_id <- NULL # no visible binding note:# nolint
 
@@ -107,7 +113,8 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time)
     # 3. Arrival times at each end station
     stns <- rcpp_csa_isochrone (gtfs$timetable, gtfs$transfers,
                                 nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
-                                start_stns, start_time, end_time)
+                                start_stns, start_time, end_time,
+                                minimise_transfers)
     if (length (stns) < 2)
         stop ("No isochrone possible") # nocov
 

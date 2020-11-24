@@ -195,6 +195,7 @@ bool fill_one_csa_iso (
         const int &arrival_time,
         const int &isochrone,
         const bool &is_start_stn,
+        const bool &minimise_transfers,
         CSA_Iso &csa_iso);
 
 void fill_one_csa_transfer (
@@ -204,6 +205,7 @@ void fill_one_csa_transfer (
         const size_t &trans_dest,
         const int &trans_duration,
         const int &isochrone,
+        const bool &minimise_transfers,
         CSA_Iso &csa_iso);
 
 int find_actual_end_time (
@@ -224,7 +226,8 @@ void make_transfer_map (
 
 Rcpp::List trace_back_isochrones (
         const CSA_Iso & csa_iso,
-        const std::unordered_set <size_t> & start_stations_set
+        const std::unordered_set <size_t> & start_stations_set,
+        const bool &minimise_transfers
         );
 
 size_t trace_back_first (
@@ -236,14 +239,17 @@ size_t trace_back_prev_index (
         const CSA_Iso & csa_iso,
         const size_t & stn,
         const size_t & departure_time,
-        const int & trip_id
+        const int & trip_id,
+        const bool &minimise_transfers
         );
 
 bool update_best_connection (
         const int & this_initial,
         const int & latest_initial,
         const int & this_transfers,
-        const int & min_transfers);
+        const int & min_transfers,
+        const bool &minimise_transfers
+        );
 
 const bool is_transfer_in_isochrone (
         const CSA_Iso & csa_iso,
@@ -287,4 +293,5 @@ Rcpp::List rcpp_csa_isochrone (
         const size_t ntrips,
         const std::vector <size_t> start_stations,
         const int start_time,
-        const int end_time);
+        const int end_time,
+        const bool minimise_transfers);

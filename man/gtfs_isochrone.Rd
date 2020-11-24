@@ -12,6 +12,7 @@ gtfs_isochrone(
   day = NULL,
   from_is_id = FALSE,
   route_pattern = NULL,
+  minimise_transfers = FALSE,
   hull_alpha = 0.1,
   quiet = FALSE
 )
@@ -49,6 +50,10 @@ example "!^U" will include all services except those starting with "U". (This
 parameter is not used at all if \code{gtfs} has already been prepared with
 \link{gtfs_timetable}.)}
 
+\item{minimise_transfers}{If \code{TRUE}, isochrones are calculated with
+minimal-transfer connections to each end point, even if those connections are
+slower than alternative connections with transfers.}
+
 \item{hull_alpha}{alpha value of non-convex hulls returned as part of result
 (see ?alphashape::ashape for details).}
 
@@ -58,8 +63,8 @@ regarding timetable construction).}
 \value{
 An object of class \code{gtfs_isochrone}, including \pkg{sf}-formatted
 points representing the \code{from} station (\code{start_point}), the terminal end
-stations (\code{end_points}), and all intermediate stations (\code{mid_points}) each with
-the earliest possible arrival time, along with lines representing the
+stations (\code{end_points}), and all intermediate stations (\code{mid_points}) each
+with the earliest possible arrival time, along with lines representing the
 individual routes. A non-convex ("alpha") hull is also returned (as an
 \pkg{sf} \code{POLYGON} object), including measures of area and "elongation",
 which equals zero for a circle, and increases towards one for more elongated

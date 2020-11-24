@@ -16,7 +16,9 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
         const size_t nstations,
         const size_t ntrips,
         const std::vector <size_t> start_stations,
-        const int start_time, const int end_time)
+        const int start_time,
+        const int end_time,
+        const bool minimise_transfers)
 {
 
     const int isochrone_val = end_time - start_time;
@@ -72,7 +74,8 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
 
         bool filled = csaiso::fill_one_csa_iso (departure_station [i],
                 arrival_station [i], trip_id [i], departure_time [i],
-                arrival_time [i], isochrone_val, is_start_stn, csa_iso);
+                arrival_time [i], isochrone_val, is_start_stn,
+                minimise_transfers, csa_iso);
 
         if (filled && transfer_map.find (arrival_station [i]) != transfer_map.end ())
         {
@@ -85,14 +88,16 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
                 {
                     csaiso::fill_one_csa_transfer (departure_station [i],
                             arrival_station [i], arrival_time [i], trans_dest,
-                            trans_duration, isochrone_val, csa_iso);
+                            trans_duration, isochrone_val,
+                            minimise_transfers, csa_iso);
                 }
 
             } // end for t over transfer map
         } // end if filled
     } // end for i over nrows of timetable
 
-    Rcpp::List res = csaiso::trace_back_isochrones (csa_iso, start_stations_set);
+    Rcpp::List res = csaiso::trace_back_isochrones (csa_iso, start_stations_set,
+            minimise_transfers);
 
     return res;
 }
@@ -143,6 +148,7 @@ bool csaiso::fill_one_csa_iso (
         const int &arrival_time,
         const int &isochrone,
         const bool &is_start_stn,
+        const bool &minimise_transfers,
         CSA_Iso &csa_iso) {
 
     bool fill_vals = false, is_end_stn = false, same_trip = false;
@@ -185,7 +191,8 @@ bool csaiso::fill_one_csa_iso (
                 if (!same_trip)
                 {
                     update = csaiso::update_best_connection (st.initial_depart,
-                            latest_initial, st.ntransfers, ntransfers);
+                            latest_initial, st.ntransfers, ntransfers,
+                            minimise_transfers);
                 }
 
                 if (update)
@@ -259,6 +266,7 @@ void csaiso::fill_one_csa_transfer (
         const size_t &trans_dest,
         const int &trans_duration,
         const int &isochrone,
+        const bool &minimise_transfers,
         CSA_Iso &csa_iso)
 {
     const int trans_time = arrival_time + trans_duration;
@@ -295,7 +303,8 @@ void csaiso::fill_one_csa_transfer (
         if (fill_here)
         {
             const bool update = csaiso::update_best_connection (st.initial_depart,
-                    latest_initial, st.ntransfers, ntransfers);
+                    latest_initial, st.ntransfers, ntransfers,
+                    minimise_transfers);
 
             if (update)
             {
@@ -345,7 +354,8 @@ int csaiso::find_actual_end_time (
 
 Rcpp::List csaiso::trace_back_isochrones (
         const CSA_Iso & csa_iso,
-        const std::unordered_set <size_t> & start_stations_set
+        const std::unordered_set <size_t> & start_stations_set,
+        const bool &minimise_transfers
         )
 {
     const size_t nend = std::accumulate (csa_iso.is_end_stn.begin (),
@@ -386,7 +396,8 @@ Rcpp::List csaiso::trace_back_isochrones (
         {
             stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
 
-            prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip);
+            prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip,
+                    minimise_transfers);
 
             trip_out.push_back (this_trip);
             end_times_out.push_back (departure_time);
@@ -460,7 +471,8 @@ size_t csaiso::trace_back_prev_index (
         const CSA_Iso & csa_iso,
         const size_t & stn,
         const size_t & departure_time,
-        const int & trip_id
+        const int & trip_id,
+        const bool &minimise_transfers
         )
 {
     size_t prev_index = INFINITE_INT;
@@ -478,7 +490,8 @@ size_t csaiso::trace_back_prev_index (
             if (!update)
             {
                 update = csaiso::update_best_connection (st.initial_depart,
-                        latest_initial, st.ntransfers, ntransfers);
+                        latest_initial, st.ntransfers, ntransfers,
+                        minimise_transfers);
             }
 
             if (update)
@@ -501,11 +514,25 @@ bool csaiso::update_best_connection (
         const int & this_initial,
         const int & latest_initial,
         const int & this_transfers,
-        const int & min_transfers)
+        const int & min_transfers,
+        const bool &minimise_transfers)
 {
-    bool update = (this_initial > latest_initial);
-    if (!update && this_transfers < min_transfers)
-        update = (this_initial == latest_initial);
+    bool update = false;
+
+    if (minimise_transfers)
+    {
+
+        update = (this_transfers < min_transfers);
+        if (!update && (this_transfers == min_transfers))
+            update = (this_initial > latest_initial);
+
+    } else {
+
+        update = (this_initial > latest_initial);
+        if (!update && this_transfers < min_transfers)
+            update = (this_initial == latest_initial);
+
+    }
 
     return update;
 }
