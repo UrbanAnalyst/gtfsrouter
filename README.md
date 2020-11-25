@@ -144,19 +144,17 @@ using more realistic times routed through the underlying street network.
 Contributors
 ------------
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-This project uses the [`allcontributors`
-package](https://github.com/ropenscilabs/allcontributors) following the
-[all-contributors](https://allcontributors.org) specification.
-Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropenscilabs/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
 
-Code
-----
+### Code
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -177,12 +175,14 @@ Code
 <a href="https://github.com/ATFutures/gtfs-router/commits?author=stmarcin">stmarcin</a>
 </td>
 </tr>
+
 </table>
 
-Issue Authors
--------------
+
+### Issues
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/polettif">
@@ -227,6 +227,8 @@ Issue Authors
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aorlandoandradeb">orlandoandradeb</a>
 </td>
 </tr>
+
+
 <tr>
 <td align="center">
 <a href="https://github.com/Maxime2506">
@@ -258,8 +260,16 @@ Issue Authors
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aloanho23">loanho23</a>
 </td>
+<td align="center">
+<a href="https://github.com/dcooley">
+<img src="https://avatars0.githubusercontent.com/u/8093396?u=2c8d9162f246d90d433034d212b29a19e0f245c1&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Adcooley">dcooley</a>
+</td>
 </tr>
+
 </table>
+
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
