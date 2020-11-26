@@ -124,7 +124,10 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time,
     stns <- stns [index]
 
     index <- which (vapply (stns, function (i) !is.null (i), logical (1)))
-    trips <- trips [index]
+    # replace MAXINT trips with NA:
+    trips <- lapply (trips [index], function (i) {
+                     i [which (i == .Machine$integer.max)] <- NA_integer_
+                     return (i) })
     earliest_arrival <- earliest_arrival [index]
     stns <- stns [index]
 
@@ -141,15 +144,27 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time,
 
     isotrips <- lapply (seq (stns), function (i)
                    {
-        data.frame (cbind (gtfs$stops [stns [[i]], c ("stop_id",
-                                                      "stop_name",
-                                                      "parent_station",
-                                                      "stop_lon",
-                                                      "stop_lat")]),
-                    cbind (gtfs$trips [trips [[i]], c ("route_id",
-                                                       "trip_id",
-                                                       "trip_headsign")]),
-                    cbind ("earliest_arrival" = earliest_arrival[[i]]))
+                       s <- gtfs$stops [stns [[i]],
+                                        c ("stop_id",
+                                           "stop_name",
+                                           "parent_station",
+                                           "stop_lon",
+                                           "stop_lat")]
+                       tr <- gtfs$trips [trips [[i]],
+                                         c ("route_id",
+                                            "trip_id",
+                                            "trip_headsign")]
+                       # get num transfers
+                       index <- which (!is.na (trips [[i]]))
+                       tripi <- na.omit (trips [[i]])
+                       ntransfers <- match (tripi, unique (tripi)) - 1L
+                       tr$ntransfers <- NA_integer_
+                       tr$ntransfers [index] <- ntransfers
+
+                       e <- hms::hms (earliest_arrival [[i]])
+                       ret <- data.frame (cbind (s,
+                                                 tr,
+                                                 earliest_arrival = e))
                    })
 
     # Then cut them down to within the alloted isochrone durations:
@@ -186,15 +201,13 @@ route_endpoints <- function (x)
                   i [nrow (i), "stop_id"], character (1))
     arrival <- vapply (x, function (i)
                        i [nrow (i), "earliest_arrival"],
-                       integer (1))
+                       hms::hms (1))
     departure <- vapply (x, function (i)
                         i$earliest_arrival [1],
-                        integer (1))
+                        hms::hms (1))
 
-    transfers <- vapply (x, function (i) {
-                             index <- seq (nrow (i)) [-1]
-                             length (which (i$trip_id [index - 1] !=
-                                            i$trip_id [index])) },
+    transfers <- vapply (x, function (i)
+                         max (i$ntransfers, na.rm = TRUE),
                          integer (1))
 
     sf::st_sf ("stop_name" = nms,
@@ -222,25 +235,22 @@ route_midpoints <- function (x)
                   i [-c (1, nrow (i)), "stop_id"])
 
     arrival <- lapply (x, function (i) i$earliest_arrival [-c (1, nrow (i))])
-    arrival <- hms::hms (do.call (c, arrival))
+    arrival <- do.call (c, arrival)
 
     departure <- lapply (x, function (i)
                         rep (i$earliest_arrival [1], nrow (i) - 2))
-    departure <- hms::hms (do.call (c, departure))
+    departure <- do.call (c, departure)
 
-    duration <- hms::hms (as.integer (arrival - departure))
+    duration <- hms::hms (as.integer (arrival) - departure)
 
-    transfers <- lapply (x, function (i) {
-                             index <- match (i$trip_id, unique (i$trip_id)) - 1
-                             cumsum (diff (sort (index [-length (index)])))
-                        })
+    transfers <- do.call (c, lapply (x, function (i) i$ntransfers [-c (1, nrow (i))]))
 
     sf::st_sf ("stop_name" = do.call (c, nms),
                "stop_id" = do.call (c, ids),
                "departure" = departure,
                "arrival" = arrival,
                "duration" = duration,
-               "transfers" = do.call (c, transfers),
+               "transfers" = transfers,
                geometry = g)
 }
 
