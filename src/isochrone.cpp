@@ -315,6 +315,69 @@ int csaiso::find_actual_end_time (
     return (actual_end_time);
 }
 
+void csaiso::trace_back_one_stn (
+        const CSA_Iso & csa_iso,
+        BackTrace & backtrace,
+        const size_t & end_stn,
+        const bool &minimise_transfers
+        )
+{
+    size_t stn = end_stn;
+
+    size_t prev_index = csaiso::trace_back_first (csa_iso, stn);
+
+    int arrival_time = csa_iso.connections [stn].convec [prev_index].arrival_time;
+    int departure_time = csa_iso.connections [stn].convec [prev_index].departure_time;
+    size_t departure_stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
+    size_t this_trip = csa_iso.connections [stn].convec [prev_index].trip;
+
+    backtrace.end_station.push_back (static_cast <int> (stn));
+    backtrace.trip.push_back (this_trip);
+    backtrace.end_times.push_back (arrival_time);
+
+    int temp = 0;
+
+    while (prev_index < INFINITE_INT)
+    {
+        stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
+
+        prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip,
+                minimise_transfers);
+
+        backtrace.trip.push_back (this_trip);
+        backtrace.end_times.push_back (departure_time);
+
+        if (prev_index < INFINITE_INT)
+        {
+            this_trip = csa_iso.connections [stn].convec [prev_index].trip;
+            arrival_time = csa_iso.connections [stn].convec [prev_index].arrival_time;
+
+            backtrace.end_station.push_back (static_cast <int> (stn));
+
+            departure_time = csa_iso.connections [stn].convec [prev_index].departure_time;
+            departure_stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
+        }
+
+
+        temp++;
+        if (temp > csa_iso.is_end_stn.size ())
+            Rcpp::stop ("backtrace has no end");
+    }
+    backtrace.end_station.push_back (departure_stn);
+
+    std::reverse (backtrace.end_station.begin (), backtrace.end_station.end ());
+    std::reverse (backtrace.end_times.begin (), backtrace.end_times.end ());
+    std::reverse (backtrace.trip.begin (), backtrace.trip.end ());
+
+    // trips can end with transfers which have to be removed here
+    while (backtrace.trip.back () == INFINITE_INT)
+    {
+        backtrace.end_station.resize (backtrace.end_station.size () - 1);
+        backtrace.end_times.resize (backtrace.end_times.size () - 1);
+        backtrace.trip.resize (backtrace.trip.size () - 1);
+    }
+}
+
 // Trace back first connection from terminal station, which is simply the first
 // equal shortest connection to that stn
 size_t csaiso::trace_back_first (
