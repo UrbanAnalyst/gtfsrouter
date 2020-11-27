@@ -56,8 +56,8 @@
 #' go_home (3)
 #' }
 #' @export
-go_home <- function (wait = 0, start_time)
-{
+go_home <- function (wait = 0, start_time) {
+
     go_home_work (home = TRUE, wait = wait, start_time)
 }
 
@@ -93,13 +93,13 @@ go_home <- function (wait = 0, start_time)
 #' go_to_work (3)
 #' }
 #' @export
-go_to_work <- function (wait = 0, start_time)
-{
+go_to_work <- function (wait = 0, start_time) {
+
     go_home_work (home = FALSE, wait = wait, start_time)
 }
 
-go_home_work <- function (home = TRUE, wait, start_time)
-{
+go_home_work <- function (home = TRUE, wait, start_time) {
+
     vars <- get_envvars ()
     fname <- get_rds_name (vars$file)
     if (!file.exists (fname))
@@ -108,22 +108,18 @@ go_home_work <- function (home = TRUE, wait, start_time)
 
     gtfs <- readRDS (fname)
     suppressMessages (gtfs <- gtfs_timetable (gtfs))
-    if (home)
-    {
+    if (home) {
         from <- vars$work
         to <- vars$home
-    } else
-    {
+    } else {
         from <- vars$home
         to <- vars$work
     }
     if (missing (start_time))
         start_time <- NULL # nocov
     res <- gtfs_route (gtfs, from = from, to = to, start_time = start_time)
-    if (wait > 0)
-    {
-        for (i in seq (wait))
-        {
+    if (wait > 0) {
+        for (i in seq (wait)) {
             depart <- convert_time (res$departure_time [1]) + 1
             res <- gtfs_route (gtfs, from = from, to = to, start_time = depart)
         }
@@ -131,8 +127,8 @@ go_home_work <- function (home = TRUE, wait, start_time)
     return (res)
 }
 
-get_envvars <- function ()
-{
+get_envvars <- function () {
+
     if (Sys.getenv ("gtfs_home") == "" |
         Sys.getenv ("gtfs_work") == "" |
         Sys.getenv ("gtfs_data") == "")
@@ -149,8 +145,8 @@ get_envvars <- function ()
           file = Sys.getenv ("gtfs_data"))
 }
 
-get_rds_name <- function (f)
-{
+get_rds_name <- function (f) {
+
     paste0 (tools::file_path_sans_ext (f), ".Rds")
 }
 
@@ -166,8 +162,8 @@ get_rds_name <- function (f)
 #' parameter.
 #'
 #' @export
-process_gtfs_local <- function (expand = 2)
-{
+process_gtfs_local <- function (expand = 2) {
+
     vars <- get_envvars ()
 
     gtfs <- extract_gtfs (vars$file, quiet = TRUE)
@@ -188,8 +184,8 @@ process_gtfs_local <- function (expand = 2)
     saveRDS (gtfs, fname)
 }
 
-reduce_to_local_stops <- function (gtfs, expand = 2)
-{
+reduce_to_local_stops <- function (gtfs, expand = 2) {
+
     # remove no visible binding notes:
     stop_name <- stop_lon <- stop_lat <- from_stop_id <- to_stop_id <-
         stop_id <- trip_id <- NULL

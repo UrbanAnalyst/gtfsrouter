@@ -1,6 +1,6 @@
 
 headway_times <- function (gtfs, start_stns, end_stns, start_time) {
-    from_to_are_ids <- include_ids <- FALSE
+    from_to_are_ids <- include_ids <- FALSE # nolint
     max_transfers <- .Machine$integer.max
     route <- rcpp_csa (gtfs$timetable, gtfs$transfers,
                        nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
@@ -20,7 +20,7 @@ headway_times <- function (gtfs, start_stns, end_stns, start_time) {
 #' @export
 gtfs_route_headway <- function (gtfs, from, to, quiet = FALSE) {
 
-    departure_time <- NULL # suppress no visible binding note
+    departure_time <- NULL # suppress no visible binding note # nolint
 
     from_to_are_ids <- FALSE
     start_stns <- from_to_to_stations (from, gtfs, from_to_are_ids) [[1]]

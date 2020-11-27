@@ -12,8 +12,7 @@
 #' g <- gtfs_timetable (g)
 #' summary (g) # also summarizes additional timetable information
 #' @export
-summary.gtfs <- function (object, ...)
-{
+summary.gtfs <- function (object, ...) {
     msg <- "A gtfs "
     if (attr (object, "filtered"))
         msg <- paste0 (msg, "timetable ")
@@ -32,8 +31,7 @@ summary.gtfs <- function (object, ...)
 #' @param x object to be plotted
 #' @param ... ignored here
 #' @export
-plot.gtfs_isochrone <- function (x, ...)
-{
+plot.gtfs_isochrone <- function (x, ...) {
     requireNamespace ("sf")
     requireNamespace ("alphahull")
     requireNamespace ("mapview")
