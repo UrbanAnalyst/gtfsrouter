@@ -1,4 +1,4 @@
-#include "csa.h"
+#include "iso.h"
 
 //' rcpp_csa_isochrone
 //'
