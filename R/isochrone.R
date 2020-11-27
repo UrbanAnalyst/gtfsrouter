@@ -155,7 +155,7 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time,
                                             "trip_headsign")]
                        # get num transfers
                        index <- which (!is.na (trips [[i]]))
-                       tripi <- na.omit (trips [[i]])
+                       tripi <- stats::na.omit (trips [[i]])
                        ntransfers <- match (tripi, unique (tripi)) - 1L
                        tr$ntransfers <- NA_integer_
                        tr$ntransfers [index] <- ntransfers
@@ -222,7 +222,7 @@ route_midpoints <- function (x) {
 
     # NAs for trip IDs between transfer stations, which can be removed here
     # anyway
-    x <- lapply (x, function (i) na.omit (i))
+    x <- lapply (x, function (i) stats::na.omit (i))
 
     xy <- lapply (x, function (i)
                   as.matrix (i [-c (1, nrow (i)), c ("stop_lon", "stop_lat")]))
@@ -296,7 +296,7 @@ hull_ratio <- function (x) {
 
 get_ahull <- function (x, alpha = alpha) {
 
-    x <- na.omit (x [!duplicated (x), ])
+    x <- stats::na.omit (x [!duplicated (x), ])
     alpha <- 0.1
     a <- data.frame (alphahull::ashape (x, alpha = alpha)$edges)
 
