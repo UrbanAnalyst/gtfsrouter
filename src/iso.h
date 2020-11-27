@@ -51,6 +51,11 @@ class CSA_Iso
 
 };
 
+struct BackTrace
+{
+    std::vector <int> trip, end_station, end_times;
+};
+
 namespace csaiso {
 
 void trace_forward_iso (
@@ -103,12 +108,6 @@ void make_transfer_map (
     const std::vector <int> &trans_time
         );
 
-Rcpp::List trace_back_isochrones (
-        const CSA_Iso & csa_iso,
-        const std::unordered_set <size_t> & start_stations_set,
-        const bool &minimise_transfers
-        );
-
 size_t trace_back_first (
         const CSA_Iso & csa_iso,
         const size_t & stn
@@ -151,6 +150,22 @@ const bool arrival_already_visited (
         const CSA_Iso & csa_iso,
         const size_t & departure_station,
         const size_t & arrival_station);
+
+// The only Rcpp function:
+Rcpp::List trace_back_isochrones (
+        const CSA_Iso & csa_iso,
+        const std::unordered_set <size_t> & start_stations_set,
+        const bool &minimise_transfers
+        );
+
+// but most work done in this pure C++ fn:
+void trace_back_one_stn (
+        const CSA_Iso & csa_iso,
+        BackTrace & backtrace,
+        const size_t & end_stn,
+        const bool &minimise_transfers
+        );
+
 
 } // end namespace csaiso
 
