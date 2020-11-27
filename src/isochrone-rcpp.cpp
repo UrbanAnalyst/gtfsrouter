@@ -1,5 +1,8 @@
 #include "iso.h"
 
+// Minimal Rcpp interfaces to R. All of the main work done in isochrone.cpp,
+// which is then pure C++.
+
 //' rcpp_csa_isochrone
 //'
 //' Calculate isochrones using Connection Scan Algorithm for GTFS data. Works
