@@ -53,6 +53,19 @@ class CSA_Iso
 
 namespace csaiso {
 
+void trace_forward_iso (
+        CSA_Iso & csa_iso,
+        const int & start_time,
+        const int & end_time,
+        const std::vector <size_t> & departure_station,
+        const std::vector <size_t> & arrival_station,
+        const std::vector <size_t> & trip_id,
+        const std::vector <int> & departure_time,
+        const std::vector <int> & arrival_time,
+        const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
+        const std::unordered_set <size_t> & start_stations_set,
+        const bool & minimise_transfers);
+
 bool fill_one_csa_iso (
         const size_t &departure_station,
         const size_t &arrival_station,
