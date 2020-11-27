@@ -18,8 +18,7 @@
 #' gtfs <- extract_gtfs (f)
 #'
 #' @export
-extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL)
-{
+extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
     if (is.null (filename))
         stop ("filename must be given")
     if (!file.exists (filename))
@@ -58,17 +57,19 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL)
     if (!quiet)
         message (cli::symbol$play, cli::col_green (" Extracting GTFS feed"),
                  appendLF = FALSE)
-    for (f in seq (flist))
-    {
+
+    for (f in seq (flist)) {
+
         fout <- data.table::fread (flist [f],
                                    integer64 = "character",
                                    showProgress = FALSE)
         assign (gsub (".txt", "", basename (flist [f])), fout, pos = -1)
-        chk <- file.remove (flist [f])
-
+        chk <- file.remove (flist [f]) # nolint
     }
+
     if (!quiet)
-        message ("\r", cli::col_green (cli::symbol$tick, " Extracted GTFS feed "))
+        message ("\r", cli::col_green (cli::symbol$tick,
+                                       " Extracted GTFS feed "))
 
     if (nrow (routes) == 0 | nrow (stops) == 0 | nrow (stop_times) == 0 |
         nrow (trips) == 0)
@@ -80,22 +81,23 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL)
     # NYC stop_id values have a base ID along with two repeated versions with
     # either "N" or "S" appended. These latter are redundant. First reduce the
     # "stops" table:
-    remove_terminal_sn <- function (stop_ids, stn_suffixes)
-    {
+    remove_terminal_sn <- function (stop_ids, stn_suffixes) {
         if (!is.null (stn_suffixes)) {
             for (i in stn_suffixes) {
                 index <- grep (paste0 (i, "$"), stop_ids)
                 if (length (index) > 0)
-                    stop_ids [index] <- gsub (paste0 (i, "$"), "", stop_ids [index])
+                    stop_ids [index] <-
+                        gsub (paste0 (i, "$"), "", stop_ids [index])
             }
         }
         # nocov end
         return (stop_ids)
     }
+
     if (storage.mode(stops$stop_id) != "character") {
         stops$stop_id <- as.character(stops$stop_id)
     }
-    
+
     stops [, stop_id := remove_terminal_sn (stops [, stop_id], stn_suffixes)]
 
     index <- which (!duplicated (stops [, stop_id]))
@@ -120,8 +122,7 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL)
                  appendLF = FALSE)
     }
 
-    if (!missing_transfers)
-    {
+    if (!missing_transfers) {
         transfer <- stop_times [, stop_id] %in% transfers [, from_stop_id]
         #stop_times <-
         #stop_times [, transfer := transfer] [order (departure_time)]
@@ -152,13 +153,11 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL)
 }
 
 
-type_missing <- function (flist, type)
-{
+type_missing <- function (flist, type) {
     ret <- FALSE
     type <- paste0 (type, ".txt")
 
-    if (!any (grepl (type, flist)))
-    {
+    if (!any (grepl (type, flist))) {
         msg <- paste ("This feed contains no", type)
         if (type == "transfers.txt")
             msg <- paste (msg,

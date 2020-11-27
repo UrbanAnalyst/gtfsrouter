@@ -52,8 +52,8 @@
 gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
                             from_is_id = FALSE, route_pattern = NULL,
                             minimise_transfers = FALSE,
-                            hull_alpha = 0.1, quiet = FALSE)
-{
+                            hull_alpha = 0.1, quiet = FALSE) {
+
     requireNamespace ("geodist")
     requireNamespace ("lwgeom")
 
@@ -103,8 +103,8 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
 }
 
 get_isotrips <- function (gtfs, start_stns, start_time, end_time,
-                          minimise_transfers = FALSE)
-{
+                          minimise_transfers = FALSE) {
+
     stop_id <- trip_id <- NULL # no visible binding note:# nolint
 
     # the C++ function returns a single list with elements group in threes:
@@ -142,8 +142,7 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time,
 
     actual_start_time <- min (vapply (earliest_arrival, min, integer (1)))
 
-    isotrips <- lapply (seq (stns), function (i)
-                   {
+    isotrips <- lapply (seq (stns), function (i) {
                        s <- gtfs$stops [stns [[i]],
                                         c ("stop_id",
                                            "stop_name",
@@ -180,16 +179,16 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time,
 }
 
 # convert each isotrip to sf linestring
-route_to_linestring <- function (x)
-{
+route_to_linestring <- function (x) {
+
     xy <- lapply (x, function (i)
                   sf::st_linestring (cbind (i$stop_lon, i$stop_lat)))
     sf::st_sfc (xy, crs = 4326)
 }
 
 # extract endpoints of each route as sf point objects
-route_endpoints <- function (x)
-{
+route_endpoints <- function (x) {
+
     xy <- lapply (x, function (i)
                   as.numeric (i [nrow (i), c ("stop_lon", "stop_lat")]))
     xy <- do.call (rbind, xy)
@@ -219,9 +218,10 @@ route_endpoints <- function (x)
                geometry = g)
 }
 
-route_midpoints <- function (x)
-{
-    # NAs for trip IDs between transfer stations, which can be removed here anyway
+route_midpoints <- function (x) {
+
+    # NAs for trip IDs between transfer stations, which can be removed here
+    # anyway
     x <- lapply (x, function (i) na.omit (i))
 
     xy <- lapply (x, function (i)
@@ -243,7 +243,8 @@ route_midpoints <- function (x)
 
     duration <- hms::hms (as.integer (arrival) - departure)
 
-    transfers <- do.call (c, lapply (x, function (i) i$ntransfers [-c (1, nrow (i))]))
+    transfers <- do.call (c, lapply (x, function (i)
+                                     i$ntransfers [-c (1, nrow (i))]))
 
     sf::st_sf ("stop_name" = do.call (c, nms),
                "stop_id" = do.call (c, ids),
@@ -255,8 +256,8 @@ route_midpoints <- function (x)
 }
 
 # x is isolines
-isohull <- function (x, hull_alpha)
-{
+isohull <- function (x, hull_alpha) {
+
     xy <- lapply (x, function (i)
                   as.matrix (i [, c ("stop_lon", "stop_lat")]))
     xy <- do.call (rbind, xy)
@@ -276,8 +277,8 @@ isohull <- function (x, hull_alpha)
 }
 
 # ratio of lengths of minor / major axes of the hull
-hull_ratio <- function (x)
-{
+hull_ratio <- function (x) {
+
     xy <- sf::st_coordinates (x)
     d <- geodist::geodist (xy)
     d [lower.tri (d)] <- 0
@@ -293,8 +294,8 @@ hull_ratio <- function (x)
     minor_axis_dist / max (d)
 }
 
-get_ahull <- function (x, alpha = alpha)
-{
+get_ahull <- function (x, alpha = alpha) {
+
     x <- na.omit (x [!duplicated (x), ])
     alpha <- 0.1
     a <- data.frame (alphahull::ashape (x, alpha = alpha)$edges)
@@ -308,14 +309,11 @@ get_ahull <- function (x, alpha = alpha)
     # TODO: Find a better way to do this!
     ind_seq <- as.numeric (inds [1, ])
     inds <- inds [-1, ]
-    while (nrow (inds) > 0)
-    {
+    while (nrow (inds) > 0) {
         j <- which (inds$ind1 == utils::tail (ind_seq, n = 1))
-        if (length (j) > 0)
-        {
+        if (length (j) > 0) {
             ind_seq <- c (ind_seq, inds [j, 2])
-        } else
-        {
+        } else {
             j <- which (inds$ind2 == utils::tail (ind_seq, n = 1))
             ind_seq <- c (ind_seq, inds [j, 1])
         }

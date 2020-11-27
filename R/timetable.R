@@ -11,9 +11,9 @@
 #' 'calendar' table; rather they provide full timetables for specified calendar
 #' dates via a 'calendar_date' table. Providing a date here as a single 8-digit
 #' number representing 'yyyymmdd' will filter the data to the specified date.
-#' Also the 'calendar' is scanned for services that operate
-#' on the selected date. Therefore also a merge of feeds that combine 'calendar' 
-#' and 'calendar_dates' options is covered.
+#' Also the 'calendar' is scanned for services that operate on the selected
+#' date. Therefore also a merge of feeds that combine 'calendar' and
+#' 'calendar_dates' options is covered.
 #' @param route_pattern Using only those routes matching given pattern, for
 #' example, "^U" for routes starting with "U" (as commonly used for underground
 #' or subway routes. To negative the `route_pattern` -- that is, to include all
@@ -34,17 +34,14 @@
 #'
 #' @export
 gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
-                            quiet = FALSE)
-{
+                            quiet = FALSE) {
     # IMPORTANT: data.table works entirely by reference, so all operations
     # change original values unless first copied! This function thus returns a
     # copy even when it does nothing else, so always entails some cost.
     gtfs_cp <- data.table::copy (gtfs)
 
-    if (!attr (gtfs_cp, "filtered"))
-    {
-        if (is.null (date) & is.null (day))
-        {
+    if (!attr (gtfs_cp, "filtered")) {
+        if (is.null (date) & is.null (day)) {
             # nocov start
             if (!check_calendar (gtfs))
                 stop ("This appears to be a GTFS feed which uses a ",
@@ -65,8 +62,7 @@ gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
         attr (gtfs_cp, "filtered") <- TRUE
     }
 
-    if (!"timetable" %in% names (gtfs_cp))
-    {
+    if (!"timetable" %in% names (gtfs_cp)) {
         gtfs_cp <- make_timetable (gtfs_cp)
     }
 
@@ -81,8 +77,7 @@ gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
 # ... note that it says nothing about what 'calendar' should hold in such cases,
 # so this just follows the current patterns appeared to be used in Paris, as per
 # issue #20.
-check_calendar <- function (gtfs)
-{
+check_calendar <- function (gtfs) {
     days <- c ("monday", "tuesday", "wednesday", "thursday",
                "friday", "saturday", "sunday")
     index <- which (tolower (names (gtfs$calendar)) %in% days)
@@ -96,8 +91,7 @@ check_calendar <- function (gtfs)
     length (tab) > 1
 }
 
-make_timetable <- function (gtfs)
-{
+make_timetable <- function (gtfs) {
     # no visible binding notes
     stop_id <- trip_id <- stop_ids <- from_stop_id <- to_stop_id <- NULL
 
@@ -111,8 +105,7 @@ make_timetable <- function (gtfs)
     # the vectors of stop_ids and trip_ids.
 
     # translate transfer stations into indices
-    if ("transfers" %in% names (gtfs))
-    {
+    if ("transfers" %in% names (gtfs)) {
         # feed may have been filtered, so not all transfer stations may be in
         # feed - these are first removed
         index <- which (gtfs$transfers$from_stop_id %in% stop_ids &
@@ -135,18 +128,15 @@ make_timetable <- function (gtfs)
     return (gtfs)
 }
 
-filter_by_day <- function (gtfs, day = NULL, quiet = FALSE)
-{
+filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
     days <- c ("sunday", "monday", "tuesday", "wednesday", "thursday",
                "friday", "saturday")
 
-    if (is.null (day))
-    {
+    if (is.null (day)) {
         day <- strftime (Sys.time (), "%A")
         if (!quiet)
             message ("Day not specified; extracting timetable for ", day)
-    } else if (is.numeric (day))
-    {
+    } else if (is.numeric (day)) {
         if (any (day %% 1 != 0))
             stop ("day must be an integer value")
         if (any (day < 0 | day > 7))
@@ -176,8 +166,7 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE)
 }
 
 # nocov start - not in test data
-filter_by_date <- function (gtfs, date = NULL)
-{
+filter_by_date <- function (gtfs, date = NULL) {
     if (is.null (date))
         stop ("An explicit date must be specified in order to filter by date")
 
@@ -186,19 +175,20 @@ filter_by_date <- function (gtfs, date = NULL)
     start_date <- NULL
     end_date <- NULL
     index <- which (gtfs$calendar_dates$date == date)
-    
+
     # get all service_ids in calendar.txt that are valid for the given date
     day <- strftime(strptime(x = date, format = "%Y%m%d"), format = "%A")
     if (is.na(day)) {
         stop("Date is not provided in the proper format of yyyymmdd")
     }
     day <- tolower(day)
-    calendars_in_range <- gtfs$calendar[(start_date <= date) & (end_date >= date), ]
+    calendars_in_range <- gtfs$calendar [(start_date <= date) &
+                                         (end_date >= date), ]
     index_day <- lapply(day, function(i) {
         which(calendars_in_range [, get(i)] == 1)
     })
     index_day <- sort(unique(do.call(c, index_day)))
-    
+
     if (length(index) == 0 & length(index_day) == 0) {
         stop("date does not match any values in the provided GTFS data")
     }
@@ -210,7 +200,8 @@ filter_by_date <- function (gtfs, date = NULL)
     service_id <- c()
     if (length (index) > 0)
         service_id <- gtfs$calendar_dates [index, ] [, service_id]
-    # Find indices of all services on nominated days that are within start and end date of calendar
+    # Find indices of all services on nominated days that are within start and
+    # end date of calendar
     if (length (index_day) > 0)
         service_id <- c(service_id, gtfs$calendar [index_day, ] [, service_id])
     if (length(service_id > 0)) {
@@ -228,8 +219,7 @@ filter_by_date <- function (gtfs, date = NULL)
 }
 # nocov end
 
-filter_by_route <- function (gtfs, route_pattern = NULL)
-{
+filter_by_route <- function (gtfs, route_pattern = NULL) {
     # no visible binding notes:
     route_short_name <- route_id <- trip_id <- stop_id <-
         from_stop_id <- to_stop_id <- NULL

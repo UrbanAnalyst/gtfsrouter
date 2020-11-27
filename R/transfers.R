@@ -101,8 +101,10 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
     transfers <- pbapply::pblapply (seq (nrow (stops)), function (i) {
         stopi <- stops$stop_id [i]
         nbs <- stops$stop_id [which (d [i, ] < d_limit)]
-        services <- unique (stop_service$services [stop_service$stop_id == stopi])
-        service_stops <- unique (stop_service$stop_id [stop_service$services %in% services])
+        services <-
+            unique (stop_service$services [stop_service$stop_id == stopi])
+        service_stops <-
+            unique (stop_service$stop_id [stop_service$services %in% services])
         nbs [which (!nbs %in% service_stops)]
     })
 
@@ -124,17 +126,24 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
 
 
     names (transfers) <- gtfs$stops$stop_id
-    index <- which (vapply (transfers, function (i) length (i) > 0, logical (1)))
+    index <- which (vapply (transfers, function (i)
+                            length (i) > 0,
+                            logical (1)))
     transfers <- transfers [index]
     for (i in seq (transfers)) {
         transfers [[i]] <- cbind (from = names (transfers) [i],
                                   to = transfers [[i]])
     }
-    transfers <- data.frame (do.call (rbind, transfers), stringsAsFactors = FALSE)
-    transfers$from_lon <- gtfs$stops$stop_lon [match (transfers$from, gtfs$stops$stop_id)]
-    transfers$from_lat <- gtfs$stops$stop_lat [match (transfers$from, gtfs$stops$stop_id)]
-    transfers$to_lon <- gtfs$stops$stop_lon [match (transfers$to, gtfs$stops$stop_id)]
-    transfers$to_lat <- gtfs$stops$stop_lat [match (transfers$to, gtfs$stops$stop_id)]
+    transfers <- data.frame (do.call (rbind, transfers),
+                             stringsAsFactors = FALSE)
+    transfers$from_lon <-
+        gtfs$stops$stop_lon [match (transfers$from, gtfs$stops$stop_id)]
+    transfers$from_lat <-
+        gtfs$stops$stop_lat [match (transfers$from, gtfs$stops$stop_id)]
+    transfers$to_lon <-
+        gtfs$stops$stop_lon [match (transfers$to, gtfs$stops$stop_id)]
+    transfers$to_lat <-
+        gtfs$stops$stop_lat [match (transfers$to, gtfs$stops$stop_id)]
     transfers <- transfers [which (transfers$from != transfers$to), ]
 
     message (cli::col_green (cli::symbol$tick,
