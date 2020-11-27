@@ -12,8 +12,12 @@ test_that("extract", {
               f <- file.path (tempdir (), "junk")
               cat ("junk", file = f)
               # The following test fails on appveyor with this message:
-              # Expected match: "zip file 'C:/Users/appveyor/AppData/Local/Temp/1\\Rtmp8aCxU2/junk' cannot be opened"
-              # Actual message: "zip file 'C:/Users/appveyor/AppData/Local/Temp/1\\Rtmp8aCxU2/junk' cannot be opened"
+              # Expected match: "zip file
+              # 'C:/Users/appveyor/AppData/Local/Temp/1\\Rtmp8aCxU2/junk' cannot
+              # be opened"
+              # Actual message: "zip file
+              # 'C:/Users/appveyor/AppData/Local/Temp/1\\Rtmp8aCxU2/junk' cannot
+              # be opened"
               # --- and yes, those two are in fact identical! Therefore:
               #if (test_all)
               #    expect_error (g <- extract_gtfs (f))
@@ -37,7 +41,8 @@ test_that("extract", {
               zip (f2, files)
               if (test_all)
                   expect_error (g <- extract_gtfs (f2, quiet = TRUE),
-                                paste0 (f2, " does not appear to be a GTFS file"))
+                                paste0 (f2,
+                                        " does not appear to be a GTFS file"))
 })
 
 test_that ("timetable", {
@@ -57,10 +62,18 @@ test_that ("timetable", {
               expect_true (nrow (gt$trips) < nrow (g$trips))
               expect_identical (g$routes, gt$routes)
 
-              if (test_all) { # this fails on appveyor, so switch off on CRAN too just to be safe
-                  expect_equal (names (gt), c ("calendar", "routes", "trips",
-                                               "stop_times", "stops", "transfers",
-                                               "timetable", "stop_ids", "trip_ids"))
+              if (test_all) {
+                  # this fails on appveyor, so switch off on CRAN too just to be
+                  # safe
+                  expect_equal (names (gt), c ("calendar",
+                                               "routes",
+                                               "trips",
+                                               "stop_times",
+                                               "stops",
+                                               "transfers",
+                                               "timetable",
+                                               "stop_ids",
+                                               "trip_ids"))
               }
               expect_equal (gt$n_stations, nrow (gt$stations))
               expect_equal (gt$n_trips, nrow (gt$trip_numbers))
@@ -92,10 +105,14 @@ test_that("route", {
               expect_true (!identical (route, route2))
               expect_is (route2, "data.frame")
               expect_equal (ncol (route2), 8)
-              expect_equal (names (route2), c ("route_id", "route_name",
-                                               "trip_id", "trip_name",
-                                               "stop_id", "stop_name",
-                                               "arrival_time", "departure_time"))
+              expect_equal (names (route2), c ("route_id",
+                                               "route_name",
+                                               "trip_id",
+                                               "trip_name",
+                                               "stop_id",
+                                               "stop_name",
+                                               "arrival_time",
+                                               "departure_time"))
 
               # test data only go until 13:00, so:
               expect_error (route <- gtfs_route (gt, from = from, to = to,
@@ -128,7 +145,8 @@ test_that ("route_pattern", {
                expect_silent (gt1 <- gtfs_timetable (g, day = 3,
                                                      route_pattern = "^S",
                                                      quiet = TRUE))
-               expect_true (all (substring (gt1$routes$route_short_name, 1, 1) == "S"))
+               expect_true (all (substring (gt1$routes$route_short_name, 1, 1)
+                                 == "S"))
                from <- "Schonlein" # U-bahn station, not "S"
                to <- "Berlin Hauptbahnhof"
                start_time <- 12 * 3600 + 120 # 12:02
@@ -149,7 +167,8 @@ test_that ("route_pattern", {
                expect_silent (gt3 <- gtfs_timetable (g, day = 3,
                                                      route_pattern = "!^S"))
                expect_true (!identical (gt1, gt3))
-               expect_true (all (substring (gt3$routes$route_short_name, 1, 1) != "S"))
+               expect_true (all (substring (gt3$routes$route_short_name, 1, 1)
+                                 != "S"))
 
                expect_error (gt <- gtfs_timetable (g, day = 3,
                                                    route_pattern = "!"),
@@ -187,7 +206,7 @@ test_that ("max_transfers", {
                expect_silent (route2 <- gtfs_route (g, from = from, to = to,
                                                     start_time = start_time,
                                                     day = 3,
-                                                    max_transfers = 1)) # not possible
+                                                    max_transfers = 1))
                expect_identical (route1, route2)
 })
 
@@ -202,11 +221,17 @@ test_that ("multiple routes", {
                                                     day = 3))
                expect_is (route, "list")
                expect_length (route, 2)
-               expect_true (all (vapply (route, function (i) is.data.frame (i), logical (1))))
+               expect_true (all (vapply (route, function (i)
+                                         is.data.frame (i),
+                                         logical (1))))
 
                # convert (from, to) to matrices of lon-lat:
-               from <- vapply (from, function (i) grep (i, g$stops$stop_name) [1], integer (1))
-               to <- vapply (to, function (i) grep (i, g$stops$stop_name) [1], integer (1))
+               from <- vapply (from, function (i)
+                               grep (i, g$stops$stop_name) [1],
+                               integer (1))
+               to <- vapply (to, function (i)
+                             grep (i, g$stops$stop_name) [1],
+                             integer (1))
                from <- g$stops [from, c ("stop_lon", "stop_lat")]
                to <- g$stops [to, c ("stop_lon", "stop_lat")]
                expect_silent (route2 <- gtfs_route (g, from = from, to = to,
@@ -216,6 +241,6 @@ test_that ("multiple routes", {
                # these are not identical, because the first only greps
                # "Alexanderplatz" and so returns all U+S lines, while the 2nd
                # gets `grep (...)[1]`, and so only matches one of these, which
-               # happens to be the S Bhf. 
+               # happens to be the S Bhf.
                #expect_identical (unname (route), unname (route2))
 })
