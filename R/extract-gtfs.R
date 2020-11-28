@@ -78,30 +78,8 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
               paste (need_these_files, collapse = ", "))
 
 
-    # NYC stop_id values have a base ID along with two repeated versions with
-    # either "N" or "S" appended. These latter are redundant. First reduce the
-    # "stops" table:
-    remove_terminal_sn <- function (stop_ids, stn_suffixes) {
-        if (!is.null (stn_suffixes)) {
-            for (i in stn_suffixes) {
-                index <- grep (paste0 (i, "$"), stop_ids)
-                if (length (index) > 0)
-                    stop_ids [index] <-
-                        gsub (paste0 (i, "$"), "", stop_ids [index])
-            }
-        }
-        # nocov end
-        return (stop_ids)
-    }
+    stops <- convert_stops (stops, stn_suffixes)
 
-    if (storage.mode(stops$stop_id) != "character") {
-        stops$stop_id <- as.character(stops$stop_id)
-    }
-
-    stops [, stop_id := remove_terminal_sn (stops [, stop_id], stn_suffixes)]
-
-    index <- which (!duplicated (stops [, stop_id]))
-    stops <- stops [index, ]
     stop_times [, stop_id := remove_terminal_sn (stop_times [, stop_id],
                                                  stn_suffixes)]
 
@@ -168,4 +146,36 @@ type_missing <- function (flist, type) {
     }
 
     return (ret)
+}
+
+# NYC stop_id values have a base ID along with two repeated versions with
+# either "N" or "S" appended. These latter are redundant. First reduce the
+# "stops" table:
+remove_terminal_sn <- function (stop_ids, stn_suffixes) {
+    if (!is.null (stn_suffixes)) {
+        for (i in stn_suffixes) {
+            index <- grep (paste0 (i, "$"), stop_ids)
+            if (length (index) > 0)
+                stop_ids [index] <-
+                    gsub (paste0 (i, "$"), "", stop_ids [index])
+        }
+    }
+    # nocov end
+    return (stop_ids)
+}
+
+convert_stops <- function (stops, stn_suffixes) {
+    # suppress no visible binding notes:
+    stop_id <- NULL
+
+    if (storage.mode(stops$stop_id) != "character") {
+        stops$stop_id <- as.character(stops$stop_id)
+    }
+
+    stops [, stop_id := remove_terminal_sn (stops [, stop_id], stn_suffixes)]
+
+    index <- which (!duplicated (stops [, stop_id]))
+    stops <- stops [index, ]
+
+    return (stops)
 }
