@@ -80,21 +80,9 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
 
     stops <- convert_stops (stops, stn_suffixes)
 
-    stop_times [, stop_id := remove_terminal_sn (stop_times [, stop_id],
-                                                 stn_suffixes)]
-
-    if (!quiet)
-        message (cli::symbol$play,
-                 cli::col_green (" Converting stop times to seconds"),
-                 appendLF = FALSE)
-
-    stop_times [, arrival_time := rcpp_time_to_seconds (arrival_time)]
-    stop_times [, departure_time := rcpp_time_to_seconds (departure_time)]
-    stop_times [, trip_id := paste0 (trip_id)]
+    stop_times <- convert_stop_times (stop_times, stn_suffixes, quiet)
 
     if (!quiet) {
-        message ("\r", cli::col_green (cli::symbol$tick,
-                                       " Converted stop times to seconds "))
         message (cli::symbol$play,
                  cli::col_green (" Converting transfer times to seconds"),
                  appendLF = FALSE)
@@ -178,4 +166,28 @@ convert_stops <- function (stops, stn_suffixes) {
     stops <- stops [index, ]
 
     return (stops)
+}
+
+convert_stop_times <- function (stop_times, stn_suffixes, quiet) {
+
+    # suppress no visible binding notes:
+    arrival_time <- departure_time <- trip_id <- NULL
+
+    stop_times [, stop_id := remove_terminal_sn (stop_times [, stop_id],
+                                                 stn_suffixes)]
+
+    if (!quiet)
+        message (cli::symbol$play,
+                 cli::col_green (" Converting stop times to seconds"),
+                 appendLF = FALSE)
+
+    stop_times [, arrival_time := rcpp_time_to_seconds (arrival_time)]
+    stop_times [, departure_time := rcpp_time_to_seconds (departure_time)]
+    stop_times [, trip_id := paste0 (trip_id)]
+
+    if (!quiet)
+        message ("\r", cli::col_green (cli::symbol$tick,
+                                       " Converted stop times to seconds "))
+
+    return (stop_times)
 }
