@@ -82,27 +82,9 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
 
     stop_times <- convert_stop_times (stop_times, stn_suffixes, quiet)
 
-    if (!quiet) {
-        message (cli::symbol$play,
-                 cli::col_green (" Converting transfer times to seconds"),
-                 appendLF = FALSE)
-    }
-
-    if (!missing_transfers) {
-        transfer <- stop_times [, stop_id] %in% transfers [, from_stop_id]
-        #stop_times <-
-        #stop_times [, transfer := transfer] [order (departure_time)]
-        stop_times <- stop_times [, transfer := transfer]
-
-        index <- which (transfers [, from_stop_id] %in% stop_times [, stop_id] &
-                        transfers [, to_stop_id] %in% stop_times [, stop_id])
-        transfers <- transfers [index, ]
-        transfers [, min_transfer_time :=
-                   replace (min_transfer_time, is.na (min_transfer_time), 0)]
-    }
-    if (!quiet)
-        message ("\r", cli::col_green (cli::symbol$tick,
-                                       " Converted transfer times to seconds "))
+    if (!missing_transfers)
+        transfers <- convert_transfers (transfers, stop_times,
+                                        min_transfer_time, quiet)
 
     trips <- trips [, trip_id := paste0 (trip_id)]
 
@@ -190,4 +172,35 @@ convert_stop_times <- function (stop_times, stn_suffixes, quiet) {
                                        " Converted stop times to seconds "))
 
     return (stop_times)
+}
+
+convert_transfers <- function (transfers,
+                               stop_times,
+                               min_transfer_time,
+                               quiet) {
+
+    # suppress no visible binding notes:
+    stop_id <- from_stop_id <- NULL
+
+    if (!quiet)
+        message (cli::symbol$play,
+                 cli::col_green (" Converting transfer times to seconds"),
+                 appendLF = FALSE)
+
+    transfer <- stop_times [, stop_id] %in% transfers [, from_stop_id]
+    #stop_times <-
+    #stop_times [, transfer := transfer] [order (departure_time)]
+    stop_times <- stop_times [, transfer := transfer]
+
+    index <- which (transfers [, from_stop_id] %in% stop_times [, stop_id] &
+                    transfers [, to_stop_id] %in% stop_times [, stop_id])
+    transfers <- transfers [index, ]
+    transfers [, min_transfer_time :=
+               replace (min_transfer_time, is.na (min_transfer_time), 0)]
+
+    if (!quiet)
+        message ("\r", cli::col_green (cli::symbol$tick,
+                                       " Converted transfer times to seconds "))
+
+    return (transfers)
 }
