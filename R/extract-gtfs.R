@@ -19,12 +19,8 @@
 #'
 #' @export
 extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
-    if (is.null (filename))
-        stop ("filename must be given")
-    if (!file.exists (filename))
-        stop ("filename ", filename, " does not exist")
-    if (!(is.null (stn_suffixes) | is.character (stn_suffixes)))
-        stop ("stn_suffixes must be a character vector")
+
+    check_extract_pars (filename, stn_suffixes)
 
     # suppress no visible binding for global variables notes:
     trip_id <- NULL
@@ -105,6 +101,17 @@ unzip_gtfs <- function (filename, quiet = FALSE) {
                                        " Unzipped GTFS archive  "))
 
     return (flist)
+}
+
+check_extract_pars <- function (filename, stn_suffixes) {
+
+    if (is.null (filename))
+        stop ("filename must be given")
+    if (!file.exists (filename))
+        stop ("filename ", filename, " does not exist")
+    if (!(is.null (stn_suffixes) | is.character (stn_suffixes)))
+        stop ("stn_suffixes must be a character vector")
+
 }
 
 
