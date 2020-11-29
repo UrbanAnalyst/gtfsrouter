@@ -27,10 +27,7 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
         stop ("stn_suffixes must be a character vector")
 
     # suppress no visible binding for global variables notes:
-    arrival_time <- departure_time <- stop_id <- min_transfer_time <-
-        from_stop_id <- to_stop_id <- trip_id <- `:=` <- # nolint
-        routes <- stops <- stop_times <- trips <- NULL
-
+    trip_id <- NULL
 
     flist <- unzip_gtfs (filename, quiet = quiet)
 
