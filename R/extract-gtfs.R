@@ -31,17 +31,8 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
         from_stop_id <- to_stop_id <- trip_id <- `:=` <- # nolint
         routes <- stops <- stop_times <- trips <- NULL
 
-    #flist <- utils::unzip (filename, list = TRUE)
-    # the fread(cmd = paste0 ("unzip -p ..")) stuff is not portable, and has
-    # issues on windows, so unzip all into tempdir and work from there
 
-    if (!quiet)
-        message (cli::symbol$play, cli::col_green (" Unzipping GTFS archive"),
-                 appendLF = FALSE)
-    flist <- utils::unzip (filename, exdir = tempdir ())
-    if (!quiet)
-        message ("\r", cli::col_green (cli::symbol$tick,
-                                       " Unzipped GTFS archive  "))
+    flist <- unzip_gtfs (filename, quiet = quiet)
 
     # GTFS **must** contain "agency", "stops", "routes", "trips", and
     # "stop_times", but "agency" is not used here, so
@@ -98,6 +89,25 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
     class (res) <- c ("gtfs", class (res))
 
     return (res)
+}
+
+unzip_gtfs <- function (filename, quiet = FALSE) {
+
+    #flist <- utils::unzip (filename, list = TRUE)
+    # the fread(cmd = paste0 ("unzip -p ..")) stuff is not portable, and has
+    # issues on windows, so unzip all into tempdir and work from there
+
+    if (!quiet)
+        message (cli::symbol$play, cli::col_green (" Unzipping GTFS archive"),
+                 appendLF = FALSE)
+
+    flist <- utils::unzip (filename, exdir = tempdir ())
+
+    if (!quiet)
+        message ("\r", cli::col_green (cli::symbol$tick,
+                                       " Unzipped GTFS archive  "))
+
+    return (flist)
 }
 
 
