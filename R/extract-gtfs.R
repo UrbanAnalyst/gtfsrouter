@@ -30,12 +30,8 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
     # GTFS **must** contain "agency", "stops", "routes", "trips", and
     # "stop_times", but "agency" is not used here, so
     need_these_files <- c ("routes", "stops", "stop_times", "trips")
-    checks <- vapply (need_these_files, function (i)
-                      any (grepl (paste0 (i, ".txt"), flist)), logical (1))
-    if (!all (checks))
-        stop (filename, " does not appear to be a GTFS file; ",
-              "it must minimally contain\n  ",
-              paste (need_these_files, collapse = ", "))
+    all_files_exist (filename, flist, need_these_files)
+
     missing_transfers <- type_missing (flist, "transfers")
 
     if (!quiet)
@@ -114,6 +110,16 @@ check_extract_pars <- function (filename, stn_suffixes) {
 
 }
 
+all_files_exist <- function (filename, flist, need_these_files) {
+
+    checks <- vapply (need_these_files, function (i)
+                      any (grepl (paste0 (i, ".txt"), flist)), logical (1))
+
+    if (!all (checks))
+        stop (filename, " does not appear to be a GTFS file; ",
+              "it must minimally contain\n  ",
+              paste (need_these_files, collapse = ", "))
+}
 
 type_missing <- function (flist, type) {
     ret <- FALSE
