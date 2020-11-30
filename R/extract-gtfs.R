@@ -23,7 +23,7 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
     check_extract_pars (filename, stn_suffixes)
 
     # suppress no visible binding for global variables notes:
-    trip_id <- NULL
+    trip_id <- min_transfer_time <- NULL
 
     flist <- unzip_gtfs (filename, quiet = quiet)
 
@@ -34,44 +34,28 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
 
     missing_transfers <- type_missing (flist, "transfers")
 
-    if (!quiet)
-        message (cli::symbol$play, cli::col_green (" Extracting GTFS feed"),
-                 appendLF = FALSE)
+    e <- extract_objs_into_env (flist, quiet = quiet)
 
-    for (f in seq (flist)) {
-
-        fout <- data.table::fread (flist [f],
-                                   integer64 = "character",
-                                   showProgress = FALSE)
-        assign (gsub (".txt", "", basename (flist [f])), fout, pos = -1)
-        chk <- file.remove (flist [f]) # nolint
-    }
-
-    if (!quiet)
-        message ("\r", cli::col_green (cli::symbol$tick,
-                                       " Extracted GTFS feed "))
-
-    if (nrow (routes) == 0 | nrow (stops) == 0 | nrow (stop_times) == 0 |
-        nrow (trips) == 0)
+    if (nrow (e$routes) == 0 | nrow (e$stops) == 0 |
+        nrow (e$stop_times) == 0 | nrow (e$trips) == 0)
         stop (filename, " does not appear to be a GTFS file; ",
               "it must minimally contain\n  ",
               paste (need_these_files, collapse = ", "))
 
+    e$stops <- convert_stops (e$stops, stn_suffixes)
 
-    stops <- convert_stops (stops, stn_suffixes)
+    e$stop_times <- convert_stop_times (e$stop_times, stn_suffixes, quiet)
 
-    stop_times <- convert_stop_times (stop_times, stn_suffixes, quiet)
+    if (!missing_transfers) {
+        e$transfers <- convert_transfers (e$transfers, e$stop_times,
+                                          min_transfer_time, quiet)
+    }
 
-    if (!missing_transfers)
-        transfers <- convert_transfers (transfers, stop_times,
-                                        min_transfer_time, quiet)
-
-    trips <- trips [, trip_id := paste0 (trip_id)]
+    e$trips <- e$trips [, trip_id := paste0 (trip_id)]
 
     objs <- gsub (".txt", "", basename (flist))
-    # Note: **NOT** lapply (objs, get)!!
-    # https://stackoverflow.com/questions/18064602/why-do-i-need-to-wrap-get-in-a-dummy-function-within-a-j-lapply-call #nolint
-    res <- lapply (objs, function (i) get (i))
+
+    res <- lapply (objs, function (i) get (i, envir = e))
     names (res) <- objs
     attr (res, "filtered") <- FALSE
 
@@ -138,6 +122,31 @@ type_missing <- function (flist, type) {
     return (ret)
 }
 
+extract_objs_into_env <- function (flist, quiet = FALSE) {
+
+    if (!quiet)
+        message (cli::symbol$play, cli::col_green (" Extracting GTFS feed"),
+                 appendLF = FALSE)
+
+    e <- new.env ()
+    for (f in seq (flist)) {
+
+        fout <- data.table::fread (flist [f],
+                                   integer64 = "character",
+                                   showProgress = FALSE)
+        assign (gsub (".txt", "", basename (flist [f])),
+                value = fout,
+                envir = e)
+        chk <- file.remove (flist [f]) # nolint
+    }
+
+    if (!quiet)
+        message ("\r", cli::col_green (cli::symbol$tick,
+                                       " Extracted GTFS feed "))
+
+    return (e)
+}
+
 # NYC stop_id values have a base ID along with two repeated versions with
 # either "N" or "S" appended. These latter are redundant. First reduce the
 # "stops" table:
@@ -173,7 +182,7 @@ convert_stops <- function (stops, stn_suffixes) {
 convert_stop_times <- function (stop_times, stn_suffixes, quiet) {
 
     # suppress no visible binding notes:
-    arrival_time <- departure_time <- trip_id <- NULL
+    arrival_time <- departure_time <- trip_id <- stop_id <- NULL
 
     stop_times [, stop_id := remove_terminal_sn (stop_times [, stop_id],
                                                  stn_suffixes)]
@@ -200,7 +209,7 @@ convert_transfers <- function (transfers,
                                quiet) {
 
     # suppress no visible binding notes:
-    stop_id <- from_stop_id <- NULL
+    stop_id <- from_stop_id <- to_stop_id <- NULL
 
     if (!quiet)
         message (cli::symbol$play,
