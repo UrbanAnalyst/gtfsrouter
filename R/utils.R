@@ -9,10 +9,20 @@ berlin_gtfs_to_zip <- function () {
     flist <- c ("calendar.txt", "routes.txt", "trips.txt",
                 "stop_times.txt", "stops.txt", "transfers.txt")
     f <- gtfsrouter::berlin_gtfs
-    chk <- sapply (flist, function (i)
-                   data.table::fwrite (f [[strsplit (i, ".txt") [[1]] ]],
-                                       file.path (tempdir (), i), quote = TRUE)
-    )
+    # data.table::fwrite always returns NULL
+    chk <- vapply (flist, function (i) {
+                       si <- strsplit (i, ".txt") [[1]]
+                       res <- tryCatch (
+                            data.table::fwrite (f [[si]],
+                                                file.path (tempdir (), i),
+                                                quote = TRUE),
+                            error = function (e) e)
+                       return (!methods::is (res, "error"))
+                }, FUN.VALUE = logical (1))
+
+    if (!all (chk))                                 # nocov
+        stop ("Unable to write files to tempdir()") # nocov
+
     flist <- file.path (tempdir (), flist)
     utils::zip (file.path (tempdir (), "vbb.zip"), files = flist, flags = "-q")
     invisible (file.remove (flist))
