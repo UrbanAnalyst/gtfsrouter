@@ -4,7 +4,7 @@
 
 #include "csa.h"
 
-class CSA_Iso
+class Iso
 {
     private:
 
@@ -28,7 +28,7 @@ class CSA_Iso
 
         std::vector <ConVec> connections;
 
-        CSA_Iso (const size_t n) {
+        Iso (const size_t n) {
             is_end_stn.resize (n, false);
             earliest_departure.resize (n, INFINITE_INT);
             connections.resize (n);
@@ -59,7 +59,7 @@ struct BackTrace
 namespace csaiso {
 
 void trace_forward_iso (
-        CSA_Iso & csa_iso,
+        Iso & csa_iso,
         const int & start_time,
         const int & end_time,
         const std::vector <size_t> & departure_station,
@@ -80,7 +80,7 @@ bool fill_one_csa_iso (
         const int &isochrone,
         const bool &is_start_stn,
         const bool &minimise_transfers,
-        CSA_Iso &csa_iso);
+        Iso &csa_iso);
 
 void fill_one_csa_transfer (
         const size_t &departure_station,
@@ -90,7 +90,7 @@ void fill_one_csa_transfer (
         const int &trans_duration,
         const int &isochrone,
         const bool &minimise_transfers,
-        CSA_Iso &csa_iso);
+        Iso &csa_iso);
 
 int find_actual_end_time (
         const size_t &n,
@@ -109,12 +109,12 @@ void make_transfer_map (
         );
 
 size_t trace_back_first (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const size_t & stn
         );
 
 size_t trace_back_prev_index (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const size_t & stn,
         const size_t & departure_time,
         const int & trip_id,
@@ -130,14 +130,14 @@ bool update_best_connection (
         );
 
 const bool is_transfer_in_isochrone (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const size_t & station,
         const int & transfer_time,
         const int & isochrone
         );
 
 const bool is_transfer_connected (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const size_t & station,
         const int & transfer_time
         );
@@ -147,20 +147,20 @@ const bool is_start_stn (
     const size_t &stn);
 
 const bool arrival_already_visited (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const size_t & departure_station,
         const size_t & arrival_station);
 
 // The only Rcpp function:
 Rcpp::List trace_back_isochrones (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const std::unordered_set <size_t> & start_stations_set,
         const bool &minimise_transfers
         );
 
 // but most work done in this pure C++ fn:
 void trace_back_one_stn (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         BackTrace & backtrace,
         const size_t & end_stn,
         const bool &minimise_transfers

@@ -40,7 +40,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
             transfers ["to_stop_id"],
             transfers ["min_transfer_time"]);
 
-    CSA_Iso csa_iso (nstations + 1);
+    Iso csa_iso (nstations + 1);
 
     const std::vector <size_t> departure_station = timetable ["departure_station"],
         arrival_station = timetable ["arrival_station"],
@@ -61,7 +61,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
 
 
 Rcpp::List csaiso::trace_back_isochrones (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const std::unordered_set <size_t> & start_stations_set,
         const bool &minimise_transfers
         )
