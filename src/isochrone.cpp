@@ -66,34 +66,6 @@ void iso::trace_forward_iso (
 }
 
 
-void iso::make_transfer_map (
-    std::unordered_map <size_t, std::unordered_map <size_t, int> > &transfer_map,
-    const std::vector <size_t> &trans_from,
-    const std::vector <size_t> &trans_to,
-    const std::vector <int> &trans_time
-        )
-{
-    for (size_t i = 0; i < static_cast <size_t> (trans_from.size ()); i++)
-    {
-        if (trans_from [i] != trans_to [i])
-        {
-            std::unordered_map <size_t, int> transfer_pair; // station, time
-            if (transfer_map.find (trans_from [i]) == transfer_map.end ())
-            {
-                transfer_pair.clear ();
-                transfer_pair.emplace (trans_to [i], trans_time [i]);
-                transfer_map.emplace (trans_from [i], transfer_pair);
-            } else
-            {
-                transfer_pair = transfer_map.at (trans_from [i]);
-                transfer_pair.emplace (trans_to [i], trans_time [i]);
-                transfer_map [trans_from [i]] = transfer_pair;
-            }
-        }
-    }
-}
-
-
 //' Translate one timetable line into values at arrival station
 //'
 //' The trace_back function requires each connection to have a corresponding
@@ -314,6 +286,34 @@ int iso::find_actual_end_time (
 
     return (actual_end_time);
 }
+
+void iso::make_transfer_map (
+    std::unordered_map <size_t, std::unordered_map <size_t, int> > &transfer_map,
+    const std::vector <size_t> &trans_from,
+    const std::vector <size_t> &trans_to,
+    const std::vector <int> &trans_time
+        )
+{
+    for (size_t i = 0; i < static_cast <size_t> (trans_from.size ()); i++)
+    {
+        if (trans_from [i] != trans_to [i])
+        {
+            std::unordered_map <size_t, int> transfer_pair; // station, time
+            if (transfer_map.find (trans_from [i]) == transfer_map.end ())
+            {
+                transfer_pair.clear ();
+                transfer_pair.emplace (trans_to [i], trans_time [i]);
+                transfer_map.emplace (trans_from [i], transfer_pair);
+            } else
+            {
+                transfer_pair = transfer_map.at (trans_from [i]);
+                transfer_pair.emplace (trans_to [i], trans_time [i]);
+                transfer_map [trans_from [i]] = transfer_pair;
+            }
+        }
+    }
+}
+
 
 void iso::trace_back_one_stn (
         const Iso & iso,
