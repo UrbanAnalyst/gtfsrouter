@@ -1,7 +1,7 @@
 #include "iso.h"
 
 void csaiso::trace_forward_iso (
-        CSA_Iso & csa_iso,
+        Iso & csa_iso,
         const int & start_time,
         const int & end_time,
         const std::vector <size_t> & departure_station,
@@ -112,7 +112,7 @@ bool csaiso::fill_one_csa_iso (
         const int &isochrone,
         const bool &is_start_stn,
         const bool &minimise_transfers,
-        CSA_Iso &csa_iso) {
+        Iso &csa_iso) {
 
     bool fill_vals = false, is_end_stn = false, same_trip = false;
     int prev_trip = -1L;
@@ -230,7 +230,7 @@ void csaiso::fill_one_csa_transfer (
         const int &trans_duration,
         const int &isochrone,
         const bool &minimise_transfers,
-        CSA_Iso &csa_iso)
+        Iso &csa_iso)
 {
     const int trans_time = arrival_time + trans_duration;
 
@@ -316,7 +316,7 @@ int csaiso::find_actual_end_time (
 }
 
 void csaiso::trace_back_one_stn (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         BackTrace & backtrace,
         const size_t & end_stn,
         const bool &minimise_transfers
@@ -381,7 +381,7 @@ void csaiso::trace_back_one_stn (
 // Trace back first connection from terminal station, which is simply the first
 // equal shortest connection to that stn
 size_t csaiso::trace_back_first (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const size_t & stn
         )
 {
@@ -406,7 +406,7 @@ size_t csaiso::trace_back_first (
 }
 
 size_t csaiso::trace_back_prev_index (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const size_t & stn,
         const size_t & departure_time,
         const int & trip_id,
@@ -477,7 +477,7 @@ bool csaiso::update_best_connection (
 
 
 const bool csaiso::is_transfer_connected (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const size_t & station,
         const int & transfer_time
         )
@@ -491,7 +491,7 @@ const bool csaiso::is_transfer_connected (
 // they will be connected by transfer no matter what; otherwise return actual
 // minimal journey time to that station.
 const bool csaiso::is_transfer_in_isochrone (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const size_t & station,
         const int & transfer_time,
         const int & isochrone
@@ -520,7 +520,7 @@ const bool csaiso::is_start_stn (
 // departure station (= B) to check that none of the listed "departure_station"
 // -- NOT arrival_station -- values are A.
 const bool csaiso::arrival_already_visited (
-        const CSA_Iso & csa_iso,
+        const Iso & csa_iso,
         const size_t & departure_station,
         const size_t & arrival_station)
 {
