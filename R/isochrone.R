@@ -111,10 +111,10 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time,
     # 1. End stations
     # 2. Trip numbers
     # 3. Arrival times at each end station
-    stns <- rcpp_csa_isochrone (gtfs$timetable, gtfs$transfers,
-                                nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
-                                start_stns, start_time, end_time,
-                                minimise_transfers)
+    stns <- rcpp_isochrone (gtfs$timetable, gtfs$transfers,
+                            nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
+                            start_stns, start_time, end_time,
+                            minimise_transfers)
     if (length (stns) < 2)
         stop ("No isochrone possible") # nocov
 

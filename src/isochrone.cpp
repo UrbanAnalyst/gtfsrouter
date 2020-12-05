@@ -1,7 +1,7 @@
 #include "iso.h"
 
 void iso::trace_forward_iso (
-        Iso & csa_iso,
+        Iso & iso,
         const int & start_time,
         const int & end_time,
         const std::vector <size_t> & departure_station,
@@ -31,19 +31,19 @@ void iso::trace_forward_iso (
                 departure_station [i]);
 
         if (!is_start_stn &&
-                csa_iso.earliest_departure [departure_station [i]] < INFINITE_INT &&
-                csa_iso.earliest_departure [departure_station [i]] >
+                iso.earliest_departure [departure_station [i]] < INFINITE_INT &&
+                iso.earliest_departure [departure_station [i]] >
                 departure_time [i])
             continue;
 
-        if (iso::arrival_already_visited (csa_iso,
+        if (iso::arrival_already_visited (iso,
                     departure_station [i], arrival_station [i]))
             continue;
 
-        bool filled = iso::fill_one_csa_iso (departure_station [i],
+        bool filled = iso::fill_one_iso (departure_station [i],
                 arrival_station [i], trip_id [i], departure_time [i],
                 arrival_time [i], isochrone_val, is_start_stn,
-                minimise_transfers, csa_iso);
+                minimise_transfers, iso);
 
         if (filled && transfer_map.find (arrival_station [i]) != transfer_map.end ())
         {
@@ -54,10 +54,10 @@ void iso::trace_forward_iso (
 
                 if (!iso::is_start_stn (start_stations_set, trans_dest))
                 {
-                    iso::fill_one_csa_transfer (departure_station [i],
+                    iso::fill_one_transfer (departure_station [i],
                             arrival_station [i], arrival_time [i], trans_dest,
                             trans_duration, isochrone_val,
-                            minimise_transfers, csa_iso);
+                            minimise_transfers, iso);
                 }
 
             } // end for t over transfer map
@@ -103,7 +103,7 @@ void iso::make_transfer_map (
 //' connection in order to copy respective values across.
 //'
 //' @noRd
-bool iso::fill_one_csa_iso (
+bool iso::fill_one_iso (
         const size_t &departure_station,
         const size_t &arrival_station,
         const size_t &trip_id,
@@ -112,7 +112,7 @@ bool iso::fill_one_csa_iso (
         const int &isochrone,
         const bool &is_start_stn,
         const bool &minimise_transfers,
-        Iso &csa_iso) {
+        Iso &iso) {
 
     bool fill_vals = false, is_end_stn = false, same_trip = false;
     int prev_trip = -1L;
@@ -138,7 +138,7 @@ bool iso::fill_one_csa_iso (
         // final value of is_end_stn is then only true is also !not_end_stn.
 
         bool not_end_stn = false;
-        for (auto st: csa_iso.connections [departure_station].convec)
+        for (auto st: iso.connections [departure_station].convec)
         {
             bool fill_here = (st.arrival_time <= departure_time) &&
                 ((arrival_time - st.initial_depart) <= isochrone);
@@ -178,11 +178,11 @@ bool iso::fill_one_csa_iso (
 
         if (is_end_stn)
         {
-            csa_iso.is_end_stn [departure_station] = true;
+            iso.is_end_stn [departure_station] = true;
         } else
         {
-            csa_iso.is_end_stn [departure_station] = false;
-            csa_iso.is_end_stn [arrival_station] = false;
+            iso.is_end_stn [departure_station] = false;
+            iso.is_end_stn [arrival_station] = false;
         }
 
     }
@@ -190,22 +190,22 @@ bool iso::fill_one_csa_iso (
     if (!fill_vals)
         return false;
 
-    const size_t s = csa_iso.extend (arrival_station) - 1;
+    const size_t s = iso.extend (arrival_station) - 1;
 
-    csa_iso.connections [arrival_station].convec [s].prev_stn = departure_station;
-    csa_iso.connections [arrival_station].convec [s].departure_time = departure_time;
-    csa_iso.connections [arrival_station].convec [s].arrival_time = arrival_time;
-    csa_iso.connections [arrival_station].convec [s].trip = trip_id;
+    iso.connections [arrival_station].convec [s].prev_stn = departure_station;
+    iso.connections [arrival_station].convec [s].departure_time = departure_time;
+    iso.connections [arrival_station].convec [s].arrival_time = arrival_time;
+    iso.connections [arrival_station].convec [s].trip = trip_id;
 
-    if (csa_iso.earliest_departure [arrival_station] > arrival_time)
-        csa_iso.earliest_departure [arrival_station] = arrival_time;
+    if (iso.earliest_departure [arrival_station] > arrival_time)
+        iso.earliest_departure [arrival_station] = arrival_time;
 
     if (is_start_stn)
     {
-        csa_iso.connections [arrival_station].convec [s].ntransfers = 0L;
-        csa_iso.connections [arrival_station].convec [s].initial_depart = departure_time;
-        csa_iso.earliest_departure [departure_station] = departure_time;
-        csa_iso.earliest_departure [arrival_station] = departure_time;
+        iso.connections [arrival_station].convec [s].ntransfers = 0L;
+        iso.connections [arrival_station].convec [s].initial_depart = departure_time;
+        iso.earliest_departure [departure_station] = departure_time;
+        iso.earliest_departure [arrival_station] = departure_time;
     } else
     {
         // Trip changes happen here mostly when services departing before the
@@ -214,15 +214,15 @@ bool iso::fill_one_csa_iso (
         if (!same_trip)
             ntransfers++;
 
-        csa_iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
-        csa_iso.connections [arrival_station].convec [s].initial_depart = latest_initial;
+        iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
+        iso.connections [arrival_station].convec [s].initial_depart = latest_initial;
     }
 
     return fill_vals;
 }
 
 
-void iso::fill_one_csa_transfer (
+void iso::fill_one_transfer (
         const size_t &departure_station,
         const size_t &arrival_station,
         const int &arrival_time,
@@ -230,7 +230,7 @@ void iso::fill_one_csa_transfer (
         const int &trans_duration,
         const int &isochrone,
         const bool &minimise_transfers,
-        Iso &csa_iso)
+        Iso &iso)
 {
     const int trans_time = arrival_time + trans_duration;
 
@@ -238,28 +238,28 @@ void iso::fill_one_csa_transfer (
     bool insert_transfer = (trans_dest != departure_station); // can happen
     if (insert_transfer)
         insert_transfer = iso::is_transfer_connected (
-                csa_iso, trans_dest, trans_time);
+                iso, trans_dest, trans_time);
     if (insert_transfer)
         insert_transfer = iso::is_transfer_in_isochrone (
-                csa_iso, arrival_station, trans_time, isochrone);
+                iso, arrival_station, trans_time, isochrone);
 
     if (!insert_transfer)
         return;
 
-    csa_iso.earliest_departure [trans_dest] = trans_time;
+    iso.earliest_departure [trans_dest] = trans_time;
 
-    const size_t s = csa_iso.extend (trans_dest) - 1;
+    const size_t s = iso.extend (trans_dest) - 1;
 
-    csa_iso.connections [trans_dest].convec [s].prev_stn = arrival_station;
-    csa_iso.connections [trans_dest].convec [s].departure_time = arrival_time;
-    csa_iso.connections [trans_dest].convec [s].arrival_time = trans_time;
+    iso.connections [trans_dest].convec [s].prev_stn = arrival_station;
+    iso.connections [trans_dest].convec [s].departure_time = arrival_time;
+    iso.connections [trans_dest].convec [s].arrival_time = trans_time;
 
     // Find the latest initial departure time for all services
     // connecting to arrival station:
     int latest_initial = -1L;
     int ntransfers = INFINITE_INT;
 
-    for (auto st: csa_iso.connections [arrival_station].convec)
+    for (auto st: iso.connections [arrival_station].convec)
     {
         bool fill_here = (st.arrival_time <= arrival_time) &&
             ((arrival_time - st.initial_depart) <= isochrone);
@@ -277,8 +277,8 @@ void iso::fill_one_csa_transfer (
         }
     }
 
-    csa_iso.connections [trans_dest].convec [s].ntransfers = ntransfers + 1;
-    csa_iso.connections [trans_dest].convec [s].initial_depart = latest_initial;
+    iso.connections [trans_dest].convec [s].ntransfers = ntransfers + 1;
+    iso.connections [trans_dest].convec [s].initial_depart = latest_initial;
 }
 
 int iso::find_actual_end_time (
@@ -316,7 +316,7 @@ int iso::find_actual_end_time (
 }
 
 void iso::trace_back_one_stn (
-        const Iso & csa_iso,
+        const Iso & iso,
         BackTrace & backtrace,
         const size_t & end_stn,
         const bool &minimise_transfers
@@ -324,12 +324,12 @@ void iso::trace_back_one_stn (
 {
     size_t stn = end_stn;
 
-    size_t prev_index = iso::trace_back_first (csa_iso, stn);
+    size_t prev_index = iso::trace_back_first (iso, stn);
 
-    int arrival_time = csa_iso.connections [stn].convec [prev_index].arrival_time;
-    int departure_time = csa_iso.connections [stn].convec [prev_index].departure_time;
-    size_t departure_stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
-    size_t this_trip = csa_iso.connections [stn].convec [prev_index].trip;
+    int arrival_time = iso.connections [stn].convec [prev_index].arrival_time;
+    int departure_time = iso.connections [stn].convec [prev_index].departure_time;
+    size_t departure_stn = iso.connections [stn].convec [prev_index].prev_stn;
+    size_t this_trip = iso.connections [stn].convec [prev_index].trip;
 
     backtrace.end_station.push_back (static_cast <int> (stn));
     backtrace.trip.push_back (this_trip);
@@ -339,9 +339,9 @@ void iso::trace_back_one_stn (
 
     while (prev_index < INFINITE_INT)
     {
-        stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
+        stn = iso.connections [stn].convec [prev_index].prev_stn;
 
-        prev_index = iso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip,
+        prev_index = iso::trace_back_prev_index (iso, stn, departure_time, this_trip,
                 minimise_transfers);
 
         backtrace.trip.push_back (this_trip);
@@ -349,18 +349,18 @@ void iso::trace_back_one_stn (
 
         if (prev_index < INFINITE_INT)
         {
-            this_trip = csa_iso.connections [stn].convec [prev_index].trip;
-            arrival_time = csa_iso.connections [stn].convec [prev_index].arrival_time;
+            this_trip = iso.connections [stn].convec [prev_index].trip;
+            arrival_time = iso.connections [stn].convec [prev_index].arrival_time;
 
             backtrace.end_station.push_back (static_cast <int> (stn));
 
-            departure_time = csa_iso.connections [stn].convec [prev_index].departure_time;
-            departure_stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
+            departure_time = iso.connections [stn].convec [prev_index].departure_time;
+            departure_stn = iso.connections [stn].convec [prev_index].prev_stn;
         }
 
 
         temp++;
-        if (temp > csa_iso.is_end_stn.size ())
+        if (temp > iso.is_end_stn.size ())
             Rcpp::stop ("backtrace has no end");
     }
     backtrace.end_station.push_back (departure_stn);
@@ -381,7 +381,7 @@ void iso::trace_back_one_stn (
 // Trace back first connection from terminal station, which is simply the first
 // equal shortest connection to that stn
 size_t iso::trace_back_first (
-        const Iso & csa_iso,
+        const Iso & iso,
         const size_t & stn
         )
 {
@@ -389,7 +389,7 @@ size_t iso::trace_back_first (
     int shortest_journey = INFINITE_INT;
 
     int index = 0;
-    for (auto st: csa_iso.connections [stn].convec)
+    for (auto st: iso.connections [stn].convec)
     {
         const int journey = st.arrival_time - st.initial_depart;
 
@@ -406,7 +406,7 @@ size_t iso::trace_back_first (
 }
 
 size_t iso::trace_back_prev_index (
-        const Iso & csa_iso,
+        const Iso & iso,
         const size_t & stn,
         const size_t & departure_time,
         const int & trip_id,
@@ -420,7 +420,7 @@ size_t iso::trace_back_prev_index (
     bool same_trip = false;
 
     int index = 0;
-    for (auto st: csa_iso.connections [stn].convec)
+    for (auto st: iso.connections [stn].convec)
     {
         if (st.arrival_time <= departure_time)
         {
@@ -477,12 +477,12 @@ bool iso::update_best_connection (
 
 
 const bool iso::is_transfer_connected (
-        const Iso & csa_iso,
+        const Iso & iso,
         const size_t & station,
         const int & transfer_time
         )
 {
-    const bool res = (transfer_time <= csa_iso.earliest_departure [station]);
+    const bool res = (transfer_time <= iso.earliest_departure [station]);
 
     return res;
 }
@@ -491,15 +491,15 @@ const bool iso::is_transfer_connected (
 // they will be connected by transfer no matter what; otherwise return actual
 // minimal journey time to that station.
 const bool iso::is_transfer_in_isochrone (
-        const Iso & csa_iso,
+        const Iso & iso,
         const size_t & station,
         const int & transfer_time,
         const int & isochrone
         )
 {
     int journey = 0L;
-    if (csa_iso.earliest_departure [station] < INFINITE_INT)
-        journey = transfer_time - csa_iso.earliest_departure [station];
+    if (iso.earliest_departure [station] < INFINITE_INT)
+        journey = transfer_time - iso.earliest_departure [station];
 
     return (journey <= isochrone);
 }
@@ -520,12 +520,12 @@ const bool iso::is_start_stn (
 // departure station (= B) to check that none of the listed "departure_station"
 // -- NOT arrival_station -- values are A.
 const bool iso::arrival_already_visited (
-        const Iso & csa_iso,
+        const Iso & iso,
         const size_t & departure_station,
         const size_t & arrival_station)
 {
     bool check = false;
-    for (auto st: csa_iso.connections [departure_station].convec)
+    for (auto st: iso.connections [departure_station].convec)
         if (st.prev_stn == arrival_station)
             check = true;
 
