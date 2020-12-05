@@ -56,7 +56,7 @@ struct BackTrace
     std::vector <int> trip, end_station, end_times;
 };
 
-namespace csaiso {
+namespace iso {
 
 void trace_forward_iso (
         Iso & csa_iso,
@@ -167,7 +167,7 @@ void trace_back_one_stn (
         );
 
 
-} // end namespace csaiso
+} // end namespace iso
 
 // ---- csa-isochrone.cpp
 Rcpp::List rcpp_csa_isochrone (
