@@ -157,6 +157,11 @@ Rcpp::List trace_back_isochrones (
         const bool &minimise_transfers
         );
 
+Rcpp::IntegerMatrix trace_back_traveltimes (
+        const Iso & iso,
+        const bool &minimise_transfers
+        );
+
 // but most work done in this pure C++ fn:
 void trace_back_one_stn (
         const Iso & iso,
@@ -171,6 +176,15 @@ void trace_back_one_stn (
 // ---- isochrone.cpp
 Rcpp::List rcpp_isochrone (
         Rcpp::DataFrame timetable,
+        Rcpp::DataFrame transfers,
+        const size_t nstations,
+        const size_t ntrips,
+        const std::vector <size_t> start_stations,
+        const int start_time,
+        const int end_time,
+        const bool minimise_transfers);
+
+Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const size_t nstations,
         const size_t ntrips,
