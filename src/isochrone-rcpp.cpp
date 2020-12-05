@@ -35,7 +35,7 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     // convert transfers into a map from start to (end, transfer_time). Transfer
     // indices are 1-based.
     std::unordered_map <size_t, std::unordered_map <size_t, int> > transfer_map;
-    csaiso::make_transfer_map (transfer_map,
+    iso::make_transfer_map (transfer_map,
             transfers ["from_stop_id"],
             transfers ["to_stop_id"],
             transfers ["min_transfer_time"]);
@@ -48,19 +48,19 @@ Rcpp::List rcpp_csa_isochrone (Rcpp::DataFrame timetable,
     const std::vector <int> departure_time = timetable ["departure_time"],
         arrival_time = timetable ["arrival_time"];
 
-    csaiso::trace_forward_iso (csa_iso, start_time, end_time,
+    iso::trace_forward_iso (csa_iso, start_time, end_time,
             departure_station, arrival_station, trip_id, 
             departure_time, arrival_time,
             transfer_map, start_stations_set, minimise_transfers);
 
-    Rcpp::List res = csaiso::trace_back_isochrones (csa_iso, start_stations_set,
+    Rcpp::List res = iso::trace_back_isochrones (csa_iso, start_stations_set,
             minimise_transfers);
 
     return res;
 }
 
 
-Rcpp::List csaiso::trace_back_isochrones (
+Rcpp::List iso::trace_back_isochrones (
         const Iso & csa_iso,
         const std::unordered_set <size_t> & start_stations_set,
         const bool &minimise_transfers
@@ -85,7 +85,7 @@ Rcpp::List csaiso::trace_back_isochrones (
     for (size_t es: end_stations)
     {
         BackTrace backtrace;
-        csaiso::trace_back_one_stn (csa_iso, backtrace, es, minimise_transfers);
+        iso::trace_back_one_stn (csa_iso, backtrace, es, minimise_transfers);
 
         if (backtrace.trip.size () > 1)
         {

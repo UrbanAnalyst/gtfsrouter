@@ -1,6 +1,6 @@
 #include "iso.h"
 
-void csaiso::trace_forward_iso (
+void iso::trace_forward_iso (
         Iso & csa_iso,
         const int & start_time,
         const int & end_time,
@@ -17,7 +17,7 @@ void csaiso::trace_forward_iso (
 
     const size_t nrows = departure_station.size ();
 
-    const int actual_end_time = csaiso::find_actual_end_time (nrows, departure_time,
+    const int actual_end_time = iso::find_actual_end_time (nrows, departure_time,
             departure_station, start_stations_set, start_time, end_time);
 
     for (size_t i = 0; i < nrows; i++)
@@ -27,7 +27,7 @@ void csaiso::trace_forward_iso (
         if (departure_time [i] > actual_end_time)
             break;
 
-        const bool is_start_stn = csaiso::is_start_stn (start_stations_set,
+        const bool is_start_stn = iso::is_start_stn (start_stations_set,
                 departure_station [i]);
 
         if (!is_start_stn &&
@@ -36,11 +36,11 @@ void csaiso::trace_forward_iso (
                 departure_time [i])
             continue;
 
-        if (csaiso::arrival_already_visited (csa_iso,
+        if (iso::arrival_already_visited (csa_iso,
                     departure_station [i], arrival_station [i]))
             continue;
 
-        bool filled = csaiso::fill_one_csa_iso (departure_station [i],
+        bool filled = iso::fill_one_csa_iso (departure_station [i],
                 arrival_station [i], trip_id [i], departure_time [i],
                 arrival_time [i], isochrone_val, is_start_stn,
                 minimise_transfers, csa_iso);
@@ -52,9 +52,9 @@ void csaiso::trace_forward_iso (
                 const size_t trans_dest = t.first;
                 const int trans_duration = t.second;
 
-                if (!csaiso::is_start_stn (start_stations_set, trans_dest))
+                if (!iso::is_start_stn (start_stations_set, trans_dest))
                 {
-                    csaiso::fill_one_csa_transfer (departure_station [i],
+                    iso::fill_one_csa_transfer (departure_station [i],
                             arrival_station [i], arrival_time [i], trans_dest,
                             trans_duration, isochrone_val,
                             minimise_transfers, csa_iso);
@@ -66,7 +66,7 @@ void csaiso::trace_forward_iso (
 }
 
 
-void csaiso::make_transfer_map (
+void iso::make_transfer_map (
     std::unordered_map <size_t, std::unordered_map <size_t, int> > &transfer_map,
     const std::vector <size_t> &trans_from,
     const std::vector <size_t> &trans_to,
@@ -103,7 +103,7 @@ void csaiso::make_transfer_map (
 //' connection in order to copy respective values across.
 //'
 //' @noRd
-bool csaiso::fill_one_csa_iso (
+bool iso::fill_one_csa_iso (
         const size_t &departure_station,
         const size_t &arrival_station,
         const size_t &trip_id,
@@ -153,7 +153,7 @@ bool csaiso::fill_one_csa_iso (
                 bool update = same_trip = (st.trip == trip_id);
                 if (!same_trip)
                 {
-                    update = csaiso::update_best_connection (st.initial_depart,
+                    update = iso::update_best_connection (st.initial_depart,
                             latest_initial, st.ntransfers, ntransfers,
                             minimise_transfers);
                 }
@@ -222,7 +222,7 @@ bool csaiso::fill_one_csa_iso (
 }
 
 
-void csaiso::fill_one_csa_transfer (
+void iso::fill_one_csa_transfer (
         const size_t &departure_station,
         const size_t &arrival_station,
         const int &arrival_time,
@@ -237,10 +237,10 @@ void csaiso::fill_one_csa_transfer (
     // Bunch of AND conditions separated for easy reading:
     bool insert_transfer = (trans_dest != departure_station); // can happen
     if (insert_transfer)
-        insert_transfer = csaiso::is_transfer_connected (
+        insert_transfer = iso::is_transfer_connected (
                 csa_iso, trans_dest, trans_time);
     if (insert_transfer)
-        insert_transfer = csaiso::is_transfer_in_isochrone (
+        insert_transfer = iso::is_transfer_in_isochrone (
                 csa_iso, arrival_station, trans_time, isochrone);
 
     if (!insert_transfer)
@@ -265,7 +265,7 @@ void csaiso::fill_one_csa_transfer (
             ((arrival_time - st.initial_depart) <= isochrone);
         if (fill_here)
         {
-            const bool update = csaiso::update_best_connection (st.initial_depart,
+            const bool update = iso::update_best_connection (st.initial_depart,
                     latest_initial, st.ntransfers, ntransfers,
                     minimise_transfers);
 
@@ -281,7 +281,7 @@ void csaiso::fill_one_csa_transfer (
     csa_iso.connections [trans_dest].convec [s].initial_depart = latest_initial;
 }
 
-int csaiso::find_actual_end_time (
+int iso::find_actual_end_time (
         const size_t &n,
         const std::vector <int> &departure_time,
         const std::vector <size_t> &departure_station,
@@ -315,7 +315,7 @@ int csaiso::find_actual_end_time (
     return (actual_end_time);
 }
 
-void csaiso::trace_back_one_stn (
+void iso::trace_back_one_stn (
         const Iso & csa_iso,
         BackTrace & backtrace,
         const size_t & end_stn,
@@ -324,7 +324,7 @@ void csaiso::trace_back_one_stn (
 {
     size_t stn = end_stn;
 
-    size_t prev_index = csaiso::trace_back_first (csa_iso, stn);
+    size_t prev_index = iso::trace_back_first (csa_iso, stn);
 
     int arrival_time = csa_iso.connections [stn].convec [prev_index].arrival_time;
     int departure_time = csa_iso.connections [stn].convec [prev_index].departure_time;
@@ -341,7 +341,7 @@ void csaiso::trace_back_one_stn (
     {
         stn = csa_iso.connections [stn].convec [prev_index].prev_stn;
 
-        prev_index = csaiso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip,
+        prev_index = iso::trace_back_prev_index (csa_iso, stn, departure_time, this_trip,
                 minimise_transfers);
 
         backtrace.trip.push_back (this_trip);
@@ -380,7 +380,7 @@ void csaiso::trace_back_one_stn (
 
 // Trace back first connection from terminal station, which is simply the first
 // equal shortest connection to that stn
-size_t csaiso::trace_back_first (
+size_t iso::trace_back_first (
         const Iso & csa_iso,
         const size_t & stn
         )
@@ -405,7 +405,7 @@ size_t csaiso::trace_back_first (
     return (prev_index);
 }
 
-size_t csaiso::trace_back_prev_index (
+size_t iso::trace_back_prev_index (
         const Iso & csa_iso,
         const size_t & stn,
         const size_t & departure_time,
@@ -427,7 +427,7 @@ size_t csaiso::trace_back_prev_index (
             bool update = same_trip = (st.trip == trip_id);
             if (!update)
             {
-                update = csaiso::update_best_connection (st.initial_depart,
+                update = iso::update_best_connection (st.initial_depart,
                         latest_initial, st.ntransfers, ntransfers,
                         minimise_transfers);
             }
@@ -448,7 +448,7 @@ size_t csaiso::trace_back_prev_index (
     return (prev_index);
 }
 
-bool csaiso::update_best_connection (
+bool iso::update_best_connection (
         const int & this_initial,
         const int & latest_initial,
         const int & this_transfers,
@@ -476,7 +476,7 @@ bool csaiso::update_best_connection (
 }
 
 
-const bool csaiso::is_transfer_connected (
+const bool iso::is_transfer_connected (
         const Iso & csa_iso,
         const size_t & station,
         const int & transfer_time
@@ -490,7 +490,7 @@ const bool csaiso::is_transfer_connected (
 // Return a dummy value of 0 for stations which have not yet been reached, so
 // they will be connected by transfer no matter what; otherwise return actual
 // minimal journey time to that station.
-const bool csaiso::is_transfer_in_isochrone (
+const bool iso::is_transfer_in_isochrone (
         const Iso & csa_iso,
         const size_t & station,
         const int & transfer_time,
@@ -504,7 +504,7 @@ const bool csaiso::is_transfer_in_isochrone (
     return (journey <= isochrone);
 }
 
-const bool csaiso::is_start_stn (
+const bool iso::is_start_stn (
     const std::unordered_set <size_t> &start_stations_set,
     const size_t &stn)
 {
@@ -519,7 +519,7 @@ const bool csaiso::is_start_stn (
 // prior station of B (departure_station), so check over all connections for
 // departure station (= B) to check that none of the listed "departure_station"
 // -- NOT arrival_station -- values are A.
-const bool csaiso::arrival_already_visited (
+const bool iso::arrival_already_visited (
         const Iso & csa_iso,
         const size_t & departure_station,
         const size_t & arrival_station)
