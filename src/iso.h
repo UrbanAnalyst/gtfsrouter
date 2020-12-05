@@ -169,7 +169,7 @@ void trace_back_one_stn (
 
 } // end namespace iso
 
-// ---- csa-isochrone.cpp
+// ---- isochrone.cpp
 Rcpp::List rcpp_isochrone (
         Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
