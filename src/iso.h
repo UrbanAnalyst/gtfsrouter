@@ -151,10 +151,9 @@ const bool arrival_already_visited (
         const size_t & departure_station,
         const size_t & arrival_station);
 
-// The only Rcpp function:
+// The only two Rcpp functions:
 Rcpp::List trace_back_isochrones (
         const Iso & iso,
-        const std::unordered_set <size_t> & start_stations_set,
         const bool &minimise_transfers
         );
 

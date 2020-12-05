@@ -53,8 +53,7 @@ Rcpp::List rcpp_isochrone (Rcpp::DataFrame timetable,
             departure_time, arrival_time,
             transfer_map, start_stations_set, minimise_transfers);
 
-    Rcpp::List res = iso::trace_back_isochrones (iso, start_stations_set,
-            minimise_transfers);
+    Rcpp::List res = iso::trace_back_isochrones (iso, minimise_transfers);
 
     return res;
 }
@@ -62,7 +61,6 @@ Rcpp::List rcpp_isochrone (Rcpp::DataFrame timetable,
 
 Rcpp::List iso::trace_back_isochrones (
         const Iso & iso,
-        const std::unordered_set <size_t> & start_stations_set,
         const bool &minimise_transfers
         )
 {
