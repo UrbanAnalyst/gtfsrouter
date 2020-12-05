@@ -58,8 +58,8 @@ rcpp_csa <- function(timetable, transfers, nstations, ntrips, start_stations, en
 #' All elements of all data are 1-indexed
 #'
 #' @noRd
-rcpp_isochrone <- function(timetable, transfers, nstations, ntrips, start_stations, start_time, end_time, minimise_transfers) {
-    .Call(`_gtfsrouter_rcpp_isochrone`, timetable, transfers, nstations, ntrips, start_stations, start_time, end_time, minimise_transfers)
+rcpp_isochrone <- function(timetable, transfers, nstations, start_stations, start_time, end_time, minimise_transfers) {
+    .Call(`_gtfsrouter_rcpp_isochrone`, timetable, transfers, nstations, start_stations, start_time, end_time, minimise_transfers)
 }
 
 #' rcpp_traveltimes
@@ -72,6 +72,6 @@ rcpp_isochrone <- function(timetable, transfers, nstations, ntrips, start_statio
 #' All elements of all data are 1-indexed
 #'
 #' @noRd
-rcpp_traveltimes <- function(timetable, transfers, nstations, ntrips, start_stations, start_time, end_time, minimise_transfers) {
-    .Call(`_gtfsrouter_rcpp_traveltimes`, timetable, transfers, nstations, ntrips, start_stations, start_time, end_time, minimise_transfers)
+rcpp_traveltimes <- function(timetable, transfers, nstations, start_stations, start_time, end_time, minimise_transfers) {
+    .Call(`_gtfsrouter_rcpp_traveltimes`, timetable, transfers, nstations, start_stations, start_time, end_time, minimise_transfers)
 }
