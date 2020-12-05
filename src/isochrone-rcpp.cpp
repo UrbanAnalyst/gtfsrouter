@@ -95,3 +95,96 @@ Rcpp::List iso::trace_back_isochrones (
 
     return res;
 }
+
+//' rcpp_traveltimes
+//'
+//' Calculate isochrones using Connection Scan Algorithm for GTFS data. Works
+//' largely as rcpp_csa. Returns a list of integer vectors, with [i] holding
+//' sequences of stations on a given route, the end one being the terminal
+//' isochrone point, and [i+1] holding correpsonding trip numbers.
+//'
+//' All elements of all data are 1-indexed
+//'
+//' @noRd
+// [[Rcpp::export]]
+Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
+        Rcpp::DataFrame transfers,
+        const size_t nstations,
+        const size_t ntrips,
+        const std::vector <size_t> start_stations,
+        const int start_time,
+        const int end_time,
+        const bool minimise_transfers)
+{
+
+    // make start and end stations into std::unordered_sets to allow
+    // constant-time lookup. stations are submitted as 0-based, while all other
+    // values in timetable and transfers table are 1-based R indices, so all are
+    // converted below to 0-based.
+    std::unordered_set <size_t> start_stations_set;
+    for (auto s: start_stations)
+        start_stations_set.emplace (s);
+
+    // convert transfers into a map from start to (end, transfer_time). Transfer
+    // indices are 1-based.
+    std::unordered_map <size_t, std::unordered_map <size_t, int> > transfer_map;
+    iso::make_transfer_map (transfer_map,
+            transfers ["from_stop_id"],
+            transfers ["to_stop_id"],
+            transfers ["min_transfer_time"]);
+
+    Iso iso (nstations + 1);
+
+    const std::vector <size_t> departure_station = timetable ["departure_station"],
+        arrival_station = timetable ["arrival_station"],
+        trip_id = timetable ["trip_id"];
+    const std::vector <int> departure_time = timetable ["departure_time"],
+        arrival_time = timetable ["arrival_time"];
+
+    iso::trace_forward_iso (iso, start_time, end_time,
+            departure_station, arrival_station, trip_id, 
+            departure_time, arrival_time,
+            transfer_map, start_stations_set, minimise_transfers);
+
+    Rcpp::IntegerMatrix res = iso::trace_back_traveltimes (iso, minimise_transfers);
+
+    return res;
+}
+
+
+Rcpp::IntegerMatrix iso::trace_back_traveltimes (
+        const Iso & iso,
+        const bool &minimise_transfers
+        )
+{
+    const size_t nst = iso.is_end_stn.size ();
+
+    Rcpp::IntegerMatrix res (nst, 2);
+
+    int count = 0;
+
+    for (auto s: iso.connections)
+    {
+        int ntransfers = INFINITE_INT;
+        int duration = INFINITE_INT;
+        
+        for (auto con: s.convec)
+        {
+            int this_duration = con.arrival_time - con.initial_depart;
+            if (minimise_transfers && con.ntransfers < ntransfers)
+            {
+                ntransfers = con.ntransfers;
+                duration = this_duration;
+            } else if (this_duration < duration)
+            {
+                ntransfers = con.ntransfers;
+                duration = this_duration;
+            }
+        }
+
+        res (count, 0) = duration;
+        res (count++, 1) = ntransfers;
+    }
+
+    return res;
+}
