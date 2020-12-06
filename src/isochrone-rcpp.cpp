@@ -139,7 +139,7 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
     const std::vector <int> departure_time = timetable ["departure_time"],
         arrival_time = timetable ["arrival_time"];
 
-    iso::trace_forward_iso (iso, start_time, end_time,
+    iso::trace_forward_traveltimes (iso, start_time,
             departure_station, arrival_station, trip_id, 
             departure_time, arrival_time,
             transfer_map, start_stations_set, minimise_transfers);
