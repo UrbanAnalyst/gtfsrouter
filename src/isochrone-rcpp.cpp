@@ -172,7 +172,9 @@ Rcpp::IntegerMatrix iso::trace_back_traveltimes (
             {
                 ntransfers = con.ntransfers;
                 duration = this_duration;
-            } else if (this_duration < duration)
+            } else if (this_duration < duration ||
+                    (this_duration == duration &&
+                     con.ntransfers < ntransfers))
             {
                 ntransfers = con.ntransfers;
                 duration = this_duration;
