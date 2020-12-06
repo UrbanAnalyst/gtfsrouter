@@ -216,7 +216,7 @@ void iso::trace_forward_traveltimes (
     const int nstations = static_cast <int> (stations.size ());
 
     int nstns_reached = 0;
-    
+
     for (size_t i = 0; i < nrows; i++)
     {
         if (departure_time [i] < start_time)
@@ -265,13 +265,24 @@ void iso::trace_forward_traveltimes (
                             arrival_station [i], arrival_time [i], trans_dest,
                             trans_duration, isochrone_val,
                             minimise_transfers, iso);
+                    if (stations.find (trans_dest) !=
+                            stations.end ())
+                    {
+                        if (!stations.at (trans_dest))
+                        {
+                            stations [trans_dest] = true;
+                            nstns_reached++;
+                        }
+                    }
                 }
 
             } // end for t over transfer map
         } // end if filled
 
         if (nstns_reached >= nstations)
+        {
             break;
+        }
     } // end for i over nrows of timetable
 }
 
