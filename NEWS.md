@@ -1,5 +1,9 @@
 # v 0.0.4.00x
 
+Major changes:
+
+- Add new `gtfs_traveltimes` function
+
 Minor changes:
 
 - `route_pattern` arguments (to `gtfs_route/isochrone/timetable()` functions)
