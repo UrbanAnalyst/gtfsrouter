@@ -111,7 +111,6 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         const size_t nstations,
         const std::vector <size_t> start_stations,
         const int start_time,
-        const int end_time,
         const bool minimise_transfers)
 {
 

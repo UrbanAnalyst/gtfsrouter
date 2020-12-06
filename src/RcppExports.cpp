@@ -76,8 +76,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_traveltimes
-Rcpp::IntegerMatrix rcpp_traveltimes(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const size_t nstations, const std::vector <size_t> start_stations, const int start_time, const int end_time, const bool minimise_transfers);
-RcppExport SEXP _gtfsrouter_rcpp_traveltimes(SEXP timetableSEXP, SEXP transfersSEXP, SEXP nstationsSEXP, SEXP start_stationsSEXP, SEXP start_timeSEXP, SEXP end_timeSEXP, SEXP minimise_transfersSEXP) {
+Rcpp::IntegerMatrix rcpp_traveltimes(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const size_t nstations, const std::vector <size_t> start_stations, const int start_time, const bool minimise_transfers);
+RcppExport SEXP _gtfsrouter_rcpp_traveltimes(SEXP timetableSEXP, SEXP transfersSEXP, SEXP nstationsSEXP, SEXP start_stationsSEXP, SEXP start_timeSEXP, SEXP minimise_transfersSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -86,9 +86,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const size_t >::type nstations(nstationsSEXP);
     Rcpp::traits::input_parameter< const std::vector <size_t> >::type start_stations(start_stationsSEXP);
     Rcpp::traits::input_parameter< const int >::type start_time(start_timeSEXP);
-    Rcpp::traits::input_parameter< const int >::type end_time(end_timeSEXP);
     Rcpp::traits::input_parameter< const bool >::type minimise_transfers(minimise_transfersSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_traveltimes(timetable, transfers, nstations, start_stations, start_time, end_time, minimise_transfers));
+    rcpp_result_gen = Rcpp::wrap(rcpp_traveltimes(timetable, transfers, nstations, start_stations, start_time, minimise_transfers));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -99,7 +98,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gtfsrouter_rcpp_make_timetable", (DL_FUNC) &_gtfsrouter_rcpp_make_timetable, 3},
     {"_gtfsrouter_rcpp_csa", (DL_FUNC) &_gtfsrouter_rcpp_csa, 8},
     {"_gtfsrouter_rcpp_isochrone", (DL_FUNC) &_gtfsrouter_rcpp_isochrone, 7},
-    {"_gtfsrouter_rcpp_traveltimes", (DL_FUNC) &_gtfsrouter_rcpp_traveltimes, 7},
+    {"_gtfsrouter_rcpp_traveltimes", (DL_FUNC) &_gtfsrouter_rcpp_traveltimes, 6},
     {NULL, NULL, 0}
 };
 
