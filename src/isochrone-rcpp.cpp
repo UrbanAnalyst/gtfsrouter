@@ -111,7 +111,8 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         const size_t nstations,
         const std::vector <size_t> start_stations,
         const int start_time,
-        const bool minimise_transfers)
+        const bool minimise_transfers,
+        const int cutoff)
 {
 
     // make start and end stations into std::unordered_sets to allow
@@ -141,7 +142,8 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
     iso::trace_forward_traveltimes (iso, start_time,
             departure_station, arrival_station, trip_id, 
             departure_time, arrival_time,
-            transfer_map, start_stations_set, minimise_transfers);
+            transfer_map, start_stations_set,
+            minimise_transfers, cutoff);
 
     Rcpp::IntegerMatrix res = iso::trace_back_traveltimes (iso, minimise_transfers);
 
