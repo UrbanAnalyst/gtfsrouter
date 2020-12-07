@@ -204,7 +204,8 @@ void iso::trace_forward_traveltimes (
         const std::vector <int> & arrival_time,
         const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
         const std::unordered_set <size_t> & start_stations_set,
-        const bool & minimise_transfers)
+        const bool & minimise_transfers,
+        const int & cutoff)
 {
     const size_t nrows = departure_station.size ();
 
@@ -216,6 +217,10 @@ void iso::trace_forward_traveltimes (
     const int nstations = static_cast <int> (stations.size ());
 
     int nstns_reached = 0;
+
+    traveltime::TTDur ttdur (cutoff);
+
+    bool stop = false;
 
     for (size_t i = 0; i < nrows; i++)
     {
@@ -229,6 +234,7 @@ void iso::trace_forward_traveltimes (
         {
             stations [departure_station [i]] = true;
             nstns_reached++;
+            traveltime::incr_tt_stats (ttdur, i, nstns_reached > 2);
         }
 
         if (!is_start_stn &&
@@ -250,6 +256,7 @@ void iso::trace_forward_traveltimes (
         {
             stations [arrival_station [i]] = true;
             nstns_reached++;
+            stop = traveltime::incr_tt_stats (ttdur, i, nstns_reached > 2);
         }
 
         if (filled && transfer_map.find (arrival_station [i]) != transfer_map.end ())
@@ -272,6 +279,7 @@ void iso::trace_forward_traveltimes (
                         {
                             stations [trans_dest] = true;
                             nstns_reached++;
+                            stop = traveltime::incr_tt_stats (ttdur, i, nstns_reached > 2);
                         }
                     }
                 }
@@ -279,12 +287,52 @@ void iso::trace_forward_traveltimes (
             } // end for t over transfer map
         } // end if filled
 
-        if (nstns_reached >= nstations)
+        if (stop || nstns_reached >= nstations)
         {
             break;
         }
     } // end for i over nrows of timetable
+}
 
+
+bool traveltime::incr_tt_stats (traveltime::TTDur & ttdur,
+        int i, bool incr)
+{
+    bool stop = false;
+
+    ttdur.prev_found = ttdur.this_found;
+    ttdur.this_found = i;
+
+    if (incr)
+    {
+        long long this_dur = static_cast <long long> (
+                ttdur.this_found - ttdur.prev_found);
+        ttdur.duration_sum1 += this_dur;
+        ttdur.duration_sum2 += this_dur * this_dur;
+        ttdur.n++;
+
+        // The SD of the SD can only be calculated for n > 1
+
+        if (ttdur.n > 1L)
+        {
+            const double n = static_cast <double> (ttdur.n);
+            const double mn = static_cast <double> (ttdur.duration_sum1) / n;
+            const double s2 = static_cast <double> (ttdur.duration_sum2) / n;
+            const double sd = sqrt ((s2 - mn * mn) * n / (n - 1.0));
+
+            ttdur.sd_sum1 += sd;
+            ttdur.sd_sum2 += sd * sd;
+
+            const double sd_mn = ttdur.sd_sum1 / n;
+            const double sd_sd = sqrt ((ttdur.sd_sum2 / n - sd_mn * sd_mn) * n / (n - 1.0));
+            const double sdlim = sd_mn + static_cast <double> (ttdur.cutoff) * sd_sd;
+
+            if (static_cast <double> (this_dur) > sdlim)
+                stop = true;
+        }
+    }
+
+    return stop;
 }
 
 

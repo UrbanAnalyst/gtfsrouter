@@ -12,6 +12,7 @@ gtfs_traveltimes(
   from_is_id = FALSE,
   route_pattern = NULL,
   minimise_transfers = FALSE,
+  cutoff = 10,
   quiet = FALSE
 )
 }
@@ -50,10 +51,24 @@ parameter is not used at all if \code{gtfs} has already been prepared with
 minimal-transfer connections to each end point, even if those connections are
 slower than alternative connections with transfers.}
 
+\item{cutoff}{After a period of traversing a timetable, very few new stations
+will be able to be reached. The period between reaching new stations
+generally remains very constant up until that point, after which it increases
+notably. Cutoff stops the search for new stations once the mean plus standard
+deviation in time between successive new stations being reached exceeds the
+given multiple. This value should generally not be changed, but may be set to
+'0' to search an entire timetable, although see Note.}
+
 \item{quiet}{Set to \code{TRUE} to suppress screen messages (currently just
 regarding timetable construction).}
 }
 \description{
 Travel times from a nominated station departing at a nominated time to every
 other reachable station in a system.
+}
+\note{
+Searching for all connections over an entire timetable may return
+anomalously high travel times for stations or platforms thereof which are only
+very occasionally serviced. Results generated with \code{cutoff = 0} may need to
+be manually cleaned prior to analysis.
 }

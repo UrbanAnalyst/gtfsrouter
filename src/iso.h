@@ -92,7 +92,8 @@ void trace_forward_traveltimes (
         const std::vector <int> & arrival_time,
         const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
         const std::unordered_set <size_t> & start_stations_set,
-        const bool & minimise_transfers);
+        const bool & minimise_transfers,
+        const int & cutoff);
 
 void fill_one_transfer (
         const size_t &departure_station,
@@ -185,6 +186,32 @@ void trace_back_one_stn (
 
 } // end namespace iso
 
+namespace traveltime {
+
+    class TTDur {
+
+        public:
+
+            int cutoff,
+                prev_found,
+                this_found,
+                n = 0;
+            long long duration_sum1 = 0,
+                 duration_sum2 = 0;
+            double sd_sum1 = 0.0,
+                   sd_sum2 = 0.0;
+
+            TTDur (const int cutoff_) {
+                cutoff = cutoff_;
+            }
+    };
+
+    bool incr_tt_stats (TTDur & ttdur,
+            int i,
+            bool incr);
+
+} // end namespace traveltime
+
 // ---- isochrone.cpp
 Rcpp::List rcpp_isochrone (
         Rcpp::DataFrame timetable,
@@ -201,4 +228,5 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         const std::vector <size_t> start_stations,
         const int start_time,
         const int end_time,
-        const bool minimise_transfers);
+        const bool minimise_transfers,
+        const int cutoff);
