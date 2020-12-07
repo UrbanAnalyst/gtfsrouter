@@ -28,6 +28,11 @@ gtfs_traveltimes <- function (gtfs,
                               cutoff = 10,
                               quiet = FALSE) {
 
+    if (!all (is.numeric (cutoff)) | all (cutoff < 0) | length (cutoff) > 1)
+        stop ("cutoff must be a single number >= 0")
+    if (cutoff == 0)
+        cutoff <- .Machine$integer.max
+
     if (!"timetable" %in% names (gtfs))
         gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)
 
