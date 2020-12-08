@@ -61,7 +61,7 @@ gtfs_traveltimes <- function (gtfs,
     stns <- stns [-1, ]
     stns <- data.frame (duration = stns [, 1],
                         ntransfers = stns [, 2],
-                        id = gtfs$stops$stop_id,
+                        stop_id = gtfs$stops$stop_id,
                         stop_name = gtfs$stops$stop_name,
                         stop_lon = gtfs$stops$stop_lon,
                         stop_lat = gtfs$stops$stop_lat,
