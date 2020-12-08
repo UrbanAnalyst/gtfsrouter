@@ -1,6 +1,6 @@
-#include "iso.h"
+#include "traveltimes.h"
 
-// Minimal Rcpp interfaces to R. All of the main work done in isochrone.cpp,
+// Minimal Rcpp interfaces to R. All of the main work done in traveltimes.cpp,
 // which is then pure C++.
 
 //' rcpp_isochrone
