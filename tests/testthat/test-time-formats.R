@@ -10,7 +10,9 @@ test_that("convert-time", {
               expect_true (file.exists (f))
               expect_silent (g <- extract_gtfs (f, quiet = TRUE))
               expect_silent (gt <- gtfs_timetable (g, quiet = TRUE))
-              day <- strftime (Sys.time (), "%A")
+              days <- c ("monday", "tuesday", "wednesday", "thursday",
+                         "friday", "saturday", "sunday")
+              day <- days [as.integer (strftime (Sys.time (), "%u"))]
               msg <- paste0 ("Day not specified; extracting timetable for ",
                              day)
               expect_message (gt <- gtfs_timetable (g, quiet = FALSE), msg)
