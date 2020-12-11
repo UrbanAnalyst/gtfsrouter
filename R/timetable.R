@@ -167,6 +167,7 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
 }
 
 # nocov start - not in test data
+# date is passed from timetable, so must be in form YYYYMMDD
 filter_by_date <- function (gtfs, date = NULL) {
     if (is.null (date))
         stop ("An explicit date must be specified in order to filter by date")
@@ -178,10 +179,10 @@ filter_by_date <- function (gtfs, date = NULL) {
     index <- which (gtfs$calendar_dates$date == date)
 
     # get all service_ids in calendar.txt that are valid for the given date
+    date <- strptime (date, format = "%Y%m%d") # YYYYMMDD date as POSIX
     days <- c ("monday", "tuesday", "wednesday", "thursday",
     		   "friday", "saturday", "sunday")
-    day <- days [ as.integer(strftime(strptime(
-    	x = date, format = "%Y%m%d"), format = "%u"))]
+    day <- days [as.integer (strftime (date, format = "%u"))]
 
     if (is.na(day)) {
         stop("Date is not provided in the proper format of yyyymmdd")
