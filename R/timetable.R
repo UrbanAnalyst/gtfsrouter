@@ -129,11 +129,12 @@ make_timetable <- function (gtfs) {
 }
 
 filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
-    days <- c ("sunday", "monday", "tuesday", "wednesday", "thursday",
-               "friday", "saturday")
+    # start at monday because strftime "%u" give monday = 1
+    days <- c ("monday", "tuesday", "wednesday", "thursday",
+               "friday", "saturday", "sunday")
 
     if (is.null (day)) {
-        day <- strftime (Sys.time (), "%A")
+        day <- days [as.integer (strftime (Sys.time (), "%u"))]
         if (!quiet)
             message ("Day not specified; extracting timetable for ", day)
     } else if (is.numeric (day)) {
