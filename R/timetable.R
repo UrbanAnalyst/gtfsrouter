@@ -191,20 +191,19 @@ filter_by_date <- function (gtfs, date = NULL) {
     days <- c ("monday", "tuesday", "wednesday", "thursday",
     		   "friday", "saturday", "sunday")
     day <- days [as.integer (strftime (date, format = "%u"))]
-
-    if (is.na(day)) {
-        stop("Date is not provided in the proper format of yyyymmdd")
+    if (is.na (day)) {
+        stop ("Date must be provided in the format YYYYMMDD")
     }
-    day <- tolower(day)
+
     calendars_in_range <- gtfs$calendar [(start_date <= date) &
                                          (end_date >= date), ]
-    index_day <- lapply(day, function(i) {
-        which(calendars_in_range [, get(i)] == 1)
+    index_day <- lapply (day, function (i) {
+        which (calendars_in_range [, get (i)] == 1)
     })
-    index_day <- sort(unique(do.call(c, index_day)))
+    index_day <- sort (unique (do.call (c, index_day)))
 
-    if (length(index) == 0 & length(index_day) == 0) {
-        stop("date does not match any values in the provided GTFS data")
+    if (length (index) == 0 & length (index_day) == 0) {
+        stop ("date does not match any values in the provided GTFS data")
     }
     exception_type <- gtfs$calendar_dates$exception_type [index]
     # exception_type = 1: Service *added* for specified date
