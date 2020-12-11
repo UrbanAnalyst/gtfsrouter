@@ -178,7 +178,11 @@ filter_by_date <- function (gtfs, date = NULL) {
     index <- which (gtfs$calendar_dates$date == date)
 
     # get all service_ids in calendar.txt that are valid for the given date
-    day <- strftime(strptime(x = date, format = "%Y%m%d"), format = "%A")
+    days <- c ("monday", "tuesday", "wednesday", "thursday",
+    		   "friday", "saturday", "sunday")
+    day <- days [ as.integer(strftime(strptime(
+    	x = date, format = "%Y%m%d"), format = "%u"))]
+
     if (is.na(day)) {
         stop("Date is not provided in the proper format of yyyymmdd")
     }
