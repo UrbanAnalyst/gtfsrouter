@@ -129,6 +129,27 @@ make_timetable <- function (gtfs) {
 }
 
 filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
+
+    # no visible binding notes
+    trip_id <- NULL
+
+    day <- convert_day (day, quiet)
+
+    # Find indices of all services on nominated days
+    index <- lapply (day, function (i)
+                     which (gtfs$calendar [, get (i)] == 1))
+    index <- sort (unique (do.call (c, index)))
+    service_id <- gtfs$calendar [index, ] [, service_id]
+    index <- which (gtfs$trips [, service_id] %in% service_id)
+    gtfs$trips <- gtfs$trips [index, ]
+    index <- which (gtfs$stop_times [, trip_id] %in% gtfs$trips [, trip_id])
+    gtfs$stop_times <- gtfs$stop_times [index, ]
+
+    return (gtfs)
+}
+
+convert_day <- function (day = NULL, quiet = FALSE) {
+
     # start at monday because strftime "%u" give monday = 1
     days <- c ("monday", "tuesday", "wednesday", "thursday",
                "friday", "saturday", "sunday")
@@ -150,20 +171,7 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
     if (any (is.na (day)))
         stop ("day must be a day of the week")
 
-    # no visible binding notes
-    trip_id <- NULL
-
-    # Find indices of all services on nominated days
-    index <- lapply (day, function (i)
-                     which (gtfs$calendar [, get (i)] == 1))
-    index <- sort (unique (do.call (c, index)))
-    service_id <- gtfs$calendar [index, ] [, service_id]
-    index <- which (gtfs$trips [, service_id] %in% service_id)
-    gtfs$trips <- gtfs$trips [index, ]
-    index <- which (gtfs$stop_times [, trip_id] %in% gtfs$trips [, trip_id])
-    gtfs$stop_times <- gtfs$stop_times [index, ]
-
-    return (gtfs)
+    return (day)
 }
 
 # nocov start - not in test data
