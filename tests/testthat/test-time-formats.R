@@ -92,13 +92,13 @@ test_that ("date param", {
 
   # date not in feed
   expect_error (gt <- gtfs_timetable (g, date = 20180128),
-                "date does not match any values in the provided GTFS data")
+                "Calendar contains no matching dates")
 
   # wrong date format
   expect_error (gt <- gtfs_timetable (g, date = 1234),
-                "Date is not provided in the proper format of yyyymmdd")
+                "Date must be provided in the format YYYYMMDD")
   expect_error (gt <- gtfs_timetable (g, date = "abc"),
-                "Date is not provided in the proper format of yyyymmdd")
+                "Date must be provided in the format YYYYMMDD")
 
   gt_day <- gtfs_timetable (g, day = "Monday", quiet = TRUE)
   g$calendar_dates <- data.table::data.table (service_id = "1",

@@ -187,6 +187,7 @@ filter_by_date <- function (gtfs, date = NULL) {
     index <- which (gtfs$calendar_dates$date == date)
 
     # get all service_ids in calendar.txt that are valid for the given date
+    date_int <- date
     date <- strptime (date, format = "%Y%m%d") # YYYYMMDD date as POSIX
     days <- c ("monday", "tuesday", "wednesday", "thursday",
     		   "friday", "saturday", "sunday")
@@ -195,8 +196,11 @@ filter_by_date <- function (gtfs, date = NULL) {
         stop ("Date must be provided in the format YYYYMMDD")
     }
 
-    calendars_in_range <- gtfs$calendar [(start_date <= date) &
-                                         (end_date >= date), ]
+    calendars_in_range <- gtfs$calendar [(start_date <= date_int) &
+                                         (end_date >= date_int), ]
+    if (nrow (calendars_in_range) == 0)
+        stop ("Calendar contains no matching dates")
+
     index_day <- lapply (day, function (i) {
         which (calendars_in_range [, get (i)] == 1)
     })
