@@ -50,8 +50,8 @@
 #' }
 #' @export
 gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
-                            from_is_id = FALSE, route_pattern = NULL,
-                            minimise_transfers = FALSE,
+                            from_is_id = FALSE, grep_fixed = TRUE,
+                            route_pattern = NULL, minimise_transfers = FALSE,
                             hull_alpha = 0.1, quiet = FALSE) {
 
     requireNamespace ("geodist")
@@ -72,7 +72,7 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
         stop ("There are no scheduled services after that time.")
 
     stations <- NULL # no visible binding note # nolint
-    start_stns <- station_name_to_ids (from, gtfs_cp, from_is_id)
+    start_stns <- station_name_to_ids (from, gtfs_cp, from_is_id, grep_fixed)
 
     isotrips <- get_isotrips (gtfs_cp, start_stns, start_time, end_time,
                               minimise_transfers)

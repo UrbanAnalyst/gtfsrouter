@@ -11,6 +11,7 @@ gtfs_isochrone(
   end_time,
   day = NULL,
   from_is_id = FALSE,
+  grep_fixed = TRUE,
   route_pattern = NULL,
   minimise_transfers = FALSE,
   hull_alpha = 0.1,
@@ -41,6 +42,11 @@ used. (Not used if \code{gtfs} has already been prepared with
 \item{from_is_id}{Set to \code{TRUE} to enable \code{from} parameter to specify entry
 in \code{stop_id} rather than \code{stop_name} column of the \code{stops} table (same as
 \code{from_to_are_ids} parameter of \link{gtfs_route}).}
+
+\item{grep_fixed}{If \code{FALSE}, match station names (when passed as character
+string) with \code{grep(..., fixed = FALSE)}, to allow use of \code{grep} expressions.
+This is useful to refine matches in cases where desired stations may match
+multiple entries.}
 
 \item{route_pattern}{Using only those routes matching given pattern, for
 example, "^U" for routes starting with "U" (as commonly used for underground
