@@ -124,7 +124,8 @@ bool iso::fill_one_iso (
             
             if (fill_here || is_end_stn)
             {
-                bool update = same_trip = (st.trip == trip_id);
+                // only follow same trip if it has equal fewest transfers
+                bool update = same_trip = (st.trip == trip_id && st.ntransfers <= ntransfers);
                 if (!same_trip)
                 {
                     // for !minimise_transfers, update if:
@@ -186,9 +187,6 @@ bool iso::fill_one_iso (
         iso.earliest_departure [arrival_station] = departure_time;
     } else
     {
-        // Trip changes happen here mostly when services departing before the
-        // nominated start time catch up with other services, so fastest trips
-        // change services at same stop.
         iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
         iso.connections [arrival_station].convec [s].initial_depart = latest_initial;
     }
@@ -612,7 +610,7 @@ bool iso::update_best_connection (
 
     } else {
 
-        update = (this_initial > latest_initial);
+        update = (this_initial > latest_initial && this_transfers <= min_transfers);
         if (!update && this_transfers < min_transfers)
             update = (this_initial == latest_initial);
 
