@@ -13,6 +13,7 @@ gtfs_route(
   route_pattern = NULL,
   earliest_arrival = TRUE,
   include_ids = FALSE,
+  grep_fixed = TRUE,
   max_transfers = NA,
   from_to_are_ids = FALSE,
   quiet = FALSE
@@ -55,6 +56,11 @@ one, and so will be generally twice as fast.}
 
 \item{include_ids}{If \code{TRUE}, result will include columns containing
 GTFS-specific identifiers for routes, trips, and stops.}
+
+\item{grep_fixed}{If \code{FALSE}, match station names (when passed as character
+string) with \code{grep(..., fixed = FALSE)}, to allow use of \code{grep} expressions.
+This is useful to refine matches in cases where desired stations may match
+multiple entries.}
 
 \item{max_transfers}{If not \code{NA}, specify a desired maximum number of
 transfers for the route (including but not exceeding this number). This

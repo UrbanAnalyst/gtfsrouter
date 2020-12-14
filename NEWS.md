@@ -6,6 +6,10 @@ Major changes:
 
 Minor changes:
 
+- All main functions now use a `grep_fixed` parameter to enable finer control
+  over station name matching; thanks to @polettif via #66 for the idea.
+- That also includes a check to ensure matched stations are sufficiently close,
+  which in turn requires `geodist` to be moved from `Suggests` to `Imports`.
 - `route_pattern` arguments (to `gtfs_route/isochrone/timetable()` functions)
   can now be used to exclude specified patterns by prefixing them with "!" (see
   #53)

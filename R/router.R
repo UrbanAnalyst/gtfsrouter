@@ -40,6 +40,10 @@
 #' @param from_to_are_ids Set to `TRUE` to enable `from` and `to` parameter to
 #' specify entries in `stop_id` rather than `stop_name` column of the `stops`
 #' table.
+#' @param grep_fixed If `FALSE`, match station names (when passed as character
+#' string) with `grep(..., fixed = FALSE)`, to allow use of `grep` expressions.
+#' This is useful to refine matches in cases where desired stations may match
+#' multiple entries.
 #' @param quiet Set to `TRUE` to suppress screen messages (currently just
 #' regarding timetable construction).
 #'
@@ -82,7 +86,8 @@
 #' @export
 gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
                         route_pattern = NULL, earliest_arrival = TRUE,
-                        include_ids = FALSE, max_transfers = NA,
+                        include_ids = FALSE, grep_fixed = TRUE,
+                        max_transfers = NA,
                         from_to_are_ids = FALSE, quiet = FALSE) {
 
     if (length (from) != length (to))
@@ -106,8 +111,14 @@ gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
     if (nrow (gtfs_cp$timetable) == 0)
         stop ("There are no scheduled services after that time.")
 
-    start_stns <- from_to_to_stations (from, gtfs_cp, from_to_are_ids)
-    end_stns <- from_to_to_stations (to, gtfs_cp, from_to_are_ids)
+    start_stns <- from_to_to_stations (from,
+                                       gtfs_cp,
+                                       from_to_are_ids,
+                                       grep_fixed)
+    end_stns <- from_to_to_stations (to,
+                                     gtfs_cp,
+                                     from_to_are_ids,
+                                     grep_fixed)
 
     res <- lapply (seq (start_stns), function (i)
                    gtfs_route1 (gtfs_cp, start_stns [[i]], end_stns [[i]],
@@ -205,17 +216,26 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
 }
 
 # convert from and to values to indices into gtfs$stations
-from_to_to_stations <- function (stns, gtfs, from_to_are_ids) {
+from_to_to_stations <- function (stns, gtfs, from_to_are_ids, grep_fixed) {
     if (is.character (stns) | is.null (nrow (stns))) {
         ret <- lapply (stns, function (i)
-                       unique (station_name_to_ids (i, gtfs, from_to_are_ids)))
+                       unique (station_name_to_ids (i,
+                                                    gtfs,
+                                                    from_to_are_ids,
+                                                    grep_fixed)))
     } else if (!is.null (nrow (stns))) {
         ret <- apply (stns, 1, function (i)
-                      unique (station_name_to_ids (i, gtfs, from_to_are_ids)))
+                      unique (station_name_to_ids (i,
+                                                   gtfs,
+                                                   from_to_are_ids,
+                                                   grep_fixed)))
         if (!is.list (ret)) # for single row stns
             ret <- list (as.integer (ret))
     } else if (is.numeric (stns) & length (stns) == 2) {
-        ret <- list (station_name_to_ids (stns, gtfs, from_to_are_ids))
+        ret <- list (station_name_to_ids (stns,
+                                          gtfs,
+                                          from_to_are_ids,
+                                          grep_fixed))
     } else {
         stop ("from/to stations in unrecognised format")
     }
@@ -224,7 +244,7 @@ from_to_to_stations <- function (stns, gtfs, from_to_are_ids) {
 
 # names generally match to multiple IDs, each of which is returned here, as
 # 0-indexed IDs into gtfs$stations
-station_name_to_ids <- function (stn_name, gtfs, from_to_are_ids) {
+station_name_to_ids <- function (stn_name, gtfs, from_to_are_ids, grep_fixed) {
 
     # no visible binding notes:
     stop_name <- stop_id <- stop_ids <- stations <- NULL # nolint
@@ -234,7 +254,6 @@ station_name_to_ids <- function (stn_name, gtfs, from_to_are_ids) {
         if (length (stn_name) != 2)
             stop ("Numeric (from, to) values must have ",
                   "two values for (lon, lat)")
-        requireNamespace ("geodist")
         names (stn_name) <- c ("lon", "lat")
         # geodist may issue warning about inaccracy of defalt 'cheap' distance,
         # but as we're only interested in the shortest distance, it can be used.
@@ -244,10 +263,26 @@ station_name_to_ids <- function (stn_name, gtfs, from_to_are_ids) {
         # One stop name can have several IDs, each of which need to be extracted
         # here:
         this_stop <- gtfs$stops [which.min (d), ] [, stop_name]
-        index <- grep (this_stop, gtfs$stops [, stop_name], fixed = TRUE)
+        index <- grep (this_stop, gtfs$stops [, stop_name], fixed = grep_fixed)
         ret <- gtfs$stops [index, ] [, stop_id]
     } else if (!from_to_are_ids) {
-        index <- grep (stn_name, gtfs$stops [, stop_name], fixed = TRUE)
+        index <- grep (stn_name, gtfs$stops [, stop_name], fixed = grep_fixed)
+        if (length (index) == 0)
+            stop (stn_name, " does not match any stations")
+
+        # check distances between matched stations, noting that lon/lat values
+        # are only "conditionally required", so not always present
+        if (all (c ("stop_lon", "stop_lat") %in% names (gtfs$stops))) {
+            xy <- gtfs$stops [index, c ("stop_lon", "stop_lat")]
+            dmax <- max (geodist::geodist (xy, measure = "haversine")) / 1000
+            if (dmax > 5)
+                warning ("The name [", stn_name,
+                         "] matches multiple stops spread  up to ",
+                         round (dmax, digits = 1), "km apart.\n",
+                         "Considering refining matching via `grep` ",
+                         "with `grep_fixed = FALSE`.")
+        }
+
         ret <- gtfs$stops [index, ] [, stop_id]
     }
 

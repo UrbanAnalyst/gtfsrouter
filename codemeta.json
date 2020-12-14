@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ATFutures/gtfs-router",
   "issueTracker": "https://github.com/ATFutures/gtfs-router/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.4.149",
+  "version": "0.0.4.150",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -92,18 +92,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=dodgr"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "geodist",
-      "name": "geodist",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=geodist"
     },
     {
       "@type": "SoftwareApplication",
@@ -271,6 +259,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "geodist",
+      "name": "geodist",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=geodist"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "methods",
       "name": "methods"
     },
@@ -293,7 +293,7 @@
     }
   ],
   "readme": "https://github.com/ATFutures/gtfs-router/blob/master/README.md",
-  "fileSize": "10622.818KB",
+  "fileSize": "10614.62KB",
   "contIntegration": "https://codecov.io/gh/ATFutures/gtfs-router",
   "developmentStatus": "https://www.repostatus.org/#active",
   "keywords": [

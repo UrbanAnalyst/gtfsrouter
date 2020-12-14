@@ -23,6 +23,7 @@ gtfs_traveltimes <- function (gtfs,
                               start_time,
                               day = NULL,
                               from_is_id = FALSE,
+                              grep_fixed = TRUE,
                               route_pattern = NULL,
                               minimise_transfers = FALSE,
                               cutoff = 10,
@@ -47,7 +48,7 @@ gtfs_traveltimes <- function (gtfs,
         stop ("There are no scheduled services after that time.")
 
     stations <- NULL # no visible binding note # nolint
-    start_stns <- station_name_to_ids (from, gtfs_cp, from_is_id)
+    start_stns <- station_name_to_ids (from, gtfs_cp, from_is_id, grep_fixed)
 
     stns <- rcpp_traveltimes (gtfs_cp$timetable,
                               gtfs_cp$transfers,
