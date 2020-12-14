@@ -43,7 +43,7 @@ class Iso
             connections [n].convec.back ().departure_time = INFINITE_INT;
             connections [n].convec.back ().arrival_time = INFINITE_INT;
             connections [n].convec.back ().trip = INFINITE_INT;
-            connections [n].convec.back ().ntransfers = 0;
+            connections [n].convec.back ().ntransfers = 0L;
             connections [n].convec.back ().initial_depart = INFINITE_INT;
 
             return s;
