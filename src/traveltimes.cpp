@@ -94,6 +94,8 @@ bool iso::fill_one_iso (
     if (is_start_stn)
     {
         fill_vals = true;
+        ntransfers = 0;
+        latest_initial = departure_time;
     } else
     {
         // fill_vals determines whether a connection is viable, which is if it
@@ -125,6 +127,10 @@ bool iso::fill_one_iso (
                 bool update = same_trip = (st.trip == trip_id);
                 if (!same_trip)
                 {
+                    // for !minimise_transfers, update if:
+                    // 1. st.initial_depart > latest_initial OR
+                    // 2. st.ntransfers < ntransfers &&
+                    //      st.initial_depart == latest_initial
                     update = iso::update_best_connection (st.initial_depart,
                             latest_initial, st.ntransfers, ntransfers,
                             minimise_transfers);
@@ -171,7 +177,7 @@ bool iso::fill_one_iso (
 
     if (iso.earliest_departure [arrival_station] > arrival_time)
         iso.earliest_departure [arrival_station] = arrival_time;
-
+            
     if (is_start_stn)
     {
         iso.connections [arrival_station].convec [s].ntransfers = 0L;
@@ -183,9 +189,6 @@ bool iso::fill_one_iso (
         // Trip changes happen here mostly when services departing before the
         // nominated start time catch up with other services, so fastest trips
         // change services at same stop.
-        if (!same_trip)
-            ntransfers++;
-
         iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
         iso.connections [arrival_station].convec [s].initial_depart = latest_initial;
     }
@@ -272,6 +275,7 @@ void iso::trace_forward_traveltimes (
                             arrival_station [i], arrival_time [i], trans_dest,
                             trans_duration, isochrone_val,
                             minimise_transfers, iso);
+
                     if (stations.find (trans_dest) !=
                             stations.end ())
                     {
