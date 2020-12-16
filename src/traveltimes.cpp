@@ -213,6 +213,8 @@ void iso::trace_forward_traveltimes (
     const int isochrone_val = INFINITE_INT;
 
     std::unordered_map <size_t, bool> stations;
+    for (int d: departure_station)
+        stations.emplace (std::make_pair (d, false));
     for (int a: arrival_station)
         stations.emplace (std::make_pair (a, false));
     const int nstations = static_cast <int> (stations.size ());
@@ -230,7 +232,7 @@ void iso::trace_forward_traveltimes (
 
         const bool is_start_stn = iso::is_start_stn (start_stations_set,
                 departure_station [i]);
-        
+
         if (is_start_stn && !stations.at (departure_station [i]))
         {
             stations [departure_station [i]] = true;
