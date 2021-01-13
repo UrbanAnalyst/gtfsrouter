@@ -163,9 +163,24 @@ remove_terminal_sn <- function (stop_ids, stn_suffixes) {
     return (stop_ids)
 }
 
+#' rectify_col_names
+#'
+#' Some column names have stray characters (like the Stuttgart feed via #70), so
+#' can not be retrieved using `data.table` syntax, because, for example,
+#' names (stop_times) [grep ("trip_id", names (stop_times))] == "trip_id"
+#' is FALSE. This function rectifies all column names submitted to data.table
+#' operations to expected values.
+#' @noRd
+rectify_col_names <- function (tab, col_name) {
+    names (tab) [grep (col_name, names (tab))] <- col_name
+    return (tab)
+}
+
 convert_stops <- function (stops, stn_suffixes) {
     # suppress no visible binding notes:
     stop_id <- NULL
+
+    stops <- rectify_col_names (stops, "stop_id")
 
     if (storage.mode(stops$stop_id) != "character") {
         stops$stop_id <- as.character(stops$stop_id)
@@ -183,6 +198,11 @@ convert_stop_times <- function (stop_times, stn_suffixes, quiet) {
 
     # suppress no visible binding notes:
     arrival_time <- departure_time <- trip_id <- stop_id <- NULL
+
+    stop_times <- rectify_col_names (stop_times, "stop_id")
+    stop_times <- rectify_col_names (stop_times, "arrival_time")
+    stop_times <- rectify_col_names (stop_times, "departure_time")
+    stop_times <- rectify_col_names (stop_times, "trip_id")
 
     stop_times [, stop_id := remove_terminal_sn (stop_times [, stop_id],
                                                  stn_suffixes)]

@@ -14,6 +14,8 @@ Minor changes:
   can now be used to exclude specified patterns by prefixing them with "!" (see
   #53)
 - Fix bug with `max_transfers` parameter of `gtfs_route()` function (see #47)
+- Fix bug when column names do not exactly match expected values (#70; thanks
+  to @AlexandraKapp)
 
 # v 0.0.4
 
