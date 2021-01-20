@@ -184,6 +184,8 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
     # names. This is done seperately for each distinct trip so trip identifiers
     # can also be easily added
     trip_ids <- gtfs$trip_ids [unique (route$trip_number)] [, trip_ids]
+    # trips with from_to_are_ids can end with transfers == NA trip_ids
+    trip_ids <- trip_ids [!is.na (trip_ids)]
     res <- do.call (rbind, lapply (trip_ids, function (i)
                                    map_one_trip (gtfs, route, i)))
     res <- res [order (res$departure_time), ]
@@ -308,7 +310,7 @@ map_one_trip <- function (gtfs, route, route_name = "") {
     # some lines are circular, and may have two entries for same start/end
     # stations.
     trip_stops <- trip_stops [trip_stops$departure_time >=
-                              min (this_route$time), ]
+                              min (this_route$time, na.rm = TRUE), ]
 
     trip_stop_num <- match (trip_stops [, stop_id], gtfs$stop_ids [, stop_ids])
     trip_stop_num <- trip_stop_num [which (trip_stop_num %in%
