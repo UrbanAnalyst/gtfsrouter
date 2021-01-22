@@ -214,6 +214,45 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
     if (all (is.na (res$trip_name)))
         res$trip_name <- NULL # nocov
 
+    # timetables scanned in reverse do not add terminal transfers, so these have
+    # to be done here
+    end_stop <- utils::tail (route$stop_number, 1)
+    if (route$stop_number [1] %in% end_stns & !end_stop %in% start_stns) {
+        tr <- gtfs$transfers [from_stop_id == end_stop &
+                              to_stop_id %in% start_stns]
+        index <- which (tr$min_transfer_time == min (tr$min_transfer_time))
+        tr <- tr [index, ] [1] # just pick the first
+        route1 <- route [1, ] # dummy
+        route1$stop_number <- tr$to_stop_id
+        route1$time <- utils::tail (route$time, 1) - tr$min_transfer_time
+        route1$trip_number <- NA_integer_
+        route1$trip_id <- NA_character_
+
+        route <- rbind (route, route1)
+    }
+
+    # Add any terminal transfers to actual destination
+    if (is.na (route$trip_id [1]) | is.na (utils::tail (route$trip_id, 1))) {
+
+        if (is.na (route$trip_id [1])) {
+            n <- 1
+            arrival_time <- format_time (route$time [n])
+        } else { # transfer at end of a reversed timetable scan
+            n <- nrow (route)
+            tr_time <- -utils::tail (diff (route$time), 1)
+            arrival_time <- convert_time (utils::tail (res$arrival_time, 1))
+            arrival_time <- format_time (arrival_time + tr_time)
+        }
+        res1 <- res [1, ] # dummy
+        res1$route_name <- NA_character_
+        res1$trip_name <- "(transfer)"
+        res1$stop_name <- gtfs$stops$stop_name [route$stop_number [n]]
+        res1$departure_time <- NA_character_
+        res1$arrival_time <- arrival_time
+
+        res <- rbind (res, res1)
+    }
+
     return (res)
 }
 
