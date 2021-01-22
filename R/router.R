@@ -168,7 +168,7 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
                          include_ids, max_transfers) {
 
     # no visible binding note:
-   trip_id <- trip_headsign <- route_id <- route_short_name <- NULL
+    trip_id <- trip_headsign <- route_id <- route_short_name <- NULL
 
     if (is.na (max_transfers))
         max_transfers <- .Machine$integer.max
@@ -247,6 +247,10 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
         res1$route_name <- NA_character_
         res1$trip_name <- "(transfer)"
         res1$stop_name <- gtfs$stops$stop_name [route$stop_number [n]]
+        if (include_ids) {
+            res1$route_id <- res1$trip_id <- NA_character_
+            res1$stop_id <- gtfs$stops$stop_id [route$stop_number [n]]
+        }
         res1$departure_time <- NA_character_
         res1$arrival_time <- arrival_time
 
