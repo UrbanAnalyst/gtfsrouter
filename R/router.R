@@ -216,6 +216,7 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
 
     # timetables scanned in reverse do not add terminal transfers, so these have
     # to be done here
+    from_stop_id <- to_stop_id <- NULL # suppress no visible binding notes
     end_stop <- utils::tail (route$stop_number, 1)
     if (route$stop_number [1] %in% end_stns & !end_stop %in% start_stns) {
         tr <- gtfs$transfers [from_stop_id == end_stop &
