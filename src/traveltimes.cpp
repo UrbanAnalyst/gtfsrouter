@@ -30,6 +30,7 @@ void iso::trace_forward_iso (
         const bool is_start_stn = iso::is_start_stn (start_stations_set,
                 departure_station [i]);
 
+
         if (!is_start_stn &&
                 iso.earliest_departure [departure_station [i]] < INFINITE_INT &&
                 iso.earliest_departure [departure_station [i]] >
@@ -124,8 +125,17 @@ bool iso::fill_one_iso (
             
             if (fill_here || is_end_stn)
             {
+                // Bunch of AND conditions written separately for clarity.
+                bool update = same_trip = false;
                 // only follow same trip if it has equal fewest transfers
-                bool update = same_trip = (st.trip == trip_id && st.ntransfers <= ntransfers);
+                if (minimise_transfers)
+                {
+                    // This doesn't consider time, so may replace trips with
+                    // slower ones!
+                    update = same_trip = (st.trip == trip_id && st.ntransfers <= ntransfers);
+                }
+                if (!update)
+                    update = (ntransfers == INFINITE_INT);
                 if (!same_trip)
                 {
                     // for !minimise_transfers, update if:
@@ -340,6 +350,12 @@ bool traveltime::incr_tt_stats (traveltime::TTDur & ttdur,
 }
 
 
+// Transfers are used to define the `earliest_departure` time, which is
+// important to enable timetable lines to be skipped if:
+//     iso.earliest_departure [departure_station [i]] > departure_time [i]
+// It is nevertheless important to connect all possible transfers, because they
+// may represent later initial departure times with subsequent connecting
+// services.
 void iso::fill_one_transfer (
         const size_t &departure_station,
         const size_t &arrival_station,
@@ -352,11 +368,11 @@ void iso::fill_one_transfer (
 {
     const int trans_time = arrival_time + trans_duration;
 
-    // Bunch of AND conditions separated for easy reading:
+    // Bunch of AND conditions separated for easy reading.
     bool insert_transfer = (trans_dest != departure_station); // can happen
-    if (insert_transfer)
-        insert_transfer = iso::is_transfer_connected (
-                iso, trans_dest, trans_time);
+    //if (insert_transfer)
+    //    insert_transfer = iso::is_transfer_connected (
+    //            iso, trans_dest, trans_time);
     if (insert_transfer)
         insert_transfer = iso::is_transfer_in_isochrone (
                 iso, arrival_station, trans_time, isochrone);
@@ -364,7 +380,9 @@ void iso::fill_one_transfer (
     if (!insert_transfer)
         return;
 
-    iso.earliest_departure [trans_dest] = trans_time;
+    if (iso.earliest_departure [trans_dest] == INFINITE_INT |
+            trans_time < iso.earliest_departure [trans_dest])
+        iso.earliest_departure [trans_dest] = trans_time;
 
     const size_t s = iso.extend (trans_dest) - 1;
 
