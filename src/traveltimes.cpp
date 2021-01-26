@@ -128,11 +128,11 @@ bool iso::fill_one_iso (
                 // Bunch of AND conditions written separately for clarity.
                 bool update = same_trip = false;
                 // only follow same trip if it has equal fewest transfers
-                if (minimise_transfers)
+                if (minimise_transfers && st.trip == trip_id && st.ntransfers <= ntransfers)
                 {
-                    // This doesn't consider time, so may replace trips with
-                    // slower ones!
-                    update = same_trip = (st.trip == trip_id && st.ntransfers <= ntransfers);
+                    same_trip = true;
+                    if (st.initial_depart > latest_initial)
+                        update = true;
                 }
                 if (!update)
                     update = (ntransfers == INFINITE_INT);
