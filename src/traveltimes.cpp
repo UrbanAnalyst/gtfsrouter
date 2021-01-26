@@ -380,7 +380,7 @@ void iso::fill_one_transfer (
     if (!insert_transfer)
         return;
 
-    if (iso.earliest_departure [trans_dest] == INFINITE_INT |
+    if (iso.earliest_departure [trans_dest] == INFINITE_INT ||
             trans_time < iso.earliest_departure [trans_dest])
         iso.earliest_departure [trans_dest] = trans_time;
 
