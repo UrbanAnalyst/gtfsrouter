@@ -23,6 +23,14 @@ present in the nominated GTFS data set.
 \description{
 Extract data from a GTFS \code{zip} archive.
 }
+\note{
+Column types in each table of the returned object conform to GTFS
+standards (\url{https://developers.google.com/transit/gtfs/reference}),
+except that "Time" fields in the "stop_times" table are converted to integer
+values, rather than as character or "Time" objects ("HH:MM:SS"). These can be
+converted back to comply with GTFS standards by applying the \code{hms::hms()}
+function to the two time columns of the "stop_times" table.
+}
 \examples{
 berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir
 f <- file.path (tempdir (), "vbb.zip") # name of feed
