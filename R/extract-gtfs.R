@@ -128,12 +128,32 @@ extract_objs_into_env <- function (flist, quiet = FALSE) {
         message (cli::symbol$play, cli::col_green (" Extracting GTFS feed"),
                  appendLF = FALSE)
 
+    # Get types of all fields according to standards, via fns defined in
+    # gtfs-reference-fields.R (see #74)
+    fields <- gtfs_reference_fields ()
+    types <- gtfs_reference_types ()
+    fields <- lapply (fields, function (i) {
+                          n <- names (i)
+                          ret <- types [match (i, names (types))]
+                          names (ret) <- n
+                          return (ret)  })
+
     e <- new.env ()
     for (f in seq (flist)) {
 
+        # Get the column types for that file:
+        fname <- tools::file_path_sans_ext (basename (flist [f]))
+        these_fields <- fields [[fname]]
+        fhdr <- data.table::fread (flist [f],
+                                   integer64 = "character",
+                                   nrows = 1)
+        classes <- these_fields [which (names (these_fields) %in% names (fhdr))]
+
         fout <- data.table::fread (flist [f],
                                    integer64 = "character",
-                                   showProgress = FALSE)
+                                   showProgress = FALSE,
+                                   colClasses = classes)
+
         assign (gsub (".txt", "", basename (flist [f])),
                 value = fout,
                 envir = e)
