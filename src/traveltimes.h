@@ -186,32 +186,6 @@ void trace_back_one_stn (
 
 } // end namespace iso
 
-namespace traveltime {
-
-    class TTDur {
-
-        public:
-
-            int cutoff,
-                prev_found,
-                this_found,
-                n = 0;
-            long long duration_sum1 = 0,
-                 duration_sum2 = 0;
-            double sd_sum1 = 0.0,
-                   sd_sum2 = 0.0;
-
-            TTDur (const int cutoff_) {
-                cutoff = cutoff_;
-            }
-    };
-
-    bool incr_tt_stats (TTDur & ttdur,
-            int i,
-            bool incr);
-
-} // end namespace traveltime
-
 // ---- isochrone.cpp
 Rcpp::List rcpp_isochrone (
         Rcpp::DataFrame timetable,
