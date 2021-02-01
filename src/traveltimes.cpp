@@ -30,7 +30,6 @@ void iso::trace_forward_iso (
         const bool is_start_stn = iso::is_start_stn (start_stations_set,
                 departure_station [i]);
 
-
         if (!is_start_stn &&
                 iso.earliest_departure [departure_station [i]] < INFINITE_INT &&
                 iso.earliest_departure [departure_station [i]] >
@@ -216,7 +215,7 @@ void iso::trace_forward_traveltimes (
         const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
         const std::unordered_set <size_t> & start_stations_set,
         const bool & minimise_transfers,
-        const int & cutoff)
+        const double & prop_stops)
 {
     const size_t nrows = departure_station.size ();
 
@@ -229,7 +228,7 @@ void iso::trace_forward_traveltimes (
 
     int nstns_reached = 0;
 
-    traveltime::TTDur ttdur (cutoff);
+    //traveltime::TTDur ttdur (cutoff);
 
     bool stop = false;
 
@@ -260,7 +259,7 @@ void iso::trace_forward_traveltimes (
         {
             stations [arrival_station [i]] = true;
             nstns_reached++;
-            stop = traveltime::incr_tt_stats (ttdur, i, nstns_reached > 2);
+            stop = nstns_reached >= round (prop_stops * nstations);
         }
 
         if (filled && transfer_map.find (arrival_station [i]) != transfer_map.end ())
@@ -284,7 +283,7 @@ void iso::trace_forward_traveltimes (
                         {
                             stations [trans_dest] = true;
                             nstns_reached++;
-                            stop = traveltime::incr_tt_stats (ttdur, i, nstns_reached > 2);
+                            stop = nstns_reached >= round (prop_stops * nstations);
                         }
                     }
                 }
@@ -292,7 +291,7 @@ void iso::trace_forward_traveltimes (
             } // end for t over transfer map
         } // end if filled
 
-        if (stop || nstns_reached >= nstations)
+        if (stop)
         {
             break;
         }

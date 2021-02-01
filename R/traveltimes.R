@@ -3,17 +3,18 @@
 #' Travel times from a nominated station departing at a nominated time to every
 #' other reachable station in a system.
 #'
-#' @param cutoff After a period of traversing a timetable, very few new stations
-#' will be able to be reached. The period between reaching new stations
-#' generally remains very constant up until that point, after which it increases
-#' notably. Cutoff stops the search for new stations once the mean plus standard
-#' deviation in time between successive new stations being reached exceeds the
-#' given multiple. This value should generally not be changed, but may be set to
-#' '0' to search an entire timetable, although see Note.
+#' @param prop_stops Stop scanning after this proportion of all potentially
+#' reachable stops has been reached. Some stops may only be reached very
+#' infrequently (like once per day), and scanning a timetable until all stops
+#' have been reached may (1) yield anomalously long travel times for very
+#' infrequently serviced stops; and (2) take a long time to calculate. The
+#' `prop_stops` parameter should accordingly generally be less than 1. For large
+#' systems with many stops (tens of thousands), values of 0.5 are often
+#' sufficient to reach most of the system.
 #'
 #' @note Searching for all connections over an entire timetable may return
-#' anomalously high travel times for stations or platforms thereof which are only
-#' very occasionally serviced. Results generated with `cutoff = 0` may need to
+#' anomalously high travel times for stops which are only very occasionally
+#' serviced. Results generated with values of `prop_stops` close to 1 may need to
 #' be manually cleaned prior to analysis.
 #'
 #' @inheritParams gtfs_isochrone
@@ -26,13 +27,12 @@ gtfs_traveltimes <- function (gtfs,
                               grep_fixed = TRUE,
                               route_pattern = NULL,
                               minimise_transfers = FALSE,
-                              cutoff = 10,
+                              prop_stops = 0.5,
                               quiet = FALSE) {
 
-    if (!all (is.numeric (cutoff)) | all (cutoff < 0) | length (cutoff) > 1)
-        stop ("cutoff must be a single number >= 0")
-    if (cutoff == 0)
-        cutoff <- .Machine$integer.max
+    if (!all (is.numeric (prop_stops)) | all (prop_stops <= 0) |
+        all (prop_stops > 1) | length (prop_stops) > 1)
+        stop ("prop_stops must be a single number between 0 and 1")
 
     if (!"timetable" %in% names (gtfs))
         gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)
@@ -56,7 +56,7 @@ gtfs_traveltimes <- function (gtfs,
                               start_stns,
                               start_time, 
                               minimise_transfers,
-                              cutoff)
+                              prop_stops)
 
     # C++ matrix is 1-indexed, so discard first row (= 0)
     stns <- stns [-1, ]

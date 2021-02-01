@@ -13,7 +13,7 @@ gtfs_traveltimes(
   grep_fixed = TRUE,
   route_pattern = NULL,
   minimise_transfers = FALSE,
-  cutoff = 10,
+  prop_stops = 0.5,
   quiet = FALSE
 )
 }
@@ -57,13 +57,14 @@ parameter is not used at all if \code{gtfs} has already been prepared with
 minimal-transfer connections to each end point, even if those connections are
 slower than alternative connections with transfers.}
 
-\item{cutoff}{After a period of traversing a timetable, very few new stations
-will be able to be reached. The period between reaching new stations
-generally remains very constant up until that point, after which it increases
-notably. Cutoff stops the search for new stations once the mean plus standard
-deviation in time between successive new stations being reached exceeds the
-given multiple. This value should generally not be changed, but may be set to
-'0' to search an entire timetable, although see Note.}
+\item{prop_stops}{Stop scanning after this proportion of all potentially
+reachable stops has been reached. Some stops may only be reached very
+infrequently (like once per day), and scanning a timetable until all stops
+have been reached may (1) yield anomalously long travel times for very
+infrequently serviced stops; and (2) take a long time to calculate. The
+\code{prop_stops} parameter should accordingly generally be less than 1. For large
+systems with many stops (tens of thousands), values of 0.5 are often
+sufficient to reach most of the system.}
 
 \item{quiet}{Set to \code{TRUE} to suppress screen messages (currently just
 regarding timetable construction).}
@@ -74,7 +75,7 @@ other reachable station in a system.
 }
 \note{
 Searching for all connections over an entire timetable may return
-anomalously high travel times for stations or platforms thereof which are only
-very occasionally serviced. Results generated with \code{cutoff = 0} may need to
+anomalously high travel times for stops which are only very occasionally
+serviced. Results generated with values of \code{prop_stops} close to 1 may need to
 be manually cleaned prior to analysis.
 }
