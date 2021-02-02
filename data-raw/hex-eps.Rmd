@@ -10,7 +10,7 @@ Modify images in gimp by:
 3. Export as png with no background
 
 Can then convert to eps if desired, but direct loading png below also works the
-same. All black colours were adjusted to gray 0.7
+same. All black colours were adjusted to gray 0.8
 
 ```{r}
 library (ggplot2)
@@ -75,7 +75,7 @@ add_one_lab <- function (hex, lab_dat, aes, fs) {
     hex <- hex + ggplot2::geom_text (dat = lab_dat,
                                      mapping = aes,
                                      size = fs,
-                                     colour = 'black',
+                                     colour = '#555555',
                                      fontface = 1,
                                      family = 'SF Alien Encounters')
     return (hex)
