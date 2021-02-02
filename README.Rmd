@@ -1,4 +1,16 @@
 
+---
+title: "gtfsrouter"
+output:
+  rmarkdown::html_vignette:
+    self_contained: no
+
+  md_document:
+    variant: markdown_github
+---
+
+# gtfsrouter <a href='https://atfutures.github.io/gtfs-router/'><img src='man/figures/gtfsrouter.png' align="right" height=210 width=182/></a>
+
 [![R build
 status](https://github.com/atfutures/gtfs-router/workflows/R-CMD-check/badge.svg)](https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check)
 [![codecov](https://codecov.io/gh/ATFutures/gtfs-router/branch/master/graph/badge.svg)](https://codecov.io/gh/ATFutures/gtfs-router)
@@ -6,9 +18,6 @@ status](https://github.com/atfutures/gtfs-router/workflows/R-CMD-check/badge.svg
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/gtfsrouter)](https://cran.r-project.org/package=gtfsrouter) 
 [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/gtfsrouter?color=orange)](https://cran.r-project.org/package=gtfsrouter)
 
-
-
-# GTFS Router
 
 **R** package for routing with [GTFS (General Transit Feed
 Specification)](https://developers.google.com/transit/gtfs/) data. See [the

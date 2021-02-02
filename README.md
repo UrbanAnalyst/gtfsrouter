@@ -1,3 +1,5 @@
+# gtfsrouter <a href='https://atfutures.github.io/gtfs-router/'><img src='man/figures/gtfsrouter.png' align="right" height=210 width=182/></a>
+
 [![R build
 status](https://github.com/atfutures/gtfs-router/workflows/R-CMD-check/badge.svg)](https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check)
 [![codecov](https://codecov.io/gh/ATFutures/gtfs-router/branch/master/graph/badge.svg)](https://codecov.io/gh/ATFutures/gtfs-router)
@@ -7,55 +9,60 @@ Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repost
 [![CRAN
 Downloads](http://cranlogs.r-pkg.org/badges/grand-total/gtfsrouter?color=orange)](https://cran.r-project.org/package=gtfsrouter)
 
-GTFS Router
-===========
-
 **R** package for routing with [GTFS (General Transit Feed
 Specification)](https://developers.google.com/transit/gtfs/) data. See
 [the website](https://atfutures.github.io/gtfs-router/) for full
 details.
 
-Installation
-------------
+## Installation
 
 To install:
 
-    remotes::install_github("atfutures/gtfs-router")
+``` r
+remotes::install_github("atfutures/gtfs-router")
+```
 
 You can install latest stable version of `gtfsrouter` from CRAN with:
 
-    install.packages("gtfsrouter") # current CRAN version
+``` r
+install.packages("gtfsrouter") # current CRAN version
+```
 
 Alternatively, current development versions can be installed using any
 of the following options:
 
-    # install.packages("remotes")
-    remotes::install_git("https://git.sr.ht/~mpadge/gtfsrouter")
-    remotes::install_bitbucket("atfutures/gtfsrouter")
-    remotes::install_gitlab("atfutures1/gtfsrouter")
-    remotes::install_github("ATFutures/gtfsrouter")
+``` r
+# install.packages("remotes")
+remotes::install_git("https://git.sr.ht/~mpadge/gtfsrouter")
+remotes::install_bitbucket("atfutures/gtfsrouter")
+remotes::install_gitlab("atfutures1/gtfsrouter")
+remotes::install_github("ATFutures/gtfsrouter")
+```
 
 To load the package and check the version:
 
-    library(gtfsrouter)
-    packageVersion("gtfsrouter")
+``` r
+library(gtfsrouter)
+packageVersion("gtfsrouter")
+```
 
     ## [1] '0.0.4'
 
-Main functions
---------------
+## Main functions
 
 The main functions can be demonstrated with sample data included with
 the package from Berlin (the Verkehrverbund Berlin Brandenburg, or VBB).
 GTFS data are always stored as `.zip` files, and these sample data can
 be written to local storage with the function `berlin_gtfs_to_zip()`.
 
-    berlin_gtfs_to_zip()
-    tempfiles <- list.files (tempdir (), full.names = TRUE)
-    filename <- tempfiles [grep ("vbb.zip", tempfiles)]
-    filename
+``` r
+berlin_gtfs_to_zip()
+tempfiles <- list.files (tempdir (), full.names = TRUE)
+filename <- tempfiles [grep ("vbb.zip", tempfiles)]
+filename
+```
 
-    ## [1] "/tmp/RtmpZERYeW/vbb.zip"
+    ## [1] "/tmp/RtmpSCMpj3/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -65,12 +72,14 @@ GTFS data stored as a single `.zip` file.
 Given the name of a GTFS `.zip` file, `filename`, routing is as simple
 as the following code:
 
-    gtfs <- extract_gtfs (filename)
-    gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
-    gtfs_route (gtfs,
-                from = "Schonlein",
-                to = "Berlin Hauptbahnhof",
-                start_time = 12 * 3600 + 120) # 12:02 in seconds
+``` r
+gtfs <- extract_gtfs (filename)
+gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
+gtfs_route (gtfs,
+            from = "Schonlein",
+            to = "Berlin Hauptbahnhof",
+            start_time = 12 * 3600 + 120) # 12:02 in seconds
+```
 
 | route\_name | trip\_name       | stop\_name                      | arrival\_time | departure\_time |
 |:------------|:-----------------|:--------------------------------|:--------------|:----------------|
@@ -92,12 +101,14 @@ reachable within a given time - can be extracted with the
 `gtfs_isochrone()` function, which returns a list of all stations
 reachable within the specified time period from the nominated station.
 
-    gtfs <- extract_gtfs (filename)
-    gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
-    x <- gtfs_isochrone (gtfs,
-                         from = "Schonlein",
-                         start_time = 12 * 3600 + 120,
-                         end_time = 12 * 3600 + 720) # 10 minutes later
+``` r
+gtfs <- extract_gtfs (filename)
+gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
+x <- gtfs_isochrone (gtfs,
+                     from = "Schonlein",
+                     start_time = 12 * 3600 + 120,
+                     end_time = 12 * 3600 + 720) # 10 minutes later
+```
 
 The function returns an object of class `gtfs_isochrone` containing
 [`sf`](https://github.com/r-spatial/sf)-formatted sets of start and end
@@ -110,15 +121,16 @@ routed points. This requires the packages
 [`mapview`](https://cran.r-project.org/package=mapview) to be installed.
 Isochrone objects have their own plot method:
 
-    plot (x)
+``` r
+plot (x)
+```
 
 ![](./vignettes/isochrone.png)
 
 The isochrone hull also quantifies its total area and width-to-length
 ratio.
 
-Additional Functionality
-------------------------
+## Additional Functionality
 
 There are many ways to construct GTFS feeds. For background information,
 see [`gtfs.org`](http://gtfs.org), and particularly their [GTFS
@@ -141,20 +153,21 @@ which can calculate a transfer table for a given feed, with transfer
 times calculated either using straight-line distances (the default), or
 using more realistic times routed through the underlying street network.
 
-Contributors
-------------
-
+## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropenscilabs/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the
+[`allcontributors`
+package](https://github.com/ropenscilabs/allcontributors) following the
+[all-contributors](https://allcontributors.org) specification.
+Contributions of any kind are welcome!
 
 ### Code
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -175,14 +188,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ATFutures/gtfs-router/commits?author=stmarcin">stmarcin</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issues
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/polettif">
@@ -227,8 +237,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aorlandoandradeb">orlandoandradeb</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/Maxime2506">
@@ -267,9 +275,7 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Adcooley">dcooley</a>
 </td>
 </tr>
-
 </table>
-
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
