@@ -56,10 +56,10 @@ hex <- ggplot() +
     ggimage::geom_image (aes_ (x = ~x, y = ~y, image = ~image), dtram2,
                          size = 0.2, asp = 1) +
     geom_polygon (aes_ (x = ~x, y = ~y), data = border,
-                 size = 6, fill = NA, color = "#555555") +
+                 size = 6, fill = NA, color = "#55BB55") +
     scale_x_continuous (expand = c (0.02, 0.02)) +
     scale_y_continuous (expand = c (0.02, 0.02))
-#print (hex)
+print (hex)
 ```
 ```{r}
 add_one_lab <- function (hex, lab_dat, aes, fs) {
@@ -67,15 +67,15 @@ add_one_lab <- function (hex, lab_dat, aes, fs) {
     hex <- hex + ggplot2::geom_text (dat = lab_dat,
                                      mapping = aes,
                                      size = fs,
-                                     colour = 'gray80',
+                                     colour = '#555555',
                                      family = 'SF Alien Encounters', 
                                      fontface = 1,
-                                     nudge_y = 0.0001,
-                                     nudge_x = 0.0001)
+                                     nudge_y = -0.02,
+                                     nudge_x = 0.02)
     hex <- hex + ggplot2::geom_text (dat = lab_dat,
                                      mapping = aes,
                                      size = fs,
-                                     colour = '#555555',
+                                     colour = '#55BB55',
                                      fontface = 1,
                                      family = 'SF Alien Encounters')
     return (hex)
