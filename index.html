@@ -5,21 +5,25 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quickest Route with GTFS Feed • gtfsrouter</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Quickest Route with GTFS Feed">
-<meta property="og:description" content="Find the quickest route between two points at a particular start
-    time with GTFS feed.">
-<meta name="twitter:card" content="summary">
+<title>Routing with GTFS (General Transit Feed Specification)
+    Data • gtfsrouter</title>
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
+<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="pkgdown.js"></script><meta property="og:title" content="Routing with GTFS (General Transit Feed Specification)
+    Data">
+<meta property="og:description" content="Use GTFS (General Transit Feed Specification) data
+    for routing from nominated start and end stations, and for extracting
+    isochrones from nominated start station.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
-    <div class="container template-article">
+<body data-spy="scroll" data-target="#toc">
+    <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -31,29 +35,26 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.173</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="articles/gtfsrouter.html">Get started</a>
+  <a href="articles/index.html">Vignettes</a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="reference/index.html">Functions</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/ATFutures/gtfs-router">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -66,120 +67,66 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
-  <div class="col-md-9 contents">
-    
-
-    
-    
-
-<div id="gtfs-router" class="section level1">
+  <div class="contents col-md-9">
+<div id="gtfsrouter-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#gtfs-router" class="anchor"></a>GTFS Router</h1></div>
-<p><strong>R</strong> package for routing and analysis with <a href="https://developers.google.com/transit/gtfs/">GTFS (General Transit Feed Specification)</a> data. See <a href="https://atfutures.github.io/gtfs-router/">the website</a> for full details.</p>
+<a href="#gtfsrouter-" class="anchor"></a>gtfsrouter <a href="https://atfutures.github.io/gtfs-router/"><img src="reference/figures/gtfsrouter.png" align="right" height="210" width="182/"></a>
+</h1></div>
+
+<p><strong>R</strong> package for routing with <a href="https://developers.google.com/transit/gtfs/">GTFS (General Transit Feed Specification)</a> data. See <a href="https://atfutures.github.io/gtfs-router/">the website</a> for full details.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>To install:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">remotes<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"atfutures/gtfs-router"</span>)</a></code></pre></div>
-<pre><code>##   
-─  installing *source* package ‘gtfsrouter’ ...
-## 
-  
-   ** libs
-## 
-  
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include  -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -c RcppExports.cpp -o RcppExports.o
-## 
-  
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include  -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -c convert-time.cpp -o convert-time.o
-## 
-  
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include  -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -c csa-isochrone.cpp -o csa-isochrone.o
-## 
-  
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include  -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -c csa-median-timetable.cpp -o csa-median-timetable.o
-## 
-  
-   csa-median-timetable.cpp: In function ‘Rcpp::DataFrame rcpp_median_graph(Rcpp::DataFrame, Rcpp::DataFrame)’:
-##    csa-median-timetable.cpp:166:51: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-##         for (int i = 0; i &lt; gr_in.start_station.size (); i++)
-##                                                       ^
-## 
-  
-   csa-median-timetable.cpp: In function ‘Rcpp::DataFrame rcpp_median_dijkstra(int, Rcpp::DataFrame, int)’:
-##    csa-median-timetable.cpp:248:45: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-##         for (int i = 0; i &lt; start_station.size (); i++)
-##                                                 ^
-## 
-  
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include  -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -c csa-timetable.cpp -o csa-timetable.o
-## 
-  
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include  -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -c csa.cpp -o csa.o
-## 
-  
-   csa.cpp: In function ‘void csa::check_end_stations(std::unordered_set&lt;long unsigned int&gt;&amp;, const size_t&amp;, const int&amp;, CSA_Return&amp;)’:
-##    csa.cpp:249:36: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-##             if (arrival_time &lt; csa_ret.earliest_time)
-##                                        ^
-## 
-  
-   csa.cpp: In function ‘void csa::extract_final_trip(const CSA_Outputs&amp;, const CSA_Return&amp;, std::vector&lt;long unsigned int&gt;&amp;, std::vector&lt;long unsigned int&gt;&amp;, std::vector&lt;int&gt;&amp;)’:
-##    csa.cpp:306:40: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
-##             for (int j = 1; j &lt; trip.size (); j++)
-##                                            ^
-## 
-  
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include  -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -c dijkstra.cpp -o dijkstra.o
-## 
-  
-   g++ -std=gnu++11 -I"/home/travis/R-bin/lib/R/include" -DNDEBUG  -I"/home/travis/R/Library/Rcpp/include" -I/home/travis/R-bin/include  -fpic  -g -O2  -UNDEBUG -Wall -pedantic -g -O0 -c graph.cpp -o graph.o
-## 
-  
-   g++ -std=gnu++11 -shared -L/home/travis/R-bin/lib/R/lib -L/home/travis/R-bin/lib -o gtfsrouter.so RcppExports.o convert-time.o csa-isochrone.o csa-median-timetable.o csa-timetable.o csa.o dijkstra.o graph.o -L/home/travis/R-bin/lib/R/lib -lR
-## 
-  
-   installing to /tmp/RtmpHsNwjp/devtools_install_57673227dafd/00LOCK-gtfs-router/00new/gtfsrouter/libs
-## 
-  
-   ** checking absolute paths in shared objects and dynamic libraries
-## 
-  
-─  DONE (gtfsrouter)
-## </code></pre>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"atfutures/gtfs-router"</span><span class="op">)</span></code></pre></div>
+<p>You can install latest stable version of <code>gtfsrouter</code> from CRAN with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"gtfsrouter"</span><span class="op">)</span> <span class="co"># current CRAN version</span></code></pre></div>
+<p>Alternatively, current development versions can be installed using any of the following options:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_git.html">install_git</a></span><span class="op">(</span><span class="st">"https://git.sr.ht/~mpadge/gtfsrouter"</span><span class="op">)</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_bitbucket.html">install_bitbucket</a></span><span class="op">(</span><span class="st">"atfutures/gtfsrouter"</span><span class="op">)</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_gitlab.html">install_gitlab</a></span><span class="op">(</span><span class="st">"atfutures1/gtfsrouter"</span><span class="op">)</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"ATFutures/gtfsrouter"</span><span class="op">)</span></code></pre></div>
 <p>To load the package and check the version:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gtfsrouter)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/packageDescription">packageVersion</a></span>(<span class="st">"gtfsrouter"</span>)</a></code></pre></div>
-<pre><code>## [1] '0.0.1'</code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ATFutures/gtfs-router">gtfsrouter</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span><span class="op">(</span><span class="st">"gtfsrouter"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">## [1] '0.0.4'</span></span></code></pre></div>
 </div>
 <div id="main-functions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#main-functions" class="anchor"></a>Main functions</h2>
-<p>The main functions can be demonstrated with sample data from Berlin (the Verkehrverbund Berlin Brandenburg, or VBB), included with the package. GTFS data are always stored as <code>.zip</code> files, and these sample data can be written to local storage with the function <code><a href="reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip()</a></code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span>()</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">tempfiles &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list.files">list.files</a></span> (<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/tempfile">tempdir</a></span> (), <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">filename &lt;-<span class="st"> </span>tempfiles [<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grep</a></span> (<span class="st">"vbb.zip"</span>, tempfiles)]</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">filename</a></code></pre></div>
-<pre><code>## [1] "/tmp/RtmpHsNwjp/vbb.zip"</code></pre>
+<p>The main functions can be demonstrated with sample data included with the package from Berlin (the Verkehrverbund Berlin Brandenburg, or VBB). GTFS data are always stored as <code>.zip</code> files, and these sample data can be written to local storage with the function <code><a href="reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip()</a></code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">tempfiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">filename</span> <span class="op">&lt;-</span> <span class="va">tempfiles</span> <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span> <span class="op">(</span><span class="st">"vbb.zip"</span>, <span class="va">tempfiles</span><span class="op">)</span><span class="op">]</span>
+<span class="va">filename</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">## [1] "/tmp/RtmpSCMpj3/vbb.zip"</span></span></code></pre></div>
 <p>For normal package use, <code>filename</code> will specify the name of the local GTFS data stored as a single <code>.zip</code> file.</p>
 <div id="gtfs_route" class="section level3">
 <h3 class="hasAnchor">
 <a href="#gtfs_route" class="anchor"></a>gtfs_route</h3>
 <p>Given the name of a GTFS <code>.zip</code> file, <code>filename</code>, routing is as simple as the following code:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">gtfs &lt;-<span class="st"> </span><span class="kw"><a href="reference/extract_gtfs.html">extract_gtfs</a></span> (filename)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">gtfs &lt;-<span class="st"> </span><span class="kw"><a href="reference/gtfs_timetable.html">gtfs_timetable</a></span> (gtfs) <span class="co"># A pre-processing step to speed up queries</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw"><a href="reference/gtfs_route.html">gtfs_route</a></span> (gtfs,</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">            <span class="dt">from =</span> <span class="st">"Schonlein"</span>,</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">            <span class="dt">to =</span> <span class="st">"Berlin Hauptbahnhof"</span>,</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">            <span class="dt">start_time =</span> <span class="dv">12</span> <span class="op">*</span><span class="st"> </span><span class="dv">3600</span> <span class="op">+</span><span class="st"> </span><span class="dv">120</span>) <span class="co"># 12:02 in seconds</span></a></code></pre></div>
-<table class="table table">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">filename</span><span class="op">)</span>
+<span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span> <span class="co"># A pre-processing step to speed up queries</span>
+<span class="fu"><a href="reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
+            from <span class="op">=</span> <span class="st">"Schonlein"</span>,
+            to <span class="op">=</span> <span class="st">"Berlin Hauptbahnhof"</span>,
+            start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">120</span><span class="op">)</span> <span class="co"># 12:02 in seconds</span></code></pre></div>
+<table class="table">
 <thead><tr class="header">
 <th align="left">route_name</th>
 <th align="left">trip_name</th>
 <th align="left">stop_name</th>
-<th align="left">departure_time</th>
 <th align="left">arrival_time</th>
+<th align="left">departure_time</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -221,36 +168,36 @@
 <td align="left">S5</td>
 <td align="left">S Westkreuz</td>
 <td align="left">S+U Jannowitzbrucke (Berlin)</td>
-<td align="left">12:15:54</td>
 <td align="left">12:15:24</td>
+<td align="left">12:15:54</td>
 </tr>
 <tr class="odd">
 <td align="left">S5</td>
 <td align="left">S Westkreuz</td>
 <td align="left">S+U Alexanderplatz Bhf (Berlin)</td>
-<td align="left">12:18:12</td>
 <td align="left">12:17:24</td>
+<td align="left">12:18:12</td>
 </tr>
 <tr class="even">
 <td align="left">S5</td>
 <td align="left">S Westkreuz</td>
 <td align="left">S Hackescher Markt (Berlin)</td>
-<td align="left">12:19:54</td>
 <td align="left">12:19:24</td>
+<td align="left">12:19:54</td>
 </tr>
 <tr class="odd">
 <td align="left">S5</td>
 <td align="left">S Westkreuz</td>
 <td align="left">S+U Friedrichstr. Bhf (Berlin)</td>
-<td align="left">12:22:12</td>
 <td align="left">12:21:24</td>
+<td align="left">12:22:12</td>
 </tr>
 <tr class="even">
 <td align="left">S5</td>
 <td align="left">S Westkreuz</td>
 <td align="left">S+U Berlin Hauptbahnhof</td>
-<td align="left">12:24:42</td>
 <td align="left">12:24:06</td>
+<td align="left">12:24:42</td>
 </tr>
 </tbody>
 </table>
@@ -258,32 +205,111 @@
 <div id="gtfs_isochrone" class="section level3">
 <h3 class="hasAnchor">
 <a href="#gtfs_isochrone" class="anchor"></a>gtfs_isochrone</h3>
-<p>Isochrones from a nominated station - lines delinating the range reachable within a given time - can be extracted with the <code><a href="reference/gtfs_isochrone.html">gtfs_isochrone()</a></code> function, which returns a list of all stations reachable within the specified time period from the nominated station station.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">gtfs &lt;-<span class="st"> </span><span class="kw"><a href="reference/extract_gtfs.html">extract_gtfs</a></span> (filename)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">gtfs &lt;-<span class="st"> </span><span class="kw"><a href="reference/gtfs_timetable.html">gtfs_timetable</a></span> (gtfs) <span class="co"># A pre-processing step to speed up queries</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="kw"><a href="reference/gtfs_isochrone.html">gtfs_isochrone</a></span> (gtfs,</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">                     <span class="dt">from =</span> <span class="st">"Schonlein"</span>,</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">                     <span class="dt">start_time =</span> <span class="dv">12</span> <span class="op">*</span><span class="st"> </span><span class="dv">3600</span> <span class="op">+</span><span class="st"> </span><span class="dv">120</span>,</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">                     <span class="dt">end_time =</span> <span class="dv">12</span> <span class="op">*</span><span class="st"> </span><span class="dv">3600</span> <span class="op">+</span><span class="st"> </span><span class="dv">720</span>) <span class="co"># 10 minutes later</span></a></code></pre></div>
+<p>Isochrones from a nominated station - lines delineating the range reachable within a given time - can be extracted with the <code><a href="reference/gtfs_isochrone.html">gtfs_isochrone()</a></code> function, which returns a list of all stations reachable within the specified time period from the nominated station.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">filename</span><span class="op">)</span>
+<span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span> <span class="co"># A pre-processing step to speed up queries</span>
+<span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_isochrone.html">gtfs_isochrone</a></span> <span class="op">(</span><span class="va">gtfs</span>,
+                     from <span class="op">=</span> <span class="st">"Schonlein"</span>,
+                     start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">120</span>,
+                     end_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">720</span><span class="op">)</span> <span class="co"># 10 minutes later</span></code></pre></div>
 <p>The function returns an object of class <code>gtfs_isochrone</code> containing <a href="https://github.com/r-spatial/sf"><code>sf</code></a>-formatted sets of start and end points, along with all intermediate (“mid”) points, and routes. An additional item contains the non-convex (alpha) hull enclosing the routed points. This requires the packages <a href="https://github.com/hypertidy/geodist"><code>geodist</code></a>, <a href="https://cran.r-project.org/package=sf"><code>sf</code></a>, <a href="https://cran.r-project.org/package=alphahull"><code>alphahull</code></a>, and <a href="https://cran.r-project.org/package=mapview"><code>mapview</code></a> to be installed. Isochrone objects have their own plot method:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span> (x)</a></code></pre></div>
-<p><img src="fig/isochrone.png"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span> <span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
+<p><img src="./vignettes/isochrone.png"></p>
 <p>The isochrone hull also quantifies its total area and width-to-length ratio.</p>
 </div>
 </div>
-<div id="gtfs-structure" class="section level2">
+<div id="additional-functionality" class="section level2">
 <h2 class="hasAnchor">
-<a href="#gtfs-structure" class="anchor"></a>GTFS Structure</h2>
-<p>For background information, see <a href="http://gtfs.org"><code>gtfs.org</code></a>, and particularly their <a href="https://docs.google.com/document/d/16inL5BVcM1aU-_DcFJay_tC6Ni0wPa0nvQEstueG5k4/edit">GTFS Examples</a>. The VBB is strictly schedule-only, so has no <code>"frequencies.txt"</code> file (this file defines “service periods”, and overrides any schedule information during the specified times).</p>
+<a href="#additional-functionality" class="anchor"></a>Additional Functionality</h2>
+<p>There are many ways to construct GTFS feeds. For background information, see <a href="http://gtfs.org"><code>gtfs.org</code></a>, and particularly their <a href="https://docs.google.com/document/d/16inL5BVcM1aU-_DcFJay_tC6Ni0wPa0nvQEstueG5k4/edit">GTFS Examples</a>.</p>
+<p>Feeds may include a “frequencies.txt” table which defines “service periods”, and overrides any schedule information during the specified times. The <code>gtfsrouter</code> package includes a function, <a href="https://atfutures.github.io/gtfs-router/reference/frequencies_to_stop_times.html"><code>frequencies_to_stop_times()</code></a>, to convert “frequencies.txt” tables to equivalent “stop_times.txt” entries, to enable the feed to be used for routine.</p>
+<p>Feeds may also omit a “transfers.txt” table which otherwise defines transfer abilities and times between different services. Feeds without this table can generally not be used for routing, and they exclude the possibility of transferring between multiple services. The <code>gtfsrouter</code> package also includes a function, <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html"><code>gtfs_transfer_table()</code></a>, which can calculate a transfer table for a given feed, with transfer times calculated either using straight-line distances (the default), or using more realistic times routed through the underlying street network.</p>
+</div>
+<div id="contributors" class="section level2">
+<h2 class="hasAnchor">
+<a href="#contributors" class="anchor"></a>Contributors</h2>
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<p>All contributions to this project are gratefully acknowledged using the <a href="https://github.com/ropenscilabs/allcontributors"><code>allcontributors</code> package</a> following the <a href="https://allcontributors.org">all-contributors</a> specification. Contributions of any kind are welcome!</p>
+<div id="code" class="section level3">
+<h3 class="hasAnchor">
+<a href="#code" class="anchor"></a>Code</h3>
+<table class="table"><tr>
+<td align="center">
+<a href="https://github.com/mpadge"> <img src="https://avatars1.githubusercontent.com/u/6697851?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/commits?author=mpadge">mpadge</a>
+</td>
+<td align="center">
+<a href="https://github.com/AlexandraKapp"> <img src="https://avatars0.githubusercontent.com/u/18367515?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/commits?author=AlexandraKapp">AlexandraKapp</a>
+</td>
+<td align="center">
+<a href="https://github.com/stmarcin"> <img src="https://avatars2.githubusercontent.com/u/11378350?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/commits?author=stmarcin">stmarcin</a>
+</td>
+</tr></table>
+</div>
+<div id="issues" class="section level3">
+<h3 class="hasAnchor">
+<a href="#issues" class="anchor"></a>Issues</h3>
+<table class="table">
+<tr>
+<td align="center">
+<a href="https://github.com/polettif"> <img src="https://avatars3.githubusercontent.com/u/17431069?u=757eac2821736acbb02e7c90b456411d256d5780&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Apolettif">polettif</a>
+</td>
+<td align="center">
+<a href="https://github.com/tbuckl"> <img src="https://avatars1.githubusercontent.com/u/98956?u=9580c2ee3c03cbbe44ac8180b0f6a6725b0415f0&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Atbuckl">tbuckl</a>
+</td>
+<td align="center">
+<a href="https://github.com/sridharraman"> <img src="https://avatars0.githubusercontent.com/u/570692?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Asridharraman">sridharraman</a>
+</td>
+<td align="center">
+<a href="https://github.com/tuesd4y"> <img src="https://avatars2.githubusercontent.com/u/13107179?u=cfcc7852d1bed6e2b17fa3f985cebf743c43b299&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Atuesd4y">tuesd4y</a>
+</td>
+<td align="center">
+<a href="https://github.com/luukvdmeer"> <img src="https://avatars2.githubusercontent.com/u/26540305?u=c576e87314499815cbf698b7781ee58fd1d773e2&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aluukvdmeer">luukvdmeer</a>
+</td>
+<td align="center">
+<a href="https://github.com/Robinlovelace"> <img src="https://avatars3.githubusercontent.com/u/1825120?u=461318c239e721dc40668e4b0ce6cc47731328ac&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3ARobinlovelace">Robinlovelace</a>
+</td>
+<td align="center">
+<a href="https://github.com/orlandoandradeb"> <img src="https://avatars0.githubusercontent.com/u/48104481?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aorlandoandradeb">orlandoandradeb</a>
+</td>
+</tr>
+<tr>
+<td align="center">
+<a href="https://github.com/Maxime2506"> <img src="https://avatars3.githubusercontent.com/u/54989587?u=6d2c848ee0c7d8a2841d47791c30eec1cab35470&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3AMaxime2506">Maxime2506</a>
+</td>
+<td align="center">
+<a href="https://github.com/chinhqho"> <img src="https://avatars0.githubusercontent.com/u/47441312?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Achinhqho">chinhqho</a>
+</td>
+<td align="center">
+<a href="https://github.com/federicotallis"> <img src="https://avatars3.githubusercontent.com/u/25511806?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Afedericotallis">federicotallis</a>
+</td>
+<td align="center">
+<a href="https://github.com/rafapereirabr"> <img src="https://avatars0.githubusercontent.com/u/7448421?u=9a760f26e72cd66150784babc5da6862e7775542&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Arafapereirabr">rafapereirabr</a>
+</td>
+<td align="center">
+<a href="https://github.com/loanho23"> <img src="https://avatars1.githubusercontent.com/u/48426365?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aloanho23">loanho23</a>
+</td>
+<td align="center">
+<a href="https://github.com/dcooley"> <img src="https://avatars0.githubusercontent.com/u/8093396?u=2c8d9162f246d90d433034d212b29a19e0f245c1&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Adcooley">dcooley</a>
+</td>
+</tr>
+</table>
+<!-- markdownlint-enable --><!-- prettier-ignore-end --><!-- ALL-CONTRIBUTORS-LIST:END -->
+</div>
 </div>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/ATFutures/gtfs-router">https://​github.com/​ATFutures/​gtfs-router</a>
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=gtfsrouter">https://​cloud.r-project.org/​package=gtfsrouter</a>
+</li>
+<li>Browse source code at <br><a href="https://github.com/ATFutures/gtfs-router/">https://​github.com/​ATFutures/​gtfs-router/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/ATFutures/gtfs-router/issues">https://​github.com/​ATFutures/​gtfs-router/​issues</a>
 </li>
@@ -299,34 +325,38 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Mark Padgham <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Marcin Stepniak <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6489-5443" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">All authors...</a></li>
 </ul>
 </div>
 
-      <div class="dev-status">
+  <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/ATFutures/gtfs-router"><img src="https://travis-ci.org/ATFutures/gtfs-router.svg" alt="Build Status"></a></li>
-<li><a href="https://ci.appveyor.com/project/ATFutures/gtfs-router"><img src="https://ci.appveyor.com/api/projects/status/github/ATFutures/gtfs-router?branch=master&amp;svg=true" alt="AppVeyor Build Status"></a></li>
+<li><a href="https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check"><img src="https://github.com/atfutures/gtfs-router/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
 <li><a href="https://codecov.io/gh/ATFutures/gtfs-router"><img src="https://codecov.io/gh/ATFutures/gtfs-router/branch/master/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://www.repostatus.org/#wip"><img src="https://www.repostatus.org/badges/latest/wip.svg" alt="Project Status: WIP"></a></li>
+<li><a href="https://www.repostatus.org/#active"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active"></a></li>
+<li><a href="https://cran.r-project.org/package=gtfsrouter"><img src="http://www.r-pkg.org/badges/version/gtfsrouter" alt="CRAN_Status_Badge"></a></li>
+<li><a href="https://cran.r-project.org/package=gtfsrouter"><img src="http://cranlogs.r-pkg.org/badges/grand-total/gtfsrouter?color=orange" alt="CRAN Downloads"></a></li>
 </ul>
 </div>
 </div>
-
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Mark Padgham.</p>
+  <p>Developed by Mark Padgham, Marcin Stepniak.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

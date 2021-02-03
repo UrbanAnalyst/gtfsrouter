@@ -8,21 +8,29 @@
 
 <title>gtfs_timetable — gtfs_timetable • gtfsrouter</title>
 
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,10 +38,10 @@
 
 
 
-<meta property="og:title" content="gtfs_timetable — gtfs_timetable" />
 
+<meta property="og:title" content="gtfs_timetable — gtfs_timetable" />
 <meta property="og:description" content="Convert GTFS data into format able to be used to calculate routes." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -47,9 +55,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -63,30 +72,26 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.173</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
+  <a href="../index.html">Home</a>
 </li>
 <li>
-  <a href="../articles/gtfsrouter.html">Get started</a>
+  <a href="../articles/index.html">Vignettes</a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../reference/index.html">Functions</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/ATFutures/gtfs-router">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -97,6 +102,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -108,13 +114,17 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Convert GTFS data into format able to be used to calculate routes.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>gtfs_timetable</span>(<span class='no'>gtfs</span>, <span class='kw'>day</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>route_pattern</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>quiet</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-    
+    <pre class="usage"><span class='fu'>gtfs_timetable</span><span class='op'>(</span>
+  <span class='va'>gtfs</span>,
+  day <span class='op'>=</span> <span class='cn'>NULL</span>,
+  date <span class='op'>=</span> <span class='cn'>NULL</span>,
+  route_pattern <span class='op'>=</span> <span class='cn'>NULL</span>,
+  quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -127,13 +137,25 @@
       <td><p>Day of the week on which to calculate route, either as an
 unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
 between 1 = Sunday and 7 = Saturday. If not given, the current day will be
-used.</p></td>
+used - unless the following 'date' parameter is give.</p></td>
+    </tr>
+    <tr>
+      <th>date</th>
+      <td><p>Some systems do not specify days of the week within their
+'calendar' table; rather they provide full timetables for specified calendar
+dates via a 'calendar_date' table. Providing a date here as a single 8-digit
+number representing 'yyyymmdd' will filter the data to the specified date.
+Also the 'calendar' is scanned for services that operate on the selected
+date. Therefore also a merge of feeds that combine 'calendar' and
+'calendar_dates' options is covered.</p></td>
     </tr>
     <tr>
       <th>route_pattern</th>
       <td><p>Using only those routes matching given pattern, for
 example, "^U" for routes starting with "U" (as commonly used for underground
-or subway routes.</p></td>
+or subway routes. To negative the <code>route_pattern</code> -- that is, to include all
+routes except those matching the patter -- prepend the value with "!"; for
+example "!^U" with include all services except those starting with "U".</p></td>
     </tr>
     <tr>
       <th>quiet</th>
@@ -141,73 +163,70 @@ or subway routes.</p></td>
 regarding timetable construction).</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>The input data with an addition items, <code>timetable</code>, <code>stations</code>, and
 <code>trips</code>, containing data formatted for more efficient use with
 <a href='gtfs_route.html'>gtfs_route</a> (see Note).</p>
-    
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>This function is merely provided to speed up calls to the primary
 function, <a href='gtfs_route.html'>gtfs_route</a>. If the input data to that function do not
 include a formatted <code>timetable</code>, it will be calculated anyway, but queries in
 that case will generally take longer.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='berlin_gtfs_to_zip.html'>berlin_gtfs_to_zip</a></span> () <span class='co'># Write sample feed from Berlin, Germany to tempdir</span>
-<span class='no'>f</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/file.path'>file.path</a></span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/tempfile'>tempdir</a></span> (), <span class='st'>"vbb.zip"</span>) <span class='co'># name of feed</span>
-<span class='no'>gtfs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='extract_gtfs.html'>extract_gtfs</a></span> (<span class='no'>f</span>)
-<span class='no'>from</span> <span class='kw'>&lt;-</span> <span class='st'>"Innsbrucker Platz"</span> <span class='co'># U-bahn station, not "S"</span>
-<span class='no'>to</span> <span class='kw'>&lt;-</span> <span class='st'>"Alexanderplatz"</span>
-<span class='no'>start_time</span> <span class='kw'>&lt;-</span> <span class='fl'>12</span> * <span class='fl'>3600</span> + <span class='fl'>120</span> <span class='co'># 12:02</span>
-<span class='no'>route</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> (<span class='no'>gtfs</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='no'>from</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='no'>to</span>, <span class='kw'>start_time</span> <span class='kw'>=</span> <span class='no'>start_time</span>)</div><div class='output co'>#&gt; <span class='message'>Day not specified; extracting timetable for Friday</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='fu'><a href='berlin_gtfs_to_zip.html'>berlin_gtfs_to_zip</a></span> <span class='op'>(</span><span class='op'>)</span> <span class='co'># Write sample feed from Berlin, Germany to tempdir</span>
+<span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span> <span class='op'>(</span><span class='op'>)</span>, <span class='st'>"vbb.zip"</span><span class='op'>)</span> <span class='co'># name of feed</span>
+<span class='va'>gtfs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='extract_gtfs.html'>extract_gtfs</a></span> <span class='op'>(</span><span class='va'>f</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>▶<span style='color: #00BB00;'> Unzipping GTFS archive</span><span></span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔ Unzipped GTFS archive  </span><span></span></div><div class='output co'>#&gt; <span class='message'>▶</span><span style='color: #00BB00;'> Extracting GTFS feed</span><span></span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔ Extracted GTFS feed </span><span></span></div><div class='output co'>#&gt; <span class='message'>▶</span><span style='color: #00BB00;'> Converting stop times to seconds</span><span></span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔ Converted stop times to seconds </span><span></span></div><div class='output co'>#&gt; <span class='message'>▶</span><span style='color: #00BB00;'> Converting transfer times to seconds</span><span></span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔ Converted transfer times to seconds </span><span></span></div><div class='input'><span class='va'>from</span> <span class='op'>&lt;-</span> <span class='st'>"Innsbrucker Platz"</span> <span class='co'># U-bahn station, not "S"</span>
+<span class='va'>to</span> <span class='op'>&lt;-</span> <span class='st'>"Alexanderplatz"</span>
+<span class='va'>start_time</span> <span class='op'>&lt;-</span> <span class='fl'>12</span> <span class='op'>*</span> <span class='fl'>3600</span> <span class='op'>+</span> <span class='fl'>120</span> <span class='co'># 12:02</span>
+<span class='va'>route</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> <span class='op'>(</span><span class='va'>gtfs</span>, from <span class='op'>=</span> <span class='va'>from</span>, to <span class='op'>=</span> <span class='va'>to</span>, start_time <span class='op'>=</span> <span class='va'>start_time</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>Day not specified; extracting timetable for wednesday</span></div><div class='input'>
 <span class='co'># Specify day of week</span>
-<span class='no'>route</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> (<span class='no'>gtfs</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='no'>from</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='no'>to</span>, <span class='kw'>start_time</span> <span class='kw'>=</span> <span class='no'>start_time</span>,
-                     <span class='kw'>day</span> <span class='kw'>=</span> <span class='st'>"Sunday"</span>)
+<span class='va'>route</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> <span class='op'>(</span><span class='va'>gtfs</span>, from <span class='op'>=</span> <span class='va'>from</span>, to <span class='op'>=</span> <span class='va'>to</span>, start_time <span class='op'>=</span> <span class='va'>start_time</span>,
+                     day <span class='op'>=</span> <span class='st'>"Sunday"</span><span class='op'>)</span>
 
 <span class='co'># specify travel by "U" = underground only</span>
-<span class='no'>route</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> (<span class='no'>gtfs</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='no'>from</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='no'>to</span>, <span class='kw'>start_time</span> <span class='kw'>=</span> <span class='no'>start_time</span>,
-                     <span class='kw'>day</span> <span class='kw'>=</span> <span class='st'>"Sunday"</span>, <span class='kw'>route_pattern</span> <span class='kw'>=</span> <span class='st'>"^U"</span>)
+<span class='va'>route</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> <span class='op'>(</span><span class='va'>gtfs</span>, from <span class='op'>=</span> <span class='va'>from</span>, to <span class='op'>=</span> <span class='va'>to</span>, start_time <span class='op'>=</span> <span class='va'>start_time</span>,
+                     day <span class='op'>=</span> <span class='st'>"Sunday"</span>, route_pattern <span class='op'>=</span> <span class='st'>"^U"</span><span class='op'>)</span>
 <span class='co'># specify travel by "S" = street-level only (not underground)</span>
-<span class='no'>route</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> (<span class='no'>gtfs</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='no'>from</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='no'>to</span>, <span class='kw'>start_time</span> <span class='kw'>=</span> <span class='no'>start_time</span>,
-                     <span class='kw'>day</span> <span class='kw'>=</span> <span class='st'>"Sunday"</span>, <span class='kw'>route_pattern</span> <span class='kw'>=</span> <span class='st'>"^S"</span>)
+<span class='va'>route</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> <span class='op'>(</span><span class='va'>gtfs</span>, from <span class='op'>=</span> <span class='va'>from</span>, to <span class='op'>=</span> <span class='va'>to</span>, start_time <span class='op'>=</span> <span class='va'>start_time</span>,
+                     day <span class='op'>=</span> <span class='st'>"Sunday"</span>, route_pattern <span class='op'>=</span> <span class='st'>"^S"</span><span class='op'>)</span>
 
 <span class='co'># Route queries are generally faster if the GTFS data are pre-processed with</span>
 <span class='co'># `gtfs_timetable()`:</span>
-<span class='no'>gt</span> <span class='kw'>&lt;-</span> <span class='fu'>gtfs_timetable</span> (<span class='no'>gtfs</span>, <span class='kw'>day</span> <span class='kw'>=</span> <span class='st'>"Sunday"</span>, <span class='kw'>route_pattern</span> <span class='kw'>=</span> <span class='st'>"^S"</span>)
-<span class='no'>route</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> (<span class='no'>gt</span>, <span class='kw'>from</span> <span class='kw'>=</span> <span class='no'>from</span>, <span class='kw'>to</span> <span class='kw'>=</span> <span class='no'>to</span>, <span class='kw'>start_time</span> <span class='kw'>=</span> <span class='no'>start_time</span>)</div></pre>
+<span class='va'>gt</span> <span class='op'>&lt;-</span> <span class='fu'>gtfs_timetable</span> <span class='op'>(</span><span class='va'>gtfs</span>, day <span class='op'>=</span> <span class='st'>"Sunday"</span>, route_pattern <span class='op'>=</span> <span class='st'>"^S"</span><span class='op'>)</span>
+<span class='va'>route</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> <span class='op'>(</span><span class='va'>gt</span>, from <span class='op'>=</span> <span class='va'>from</span>, to <span class='op'>=</span> <span class='va'>to</span>, start_time <span class='op'>=</span> <span class='va'>start_time</span><span class='op'>)</span>
+
+</div></span></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#note">Note</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
-  <p>Developed by Mark Padgham.</p>
+  <p>Developed by Mark Padgham, Marcin Stepniak.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 
