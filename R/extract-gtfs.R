@@ -141,7 +141,8 @@ extract_objs_into_env <- function (flist, quiet = FALSE) {
     types <- gtfs_reference_types ()
     fields <- lapply (fields, function (i) {
                           n <- names (i)
-                          ret <- types [match (i, names (types))]
+                          these_types <- do.call (rbind, i) [, 1]
+                          ret <- types [match (these_types, names (types))]
                           names (ret) <- n
                           return (ret)  })
 

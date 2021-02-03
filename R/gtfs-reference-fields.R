@@ -3,111 +3,113 @@
 
 gtfs_reference_fields <- function () {
 
-    "agency" <- c ("agency_id"          = "id",             # cond. required
-                   "agency_name"        = "text",           # required
-                   "agency_url"         = "url",            # required
-                   "agency_timezone"    = "timezone",       # required
-                   "agency_lang"        = "language_code",  # optional
-                   "agency_phone"       = "phone_number",   # optional
-                   "agency_fare_url"    = "url",            # optional
-                   "agency_email"       = "email")          # optional
+    "agency" <- list ("agency_id"       = c ("id",              "cond"),
+                      "agency_name"     = c ("text",            "required"),
+                      "agency_url"      = c ("url",             "required"),
+                      "agency_timezone" = c ("timezone",        "required"),
+                      "agency_lang"     = c ("language_code",   "optional"),
+                      "agency_phone"    = c ("phone_number",    "optional"),
+                      "agency_fare_url" = c ("url",             "optional"),
+                      "agency_email"    = c ("email",           "optional"))
 
-    "calendar" <- c ("service_idi"  = "id",     # required
-                     "mondayi"      = "enum",   # required
-                     "tuesdayi"     = "enum",   # required
-                     "wednesdayi"   = "enum",   # required
-                     "thursdayi"    = "enum",   # required
-                     "fridayi"      = "enum",   # required
-                     "saturdayi"    = "enum",   # required
-                     "sundayi"      = "enum",   # required
-                     "start_datei"  = "date",   # required
-                     "end_datei"    = "date")   # required
+    "calendar" <- list ("service_idi"  = c ("id",       "required"),
+                        "mondayi"      = c ("enum",     "required"),
+                        "tuesdayi"     = c ("enum",     "required"),
+                        "wednesdayi"   = c ("enum",     "required"),
+                        "thursdayi"    = c ("enum",     "required"),
+                        "fridayi"      = c ("enum",     "required"),
+                        "saturdayi"    = c ("enum",     "required"),
+                        "sundayi"      = c ("enum",     "required"),
+                        "start_datei"  = c ("date",     "required"),
+                        "end_datei"    = c ("date",     "required"))
 
-    "calendar_dates" <- c ("service_id"     = "id",     # required
-                           "date"           = "date",   # required
-                           "exception_type" = "enum")   # required
+    "calendar_dates" <- list ("service_id"     = c ("id",       "required"),
+                              "date"           = c ("date",     "required"),
+                              "exception_type" = c ("enum",     "required"))
 
-    "fare_attributes" <- c ("fare_id"           = "id",             # required
-                            "price"             = "float",          # required
-                            "currency_type"     = "currency_code",  # required
-                            "payment_method"    = "enum",           # required
-                            "transfers"         = "enum",           # required
-                            "agency_id"         = "id",             # cond. req.
-                            "transfer_duration" = "integer")        # optional
+    # nolint start (lots of lines > 80 characters)
+    "fare_attributes" <- list ("fare_id"           = c ("id",               "required"),
+                               "price"             = c ("float",            "required"),
+                               "currency_type"     = c ("currency_code",    "required"),
+                               "payment_method"    = c ("enum",             "required"),
+                               "transfers"         = c ("enum",             "required"),
+                               "agency_id"         = c ("id",               "conditional"),
+                               "transfer_duration" = c ("integer",          "optional"))
 
-    "fare_rules" <- c ("fare_id"        = "id",     # required
-                       "route_id"       = "id",     # optional
-                       "origin_id"      = "id",     # optional
-                       "destination_id" = "id",     # optional
-                       "containsid"     = "id")     # optional
+    "fare_rules" <- list ("fare_id"        = c ("id",   "required"),
+                          "route_id"       = c ("id",   "optional"),
+                          "origin_id"      = c ("id",   "optional"),
+                          "destination_id" = c ("id",   "optional"),
+                          "containsid"     = c ("id",   "optional"))
 
-    "feed_info" <- c ("feed_publisher_name"     = "text",           # required
-                      "feed_publisher_url"      = "url",            # required
-                      "feed_lang"               = "language_code",  # required
-                      "default_lang"            = "language_code",  # optional
-                      "feed_start_date"         = "date",           # optional
-                      "feed_end_date"           = "date",           # optional
-                      "feed_version"            = "text",           # optional
-                      "feed_contact_email"      = "email",          # optional
-                      "feed_contact_url"        = "url")            # optional
+    "feed_info" <- list ("feed_publisher_name"     = c ("text",             "required"),
+                         "feed_publisher_url"      = c ("url",              "required"),
+                         "feed_lang"               = c ("language_code",    "required"),
+                         "default_lang"            = c ("language_code",    "optional"),
+                         "feed_start_date"         = c ("date",             "optional"),
+                         "feed_end_date"           = c ("date",             "optional"),
+                         "feed_version"            = c ("text",             "optional"),
+                         "feed_contact_email"      = c ("email",            "optional"),
+                         "feed_contact_url"        = c ("url",              "optional"))
 
-    "routes" <- c ("route_id"           = "id",         # required
-                   "agency_id"          = "id",         # cond. required
-                   "route_short_name"   = "text",       # cond. required
-                   "route_long_name"    = "text",       # cond. required
-                   "route_desc"         = "text",       # optional
-                   "route_type"         = "enum",       # required
-                   "route_url"          = "url",        # optional
-                   "route_color"        = "color",      # optional
-                   "route_text_color"   = "color",      # optional
-                   "route_sort_order"   = "integer",    # optional
-                   "continuous_pickup"  = "enum",       # optional
-                   "continuous_dropoff" = "enum")       # optional
+    "routes" <- list ("route_id"           = c ("id",       "required"),
+                      "agency_id"          = c ("id",       "conditional"),
+                      "route_short_name"   = c ("text",     "conditional"),
+                      "route_long_name"    = c ("text",     "conditional"),
+                      "route_desc"         = c ("text",     "optional"),
+                      "route_type"         = c ("enum",     "required"),
+                      "route_url"          = c ("url",      "optional"),
+                      "route_color"        = c ("color",    "optional"),
+                      "route_text_color"   = c ("color",    "optional"),
+                      "route_sort_order"   = c ("integer",  "optional"),
+                      "continuous_pickup"  = c ("enum",     "optional"),
+                      "continuous_dropoff" = c ("enum",     "optional"))
 
-    "shapes" <- c ("shape_id"               = "id",         # required
-                   "shape_pt_lat"           = "latitude",   # required
-                   "shape_pt_lon"           = "longitude",  # required
-                   "shape_pt_sequence"      = "integer",    # required
-                   "shape_dist_travelled"   = "float")      # optional
+    "shapes" <- list ("shape_id"               = c ("id",           "required"),
+                      "shape_pt_lat"           = c ("latitude",     "required"),
+                      "shape_pt_lon"           = c ("longitude",    "required"),
+                      "shape_pt_sequence"      = c ("integer",      "required"),
+                      "shape_dist_travelled"   = c ("float",        "optional"))
 
-    "stops" <- c ("stop_id"                 = "id",         # required
-                  "stop_code"               = "text",       # optional
-                  "stop_name"               = "text",       # cond. required
-                  "stop_desc"               = "text",       # optional
-                  "stop_lat"                = "latitude",   # cond. required
-                  "stop_lon"                = "longitude",  # cond. required
-                  "zone_id"                 = "id",         # cond. required
-                  "stop_url"                = "url",        # optional
-                  "location_type"           = "enum",       # optional
-                  "parent_station"          = "id",         # cond. required
-                  "stop_timezone"           = "timezone",   # optional
-                  "wheelchair_boarding"     = "enum",       # optional
-                  "level_id"                = "id",         # optional
-                  "platform_code"           = "text")       # optional
+    "stops" <- list ("stop_id"                 = c ("id",           "required"),
+                     "stop_code"               = c ("text",         "optional"),
+                     "stop_name"               = c ("text",         "conditional"),
+                     "stop_desc"               = c ("text",         "optional"),
+                     "stop_lat"                = c ("latitude",     "conditional"),
+                     "stop_lon"                = c ("longitude",    "conditional"),
+                     "zone_id"                 = c ("id",           "conditional"),
+                     "stop_url"                = c ("url",          "optional"),
+                     "location_type"           = c ("enum",         "optional"),
+                     "parent_station"          = c ("id",           "conditional"),
+                     "stop_timezone"           = c ("timezone",     "optional"),
+                     "wheelchair_boarding"     = c ("enum",         "optional"),
+                     "level_id"                = c ("id",           "optional"),
+                     "platform_code"           = c ("text",         "optional"))
 
-    "stop_times" <- c ("trip_id"                = "id",      # required
-                       "arrival_time"           = "time",    # cond. required
-                       "departure_time"         = "time",    # cond. required
-                       "stop_id"                = "id",      # required
-                       "stop_sequence"          = "integer", # required
-                       "stop_headsign"          = "text",    # optional
-                       "pickup_type"            = "enum",    # optional
-                       "drop_off_type"          = "enum",    # optional
-                       "continuous_pickup"      = "enum",    # optional
-                       "continuous_drop_off"    = "enum",    # optional
-                       "shape_dist_traveled"    = "float",   # optional
-                       "timepoint"              = "enum")    # optional
+    "stop_times" <- list ("trip_id"                = c ("id",           "required"),
+                          "arrival_time"           = c ("time",         "conditional"),
+                          "departure_time"         = c ("time",         "conditional"),
+                          "stop_id"                = c ("id",           "required"),
+                          "stop_sequence"          = c ("integer",      "required"),
+                          "stop_headsign"          = c ("text",         "optional"),
+                          "pickup_type"            = c ("enum",         "optional"),
+                          "drop_off_type"          = c ("enum",         "optional"),
+                          "continuous_pickup"      = c ("enum",         "optional"),
+                          "continuous_drop_off"    = c ("enum",         "optional"),
+                          "shape_dist_traveled"    = c ("float",        "optional"),
+                          "timepoint"              = c ("enum",         "optional"))
+    # nolint end
 
-    "trips" <- c ("route_id"                = "id",     # required
-                  "service_id"              = "id",     # required
-                  "trip_id"                 = "id",     # required
-                  "trip_headsign"           = "text",   # optional
-                  "trip_short_name"         = "text",   # optional
-                  "direction_id"            = "enum",   # optional
-                  "block_id"                = "id",     # optional
-                  "shape_id"                = "id",     # cond. required
-                  "wheelchair_accessible"   = "enum",   # optional
-                  "bikes_allowed"           = "enum")   # optional
+    "trips" <- list ("route_id"                = c ("id",       "required"),
+                     "service_id"              = c ("id",       "required"),
+                     "trip_id"                 = c ("id",       "required"),
+                     "trip_headsign"           = c ("text",     "optional"),
+                     "trip_short_name"         = c ("text",     "optional"),
+                     "direction_id"            = c ("enum",     "optional"),
+                     "block_id"                = c ("id",       "optional"),
+                     "shape_id"                = c ("id",       "conditional"),
+                     "wheelchair_accessible"   = c ("enum",     "optional"),
+                     "bikes_allowed"           = c ("enum",     "optional"))
 
     return (list (agency = agency,
                   calendar = calendar,
@@ -124,6 +126,7 @@ gtfs_reference_fields <- function () {
 
 # https://developers.google.com/transit/gtfs/reference#field_types
 gtfs_reference_types <- function () {
+
     c ("color"          = "character",
        "currency_code"  = "character",
        "date"           = "integer",
