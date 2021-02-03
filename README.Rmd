@@ -98,6 +98,7 @@ which returns a list of all stations reachable within the specified time period
 from the nominated station.
 ```{r isochrone-exists, echo = FALSE}
 isochrone_exists <- file.exists ("./vignettes/isochrone.png")
+isochrone_exists <- TRUE # now in man/figures
 ```
 
 ```{r isochrone, eval = TRUE, message = FALSE}
@@ -126,7 +127,8 @@ plot (x)
 m <- plot (x)
 mapview::mapshot (m, file = "./vignettes/isochrone.png")
 ```
-![](./vignettes/isochrone.png)
+<img src="man/figures/isochrone.png" width = "80%"/>
+
 
 The isochrone hull also quantifies its total area and width-to-length ratio.
 

@@ -62,7 +62,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpSCMpj3/vbb.zip"
+    ## [1] "/tmp/RtmpthX0VN/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -125,7 +125,7 @@ Isochrone objects have their own plot method:
 plot (x)
 ```
 
-![](./vignettes/isochrone.png)
+<img src="man/figures/isochrone.png" width = "80%"/>
 
 The isochrone hull also quantifies its total area and width-to-length
 ratio.
