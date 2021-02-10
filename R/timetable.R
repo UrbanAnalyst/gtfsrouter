@@ -190,7 +190,7 @@ filter_by_date <- function (gtfs, date = NULL) {
     date_int <- date
     date <- strptime (date, format = "%Y%m%d") # YYYYMMDD date as POSIX
     days <- c ("monday", "tuesday", "wednesday", "thursday",
-    		   "friday", "saturday", "sunday")
+               "friday", "saturday", "sunday")
     day <- days [as.integer (strftime (date, format = "%u"))]
     if (is.na (day)) {
         stop ("Date must be provided in the format YYYYMMDD")
@@ -220,7 +220,8 @@ filter_by_date <- function (gtfs, date = NULL) {
     # Find indices of all services on nominated days that are within start and
     # end date of calendar
     if (length (index_day) > 0)
-        service_id <- c(service_id, calendars_in_range [index_day, ] [, service_id])
+        service_id <- c (service_id,
+                         calendars_in_range [index_day, ] [, service_id])
     if (length(service_id > 0)) {
         index <- which (gtfs$trips [, service_id] %in% service_id)
         if (length (index) == 0)
