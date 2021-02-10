@@ -66,6 +66,8 @@ gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
         gtfs_cp <- make_timetable (gtfs_cp)
     }
 
+    gtfs_cp$transfers <- rm_transfer_type_3 (gtfs_cp$transfers)
+
     return (gtfs_cp)
 }
 
@@ -273,4 +275,39 @@ filter_by_route <- function (gtfs, route_pattern = NULL) {
     gtfs$transfers <- gtfs$transfers [index, ]
 
     return (gtfs)
+}
+
+# transfers$transfer_type == 3 is used to flag prohibited transfers, which must
+# be excluded. See #76.
+rm_transfer_type_3 <- function (transfers) {
+
+    if (!any (transfers$transfer_type == 3))
+        return (transfers)
+
+    # check whether any pairs of stations have different transfer_type values,
+    # and error if so. The following is a non-dplyr version of
+    # group_by (from_stop_id, to_stop_id) %>% summarise (length (from_stop_id))
+    index <- which (duplicated (cbind (transfers$from_stop_id,
+                                       transfers$to_stop_id)))
+    if (length (index) > 0) {
+        tr <- transfers [index, ]
+        tr$temp <- paste0 (tr$from_stop_id, tr$to_stop_id)
+        tr <- split (tr, f = as.factor (tr$temp))
+        n_ttypes <- vapply (tr, function (i)
+                            length (table (i$transfer_type)),
+                            integer (1),
+                            USE.NAMES = FALSE)
+        if (any (n_ttypes > 1)) {
+            tr_out <- do.call (rbind, tr [which (n_ttypes > 1)])
+            tr_out$temp <- NULL
+            message ("transfer table has different transfer types between ",
+                     "same pairs of stops: ")
+            print (tr_out)
+            stop ("Please rectify this problem with this feed.")
+        }
+    }
+
+    transfer_type <- NULL # suppress no visible binding message
+
+    return (transfers [transfer_type < 3])
 }
