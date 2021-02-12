@@ -60,14 +60,16 @@ gtfs_traveltimes <- function (gtfs,
 
     # C++ matrix is 1-indexed, so discard first row (= 0)
     stns <- stns [-1, ]
-    stns <- data.frame (duration = stns [, 1],
-                        ntransfers = stns [, 2],
+    stns <- data.frame (start_time = stns [, 1],
+                        duration = stns [, 2],
+                        ntransfers = stns [, 3],
                         stop_id = gtfs$stops$stop_id,
                         stop_name = gtfs$stops$stop_name,
                         stop_lon = gtfs$stops$stop_lon,
                         stop_lat = gtfs$stops$stop_lat,
                         stringsAsFactors = FALSE)
     stns <- stns [which (stns$duration < .Machine$integer.max), ]
+    stns$start_time <- hms::hms (stns$start_time)
     stns$duration <- hms::hms (stns$duration)
 
     return (stns)

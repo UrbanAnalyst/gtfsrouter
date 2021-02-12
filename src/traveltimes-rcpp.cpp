@@ -158,7 +158,7 @@ Rcpp::IntegerMatrix iso::trace_back_traveltimes (
 {
     const size_t nst = iso.is_end_stn.size ();
 
-    Rcpp::IntegerMatrix res (nst, 2);
+    Rcpp::IntegerMatrix res (nst, 3);
 
     int count = 0;
 
@@ -166,6 +166,7 @@ Rcpp::IntegerMatrix iso::trace_back_traveltimes (
     {
         int ntransfers = INFINITE_INT;
         int duration = INFINITE_INT;
+        int start_time = INFINITE_INT;
         
         for (auto con: s.convec)
         {
@@ -174,16 +175,19 @@ Rcpp::IntegerMatrix iso::trace_back_traveltimes (
             {
                 ntransfers = con.ntransfers;
                 duration = this_duration;
+                start_time = con.initial_depart;
             } else if (!minimise_transfers && (this_duration < duration ||
                     (this_duration == duration && con.ntransfers < ntransfers)))
             {
                 ntransfers = con.ntransfers;
                 duration = this_duration;
+                start_time = con.initial_depart;
             }
         }
 
-        res (count, 0) = duration;
-        res (count++, 1) = ntransfers;
+        res (count, 0) = start_time;
+        res (count, 1) = duration;
+        res (count++, 2) = ntransfers;
     }
 
     return res;
