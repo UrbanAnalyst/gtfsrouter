@@ -171,13 +171,13 @@ Rcpp::IntegerMatrix iso::trace_back_traveltimes (
         for (auto con: s.convec)
         {
             int this_duration = con.arrival_time - con.initial_depart;
-            if (minimise_transfers && con.ntransfers < ntransfers)
-            {
-                ntransfers = con.ntransfers;
-                duration = this_duration;
-                start_time = con.initial_depart;
-            } else if (!minimise_transfers && (this_duration < duration ||
-                    (this_duration == duration && con.ntransfers < ntransfers)))
+
+            bool update = (minimise_transfers && con.ntransfers < ntransfers);
+            if (!update && !minimise_transfers)
+                update = this_duration < duration ||
+                    (this_duration == duration && con.ntransfers < ntransfers);
+
+            if (update)
             {
                 ntransfers = con.ntransfers;
                 duration = this_duration;
