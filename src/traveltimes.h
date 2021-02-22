@@ -4,6 +4,35 @@
 
 #include "csa.h"
 
+// ----- debugging output START -----
+//#define DEBUG
+#define DEPARTURE_STATION 32290
+#define ARRIVAL_STATION 32291
+#define DEPARTURE_TIME_MIN 29340
+#define DEPARTURE_TIME_MAX 30000
+
+#ifdef DEBUG
+#define DEBUGMSG(msg, depstn, arrstn, deptime) \
+    if ((depstn) == DEPARTURE_STATION && \
+            (arrstn) == ARRIVAL_STATION && \
+            (deptime) >= DEPARTURE_TIME_MIN && \
+            (deptime) <= DEPARTURE_TIME_MAX) \
+    Rcpp::Rcout << msg << std::endl;
+#else
+#define DEBUGMSG(msg, depstn, arrstn, deptime) do{}while(0)
+#endif
+
+#ifdef DEBUG
+#define DEBUGMSGTR(msg, trstn, deptime) \
+    if ((trstn) == DEPARTURE_STATION && \
+            (deptime) >= DEPARTURE_TIME_MIN && \
+            (deptime) <= DEPARTURE_TIME_MAX) \
+    Rcpp::Rcout << msg << std::endl;
+#else
+#define DEBUGMSGTR(msg, trstn, deptime) do{}while(0)
+#endif
+// ----- debugging output END -----
+
 class Iso
 {
     private:

@@ -148,9 +148,22 @@ bool iso::fill_one_iso (
 
                 if (update)
                 {
+                    DEBUGMSG("   update: (" << departure_station << " -> " <<
+                            arrival_station << "), time(" <<
+                            departure_time << " -> " <<
+                            arrival_time << "); (dur, tr) = (" <<
+                            arrival_time - latest_initial <<
+                            ", " << st.ntransfers <<
+                            "); init = " << latest_initial <<
+                            " -> " << st.initial_depart <<
+                            "; prev_stn = " << st.prev_stn,
+                            departure_station, arrival_station,
+                            departure_time);
+
                     latest_initial = st.initial_depart;
                     prev_trip = st.trip;
                     ntransfers = st.ntransfers;
+
                 }
             }
 
@@ -161,6 +174,15 @@ bool iso::fill_one_iso (
             if (same_trip)
                 break;
         }
+
+        DEBUGMSG("--stn: (" << departure_station << " -> " <<
+                arrival_station << "), time(" <<
+                departure_time << " -> " <<
+                arrival_time << "), dur = " <<
+                arrival_time - latest_initial <<
+                " with " << ntransfers << " transfers",
+                departure_station, arrival_station,
+                departure_time);
 
         is_end_stn = is_end_stn && !not_end_stn;
 
@@ -362,6 +384,15 @@ void iso::fill_one_transfer (
 
     iso.connections [trans_dest].convec [s].ntransfers = ntransfers + 1;
     iso.connections [trans_dest].convec [s].initial_depart = latest_initial;
+
+    DEBUGMSGTR("---TR: (" << arrival_station << " -> " <<
+            trans_dest << "), time(" <<
+            arrival_time << " -> " <<
+            trans_time << "), dur = " <<
+            trans_time << " - " << latest_initial <<
+            " = " << trans_time - latest_initial <<
+            " with " << ntransfers << " transfers",
+            trans_dest, arrival_time);
 }
 
 int iso::find_actual_end_time (
