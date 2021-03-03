@@ -139,6 +139,11 @@ bool iso::fill_one_iso (
                 {
                     // only update if departure is after listed initial depart
                     update = departure_time > st.initial_depart;
+                    // and if connection is a transfer, then only if
+                    // arrival_time < listed departure time
+                    if (update & st.is_transfer)
+                        update = departure_time >= st.arrival_time;
+
                     // for !minimise_transfers, update if:
                     // 1. st.initial_depart > latest_initial OR
                     // 2. st.ntransfers < ntransfers &&
@@ -363,6 +368,7 @@ void iso::fill_one_transfer (
 
     const size_t s = iso.extend (trans_dest) - 1;
 
+    iso.connections [trans_dest].convec [s].is_transfer = true;
     iso.connections [trans_dest].convec [s].prev_stn = arrival_station;
     iso.connections [trans_dest].convec [s].departure_time = arrival_time;
     iso.connections [trans_dest].convec [s].arrival_time = trans_time;

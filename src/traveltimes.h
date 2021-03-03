@@ -10,13 +10,14 @@
  * lines allow reverse tracing between nominated station pairs and times. Just
  * switch it on, and progressively modify the values to trace backwards to
  * identify where and why any problems arise.
+ * Note that DEPARTURE_STATION has to be specified to debug transfers
  */
 
 // ----- debugging output START -----
 //#define DEBUG
-#define DEPARTURE_STATION -1
-#define ARRIVAL_STATION 32291
-#define DEPARTURE_TIME_MIN 28800
+#define DEPARTURE_STATION 20715
+#define ARRIVAL_STATION 16418
+#define DEPARTURE_TIME_MIN 28000
 #define DEPARTURE_TIME_MAX 30000
 
 #ifdef DEBUG
@@ -47,6 +48,7 @@ class Iso
     private:
 
         struct OneCon {
+            bool is_transfer = false;
             size_t prev_stn;
             int departure_time,
                 arrival_time,
