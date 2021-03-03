@@ -4,19 +4,28 @@
 
 #include "csa.h"
 
+/* Note that this algorithm is very difficult to debug, because the algorithm
+ * works by tracing a timetable forward, but problems can only be identified by
+ * tracing back from the point at which they arise. The following debugging
+ * lines allow reverse tracing between nominated station pairs and times. Just
+ * switch it on, and progressively modify the values to trace backwards to
+ * identify where and why any problems arise.
+ */
+
 // ----- debugging output START -----
 //#define DEBUG
-#define DEPARTURE_STATION 32290
+#define DEPARTURE_STATION -1
 #define ARRIVAL_STATION 32291
-#define DEPARTURE_TIME_MIN 29340
+#define DEPARTURE_TIME_MIN 28800
 #define DEPARTURE_TIME_MAX 30000
 
 #ifdef DEBUG
 #define DEBUGMSG(msg, depstn, arrstn, deptime) \
-    if ((depstn) == DEPARTURE_STATION && \
-            (arrstn) == ARRIVAL_STATION && \
-            (deptime) >= DEPARTURE_TIME_MIN && \
-            (deptime) <= DEPARTURE_TIME_MAX) \
+    if ((DEPARTURE_STATION < 0 || \
+                (depstn) == DEPARTURE_STATION) && \
+                (arrstn) == ARRIVAL_STATION && \
+                (deptime) >= DEPARTURE_TIME_MIN && \
+                (deptime) <= DEPARTURE_TIME_MAX) \
     Rcpp::Rcout << msg << std::endl;
 #else
 #define DEBUGMSG(msg, depstn, arrstn, deptime) do{}while(0)

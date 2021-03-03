@@ -152,7 +152,7 @@ bool iso::fill_one_iso (
                             arrival_station << "), time(" <<
                             departure_time << " -> " <<
                             arrival_time << "); (dur, tr) = (" <<
-                            arrival_time - latest_initial <<
+                            arrival_time - st.initial_depart <<
                             ", " << st.ntransfers <<
                             "); init = " << latest_initial <<
                             " -> " << st.initial_depart <<
