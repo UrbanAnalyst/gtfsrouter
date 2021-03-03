@@ -137,13 +137,21 @@ bool iso::fill_one_iso (
                     update = (ntransfers == INFINITE_INT);
                 if (!same_trip)
                 {
+                    // only update if departure is after listed initial depart
+                    update = departure_time > st.initial_depart;
                     // for !minimise_transfers, update if:
                     // 1. st.initial_depart > latest_initial OR
                     // 2. st.ntransfers < ntransfers &&
                     //      st.initial_depart == latest_initial
-                    update = iso::update_best_connection (st.initial_depart,
-                            latest_initial, st.ntransfers, ntransfers,
-                            minimise_transfers);
+                    if (update)
+                    {
+                        update = iso::update_best_connection (
+                                st.initial_depart,
+                                latest_initial,
+                                st.ntransfers,
+                                ntransfers,
+                                minimise_transfers);
+                    }
                 }
 
                 if (update)
@@ -370,8 +378,11 @@ void iso::fill_one_transfer (
             ((arrival_time - st.initial_depart) <= isochrone);
         if (fill_here)
         {
-            const bool update = iso::update_best_connection (st.initial_depart,
-                    latest_initial, st.ntransfers, ntransfers,
+            const bool update = iso::update_best_connection (
+                    st.initial_depart,
+                    latest_initial,
+                    st.ntransfers,
+                    ntransfers,
                     minimise_transfers);
 
             if (update)
@@ -569,8 +580,11 @@ size_t iso::trace_back_prev_index (
             bool update = same_trip = (st.trip == trip_id);
             if (!update)
             {
-                update = iso::update_best_connection (st.initial_depart,
-                        latest_initial, st.ntransfers, ntransfers,
+                update = iso::update_best_connection (
+                        st.initial_depart,
+                        latest_initial,
+                        st.ntransfers,
+                        ntransfers,
                         minimise_transfers);
             }
 
