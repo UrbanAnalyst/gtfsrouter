@@ -38,4 +38,13 @@ test_that ("traveltime errors", {
               start_times <- 2:1
               expect_error (gtfs_traveltimes (g2, from, start_times),
                             "start_time_limits must be \\(min, max\\) values")
+
+              start_time_limits <- c (43212, 49212)
+              expect_error (gtfs_traveltimes (g2, from, start_times,
+                                              max_traveltime = -1),
+                        "max_traveltime must be a single number greater than 0")
+
+              g2$transfers <- NULL
+              expect_error (gtfs_traveltimes (g2, from, start_times),
+                            "gtfs must have a transfers table")
              })

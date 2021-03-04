@@ -38,7 +38,13 @@ gtfs_traveltimes <- function (gtfs,
     if (!all (is.numeric (max_traveltime)) |
         all (max_traveltime <= 0) |
         length (max_traveltime) > 1)
-        stop ("max_traveltime must be a single number greater than 0")
+        stop ("max_traveltime must be a single number greater than 0",
+              call. = FALSE)
+
+    if (!"transfers" %in% names (gtfs))
+        stop ("gtfs must have a transfers table; ",
+              "please use 'gtfs_transfer_table()' to construct one",
+              call. = FALSE)
 
     if (!"timetable" %in% names (gtfs))
         gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)
