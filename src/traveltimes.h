@@ -134,7 +134,8 @@ void trace_forward_traveltimes (
         const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
         const std::unordered_set <size_t> & start_stations_set,
         const bool & minimise_transfers,
-        const double & prop_stops);
+        const double & prop_stops,
+        const int & max_traveltime);
 
 void fill_one_transfer (
         const size_t &departure_station,
@@ -245,4 +246,5 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         const int start_time_max,
         const int end_time,
         const bool minimise_transfers,
-        const int cutoff);
+        const double prop_stops,
+        const int max_traveltime);

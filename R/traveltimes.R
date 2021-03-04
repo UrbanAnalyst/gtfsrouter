@@ -13,6 +13,8 @@
 #' `prop_stops` parameter should accordingly generally be less than 1. For large
 #' systems with many stops (tens of thousands), values of 0.5 are often
 #' sufficient to reach most of the system.
+#' @param max_traveltime The maximal traveltime to search for, specified in
+#' seconds (with default of 1 hour). 
 #'
 #' @note Searching for all connections over an entire timetable may return
 #' anomalously high travel times for stops which are only very occasionally
@@ -38,6 +40,7 @@ gtfs_traveltimes <- function (gtfs,
                               route_pattern = NULL,
                               minimise_transfers = FALSE,
                               prop_stops = 0.5,
+                              max_traveltime = 60 * 60,
                               quiet = FALSE) {
 
     if (!all (is.numeric (prop_stops)) | all (prop_stops <= 0) |
@@ -68,7 +71,8 @@ gtfs_traveltimes <- function (gtfs,
                               start_time_limits [1], 
                               start_time_limits [2], 
                               minimise_transfers,
-                              prop_stops)
+                              prop_stops,
+                              max_traveltime)
 
     # C++ matrix is 1-indexed, so discard first row (= 0)
     stns <- stns [-1, ]

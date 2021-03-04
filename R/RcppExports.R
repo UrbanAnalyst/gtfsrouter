@@ -72,6 +72,6 @@ rcpp_isochrone <- function(timetable, transfers, nstations, start_stations, star
 #' All elements of all data are 1-indexed
 #'
 #' @noRd
-rcpp_traveltimes <- function(timetable, transfers, nstations, start_stations, start_time_min, start_time_max, minimise_transfers, prop_stops) {
-    .Call(`_gtfsrouter_rcpp_traveltimes`, timetable, transfers, nstations, start_stations, start_time_min, start_time_max, minimise_transfers, prop_stops)
+rcpp_traveltimes <- function(timetable, transfers, nstations, start_stations, start_time_min, start_time_max, minimise_transfers, prop_stops, max_traveltime) {
+    .Call(`_gtfsrouter_rcpp_traveltimes`, timetable, transfers, nstations, start_stations, start_time_min, start_time_max, minimise_transfers, prop_stops, max_traveltime)
 }

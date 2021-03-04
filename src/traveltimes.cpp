@@ -251,7 +251,8 @@ void iso::trace_forward_traveltimes (
         const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
         const std::unordered_set <size_t> & start_stations_set,
         const bool & minimise_transfers,
-        const double & prop_stops)
+        const double & prop_stops,
+        const int & max_traveltime)
 {
     const size_t nrows = departure_station.size ();
 
