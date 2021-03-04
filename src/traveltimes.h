@@ -47,6 +47,8 @@ class Iso
 {
     private:
 
+        int max_traveltime;
+
         struct OneCon {
             bool is_transfer = false;
             size_t prev_stn;
@@ -68,7 +70,10 @@ class Iso
 
         std::vector <ConVec> connections;
 
-        Iso (const size_t n) {
+        Iso (const size_t n, const int max_traveltime_in) {
+
+            max_traveltime = max_traveltime_in;
+
             is_end_stn.resize (n, false);
             earliest_departure.resize (n, INFINITE_INT);
             connections.resize (n);

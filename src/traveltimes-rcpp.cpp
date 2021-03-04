@@ -39,7 +39,7 @@ Rcpp::List rcpp_isochrone (Rcpp::DataFrame timetable,
             transfers ["to_stop_id"],
             transfers ["min_transfer_time"]);
 
-    Iso iso (nstations + 1);
+    Iso iso (nstations + 1, 999999); // the latter is a dummy val here for max_traveltime
 
     const std::vector <size_t> departure_station = timetable ["departure_station"],
         arrival_station = timetable ["arrival_station"],
@@ -133,7 +133,7 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
             transfers ["to_stop_id"],
             transfers ["min_transfer_time"]);
 
-    Iso iso (nstations + 1);
+    Iso iso (nstations + 1, max_traveltime);
 
     const std::vector <size_t> departure_station = timetable ["departure_station"],
         arrival_station = timetable ["arrival_station"],
