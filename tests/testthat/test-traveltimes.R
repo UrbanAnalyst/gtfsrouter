@@ -3,12 +3,12 @@ context("traveltimes")
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
              identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
-test_that("gtfs_traveltimes", {
-              berlin_gtfs_to_zip ()
-              f <- file.path (tempdir (), "vbb.zip")
-              expect_silent (g <- extract_gtfs (f, quiet = TRUE))
-              expect_silent (g2 <- gtfs_timetable (g, day = 3, quiet = TRUE))
+berlin_gtfs_to_zip ()
+f <- file.path (tempdir (), "vbb.zip")
+g <- extract_gtfs (f, quiet = TRUE)
+g2 <- gtfs_timetable (g, day = 3, quiet = TRUE)
 
+test_that("gtfs_traveltimes", {
               from <- "Alexanderplatz"
               start_times <- 8 * 3600 + c (0, 60) * 60 # 8:00-9:00
               res <- gtfs_traveltimes (g2, from, start_times)
@@ -22,4 +22,20 @@ test_that("gtfs_traveltimes", {
                                                 "stop_name",
                                                 "stop_lon",
                                                 "stop_lat"))
+             })
+
+test_that ("traveltime errors", {
+              from <- "Alexanderplatz"
+              start_times <- NULL
+              expect_error (gtfs_traveltimes (g2, from, start_times),
+                            "start_time_limits must have exactly two entries")
+              start_times <- 1:3
+              expect_error (gtfs_traveltimes (g2, from, start_times),
+                            "start_time_limits must have exactly two entries")
+              start_times <- c ("a", "b")
+              expect_error (gtfs_traveltimes (g2, from, start_times),
+                            "start_time_limits must be a vector of 2 integer")
+              start_times <- 2:1
+              expect_error (gtfs_traveltimes (g2, from, start_times),
+                            "start_time_limits must be \\(min, max\\) values")
              })

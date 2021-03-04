@@ -52,9 +52,7 @@ gtfs_traveltimes <- function (gtfs,
     # no visible binding note:
     departure_time <- NULL
 
-    start_time_limits <- vapply (start_time_limits,
-                                 convert_time,
-                                 integer (1))
+    start_time_limits <- convert_start_time_limits (start_time_limits)
 
     gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time_limits [1], ]
     if (nrow (gtfs_cp$timetable) == 0)
@@ -87,4 +85,16 @@ gtfs_traveltimes <- function (gtfs,
     stns$duration <- hms::hms (stns$duration)
 
     return (stns)
+}
+
+convert_start_time_limits <- function (start_time_limits) {
+
+    if (length (start_time_limits) != 2)
+        stop ("start_time_limits must have exactly two entries")
+    if (!is.numeric (start_time_limits))
+        stop ("start_time_limits must be a vector of 2 integers")
+    if (start_time_limits [1] > start_time_limits [2])
+        stop ("start_time_limits must be (min, max) values")
+
+    vapply (start_time_limits, convert_time, integer (1))
 }
