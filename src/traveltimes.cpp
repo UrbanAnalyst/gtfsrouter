@@ -274,6 +274,9 @@ void iso::trace_forward_traveltimes (
         const bool is_start_stn = iso::is_start_stn (start_stations_set,
                 departure_station [i]);
 
+        if (is_start_stn && departure_time [i] > start_time_max)
+            continue;
+
         if (!is_start_stn &&
                 iso.earliest_departure [departure_station [i]] < INFINITE_INT &&
                 iso.earliest_departure [departure_station [i]] >
