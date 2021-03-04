@@ -73,7 +73,7 @@ other reachable station in a system." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.193</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.195</span>
       </span>
     </div>
 
@@ -128,7 +128,7 @@ other reachable station in a system.</p>
   grep_fixed <span class='op'>=</span> <span class='cn'>TRUE</span>,
   route_pattern <span class='op'>=</span> <span class='cn'>NULL</span>,
   minimise_transfers <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  prop_stops <span class='op'>=</span> <span class='fl'>0.5</span>,
+  max_traveltime <span class='op'>=</span> <span class='fl'>60</span> <span class='op'>*</span> <span class='fl'>60</span>,
   quiet <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
@@ -189,15 +189,9 @@ minimal-transfer connections to each end point, even if those connections are
 slower than alternative connections with transfers.</p></td>
     </tr>
     <tr>
-      <th>prop_stops</th>
-      <td><p>Stop scanning after this proportion of all potentially
-reachable stops has been reached. Some stops may only be reached very
-infrequently (like once per day), and scanning a timetable until all stops
-have been reached may (1) yield anomalously long travel times for very
-infrequently serviced stops; and (2) take a long time to calculate. The
-<code>prop_stops</code> parameter should accordingly generally be less than 1. For large
-systems with many stops (tens of thousands), values of 0.5 are often
-sufficient to reach most of the system.</p></td>
+      <th>max_traveltime</th>
+      <td><p>The maximal traveltime to search for, specified in
+seconds (with default of 1 hour). See note for details.</p></td>
     </tr>
     <tr>
       <th>quiet</th>
@@ -208,10 +202,11 @@ regarding timetable construction).</p></td>
 
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>Searching for all connections over an entire timetable may return
-anomalously high travel times for stops which are only very occasionally
-serviced. Results generated with values of <code>prop_stops</code> close to 1 may need to
-be manually cleaned prior to analysis.</p>
+    <p>Higher values of <code>max_traveltime</code> will return traveltimes for greater
+numbers of stations, but may lead to considerably longer calculation times.
+For repeated usage, it is recommended to first establish a value sufficient
+to reach all or most stations desired for a particular query, rather than set
+<code>max_traveltime</code> to an arbitrarily high value.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='berlin_gtfs_to_zip.html'>berlin_gtfs_to_zip</a></span> <span class='op'>(</span><span class='op'>)</span>
