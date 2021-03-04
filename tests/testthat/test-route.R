@@ -1,7 +1,7 @@
 context("route")
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
-             identical (Sys.getenv ("TRAVIS"), "true"))
+             identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
 
 test_that("extract", {
@@ -11,14 +11,6 @@ test_that("extract", {
                             "filename non-existent-file.zip does not exist")
               f <- file.path (tempdir (), "junk")
               cat ("junk", file = f)
-              # The following test fails on appveyor with this message:
-              # Expected match: "zip file
-              # 'C:/Users/appveyor/AppData/Local/Temp/1\\Rtmp8aCxU2/junk' cannot
-              # be opened"
-              # Actual message: "zip file
-              # 'C:/Users/appveyor/AppData/Local/Temp/1\\Rtmp8aCxU2/junk' cannot
-              # be opened"
-              # --- and yes, those two are in fact identical! Therefore:
               #if (test_all)
               #    expect_error (g <- extract_gtfs (f))
 
