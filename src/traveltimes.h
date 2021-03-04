@@ -94,6 +94,10 @@ class Iso
             return s;
         }
 
+        const int get_max_traveltime () {
+            return max_traveltime;
+        }
+
 };
 
 struct BackTrace
@@ -139,7 +143,6 @@ void trace_forward_traveltimes (
         const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
         const std::unordered_set <size_t> & start_stations_set,
         const bool & minimise_transfers,
-        const double & prop_stops,
         const int & max_traveltime);
 
 void fill_one_transfer (
@@ -251,5 +254,4 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         const int start_time_max,
         const int end_time,
         const bool minimise_transfers,
-        const double prop_stops,
         const int max_traveltime);

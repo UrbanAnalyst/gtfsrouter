@@ -114,6 +114,10 @@ bool iso::fill_one_iso (
         bool not_end_stn = false;
         for (auto st: iso.connections [departure_station].convec)
         {
+            // don't fill any connections > max_traveltime
+            if ((arrival_time - st.initial_depart) > iso.get_max_traveltime ())
+                continue;
+
             bool fill_here = (st.arrival_time <= departure_time) &&
                 ((arrival_time - st.initial_depart) <= isochrone);
 
@@ -251,7 +255,6 @@ void iso::trace_forward_traveltimes (
         const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
         const std::unordered_set <size_t> & start_stations_set,
         const bool & minimise_transfers,
-        const double & prop_stops,
         const int & max_traveltime)
 {
     const size_t nrows = departure_station.size ();
@@ -262,8 +265,6 @@ void iso::trace_forward_traveltimes (
     for (int a: arrival_station)
         stations.emplace (std::make_pair (a, false));
     const int nstations = static_cast <int> (stations.size ());
-
-    int nstns_reached = 0;
 
     bool stop = false;
 
@@ -296,8 +297,6 @@ void iso::trace_forward_traveltimes (
         if (filled && !stations.at (arrival_station [i]))
         {
             stations [arrival_station [i]] = true;
-            nstns_reached++;
-            stop = nstns_reached >= round (prop_stops * nstations);
         }
 
         if (filled && transfer_map.find (arrival_station [i]) != transfer_map.end ())
@@ -320,8 +319,6 @@ void iso::trace_forward_traveltimes (
                         if (!stations.at (trans_dest))
                         {
                             stations [trans_dest] = true;
-                            nstns_reached++;
-                            stop = nstns_reached >= round (prop_stops * nstations);
                         }
                     }
                 }
@@ -389,12 +386,15 @@ void iso::fill_one_transfer (
             ((arrival_time - st.initial_depart) <= isochrone);
         if (fill_here)
         {
-            const bool update = iso::update_best_connection (
+            bool update = iso::update_best_connection (
                     st.initial_depart,
                     latest_initial,
                     st.ntransfers,
                     ntransfers,
                     minimise_transfers);
+
+            if (update)
+                update = (trans_time - st.initial_depart) < iso.get_max_traveltime();
 
             if (update)
             {

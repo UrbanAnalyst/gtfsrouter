@@ -113,7 +113,6 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         const int start_time_min,
         const int start_time_max,
         const bool minimise_transfers,
-        const double prop_stops,
         const int max_traveltime)
 {
 
@@ -153,7 +152,6 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
             transfer_map,
             start_stations_set,
             minimise_transfers,
-            prop_stops,
             max_traveltime);
 
     Rcpp::IntegerMatrix res = iso::trace_back_traveltimes (

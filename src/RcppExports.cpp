@@ -76,8 +76,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_traveltimes
-Rcpp::IntegerMatrix rcpp_traveltimes(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const size_t nstations, const std::vector <size_t> start_stations, const int start_time_min, const int start_time_max, const bool minimise_transfers, const double prop_stops, const int max_traveltime);
-RcppExport SEXP _gtfsrouter_rcpp_traveltimes(SEXP timetableSEXP, SEXP transfersSEXP, SEXP nstationsSEXP, SEXP start_stationsSEXP, SEXP start_time_minSEXP, SEXP start_time_maxSEXP, SEXP minimise_transfersSEXP, SEXP prop_stopsSEXP, SEXP max_traveltimeSEXP) {
+Rcpp::IntegerMatrix rcpp_traveltimes(Rcpp::DataFrame timetable, Rcpp::DataFrame transfers, const size_t nstations, const std::vector <size_t> start_stations, const int start_time_min, const int start_time_max, const bool minimise_transfers, const int max_traveltime);
+RcppExport SEXP _gtfsrouter_rcpp_traveltimes(SEXP timetableSEXP, SEXP transfersSEXP, SEXP nstationsSEXP, SEXP start_stationsSEXP, SEXP start_time_minSEXP, SEXP start_time_maxSEXP, SEXP minimise_transfersSEXP, SEXP max_traveltimeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -88,9 +88,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const int >::type start_time_min(start_time_minSEXP);
     Rcpp::traits::input_parameter< const int >::type start_time_max(start_time_maxSEXP);
     Rcpp::traits::input_parameter< const bool >::type minimise_transfers(minimise_transfersSEXP);
-    Rcpp::traits::input_parameter< const double >::type prop_stops(prop_stopsSEXP);
     Rcpp::traits::input_parameter< const int >::type max_traveltime(max_traveltimeSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_traveltimes(timetable, transfers, nstations, start_stations, start_time_min, start_time_max, minimise_transfers, prop_stops, max_traveltime));
+    rcpp_result_gen = Rcpp::wrap(rcpp_traveltimes(timetable, transfers, nstations, start_stations, start_time_min, start_time_max, minimise_transfers, max_traveltime));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -101,7 +100,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gtfsrouter_rcpp_make_timetable", (DL_FUNC) &_gtfsrouter_rcpp_make_timetable, 3},
     {"_gtfsrouter_rcpp_csa", (DL_FUNC) &_gtfsrouter_rcpp_csa, 8},
     {"_gtfsrouter_rcpp_isochrone", (DL_FUNC) &_gtfsrouter_rcpp_isochrone, 7},
-    {"_gtfsrouter_rcpp_traveltimes", (DL_FUNC) &_gtfsrouter_rcpp_traveltimes, 9},
+    {"_gtfsrouter_rcpp_traveltimes", (DL_FUNC) &_gtfsrouter_rcpp_traveltimes, 8},
     {NULL, NULL, 0}
 };
 

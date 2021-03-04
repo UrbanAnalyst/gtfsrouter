@@ -13,7 +13,7 @@ gtfs_traveltimes(
   grep_fixed = TRUE,
   route_pattern = NULL,
   minimise_transfers = FALSE,
-  prop_stops = 0.5,
+  max_traveltime = 60 * 60,
   quiet = FALSE
 )
 }
@@ -55,14 +55,8 @@ parameter is not used at all if \code{gtfs} has already been prepared with
 minimal-transfer connections to each end point, even if those connections are
 slower than alternative connections with transfers.}
 
-\item{prop_stops}{Stop scanning after this proportion of all potentially
-reachable stops has been reached. Some stops may only be reached very
-infrequently (like once per day), and scanning a timetable until all stops
-have been reached may (1) yield anomalously long travel times for very
-infrequently serviced stops; and (2) take a long time to calculate. The
-\code{prop_stops} parameter should accordingly generally be less than 1. For large
-systems with many stops (tens of thousands), values of 0.5 are often
-sufficient to reach most of the system.}
+\item{max_traveltime}{The maximal traveltime to search for, specified in
+seconds (with default of 1 hour). See note for details.}
 
 \item{quiet}{Set to \code{TRUE} to suppress screen messages (currently just
 regarding timetable construction).}
@@ -72,10 +66,11 @@ Travel times from a nominated station departing at a nominated time to every
 other reachable station in a system.
 }
 \note{
-Searching for all connections over an entire timetable may return
-anomalously high travel times for stops which are only very occasionally
-serviced. Results generated with values of \code{prop_stops} close to 1 may need to
-be manually cleaned prior to analysis.
+Higher values of \code{max_traveltime} will return traveltimes for greater
+numbers of stations, but may lead to considerably longer calculation times.
+For repeated usage, it is recommended to first establish a value sufficient
+to reach all or most stations desired for a particular query, rather than set
+\code{max_traveltime} to an arbitrarily high value.
 }
 \examples{
 berlin_gtfs_to_zip ()

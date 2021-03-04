@@ -5,21 +5,14 @@
 #'
 #' @param start_time_limits A vector of two integer values denoting the earliest
 #' and latest departure times in seconds for the traveltime values.
-#' @param prop_stops Stop scanning after this proportion of all potentially
-#' reachable stops has been reached. Some stops may only be reached very
-#' infrequently (like once per day), and scanning a timetable until all stops
-#' have been reached may (1) yield anomalously long travel times for very
-#' infrequently serviced stops; and (2) take a long time to calculate. The
-#' `prop_stops` parameter should accordingly generally be less than 1. For large
-#' systems with many stops (tens of thousands), values of 0.5 are often
-#' sufficient to reach most of the system.
 #' @param max_traveltime The maximal traveltime to search for, specified in
-#' seconds (with default of 1 hour). 
+#' seconds (with default of 1 hour). See note for details.
 #'
-#' @note Searching for all connections over an entire timetable may return
-#' anomalously high travel times for stops which are only very occasionally
-#' serviced. Results generated with values of `prop_stops` close to 1 may need to
-#' be manually cleaned prior to analysis.
+#' @note Higher values of `max_traveltime` will return traveltimes for greater
+#' numbers of stations, but may lead to considerably longer calculation times.
+#' For repeated usage, it is recommended to first establish a value sufficient
+#' to reach all or most stations desired for a particular query, rather than set
+#' `max_traveltime` to an arbitrarily high value.
 #'
 #' @inheritParams gtfs_isochrone
 #' @examples
@@ -39,13 +32,13 @@ gtfs_traveltimes <- function (gtfs,
                               grep_fixed = TRUE,
                               route_pattern = NULL,
                               minimise_transfers = FALSE,
-                              prop_stops = 0.5,
                               max_traveltime = 60 * 60,
                               quiet = FALSE) {
 
-    if (!all (is.numeric (prop_stops)) | all (prop_stops <= 0) |
-        all (prop_stops > 1) | length (prop_stops) > 1)
-        stop ("prop_stops must be a single number between 0 and 1")
+    if (!all (is.numeric (max_traveltime)) |
+        all (max_traveltime <= 0) |
+        length (max_traveltime) > 1)
+        stop ("max_traveltime must be a single number greater than 0")
 
     if (!"timetable" %in% names (gtfs))
         gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)
@@ -71,7 +64,6 @@ gtfs_traveltimes <- function (gtfs,
                               start_time_limits [1], 
                               start_time_limits [2], 
                               minimise_transfers,
-                              prop_stops,
                               max_traveltime)
 
     # C++ matrix is 1-indexed, so discard first row (= 0)
