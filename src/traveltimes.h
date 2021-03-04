@@ -126,7 +126,6 @@ bool fill_one_iso (
         const size_t &trip_id,
         const int &departure_time,
         const int &arrival_time,
-        const int &isochrone,
         const bool &is_start_stn,
         const bool &minimise_transfers,
         Iso &iso);
@@ -151,7 +150,6 @@ void fill_one_transfer (
         const int &arrival_time,
         const size_t &trans_dest,
         const int &trans_duration,
-        const int &isochrone,
         const bool &minimise_transfers,
         Iso &iso);
 
@@ -193,10 +191,9 @@ bool update_best_connection (
         );
 
 const bool is_transfer_in_isochrone (
-        const Iso & iso,
+        Iso & iso,
         const size_t & station,
-        const int & transfer_time,
-        const int & isochrone
+        const int & transfer_time
         );
 
 const bool is_transfer_connected (
