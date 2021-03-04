@@ -110,7 +110,8 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const size_t nstations,
         const std::vector <size_t> start_stations,
-        const int start_time,
+        const int start_time_min,
+        const int start_time_max,
         const bool minimise_transfers,
         const double prop_stops)
 {
@@ -139,13 +140,23 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
     const std::vector <int> departure_time = timetable ["departure_time"],
         arrival_time = timetable ["arrival_time"];
 
-    iso::trace_forward_traveltimes (iso, start_time,
-            departure_station, arrival_station, trip_id, 
-            departure_time, arrival_time,
-            transfer_map, start_stations_set,
-            minimise_transfers, prop_stops);
+    iso::trace_forward_traveltimes (
+            iso,
+            start_time_min,
+            start_time_max,
+            departure_station,
+            arrival_station,
+            trip_id, 
+            departure_time,
+            arrival_time,
+            transfer_map,
+            start_stations_set,
+            minimise_transfers,
+            prop_stops);
 
-    Rcpp::IntegerMatrix res = iso::trace_back_traveltimes (iso, minimise_transfers);
+    Rcpp::IntegerMatrix res = iso::trace_back_traveltimes (
+            iso,
+            minimise_transfers);
 
     return res;
 }

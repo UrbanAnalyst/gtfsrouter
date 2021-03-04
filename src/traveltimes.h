@@ -124,7 +124,8 @@ bool fill_one_iso (
 
 void trace_forward_traveltimes (
         Iso & iso,
-        const int & start_time,
+        const int & start_time_min,
+        const int & start_time_max,
         const std::vector <size_t> & departure_station,
         const std::vector <size_t> & arrival_station,
         const std::vector <size_t> & trip_id,
@@ -240,7 +241,8 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const size_t nstations,
         const std::vector <size_t> start_stations,
-        const int start_time,
+        const int start_time_min,
+        const int start_time_max,
         const int end_time,
         const bool minimise_transfers,
         const int cutoff);

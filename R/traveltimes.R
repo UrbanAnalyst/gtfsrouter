@@ -3,6 +3,8 @@
 #' Travel times from a nominated station departing at a nominated time to every
 #' other reachable station in a system.
 #'
+#' @param start_time_limits A vector of two integer values denoting the earliest
+#' and latest departure times in seconds for the traveltime values.
 #' @param prop_stops Stop scanning after this proportion of all potentially
 #' reachable stops has been reached. Some stops may only be reached very
 #' infrequently (like once per day), and scanning a timetable until all stops
@@ -18,10 +20,18 @@
 #' be manually cleaned prior to analysis.
 #'
 #' @inheritParams gtfs_isochrone
+#' @examples
+#' berlin_gtfs_to_zip ()
+#' f <- file.path (tempdir (), "vbb.zip")
+#' g <- extract_gtfs (f)
+#' g <- gtfs_timetable (g)
+#' from <- "Alexanderplatz"
+#' start_times <- 8 * 3600 + c (0, 60) * 60 # 8:00-9:00
+#' res <- gtfs_traveltimes (g, from, start_times)
 #' @export
 gtfs_traveltimes <- function (gtfs,
                               from,
-                              start_time,
+                              start_time_limits,
                               day = NULL,
                               from_is_id = FALSE,
                               grep_fixed = TRUE,
@@ -42,8 +52,11 @@ gtfs_traveltimes <- function (gtfs,
     # no visible binding note:
     departure_time <- NULL
 
-    start_time <- convert_time (start_time)
-    gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time, ]
+    start_time_limits <- vapply (start_time_limits,
+                                 convert_time,
+                                 integer (1))
+
+    gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time_limits [1], ]
     if (nrow (gtfs_cp$timetable) == 0)
         stop ("There are no scheduled services after that time.")
 
@@ -54,7 +67,8 @@ gtfs_traveltimes <- function (gtfs,
                               gtfs_cp$transfers,
                               nrow (gtfs_cp$stop_ids),
                               start_stns,
-                              start_time, 
+                              start_time_limits [1], 
+                              start_time_limits [2], 
                               minimise_transfers,
                               prop_stops)
 

@@ -37,12 +37,14 @@ convert_time <- function (my_time) {
         if (length (my_time) == 1) {
             # do nothing; presume to be seconds, not hours
         } else if (length (my_time) == 2)
-            my_time <- 3600 * my_time [1] + 60 * my_time [2]
+            my_time <- 3600L * my_time [1] + 60L * my_time [2]
         else if (length (my_time) == 3)
-            my_time <- 3600 * my_time [1] + 60 * my_time [2] + my_time [3]
+            my_time <- 3600L * my_time [1] + 60L * my_time [2] + my_time [3]
         else
             stop ("Don't know how to parse time vectors of length ",
                   length (my_time))
+
+        my_time <- as.integer (my_time)
     } else
         stop ("Time is of unknown class") # nocov - TODO: Cover that
 

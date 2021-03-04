@@ -7,7 +7,7 @@
 gtfs_traveltimes(
   gtfs,
   from,
-  start_time,
+  start_time_limits,
   day = NULL,
   from_is_id = FALSE,
   grep_fixed = TRUE,
@@ -25,10 +25,8 @@ efficient queries, pre-processed with \link{gtfs_timetable}.}
 (as \code{stop_name} or \code{stop_id} entry in the \code{stops} table, or a vector of two
 numeric values).}
 
-\item{start_time}{Desired departure time at \code{from} station, either in seconds
-after midnight, a vector of two or three integers (hours, minutes) or (hours,
-minutes, seconds), an object of class \link{difftime}, \pkg{hms}, or
-\pkg{lubridate}.}
+\item{start_time_limits}{A vector of two integer values denoting the earliest
+and latest departure times in seconds for the traveltime values.}
 
 \item{day}{Day of the week on which to calculate route, either as an
 unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
@@ -78,4 +76,13 @@ Searching for all connections over an entire timetable may return
 anomalously high travel times for stops which are only very occasionally
 serviced. Results generated with values of \code{prop_stops} close to 1 may need to
 be manually cleaned prior to analysis.
+}
+\examples{
+berlin_gtfs_to_zip ()
+f <- file.path (tempdir (), "vbb.zip")
+g <- extract_gtfs (f)
+g <- gtfs_timetable (g)
+from <- "Alexanderplatz"
+start_times <- 8 * 3600 + c (0, 60) * 60 # 8:00-9:00
+res <- gtfs_traveltimes (g, from, start_times)
 }

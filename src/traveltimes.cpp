@@ -241,7 +241,8 @@ bool iso::fill_one_iso (
 
 void iso::trace_forward_traveltimes (
         Iso & iso,
-        const int & start_time,
+        const int & start_time_min,
+        const int & start_time_max,
         const std::vector <size_t> & departure_station,
         const std::vector <size_t> & arrival_station,
         const std::vector <size_t> & trip_id,
@@ -267,7 +268,7 @@ void iso::trace_forward_traveltimes (
 
     for (size_t i = 0; i < nrows; i++)
     {
-        if (departure_time [i] < start_time)
+        if (departure_time [i] < start_time_min)
             continue; // # nocov - these lines already removed in R fn.
 
         const bool is_start_stn = iso::is_start_stn (start_stations_set,
