@@ -92,6 +92,9 @@ knitr::kable (r)
 
 ### gtfs_isochrone
 
+*This function will soon  be deprecated, to be replaced by
+`gtfs_traveltimes()`.*
+
 Isochrones from a nominated station - lines delineating the range reachable
 within a given time - can be extracted with the `gtfs_isochrone()` function,
 which returns a list of all stations reachable within the specified time period
