@@ -1,7 +1,6 @@
 Package: gtfsrouter
-Title: Routing with GTFS (General Transit Feed Specification)
-    Data
-Version: 0.0.4.202
+Title: Routing with GTFS (General Transit Feed Specification) Data
+Version: 0.0.4.203
 Authors@R: 
     c(person(given = "Mark",
              family = "Padgham",
@@ -16,8 +15,8 @@ Authors@R:
              family = "Kapp",
              role = "ctb",
              email = "alk@mobilityinstitute.com"))
-Description: Use GTFS (General Transit Feed Specification) data
-    for routing from nominated start and end stations, and for extracting
+Description: Use GTFS (General Transit Feed Specification) data for
+    routing from nominated start and end stations, and for extracting
     isochrones from nominated start station.
 License: GPL-3
 URL: https://github.com/ATFutures/gtfs-router

@@ -78,17 +78,26 @@ time, and routing for the current day of the week.
 ```{r route1-fakey, eval = FALSE}
 from <- "Innsbrucker Platz"
 to <- "Alexanderplatz"
-gtfs_route (gtfs, from = from, to = to)
+gtfs_route (gtfs,
+            from = from,
+            to = to)
 ```
 ```{r route1, eval = TRUE, echo = FALSE}
 from <- "Innsbrucker Platz"
 to <- "Alexanderplatz"
-knitr::kable (gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00"))
+knitr::kable (gtfs_route (gtfs,
+                          from = from,
+                          to = to,
+                          start_time = "12:00:00"))
 ```
 
 Both the start time and day of the week can be explicitly specified:
 ```{r route2, eval = TRUE}
-route <- gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday")
+route <- gtfs_route (gtfs,
+                     from = from,
+                     to = to,
+                     start_time = "12:00:00",
+                     day = "Sunday")
 ```
 
 ## 2.1 GTFS Timetables
@@ -113,11 +122,22 @@ demonstrate using the sample data:
 gtfs <- extract_gtfs (f)
 from <- "Innsbrucker Platz"
 to <- "Alexanderplatz"
-system.time (gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday"))
+system.time (
+    gtfs_route (gtfs,
+                from = from,
+                to = to,
+                start_time = "12:00:00",
+                day = "Sunday")
+    )
 names (gtfs)
-gtfs <- gtfs_timetable (gtfs, day = "Sunday") # explicit pre-processing to extract timetable for Sunday
+# explicit pre-processing to extract timetable for Sunday
+gtfs <- gtfs_timetable (gtfs,
+                        day = "Sunday")
 names (gtfs)
-system.time (gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00"))
+system.time (gtfs_route (gtfs,
+                         from = from,
+                         to = to,
+                         start_time = "12:00:00"))
 ```
 Note that the `day` parameter is used to extract the timetable, after which it
 is no longer required in the actual call to `gtfs_route()`.
@@ -142,10 +162,20 @@ from `r from` to `r to` above was via two "U" services.  We can also specify
 that we'd prefer to travel by "S" services, noting that the `route_pattern =
 "S"` specifies a `route_short_name` that *starts with* (`"^"`) "S":
 ```{r route3-fakey, eval = FALSE}
-gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", route_pattern = "^S")
+gtfs_route (gtfs,
+            from = from,
+            to = to,
+            start_time = "12:00:00",
+            day = "Sunday",
+            route_pattern = "^S")
 ```
 ```{r route3, echo = FALSE, eval = TRUE}
-knitr::kable (gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", route_pattern = "^S"))
+knitr::kable (gtfs_route (gtfs,
+                          from = from,
+                          to = to,
+                          start_time = "12:00:00",
+                          day = "Sunday",
+                          route_pattern = "^S"))
 ```
 
 ## 2.3. Routing for earliest arrivals or earliest departures
@@ -160,13 +190,27 @@ parameter:
 ```{r route4a-fakey, eval = FALSE}
 from <- "Alexanderplatz"
 to <- "Pankow"
-gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", earliest_arrival = FALSE)
+gtfs_route (gtfs,
+            from = from,
+            to = to,
+            start_time = "12:00:00",
+            day = "Sunday",
+            earliest_arrival = FALSE)
 ```
 ```{r route4a, eval = TRUE, echo = FALSE}
 from <- "Alexanderplatz"
 to <- "Pankow"
-r1 <- gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday")
-r2 <- gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", earliest_arrival = FALSE)
+r1 <- gtfs_route (gtfs,
+                  from = from,
+                  to = to,
+                  start_time = "12:00:00",
+                  day = "Sunday")
+r2 <- gtfs_route (gtfs,
+                  from = from,
+                  to = to,
+                  start_time = "12:00:00",
+                  day = "Sunday",
+                  earliest_arrival = FALSE)
 knitr::kable (r2)
 ```
 
@@ -174,7 +218,12 @@ And the earliest-departing route arrives at `r to` at
 `r r2$arrival_time [nrow (r2)]`, departing `r from` at 
 `r r2$departure_time [1]`. In contrast, the earliest-arriving service is:
 ```{r route4b-fakey, eval = FALSE}
-gtfs_route (gtfs, from = from, to = to, start_time = "12:00:00", day = "Sunday", earliest_arrival = TRUE)
+gtfs_route (gtfs,
+            from = from,
+            to = to,
+            start_time = "12:00:00",
+            day = "Sunday",
+            earliest_arrival = TRUE)
 ```
 ```{r route4b, eval = TRUE, echo = FALSE}
 knitr::kable (r1)
@@ -303,11 +352,11 @@ gtfs <- gtfs_timetable (gtfs, day = 3)
 Whereas routing requires start and end *stations* (along with a start time),
 isochrones require specifying start and end *times* (along with a start
 station). The following code returns the isochrone of all stations reachable in
-5 minutes from "Alexanderplatz", departing at 12:00.
+20 minutes from "Alexanderplatz", departing at 12:00.
 ```{r isochrone}
 from <- "Alexanderplatz"
-start_time <- "12:05"
-end_time <- "12:10"
+start_time <- "12:00"
+end_time <- "12:20"
 ic <- gtfs_isochrone (gtfs,
                       from = from,
                       start_time = start_time,
@@ -355,5 +404,3 @@ mapview::mapshot (m, file = fig_name)
 ```{r isochrone-mapshot-plot, echo = FALSE, out.width = "100%"}
 knitr::include_graphics (fig_name)
 ```
-
-
