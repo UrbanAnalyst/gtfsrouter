@@ -352,11 +352,11 @@ gtfs <- gtfs_timetable (gtfs, day = 3)
 Whereas routing requires start and end *stations* (along with a start time),
 isochrones require specifying start and end *times* (along with a start
 station). The following code returns the isochrone of all stations reachable in
-20 minutes from "Alexanderplatz", departing at 12:00.
+30 minutes from "Alexanderplatz", departing at 12:00.
 ```{r isochrone}
 from <- "Alexanderplatz"
 start_time <- "12:00"
-end_time <- "12:20"
+end_time <- "12:30"
 ic <- gtfs_isochrone (gtfs,
                       from = from,
                       start_time = start_time,
@@ -365,7 +365,7 @@ ic <- gtfs_isochrone (gtfs,
 Note that the isochrone will be calculated out to five minutes after the first
 service to depart from Alexander Platz *after* 12:00. If, for example, this
 first service actually departs at 12:02, then the isochrones will define the
-range of all services leaving that station and travelling until 12:07. This
+range of all services leaving that station and travelling until 12:32. This
 function returns an object of class `gtfs_isochrone`, which has the following
 structure:
 ```{r}
