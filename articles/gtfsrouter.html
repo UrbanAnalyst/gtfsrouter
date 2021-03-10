@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.198</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.204</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
       <h1 data-toc-skip>gtfsrouter</h1>
                         <h4 class="author">Mark Padgham</h4>
             
-            <h4 class="date">2021-03-04</h4>
+            <h4 class="date">2021-03-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ATFutures/gtfs-router/blob/master/vignettes/gtfsrouter.Rmd"><code>vignettes/gtfsrouter.Rmd</code></a></small>
       <div class="hidden name"><code>gtfsrouter.Rmd</code></div>
@@ -115,8 +115,10 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Innsbrucker Platz"</span>
 <span class="va">to</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span>
-<span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span><span class="op">)</span></code></pre></div>
-<pre><code>## Day not specified; extracting timetable for thursday</code></pre>
+<span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
+            from <span class="op">=</span> <span class="va">from</span>,
+            to <span class="op">=</span> <span class="va">to</span><span class="op">)</span></code></pre></div>
+<pre><code>## Day not specified; extracting timetable for wednesday</code></pre>
 <table class="table">
 <thead><tr class="header">
 <th align="left">route_name</th>
@@ -249,7 +251,11 @@
 </table>
 <p>Both the start time and day of the week can be explicitly specified:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="st">"12:00:00"</span>, day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
+                     from <span class="op">=</span> <span class="va">from</span>,
+                     to <span class="op">=</span> <span class="va">to</span>,
+                     start_time <span class="op">=</span> <span class="st">"12:00:00"</span>,
+                     day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span></code></pre></div>
 <div id="gtfs-timetables" class="section level2">
 <h2 class="hasAnchor">
 <a href="#gtfs-timetables" class="anchor"></a>2.1 GTFS Timetables</h2>
@@ -268,22 +274,33 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Innsbrucker Platz"</span>
 <span class="va">to</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span>
-<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span> <span class="op">(</span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="st">"12:00:00"</span>, day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span> <span class="op">(</span>
+    <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
+                from <span class="op">=</span> <span class="va">from</span>,
+                to <span class="op">=</span> <span class="va">to</span>,
+                start_time <span class="op">=</span> <span class="st">"12:00:00"</span>,
+                day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span>
+    <span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.081   0.005   0.088</code></pre>
+##   0.079   0.005   0.084</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "calendar"   "routes"     "trips"      "stop_times" "stops"     
 ## [6] "transfers"</code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span>, day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span> <span class="co"># explicit pre-processing to extract timetable for Sunday</span>
+<code class="sourceCode R"><span class="co"># explicit pre-processing to extract timetable for Sunday</span>
+<span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span>,
+                        day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "calendar"   "routes"     "trips"      "stop_times" "stops"     
 ## [6] "transfers"  "timetable"  "stop_ids"   "trip_ids"</code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span> <span class="op">(</span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="st">"12:00:00"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span> <span class="op">(</span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
+                         from <span class="op">=</span> <span class="va">from</span>,
+                         to <span class="op">=</span> <span class="va">to</span>,
+                         start_time <span class="op">=</span> <span class="st">"12:00:00"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.063   0.002   0.065</code></pre>
+##   0.067   0.003   0.072</code></pre>
 <p>Note that the <code>day</code> parameter is used to extract the timetable, after which it is no longer required in the actual call to <code><a href="../reference/gtfs_route.html">gtfs_route()</a></code>.</p>
 </div>
 <div id="routing-by-mode-of-transport" class="section level2">
@@ -378,7 +395,12 @@
 </table>
 <p>These short names will differ for each GTFS, with the two primary train systems in Berlin being the underground trains denoted “U” (although not always travelling underground), and street-level trains denoted “S”. The default route from Innsbrucker Platz to Alexanderplatz above was via two “U” services. We can also specify that we’d prefer to travel by “S” services, noting that the <code>route_pattern = "S"</code> specifies a <code>route_short_name</code> that <em>starts with</em> (<code>"^"</code>) “S”:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="st">"12:00:00"</span>, day <span class="op">=</span> <span class="st">"Sunday"</span>, route_pattern <span class="op">=</span> <span class="st">"^S"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
+            from <span class="op">=</span> <span class="va">from</span>,
+            to <span class="op">=</span> <span class="va">to</span>,
+            start_time <span class="op">=</span> <span class="st">"12:00:00"</span>,
+            day <span class="op">=</span> <span class="st">"Sunday"</span>,
+            route_pattern <span class="op">=</span> <span class="st">"^S"</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">route_name</th>
@@ -482,7 +504,12 @@
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span>
 <span class="va">to</span> <span class="op">&lt;-</span> <span class="st">"Pankow"</span>
-<span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="st">"12:00:00"</span>, day <span class="op">=</span> <span class="st">"Sunday"</span>, earliest_arrival <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
+            from <span class="op">=</span> <span class="va">from</span>,
+            to <span class="op">=</span> <span class="va">to</span>,
+            start_time <span class="op">=</span> <span class="st">"12:00:00"</span>,
+            day <span class="op">=</span> <span class="st">"Sunday"</span>,
+            earliest_arrival <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">route_name</th>
@@ -566,7 +593,12 @@
 </table>
 <p>And the earliest-departing route arrives at Pankow at 12:20:42, departing Alexanderplatz at 12:00:42. In contrast, the earliest-arriving service is:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="st">"12:00:00"</span>, day <span class="op">=</span> <span class="st">"Sunday"</span>, earliest_arrival <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
+            from <span class="op">=</span> <span class="va">from</span>,
+            to <span class="op">=</span> <span class="va">to</span>,
+            start_time <span class="op">=</span> <span class="st">"12:00:00"</span>,
+            day <span class="op">=</span> <span class="st">"Sunday"</span>,
+            earliest_arrival <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">route_name</th>
@@ -724,11 +756,11 @@
 <span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span>
 <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span>
 <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span>, day <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<p>Whereas routing requires start and end <em>stations</em> (along with a start time), isochrones require specifying start and end <em>times</em> (along with a start station). The following code returns the isochrone of all stations reachable in 5 minutes from “Alexanderplatz”, departing at 12:00.</p>
+<p>Whereas routing requires start and end <em>stations</em> (along with a start time), isochrones require specifying start and end <em>times</em> (along with a start station). The following code returns the isochrone of all stations reachable in 30 minutes from “Alexanderplatz”, departing at 12:00.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span>
-<span class="va">start_time</span> <span class="op">&lt;-</span> <span class="st">"12:05"</span>
-<span class="va">end_time</span> <span class="op">&lt;-</span> <span class="st">"12:10"</span>
+<span class="va">start_time</span> <span class="op">&lt;-</span> <span class="st">"12:00"</span>
+<span class="va">end_time</span> <span class="op">&lt;-</span> <span class="st">"12:30"</span>
 <span class="va">ic</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_isochrone.html">gtfs_isochrone</a></span> <span class="op">(</span><span class="va">gtfs</span>,
                       from <span class="op">=</span> <span class="va">from</span>,
                       start_time <span class="op">=</span> <span class="va">start_time</span>,
@@ -738,7 +770,7 @@
 ##   method     from
 ##   print.boxx cli</code></pre>
 <pre><code>## Linking to GEOS 3.8.1, GDAL 3.1.4, PROJ 6.3.1</code></pre>
-<p>Note that the isochrone will be calculated out to five minutes after the first service to depart from Alexander Platz <em>after</em> 12:00. If, for example, this first service actually departs at 12:02, then the isochrones will define the range of all services leaving that station and travelling until 12:07. This function returns an object of class <code>gtfs_isochrone</code>, which has the following structure:</p>
+<p>Note that the isochrone will be calculated out to five minutes after the first service to depart from Alexander Platz <em>after</em> 12:00. If, for example, this first service actually departs at 12:02, then the isochrones will define the range of all services leaving that station and travelling until 12:32. This function returns an object of class <code>gtfs_isochrone</code>, which has the following structure:</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span> <span class="op">(</span><span class="va">ic</span><span class="op">)</span></code></pre></div>
 <pre><code>## List of 7
@@ -749,48 +781,48 @@
 ##   ..- attr(*, "sf_column")= chr "geometry"
 ##   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA
 ##   .. ..- attr(*, "names")= chr [1:2] "stop_name" "stop_id"
-##  $ mid_points :Classes 'sf' and 'data.frame':    7 obs. of  7 variables:
-##   ..$ stop_name: chr [1:7] "U Rosa-Luxemburg-Platz (Berlin)" "U Klosterstr. (Berlin)" "U Schillingstr. (Berlin)" "U Weinmeisterstr. (Berlin)" ...
-##   ..$ stop_id  : chr [1:7] "070201022502" "070201022701" "070201053902" "070201083502" ...
-##   ..$ departure: num [1:7] 43740 43530 43530 43650 43650 ...
-##   ..$ arrival  : 'hms' num [1:7] 12:11:00 12:07:30 12:07:30 12:09:00 ...
+##  $ mid_points :Classes 'sf' and 'data.frame':    94 obs. of  7 variables:
+##   ..$ stop_name: chr [1:94] "S Hackescher Markt (Berlin)" "S+U Friedrichstr. Bhf (Berlin)" "S+U Brandenburger Tor (Berlin)" "S+U Potsdamer Platz Bhf (Berlin)" ...
+##   ..$ stop_id  : chr [1:94] "060100002734" "060100000431" "060100025441" "060100020451" ...
+##   ..$ departure: num [1:94] 43242 43242 43242 43242 43242 ...
+##   ..$ arrival  : 'hms' num [1:94] 12:02:24 12:08:42 12:10:24 12:12:24 ...
 ##   .. ..- attr(*, "units")= chr "secs"
-##   ..$ duration : 'hms' num [1:7] 00:02:00 00:02:00 00:02:00 00:01:30 ...
+##   ..$ duration : 'hms' num [1:94] 00:01:42 00:08:00 00:09:42 00:11:42 ...
 ##   .. ..- attr(*, "units")= chr "secs"
-##   ..$ transfers: int [1:7] 0 0 0 0 0 0 0
-##   ..$ geometry :sfc_POINT of length 7; first list element:  'XY' num [1:2] 13.4 52.5
+##   ..$ transfers: int [1:94] 0 1 1 1 1 1 1 2 2 1 ...
+##   ..$ geometry :sfc_POINT of length 94; first list element:  'XY' num [1:2] 13.4 52.5
 ##   ..- attr(*, "sf_column")= chr "geometry"
 ##   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA
 ##   .. ..- attr(*, "names")= chr [1:6] "stop_name" "stop_id" "departure" "arrival" ...
-##  $ end_points :Classes 'sf' and 'data.frame':    6 obs. of  7 variables:
-##   ..$ stop_name: chr [1:6] "S Hackescher Markt (Berlin)" "U Senefelderplatz (Berlin)" "U Markisches Museum (Berlin)" "U Strausberger Platz (Berlin)" ...
-##   ..$ stop_id  : chr [1:6] "060100002734" "070201022402" "070201022801" "070201053802" ...
-##   ..$ departure: 'hms' num [1:6] 12:08:12 12:09:00 12:05:30 12:05:30 ...
+##  $ end_points :Classes 'sf' and 'data.frame':    9 obs. of  7 variables:
+##   ..$ stop_name: chr [1:9] "S+U Yorckstr. S2 S25 S26 U7 (Berlin)" "S Poelchaustr. (Berlin)" "S Kaulsdorf (Berlin)" "S Planterwald (Berlin)" ...
+##   ..$ stop_id  : chr [1:9] "060058103482" "060170005001" "060175002002" "060191002003" ...
+##   ..$ departure: 'hms' num [1:9] 12:00:42 12:00:42 12:03:42 12:00:42 ...
 ##   .. ..- attr(*, "units")= chr "secs"
-##   ..$ arrival  : 'hms' num [1:6] 12:09:54 12:12:30 12:09:00 12:09:00 ...
+##   ..$ arrival  : 'hms' num [1:9] 12:29:30 12:26:48 12:31:12 12:25:54 ...
 ##   .. ..- attr(*, "units")= chr "secs"
-##   ..$ duration : 'hms' num [1:6] 00:01:42 00:03:30 00:03:30 00:03:30 ...
+##   ..$ duration : 'hms' num [1:9] 00:28:48 00:26:06 00:27:30 00:25:12 ...
 ##   .. ..- attr(*, "units")= chr "secs"
-##   ..$ transfers: int [1:6] 0 0 0 0 0 0
-##   ..$ geometry :sfc_POINT of length 6; first list element:  'XY' num [1:2] 13.4 52.5
+##   ..$ transfers: int [1:9] 2 1 1 1 0 0 1 1 1
+##   ..$ geometry :sfc_POINT of length 9; first list element:  'XY' num [1:2] 13.4 52.5
 ##   ..- attr(*, "sf_column")= chr "geometry"
 ##   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA NA NA NA NA
 ##   .. ..- attr(*, "names")= chr [1:6] "stop_name" "stop_id" "departure" "arrival" ...
-##  $ routes     :sfc_LINESTRING of length 6; first list element:  'XY' num [1:2, 1:2] 13.4 13.4 52.5 52.5
+##  $ routes     :sfc_LINESTRING of length 9; first list element:  'XY' num [1:13, 1:2] 13.4 13.4 13.4 13.4 13.4 ...
 ##  $ hull       :Classes 'sf' and 'data.frame':    1 obs. of  3 variables:
-##   ..$ area      : Units: [m^2] num 4113330
-##   ..$ elongation: num 0.543
+##   ..$ area      : Units: [m^2] num 1.04e+08
+##   ..$ elongation: num 0.512
 ##   ..$ geometry  :sfc_POLYGON of length 1; first list element: List of 1
-##   .. ..$ : num [1:7, 1:2] 13.4 13.4 13.4 13.4 13.4 ...
+##   .. ..$ : num [1:20, 1:2] 13.4 13.4 13.4 13.3 13.3 ...
 ##   .. .. ..- attr(*, "dimnames")=List of 2
-##   .. .. .. ..$ : chr [1:7] "1" "6" "2" "3" ...
+##   .. .. .. ..$ : chr [1:20] "1" "13" "12" "30" ...
 ##   .. .. .. ..$ : chr [1:2] "x" "y"
 ##   .. ..- attr(*, "class")= chr [1:3] "XY" "POLYGON" "sfg"
 ##   ..- attr(*, "sf_column")= chr "geometry"
 ##   ..- attr(*, "agr")= Factor w/ 3 levels "constant","aggregate",..: NA NA
 ##   .. ..- attr(*, "names")= chr [1:2] "area" "elongation"
-##  $ start_time : int 43530
-##  $ end_time   : int 43830
+##  $ start_time : int 43242
+##  $ end_time   : int 45042
 ##  - attr(*, "class")= chr [1:2] "gtfs_isochrone" "list"</code></pre>
 <p>As mentioned above, the <code>start_point</code> item defines the single start point for the isochrone; the <code>mid_points</code> include stops which all routes pass through on their way to the terminal points reachable within the specified time range; and <code>end_points</code> defines those terminal, isochrone points. The return object also includes information on the non-convex (“alpha”) hull defining the boundary of the terminal points (see the <a href="https://cran.r-project.org/package=alphahull"><code>alphahull</code> package</a> for details), and geometric lines representing the actual routes taken. Finally, the <code>hull</code> time also quantifies its area and width-to-length ratio. The latter is informative, as higher values generally indicate a greater reachable area, while lower values are typically indicative of a radial system primarily serving transport in two directions (in and out of a city).</p>
 <p>The object returned from the <code><a href="../reference/gtfs_isochrone.html">gtfs_isochrone()</a></code> function also has its own plot method, which automatically opens a browser tab, and displays the start and end points (in green and red, respectively), all intermediate points, and the lines of the routes travelled. This uses the <code>mapview</code> package which must be installed for this to work. A static example is shown below:</p>
