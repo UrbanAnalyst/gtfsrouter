@@ -398,6 +398,8 @@ isochrone_exists <- file.exists (fig_name)
 plot (ic)
 ```
 ```{r isochrone-mapshot, eval = !isochrone_exists, echo = FALSE}
+# https://github.com/r-spatial/mapview/issues/321
+# -> currently requires mapview v >= 2.9.8
 m <- plot (ic)
 mapview::mapshot (m, file = fig_name)
 ```
