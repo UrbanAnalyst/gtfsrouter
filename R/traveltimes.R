@@ -3,36 +3,48 @@
 #' Travel times from a nominated station departing at a nominated time to every
 #' other reachable station in a system.
 #'
-#' @param prop_stops Stop scanning after this proportion of all potentially
-#' reachable stops has been reached. Some stops may only be reached very
-#' infrequently (like once per day), and scanning a timetable until all stops
-#' have been reached may (1) yield anomalously long travel times for very
-#' infrequently serviced stops; and (2) take a long time to calculate. The
-#' `prop_stops` parameter should accordingly generally be less than 1. For large
-#' systems with many stops (tens of thousands), values of 0.5 are often
-#' sufficient to reach most of the system.
+#' @param start_time_limits A vector of two integer values denoting the earliest
+#' and latest departure times in seconds for the traveltime values.
+#' @param max_traveltime The maximal traveltime to search for, specified in
+#' seconds (with default of 1 hour). See note for details.
 #'
-#' @note Searching for all connections over an entire timetable may return
-#' anomalously high travel times for stops which are only very occasionally
-#' serviced. Results generated with values of `prop_stops` close to 1 may need to
-#' be manually cleaned prior to analysis.
+#' @note Higher values of `max_traveltime` will return traveltimes for greater
+#' numbers of stations, but may lead to considerably longer calculation times.
+#' For repeated usage, it is recommended to first establish a value sufficient
+#' to reach all or most stations desired for a particular query, rather than set
+#' `max_traveltime` to an arbitrarily high value.
 #'
 #' @inheritParams gtfs_isochrone
+#' @examples
+#' berlin_gtfs_to_zip ()
+#' f <- file.path (tempdir (), "vbb.zip")
+#' g <- extract_gtfs (f)
+#' g <- gtfs_timetable (g)
+#' from <- "Alexanderplatz"
+#' start_times <- 8 * 3600 + c (0, 60) * 60 # 8:00-9:00
+#' res <- gtfs_traveltimes (g, from, start_times)
 #' @export
 gtfs_traveltimes <- function (gtfs,
                               from,
-                              start_time,
+                              start_time_limits,
                               day = NULL,
                               from_is_id = FALSE,
                               grep_fixed = TRUE,
                               route_pattern = NULL,
                               minimise_transfers = FALSE,
-                              prop_stops = 0.5,
+                              max_traveltime = 60 * 60,
                               quiet = FALSE) {
 
-    if (!all (is.numeric (prop_stops)) | all (prop_stops <= 0) |
-        all (prop_stops > 1) | length (prop_stops) > 1)
-        stop ("prop_stops must be a single number between 0 and 1")
+    if (!all (is.numeric (max_traveltime)) |
+        all (max_traveltime <= 0) |
+        length (max_traveltime) > 1)
+        stop ("max_traveltime must be a single number greater than 0",
+              call. = FALSE)
+
+    if (!"transfers" %in% names (gtfs))
+        stop ("gtfs must have a transfers table; ",
+              "please use 'gtfs_transfer_table()' to construct one",
+              call. = FALSE)
 
     if (!"timetable" %in% names (gtfs))
         gtfs <- gtfs_timetable (gtfs, day, route_pattern, quiet = quiet)
@@ -42,8 +54,9 @@ gtfs_traveltimes <- function (gtfs,
     # no visible binding note:
     departure_time <- NULL
 
-    start_time <- convert_time (start_time)
-    gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time, ]
+    start_time_limits <- convert_start_time_limits (start_time_limits)
+
+    gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time_limits [1], ]
     if (nrow (gtfs_cp$timetable) == 0)
         stop ("There are no scheduled services after that time.")
 
@@ -54,9 +67,10 @@ gtfs_traveltimes <- function (gtfs,
                               gtfs_cp$transfers,
                               nrow (gtfs_cp$stop_ids),
                               start_stns,
-                              start_time, 
+                              start_time_limits [1], 
+                              start_time_limits [2], 
                               minimise_transfers,
-                              prop_stops)
+                              max_traveltime)
 
     # C++ matrix is 1-indexed, so discard first row (= 0)
     stns <- stns [-1, ]
@@ -73,4 +87,16 @@ gtfs_traveltimes <- function (gtfs,
     stns$duration <- hms::hms (stns$duration)
 
     return (stns)
+}
+
+convert_start_time_limits <- function (start_time_limits) {
+
+    if (length (start_time_limits) != 2)
+        stop ("start_time_limits must have exactly two entries")
+    if (!is.numeric (start_time_limits))
+        stop ("start_time_limits must be a vector of 2 integers")
+    if (start_time_limits [1] > start_time_limits [2])
+        stop ("start_time_limits must be (min, max) values")
+
+    vapply (start_time_limits, convert_time, integer (1))
 }

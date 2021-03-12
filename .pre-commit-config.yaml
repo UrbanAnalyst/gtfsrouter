@@ -52,3 +52,7 @@ repos:
         entry: /home/smexus/bin/precommit/description
         language: script
         # `exclude: <regex>` to allow committing specific files.
+    -   id: src debug macros off
+        name: src code has debug macros turned off
+        entry: /home/smexus/bin/precommit/src_debug
+        language: script

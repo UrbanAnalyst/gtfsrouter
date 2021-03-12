@@ -4,19 +4,29 @@
 
 #include "csa.h"
 
+/* Note that this algorithm is very difficult to debug, because the algorithm
+ * works by tracing a timetable forward, but problems can only be identified by
+ * tracing back from the point at which they arise. The following debugging
+ * lines allow reverse tracing between nominated station pairs and times. Just
+ * switch it on, and progressively modify the values to trace backwards to
+ * identify where and why any problems arise.
+ * Note that DEPARTURE_STATION has to be specified to debug transfers
+ */
+
 // ----- debugging output START -----
 //#define DEBUG
-#define DEPARTURE_STATION 32290
-#define ARRIVAL_STATION 32291
-#define DEPARTURE_TIME_MIN 29340
+#define DEPARTURE_STATION 20715
+#define ARRIVAL_STATION 16418
+#define DEPARTURE_TIME_MIN 28000
 #define DEPARTURE_TIME_MAX 30000
 
 #ifdef DEBUG
 #define DEBUGMSG(msg, depstn, arrstn, deptime) \
-    if ((depstn) == DEPARTURE_STATION && \
-            (arrstn) == ARRIVAL_STATION && \
-            (deptime) >= DEPARTURE_TIME_MIN && \
-            (deptime) <= DEPARTURE_TIME_MAX) \
+    if ((DEPARTURE_STATION < 0 || \
+                (depstn) == DEPARTURE_STATION) && \
+                (arrstn) == ARRIVAL_STATION && \
+                (deptime) >= DEPARTURE_TIME_MIN && \
+                (deptime) <= DEPARTURE_TIME_MAX) \
     Rcpp::Rcout << msg << std::endl;
 #else
 #define DEBUGMSG(msg, depstn, arrstn, deptime) do{}while(0)
@@ -37,7 +47,10 @@ class Iso
 {
     private:
 
+        int max_traveltime;
+
         struct OneCon {
+            bool is_transfer = false;
             size_t prev_stn;
             int departure_time,
                 arrival_time,
@@ -57,7 +70,10 @@ class Iso
 
         std::vector <ConVec> connections;
 
-        Iso (const size_t n) {
+        Iso (const size_t n, const int max_traveltime_in) {
+
+            max_traveltime = max_traveltime_in;
+
             is_end_stn.resize (n, false);
             earliest_departure.resize (n, INFINITE_INT);
             connections.resize (n);
@@ -76,6 +92,10 @@ class Iso
             connections [n].convec.back ().initial_depart = INFINITE_INT;
 
             return s;
+        }
+
+        const int get_max_traveltime () {
+            return max_traveltime;
         }
 
 };
@@ -106,14 +126,14 @@ bool fill_one_iso (
         const size_t &trip_id,
         const int &departure_time,
         const int &arrival_time,
-        const int &isochrone,
         const bool &is_start_stn,
         const bool &minimise_transfers,
         Iso &iso);
 
 void trace_forward_traveltimes (
         Iso & iso,
-        const int & start_time,
+        const int & start_time_min,
+        const int & start_time_max,
         const std::vector <size_t> & departure_station,
         const std::vector <size_t> & arrival_station,
         const std::vector <size_t> & trip_id,
@@ -122,7 +142,7 @@ void trace_forward_traveltimes (
         const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
         const std::unordered_set <size_t> & start_stations_set,
         const bool & minimise_transfers,
-        const double & prop_stops);
+        const int & max_traveltime);
 
 void fill_one_transfer (
         const size_t &departure_station,
@@ -130,7 +150,6 @@ void fill_one_transfer (
         const int &arrival_time,
         const size_t &trans_dest,
         const int &trans_duration,
-        const int &isochrone,
         const bool &minimise_transfers,
         Iso &iso);
 
@@ -172,10 +191,9 @@ bool update_best_connection (
         );
 
 const bool is_transfer_in_isochrone (
-        const Iso & iso,
+        Iso & iso,
         const size_t & station,
-        const int & transfer_time,
-        const int & isochrone
+        const int & transfer_time
         );
 
 const bool is_transfer_connected (
@@ -229,7 +247,8 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const size_t nstations,
         const std::vector <size_t> start_stations,
-        const int start_time,
+        const int start_time_min,
+        const int start_time_max,
         const int end_time,
         const bool minimise_transfers,
-        const int cutoff);
+        const int max_traveltime);

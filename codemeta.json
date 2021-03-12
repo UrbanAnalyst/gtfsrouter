@@ -5,18 +5,18 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "gtfsrouter",
-  "description": "Use GTFS (General Transit Feed Specification) data\n    for routing from nominated start and end stations, and for extracting\n    isochrones from nominated start station.",
-  "name": "gtfsrouter: Routing with GTFS (General Transit Feed Specification)\n    Data",
+  "description": "Use GTFS (General Transit Feed Specification) data for\n    routing from nominated start and end stations, and for extracting\n    isochrones from nominated start station.",
+  "name": "gtfsrouter: Routing with GTFS (General Transit Feed Specification) Data",
   "codeRepository": "https://github.com/ATFutures/gtfs-router",
   "issueTracker": "https://github.com/ATFutures/gtfs-router/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.4.180",
+  "version": "0.0.4.205",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.3 (2020-10-10)",
+  "runtimePlatform": "R version 4.0.4 (2021-02-15)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -292,8 +292,8 @@
       "identifier": "https://sysreqs.r-hub.io/get/cxx11"
     }
   ],
-  "readme": "https://github.com/ATFutures/gtfs-router/blob/master/README.md",
-  "fileSize": "306606.773KB",
+  "readme": "https://github.com/ATFutures/gtfs-router/blob/main/README.md",
+  "fileSize": "266764.158KB",
   "contIntegration": "https://codecov.io/gh/ATFutures/gtfs-router",
   "developmentStatus": "https://www.repostatus.org/#active",
   "keywords": [

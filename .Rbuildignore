@@ -11,6 +11,7 @@
 docs/
 data-raw/
 scripts/
+feeds/
 ^_pkgdown\.yml$
 ^appveyor\.yml$
 ^.*\.Rproj$

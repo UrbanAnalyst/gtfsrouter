@@ -1,8 +1,7 @@
 context("go home")
 
-is_appveyor <- Sys.getenv ("APPVEYOR") != "" # appevyor sets this envvar
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
-             identical (Sys.getenv ("TRAVIS"), "true"))
+             identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
 test_that("go home set up", {
               if (Sys.getenv ("gtfs_home") == "" |

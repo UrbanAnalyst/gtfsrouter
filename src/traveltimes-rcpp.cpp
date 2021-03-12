@@ -39,7 +39,7 @@ Rcpp::List rcpp_isochrone (Rcpp::DataFrame timetable,
             transfers ["to_stop_id"],
             transfers ["min_transfer_time"]);
 
-    Iso iso (nstations + 1);
+    Iso iso (nstations + 1, end_time - start_time);
 
     const std::vector <size_t> departure_station = timetable ["departure_station"],
         arrival_station = timetable ["arrival_station"],
@@ -110,9 +110,10 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,
         const size_t nstations,
         const std::vector <size_t> start_stations,
-        const int start_time,
+        const int start_time_min,
+        const int start_time_max,
         const bool minimise_transfers,
-        const double prop_stops)
+        const int max_traveltime)
 {
 
     // make start and end stations into std::unordered_sets to allow
@@ -131,7 +132,7 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
             transfers ["to_stop_id"],
             transfers ["min_transfer_time"]);
 
-    Iso iso (nstations + 1);
+    Iso iso (nstations + 1, max_traveltime);
 
     const std::vector <size_t> departure_station = timetable ["departure_station"],
         arrival_station = timetable ["arrival_station"],
@@ -139,13 +140,23 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
     const std::vector <int> departure_time = timetable ["departure_time"],
         arrival_time = timetable ["arrival_time"];
 
-    iso::trace_forward_traveltimes (iso, start_time,
-            departure_station, arrival_station, trip_id, 
-            departure_time, arrival_time,
-            transfer_map, start_stations_set,
-            minimise_transfers, prop_stops);
+    iso::trace_forward_traveltimes (
+            iso,
+            start_time_min,
+            start_time_max,
+            departure_station,
+            arrival_station,
+            trip_id, 
+            departure_time,
+            arrival_time,
+            transfer_map,
+            start_stations_set,
+            minimise_transfers,
+            max_traveltime);
 
-    Rcpp::IntegerMatrix res = iso::trace_back_traveltimes (iso, minimise_transfers);
+    Rcpp::IntegerMatrix res = iso::trace_back_traveltimes (
+            iso,
+            minimise_transfers);
 
     return res;
 }
@@ -170,6 +181,9 @@ Rcpp::IntegerMatrix iso::trace_back_traveltimes (
         
         for (auto con: s.convec)
         {
+            if (con.is_transfer)
+                continue;
+
             int this_duration = con.arrival_time - con.initial_depart;
 
             bool update = (minimise_transfers && con.ntransfers < ntransfers);
