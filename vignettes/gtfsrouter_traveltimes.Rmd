@@ -22,10 +22,9 @@ library (gtfsrouter)
 
 # Traveltimes
 
-Building on the idea if isochrones the function [`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html) calculates travel times from a nominated start station to all other stations. The travel time for a route is selected that has the shortest duration for the minimum possible transfers. 
+Building on the idea if isochrones the function [`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html) calculates travel times from a nominated start station to all other stations. The travel time for a route is selected which has the shortest duration for the minimum possible transfers. 
 The function returns a data frame, each row representing a destination station with information about amount of transfers, start time and duration needed from the start station.
-As with routing, the
-function also requires initial extraction of GTFS data and, for faster queries,
+As with routing, the function also requires initial extraction of GTFS data and, for faster queries,
 explicit conversion to
 [`gtfs_timetable()`](https://atfutures.github.io/gtfs-router/reference/gtfs_timetable.html)
 format.
@@ -36,13 +35,32 @@ f <- file.path (tempdir (), "vbb.zip")
 gtfs <- extract_gtfs (f)
 gtfs <- gtfs_timetable (gtfs, day = 3)
 ```
+The parameter `start_time_limits` sets the earliest and latest possible start for desired route travel times. E.g. to get travel times for routes starting between 12 PM and 1 PM the limits should be set as `start_time_limits = c(12*3600, 13*3600)`.
 
 ```{r traveltimes}
 from <- "Alexanderplatz"
-start_time <- "12:00"
-tt <- gtfs_traveltimes(gtfs,
+start_time_limits <- c(12*3600, 13*3600)
+tt1 <- gtfs_traveltimes(gtfs,
                       from = from,
-                      start_time = start_time)
-head(tt)
+                      start_time_limits = start_time_limits)
+head(tt1)
 ```
-With the parameter `prop_stops` the proportion of stops, that a travel time shall be returned for, can be specified. Some stops may only be reached very infrequently (like once per day), and scanning a timetable until all stops have been reached may (1) yield anomalously long travel times for very infrequently serviced stops; and (2) take a long time to calculate. The `prop_stops` parameter should accordingly generally be less than 1. For large systems with many stops (tens of thousands), values of 0.5 are often sufficient to reach most of the system. 
+
+With the parameter `max_traveltime` the maximum travel time can be specified (in seconds). By default it is set to one hour. So the previous query included trips up to one hour travel time:
+
+````{r max traveltime1}
+head(data.table::setorder(tt1,-"duration"), 3)
+```
+
+To get trips for the same start point but only up to 30 minutes travel time, set the `max_traveltime` parameter accordingly:
+
+```{r max_traveltime2}
+max_traveltime <- 30*60 # half hour
+tt2 <- gtfs_traveltimes(gtfs,
+                      from = from,
+                      start_time_limits = start_time_limits,
+                      max_traveltime = max_traveltime)
+head(data.table::setorder(tt2,-"duration"), 3)
+```
+
+
