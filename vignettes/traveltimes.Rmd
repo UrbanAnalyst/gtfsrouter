@@ -1,5 +1,5 @@
 ---
-title: "gtfsrouter travel times"
+title: "Travel Times"
 author: "Alexandra Kapp"
 date: "`r Sys.Date()`"
 output: 
@@ -9,7 +9,7 @@ output:
     number_sections: false
     theme: flatly
 vignette: >
-  %\VignetteIndexEntry{gtfsrouter_traveltime}
+  %\VignetteIndexEntry{Travel Times}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -62,5 +62,3 @@ tt2 <- gtfs_traveltimes(gtfs,
                       max_traveltime = max_traveltime)
 head(data.table::setorder(tt2,-"duration"), 3)
 ```
-
-
