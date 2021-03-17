@@ -47,10 +47,10 @@ c(12*3600, 13*3600)`.
 
 ```{r traveltimes}
 from <- "Alexanderplatz"
-start_time_limits <- c(12*3600, 13*3600)
+start_time_limits <- c(12 * 3600, 13 * 3600)
 tt1 <- gtfs_traveltimes(gtfs,
-                      from = from,
-                      start_time_limits = start_time_limits)
+                        from = from,
+                        start_time_limits = start_time_limits)
 head(tt1)
 ```
 
@@ -59,17 +59,17 @@ With the parameter `max_traveltime` the maximum travel time can be specified
 trips up to one hour travel time:
 
 ```{r max traveltime1}
-head(data.table::setorder(tt1,-"duration"), 3)
+head(data.table::setorder(tt1, -"duration"), 3)
 ```
 
 To get trips for the same start point but only up to 30 minutes travel time,
 set the `max_traveltime` parameter accordingly:
 
 ```{r max_traveltime2}
-max_traveltime <- 30*60 # half hour
+max_traveltime <- 30 * 60 # half hour
 tt2 <- gtfs_traveltimes(gtfs,
-                      from = from,
-                      start_time_limits = start_time_limits,
-                      max_traveltime = max_traveltime)
-head(data.table::setorder(tt2,-"duration"), 3)
+                        from = from,
+                        start_time_limits = start_time_limits,
+                        max_traveltime = max_traveltime)
+head(data.table::setorder(tt2, -"duration"), 3)
 ```
