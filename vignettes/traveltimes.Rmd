@@ -48,7 +48,7 @@ head(tt1)
 
 With the parameter `max_traveltime` the maximum travel time can be specified (in seconds). By default it is set to one hour. So the previous query included trips up to one hour travel time:
 
-````{r max traveltime1}
+```{r max traveltime1}
 head(data.table::setorder(tt1,-"duration"), 3)
 ```
 
