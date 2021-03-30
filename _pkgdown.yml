@@ -34,7 +34,7 @@ articles:
   - title: The gtfsrouter package
     contents:
     - gtfsrouter
-    - Travel Times
+    - traveltimes
 
 navbar:
   title: gtfsrouter
