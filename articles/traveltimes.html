@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.219</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.220</span>
       </span>
     </div>
 
@@ -171,15 +171,15 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span> <span class="op">(</span><span class="fu"><a href="../reference/gtfs_traveltimes.html">gtfs_traveltimes</a></span> <span class="op">(</span><span class="va">gtfs</span>,
                         from <span class="op">=</span> <span class="va">from</span>,
                         start_time_limits <span class="op">=</span> <span class="va">start_time_limits</span>,
-                        max_traveltime <span class="op">=</span> <span class="fl">7200</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 697</code></pre>
+                        max_traveltime <span class="op">=</span> <span class="fl">7200</span><span class="op">)</span><span class="op">)</span>
+<span class="co">## [1] 15989</span></code></pre></div>
 <p>These additional stations reached naturally tend to be stations on the periphery of the system, while doubling the <code>max_traveltime</code> parameter approximately doubles the calculation time (in this case, according to the graphs shown above). Appropriate values will depend on the nature of desired results. Analyses focussed on more central parts of a system can use smaller values, with shorter corresponding calculation times. Analyses for which peripheral stations are important may need to use larger values of <code>max_traveltimes</code>, yet should do so carefully to avoid undue increases in calculation times.</p>
 </div>
 <div id="fastest-routes-versus-minimal-transfer-routes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fastest-routes-versus-minimal-transfer-routes" class="anchor"></a>Fastest Routes versus Minimal-Transfer Routes</h2>
 <p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> function has an additional parameter, <code>minimise_transfers</code>, which can be used to return either the fastest possible connections from a start station to all other reachable stations within a system, or the fastest connection which has the least possible number of transfers. Connections with the least transfers may be slower than fastest possible connections, as shown by the following analysis.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tt_fastest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_traveltimes.html">gtfs_traveltimes</a></span> <span class="op">(</span><span class="va">gtfs</span>,
                                 from <span class="op">=</span> <span class="va">from</span>,
                                 start_time_limits <span class="op">=</span> <span class="va">start_time_limits</span><span class="op">)</span>
@@ -197,14 +197,15 @@
                    min_tr_ntr <span class="op">=</span> <span class="va">tt_min_tr</span><span class="op">$</span><span class="va">ntransfers</span><span class="op">)</span>
 
 <span class="fl">60</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">min_tr_dur</span> <span class="op">-</span> <span class="va">dat</span><span class="op">$</span><span class="va">fastest_dur</span><span class="op">)</span> <span class="co"># in minutes</span>
-<span class="co">## 3.957052</span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<span class="co">## [1] 3.957052</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">fastest_ntr</span> <span class="op">-</span> <span class="va">dat</span><span class="op">$</span><span class="va">min_tr_ntr</span><span class="op">)</span>
-<span class="co">## 0.2818428</span></code></pre></div>
+<span class="co">## [1] 0.2818428</span></code></pre></div>
 <p>And minimal-transfer trips take on average just under 4 minutes longer, while requiring 0.28 fewer trips. Most fastest trips are nevertheless also minimal-transfer trips, as can be seen by the number of identical values returned by these two queries.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">min_tr_ntr</span> <span class="op">==</span> <span class="va">dat</span><span class="op">$</span><span class="va">fastest_ntr</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">)</span>
-<span class="co">## 0.6875221</span></code></pre></div>
+<span class="co">## [1] 0.6875221</span></code></pre></div>
+<p>So almost 70% of faster trips are also trips with fewest number of transfers, with around 30% of fastest trips involving more than the minimal possible number of transfers.</p>
 </div>
 <div id="the-traveltimes-algorithm" class="section level2">
 <h2 class="hasAnchor">
