@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.205</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.214</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
       <h1 data-toc-skip>gtfsrouter</h1>
                         <h4 class="author">Mark Padgham</h4>
             
-            <h4 class="date">2021-03-10</h4>
+            <h4 class="date">2021-03-30</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ATFutures/gtfs-router/blob/master/vignettes/gtfsrouter.Rmd"><code>vignettes/gtfsrouter.Rmd</code></a></small>
       <div class="hidden name"><code>gtfsrouter.Rmd</code></div>
@@ -118,7 +118,7 @@
 <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
             from <span class="op">=</span> <span class="va">from</span>,
             to <span class="op">=</span> <span class="va">to</span><span class="op">)</span></code></pre></div>
-<pre><code>## Day not specified; extracting timetable for wednesday</code></pre>
+<pre><code>## Day not specified; extracting timetable for tuesday</code></pre>
 <table class="table">
 <thead><tr class="header">
 <th align="left">route_name</th>
@@ -282,7 +282,7 @@
                 day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span>
     <span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.077   0.005   0.083</code></pre>
+##   0.059   0.000   0.059</code></pre>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "calendar"   "routes"     "trips"      "stop_times" "stops"     
@@ -300,7 +300,7 @@
                          to <span class="op">=</span> <span class="va">to</span>,
                          start_time <span class="op">=</span> <span class="st">"12:00:00"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.059   0.001   0.060</code></pre>
+##   0.043   0.000   0.043</code></pre>
 <p>Note that the <code>day</code> parameter is used to extract the timetable, after which it is no longer required in the actual call to <code><a href="../reference/gtfs_route.html">gtfs_route()</a></code>.</p>
 </div>
 <div id="routing-by-mode-of-transport" class="section level2">
@@ -766,12 +766,15 @@
                       start_time <span class="op">=</span> <span class="va">start_time</span>,
                       end_time <span class="op">=</span> <span class="va">end_time</span><span class="op">)</span></code></pre></div>
 <pre><code>## Loading required namespace: lwgeom</code></pre>
-<pre><code>## Registered S3 method overwritten by 'spatstat':
+<pre><code>## Registered S3 method overwritten by 'spatstat.geom':
 ##   method     from
 ##   print.boxx cli</code></pre>
-<pre><code>## Linking to GEOS 3.8.1, GDAL 3.1.4, PROJ 6.3.1</code></pre>
+<pre><code>## Linking to GEOS 3.7.1, GDAL 2.2.3, PROJ 4.9.3</code></pre>
+<pre><code>## WARNING: different compile-time and runtime versions for GEOS found:</code></pre>
+<pre><code>## Linked against: 3.7.1-CAPI-1.11.1 27a5e771 compiled against: 3.6.2-CAPI-1.10.2</code></pre>
+<pre><code>## It is probably a good idea to reinstall sf, and maybe rgeos and rgdal too</code></pre>
 <p>Note that the isochrone will be calculated out to five minutes after the first service to depart from Alexander Platz <em>after</em> 12:00. If, for example, this first service actually departs at 12:02, then the isochrones will define the range of all services leaving that station and travelling until 12:32. This function returns an object of class <code>gtfs_isochrone</code>, which has the following structure:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span> <span class="op">(</span><span class="va">ic</span><span class="op">)</span></code></pre></div>
 <pre><code>## List of 7
 ##  $ start_point:Classes 'sf' and 'data.frame':    1 obs. of  3 variables:
@@ -826,7 +829,7 @@
 ##  - attr(*, "class")= chr [1:2] "gtfs_isochrone" "list"</code></pre>
 <p>As mentioned above, the <code>start_point</code> item defines the single start point for the isochrone; the <code>mid_points</code> include stops which all routes pass through on their way to the terminal points reachable within the specified time range; and <code>end_points</code> defines those terminal, isochrone points. The return object also includes information on the non-convex (“alpha”) hull defining the boundary of the terminal points (see the <a href="https://cran.r-project.org/package=alphahull"><code>alphahull</code> package</a> for details), and geometric lines representing the actual routes taken. Finally, the <code>hull</code> time also quantifies its area and width-to-length ratio. The latter is informative, as higher values generally indicate a greater reachable area, while lower values are typically indicative of a radial system primarily serving transport in two directions (in and out of a city).</p>
 <p>The object returned from the <code><a href="../reference/gtfs_isochrone.html">gtfs_isochrone()</a></code> function also has its own plot method, which automatically opens a browser tab, and displays the start and end points (in green and red, respectively), all intermediate points, and the lines of the routes travelled. This uses the <code>mapview</code> package which must be installed for this to work. A static example is shown below:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span> <span class="op">(</span><span class="va">ic</span><span class="op">)</span></code></pre></div>
 <p><img src="isochrone.png" width="100%"></p>
 </div>

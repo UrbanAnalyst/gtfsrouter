@@ -3,5 +3,6 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   gtfsrouter: gtfsrouter.html
-last_built: 2021-03-10T09:01Z
+  traveltimes: traveltimes.html
+last_built: 2021-03-30T09:17Z
 
