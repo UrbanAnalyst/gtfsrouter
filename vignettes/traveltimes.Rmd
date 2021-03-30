@@ -179,11 +179,12 @@ of stations reached exceeds by some small amount the total number of actual
 stops in a system. In the case of these Berlin data, a maximum traveltime of
 2 hours is sufficient.
 
-```{r}
+```{r vbb-2hours, eval = FALSE}
 nrow (gtfs_traveltimes (gtfs,
                         from = from,
                         start_time_limits = start_time_limits,
                         max_traveltime = 7200))
+## [1] 15989
 ```
 
 These additional stations reached naturally tend to be stations on the
@@ -225,11 +226,11 @@ dat <- data.frame (stop_id = tt_fastest$stop_id,
                    min_tr_ntr = tt_min_tr$ntransfers)
 
 60 * mean (dat$min_tr_dur - dat$fastest_dur) # in minutes
-## 3.957052
+## [1] 3.957052
 ```
 ```{r ntr-diff, eval = FALSE}
 mean (dat$fastest_ntr - dat$min_tr_ntr)
-## 0.2818428
+## [1] 0.2818428
 ```
 
 And minimal-transfer trips take on average just under 4 minutes longer, while
@@ -239,8 +240,12 @@ returned by these two queries.
 
 ```{r ntr-prop, eval = FALSE}
 length (which (dat$min_tr_ntr == dat$fastest_ntr)) / nrow (dat)
-## 0.6875221
+## [1] 0.6875221
 ```
+
+So almost 70% of faster trips are also trips with fewest number of transfers,
+with around 30% of fastest trips involving more than the minimal possible
+number of transfers.
 
 ## The Traveltimes Algorithm
 
