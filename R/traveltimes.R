@@ -86,6 +86,8 @@ gtfs_traveltimes <- function (gtfs,
     stns$start_time <- hms::hms (stns$start_time)
     stns$duration <- hms::hms (stns$duration)
 
+    rownames (stns) <- NULL
+
     return (stns)
 }
 
