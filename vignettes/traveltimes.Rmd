@@ -1,6 +1,6 @@
 ---
 title: "Travel Times"
-author: "Alexandra Kapp"
+author: "Mark Padgham & Alexandra Kapp"
 date: "`r Sys.Date()`"
 output: 
   html_document:
@@ -20,56 +20,231 @@ library (gtfsrouter)
 #devtools::load_all (".", export_all = FALSE)
 ```
 
-# Traveltimes
-
-Building on the idea if isochrones the function
+The function
 [`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html)
-calculates travel times from a nominated start station to all other stations.
-The travel time for a route is selected which has the shortest duration for the
-minimum possible transfers. The function returns a data frame, each row
-representing a destination station with information about amount of transfers,
-start time and duration needed from the start station. As with routing, the
-function also requires initial extraction of GTFS data and, for faster queries,
-explicit conversion to
-[`gtfs_timetable()`](https://atfutures.github.io/gtfs-router/reference/gtfs_timetable.html)
-format.
+calculates travel times from a nominated departure station and time to all
+reachable stations. In addition to specifying a departure station, the main
+parameter required by the function is a pair of `start_time_limits` specifying
+the earliest and latest possible start times. For example, travel times to all
+stations for services leaving a nominated station between 12:00 and 13:00 can
+be extracted by specifying `start_time_limits = c (12 * 3600, 13 * 3600)`. The
+following code uses the internal Berlin data to demonstrate, starting by
+reading the GTFS data and constructing a timetable for a specified day, in
+order to speed up subsequent routing calculations.
 
 ```{r berlin_gtfs}
 berlin_gtfs_to_zip ()
 f <- file.path (tempdir (), "vbb.zip")
-gtfs <- extract_gtfs (f)
+gtfs <- extract_gtfs (f, quiet = TRUE)
 gtfs <- gtfs_timetable (gtfs, day = 3)
 ```
-The parameter `start_time_limits` sets the earliest and latest possible start
-for desired route travel times. E.g. to get travel times for routes starting
-between 12 PM and 1 PM the limits should be set as `start_time_limits =
-c(12*3600, 13*3600)`.
+
+The 
+[`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html)
+function may then be called with the following code:
 
 ```{r traveltimes}
 from <- "Alexanderplatz"
 start_time_limits <- c(12 * 3600, 13 * 3600)
-tt1 <- gtfs_traveltimes(gtfs,
+tt <- gtfs_traveltimes(gtfs,
+                       from = from,
+                       start_time_limits = start_time_limits)
+head(tt)
+```
+
+The function returns a `data.frame` in which each row details the fastest
+connection to each station, in terms of the start time and duration of that
+trip, as well as the number of transfers necessary.
+
+## Maximum Traveltimes
+
+The previous code returns a `data.frame` detailing traveltimes for the following stations:
+
+```{r}
+nrow (tt)
+```
+
+The total number of stations contained within the sample GTFS data are:
+
+```{r}
+nrow (gtfs$stops)
+```
+
+The
+[`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html)
+function does not generally record travel times to every station within
+a system. The number of stations reached is generally controlled by an
+additional parameter, `max_traveltime`, which defaults to one hour. The maximum
+traveltimes returned from the above call are:
+
+```{r maxtt}
+hms::hms (as.integer (max (tt$duration)))
+```
+
+In this case that value actually reflects the restricted data included in the
+sample data set, but applying the function to an actual GTFS feed will by
+default record traveltimes to all stations reachable within one hour. The
+following shows a more realistic example using a full version of the Berlin
+GTFS data:
+
+```{r get-vbb, eval = FALSE}
+gtfs <- extract_gtfs ("/<path>/<to>/vbb.zip")
+gtfs <- gtfs_timetable (gtfs, day = 3)
+tt <- gtfs_traveltimes (gtfs,
                         from = from,
                         start_time_limits = start_time_limits)
-head(tt1)
+nrow (tt); hms::hms (as.integer (max (tt$duration)))
+## [1] 8556
+## 01:00:00
 ```
 
-With the parameter `max_traveltime` the maximum travel time can be specified
-(in seconds). By default it is set to one hour. So the previous query included
-trips up to one hour travel time:
+The number of stations reached in the full feed is far more, and the maximum
+trip duration is indeed precisely one hour. The reason the function does not
+automatically return information of all reachable stations is that calculation
+times increase non-linearly with numbers of stations reached. The following
+code estimates calculation times as a function both of `max_traveltime`, and
+numbers of stations reached.
 
-```{r max traveltime1}
-head(data.table::setorder(tt1, -"duration"), 3)
+```{r timing1, eval = FALSE}
+maxt <- 3600 + 0:10 * 1800 # 1-6 hours in half-hour intervals
+dat <- vapply (maxt, function (i) {
+            st <- system.time (
+                res <- gtfs_traveltimes (gtfs,
+                                         from = from,
+                                         start_time_limits = start_time_limits,
+                                         max_traveltime = i)
+                )
+            return (c (st [3], nrow (res))) },
+            numeric (2))
+dat <- data.frame (max_time = maxt / 3600, # in hours
+                   calc_time = dat [1, ],
+                   n_stns = dat [2, ] / 1000)
+par (mfrow = c (1, 2))
+plot (dat$max_time, dat$calc_time, pch = 19, col = "gray",
+      xlab = "Max Traveltime (hours)",
+      ylab = "Calculation Time (seconds)")
+lines (dat$max_time, dat$calc_time)
+plot (dat$n_stns, dat$calc_time, pch = 19, col = "gray",
+      xlab = "Thousands of Stations Reached",
+      ylab = "Calculation Time (seconds)")
+lines (dat$n_stns, dat$calc_time)
+```
+```{r timing-manual, echo = FALSE}
+maxt <- 3600 + 0:10 * 1800
+calc_time <- c (0.914, 1.246, 1.911, 2.156, 2.333, 2.513, 2.889, 3.344, 3.784,
+                4.200, 4.661)
+n_stns <- c (8556, 12530, 15989, 19364, 21752, 23628, 24628, 25004, 25191,
+             25295, 25352)
+dat <- data.frame (max_time = maxt / 3600, # in hours
+                   calc_time = calc_time,
+                   n_stns = n_stns / 1000)
+par (mfrow = c (1, 2))
+plot (dat$max_time, dat$calc_time, pch = 19, col = "gray",
+      xlab = "Max Traveltime (hours)",
+      ylab = "Calculation Time (seconds)")
+lines (dat$max_time, dat$calc_time)
+plot (dat$n_stns, dat$calc_time, pch = 19, col = "gray",
+      xlab = "Thousands of Stations Reached",
+      ylab = "Calculation Time (seconds)")
+lines (dat$n_stns, dat$calc_time)
+
+
 ```
 
-To get trips for the same start point but only up to 30 minutes travel time,
-set the `max_traveltime` parameter accordingly:
+Those graphs show that increasing the `max_traveltime` parameter leads to
+approximately linear increases in the calculation times required for 
+[`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html)
+to execute, while relationships with numbers of stations actually reached are
+highly non-linear. The panel on the right side shows that increases in
+`max_traveltime` eventually have little effect on increasing numbers of
+stations reached, yet increase computation times considerably. Values for
+`max_traveltime` should accordingly only be adjusted after first determining
+appropriate values. In particular, note that although the Berlin GTFS has
+a large number of distinct stops:
 
-```{r max_traveltime2}
-max_traveltime <- 30 * 60 # half hour
-tt2 <- gtfs_traveltimes(gtfs,
+```{r vbb-stops, eval = FALSE}
+nrow (gtfs$stops)
+## [1] 41577
+```
+
+Many of these reflect `stop_id` values for multiple platforms at a single station. The number of distinct stop names is in fact much less:
+
+```{r vbb-stop-names, eval = FALSE}
+length (unique (gtfs$stops$stop_name))
+## [1] 13090
+```
+
+A rule-of-thumb is to increase the `max_traveltime` parameter until the number
+of stations reached exceeds by some small amount the total number of actual
+stops in a system. In the case of these Berlin data, a maximum traveltime of
+2 hours is sufficient.
+
+```{r}
+nrow (gtfs_traveltimes (gtfs,
                         from = from,
                         start_time_limits = start_time_limits,
-                        max_traveltime = max_traveltime)
-head(data.table::setorder(tt2, -"duration"), 3)
+                        max_traveltime = 7200))
 ```
+
+These additional stations reached naturally tend to be stations on the
+periphery of the system, while doubling the `max_traveltime` parameter
+approximately doubles the calculation time (in this case, according to the
+graphs shown above). Appropriate values will depend on the nature of desired
+results. Analyses focussed on more central parts of a system can use smaller
+values, with shorter corresponding calculation times. Analyses for which
+peripheral stations are important may need to use larger values of
+`max_traveltimes`, yet should do so carefully to avoid undue increases in
+calculation times.
+
+## Fastest Routes versus Minimal-Transfer Routes
+
+The
+[`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html)
+function has an additional parameter, `minimise_transfers`, which can be used
+to return either the fastest possible connections from a start station to all
+other reachable stations within a system, or the fastest connection which has
+the least possible number of transfers. Connections with the least transfers
+may be slower than fastest possible connections, as shown by the following
+analysis.
+
+```{r min-transfers, eval = FALSE}
+tt_fastest <- gtfs_traveltimes (gtfs,
+                                from = from,
+                                start_time_limits = start_time_limits)
+tt_min_tr <- gtfs_traveltimes (gtfs,
+                               from = from,
+                               start_time_limits = start_time_limits,
+                               minimise_transfers = TRUE)
+# non-dplyr join:
+tt_fastest <- tt_fastest [tt_fastest$stop_id %in% tt_min_tr$stop_id, ]
+tt_min_tr <- tt_min_tr [tt_min_tr$stop_id %in% tt_fastest$stop_id, ]
+dat <- data.frame (stop_id = tt_fastest$stop_id,
+                   fastest_dur = as.numeric (tt_fastest$duration / 3600), # hours
+                   fastest_ntr = tt_fastest$ntransfers,
+                   min_tr_dur = as.numeric (tt_min_tr$duration / 3600),
+                   min_tr_ntr = tt_min_tr$ntransfers)
+
+60 * mean (dat$min_tr_dur - dat$fastest_dur) # in minutes
+## 3.957052
+```
+```{r ntr-diff, eval = FALSE}
+mean (dat$fastest_ntr - dat$min_tr_ntr)
+## 0.2818428
+```
+
+And minimal-transfer trips take on average just under 4 minutes longer, while
+requiring 0.28 fewer trips. Most fastest trips are nevertheless also
+minimal-transfer trips, as can be seen by the number of identical values
+returned by these two queries.
+
+```{r ntr-prop, eval = FALSE}
+length (which (dat$min_tr_ntr == dat$fastest_ntr)) / nrow (dat)
+## 0.6875221
+```
+
+## The Traveltimes Algorithm
+
+The 
+[`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html)
+is based on a new algorithm specifically developed for this package, and which
+will be described here in further detail in subsequent releases of the package.
