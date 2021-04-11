@@ -93,7 +93,7 @@ knitr::kable (r)
 ### gtfs_isochrone
 
 *This function will soon  be deprecated, to be replaced by
-`gtfs_traveltimes()`.*
+[`gtfs_traveltimes()`.](https://atfutures.github.io/gtfs-router/articles/traveltimes.html)*
 
 Isochrones from a nominated station - lines delineating the range reachable
 within a given time - can be extracted with the `gtfs_isochrone()` function,
@@ -108,9 +108,9 @@ isochrone_exists <- TRUE # now in man/figures
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
 x <- gtfs_isochrone (gtfs,
-                     from = "Schonlein",
-                     start_time = 12 * 3600 + 120,
-                     end_time = 12 * 3600 + 720) # 10 minutes later
+                     from = "S+U Zoologischer Garten Bhf",
+                     start_time = 12 * 3600 + 1200,
+                     end_time = 12 * 3600 + 1200 + 10 * 60)
 ```
 
 The function returns an object of class `gtfs_isochrone` containing

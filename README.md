@@ -1,3 +1,4 @@
+
 # gtfsrouter <a href='https://atfutures.github.io/gtfs-router/'><img src='man/figures/gtfsrouter.png' align="right" height=210 width=182/></a>
 
 [![R build
@@ -46,7 +47,7 @@ library(gtfsrouter)
 packageVersion("gtfsrouter")
 ```
 
-    ## [1] '0.0.4'
+    ## [1] '0.0.4.213'
 
 ## Main functions
 
@@ -62,7 +63,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpLlSA7K/vbb.zip"
+    ## [1] "/tmp/Rtmpj3YiSa/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -97,7 +98,7 @@ gtfs_route (gtfs,
 ### gtfs\_isochrone
 
 *This function will soon be deprecated, to be replaced by
-`gtfs_traveltimes()`.*
+[`gtfs_traveltimes()`.](https://atfutures.github.io/gtfs-router/articles/traveltimes.html)*
 
 Isochrones from a nominated station - lines delineating the range
 reachable within a given time - can be extracted with the
@@ -108,9 +109,9 @@ reachable within the specified time period from the nominated station.
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
 x <- gtfs_isochrone (gtfs,
-                     from = "Schonlein",
-                     start_time = 12 * 3600 + 120,
-                     end_time = 12 * 3600 + 720) # 10 minutes later
+                     from = "S+U Zoologischer Garten Bhf",
+                     start_time = 12 * 3600 + 1200,
+                     end_time = 12 * 3600 + 1200 + 10 * 60)
 ```
 
 The function returns an object of class `gtfs_isochrone` containing
