@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.221</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.222</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ATFutures/gtfs-router">gtfsrouter</a></span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span><span class="op">(</span><span class="st">"gtfsrouter"</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">## [1] '0.0.4'</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">## [1] '0.0.4.213'</span></span></code></pre></div>
 </div>
 <div id="main-functions" class="section level2">
 <h2 class="hasAnchor">
@@ -105,7 +105,7 @@
 <span class="va">tempfiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">filename</span> <span class="op">&lt;-</span> <span class="va">tempfiles</span> <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span> <span class="op">(</span><span class="st">"vbb.zip"</span>, <span class="va">tempfiles</span><span class="op">)</span><span class="op">]</span>
 <span class="va">filename</span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">## [1] "/tmp/RtmpLlSA7K/vbb.zip"</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">## [1] "/tmp/Rtmpj3YiSa/vbb.zip"</span></span></code></pre></div>
 <p>For normal package use, <code>filename</code> will specify the name of the local GTFS data stored as a single <code>.zip</code> file.</p>
 <div id="gtfs_route" class="section level3">
 <h3 class="hasAnchor">
@@ -203,15 +203,15 @@
 <div id="gtfs_isochrone" class="section level3">
 <h3 class="hasAnchor">
 <a href="#gtfs_isochrone" class="anchor"></a>gtfs_isochrone</h3>
-<p><em>This function will soon be deprecated, to be replaced by <code><a href="reference/gtfs_traveltimes.html">gtfs_traveltimes()</a></code>.</em></p>
+<p><em>This function will soon be deprecated, to be replaced by <a href="https://atfutures.github.io/gtfs-router/articles/traveltimes.html"><code>gtfs_traveltimes()</code>.</a></em></p>
 <p>Isochrones from a nominated station - lines delineating the range reachable within a given time - can be extracted with the <code><a href="reference/gtfs_isochrone.html">gtfs_isochrone()</a></code> function, which returns a list of all stations reachable within the specified time period from the nominated station.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">filename</span><span class="op">)</span>
 <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span> <span class="co"># A pre-processing step to speed up queries</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_isochrone.html">gtfs_isochrone</a></span> <span class="op">(</span><span class="va">gtfs</span>,
-                     from <span class="op">=</span> <span class="st">"Schonlein"</span>,
-                     start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">120</span>,
-                     end_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">720</span><span class="op">)</span> <span class="co"># 10 minutes later</span></code></pre></div>
+                     from <span class="op">=</span> <span class="st">"S+U Zoologischer Garten Bhf"</span>,
+                     start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">1200</span>,
+                     end_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">1200</span> <span class="op">+</span> <span class="fl">10</span> <span class="op">*</span> <span class="fl">60</span><span class="op">)</span></code></pre></div>
 <p>The function returns an object of class <code>gtfs_isochrone</code> containing <a href="https://github.com/r-spatial/sf"><code>sf</code></a>-formatted sets of start and end points, along with all intermediate (“mid”) points, and routes. An additional item contains the non-convex (alpha) hull enclosing the routed points. This requires the packages <a href="https://github.com/hypertidy/geodist"><code>geodist</code></a>, <a href="https://cran.r-project.org/package=sf"><code>sf</code></a>, <a href="https://cran.r-project.org/package=alphahull"><code>alphahull</code></a>, and <a href="https://cran.r-project.org/package=mapview"><code>mapview</code></a> to be installed. Isochrone objects have their own plot method:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span> <span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
