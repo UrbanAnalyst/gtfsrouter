@@ -25,3 +25,4 @@ vbb/
 ^temp*
 WORDLIST$
 precommit/
+^\.hooks$
