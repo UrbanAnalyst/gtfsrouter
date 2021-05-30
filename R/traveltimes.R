@@ -56,7 +56,8 @@ gtfs_traveltimes <- function (gtfs,
 
     start_time_limits <- convert_start_time_limits (start_time_limits)
 
-    gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >= start_time_limits [1], ]
+    gtfs_cp$timetable <- gtfs_cp$timetable [departure_time >=
+                                            start_time_limits [1], ]
     if (nrow (gtfs_cp$timetable) == 0)
         stop ("There are no scheduled services after that time.")
 
@@ -67,8 +68,8 @@ gtfs_traveltimes <- function (gtfs,
                               gtfs_cp$transfers,
                               nrow (gtfs_cp$stop_ids),
                               start_stns,
-                              start_time_limits [1], 
-                              start_time_limits [2], 
+                              start_time_limits [1],
+                              start_time_limits [2],
                               minimise_transfers,
                               max_traveltime)
 
