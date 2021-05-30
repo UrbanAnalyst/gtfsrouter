@@ -21,7 +21,7 @@
 #' g <- extract_gtfs (f)
 #' g <- gtfs_timetable (g)
 #' from <- "Alexanderplatz"
-#' start_times <- 8 * 3600 + c (0, 60) * 60 # 8:00-9:00
+#' start_times <- 12 * 3600 + c (0, 60) * 60 # 8:00-9:00
 #' res <- gtfs_traveltimes (g, from, start_times)
 #' @export
 gtfs_traveltimes <- function (gtfs,
