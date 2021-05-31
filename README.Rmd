@@ -25,18 +25,11 @@ website](https://atfutures.github.io/gtfs-router/) for full details.
 
 ## Installation
 
-To install:
-```{r remotes, eval = FALSE, message = FALSE}
-remotes::install_github("atfutures/gtfs-router")
-```
-```{r load_all, echo = FALSE, message = FALSE}
-#devtools::load_all (".", export_all = FALSE)
-```
-
 You can install latest stable version of `gtfsrouter` from CRAN with:
 ```{r cran-installation, eval = FALSE}
-install.packages("gtfsrouter") # current CRAN version
+install.packages("gtfsrouter")
 ```
+
 Alternatively, current development versions can be installed using any of the
 following options:
 ```{r gh-installation, eval = FALSE}
@@ -82,7 +75,7 @@ gtfs_route (gtfs,
 ```
 ```{r example, echo = FALSE, message = FALSE}
 gtfs <- extract_gtfs (filename)
-gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
+gtfs <- gtfs_timetable (gtfs)
 r <- gtfs_route (gtfs,
                  from = "Schonlein",
                  to = "Berlin Hauptbahnhof",
@@ -90,51 +83,29 @@ r <- gtfs_route (gtfs,
 knitr::kable (r)
 ```
 
-### gtfs_isochrone
+### gtfs_traveltimes
 
-*This function will soon  be deprecated, to be replaced by
-[`gtfs_traveltimes()`.](https://atfutures.github.io/gtfs-router/articles/traveltimes.html)*
-
-Isochrones from a nominated station - lines delineating the range reachable
-within a given time - can be extracted with the `gtfs_isochrone()` function,
-which returns a list of all stations reachable within the specified time period
-from the nominated station.
-```{r isochrone-exists, echo = FALSE}
-isochrone_exists <- file.exists ("./vignettes/isochrone.png")
-isochrone_exists <- TRUE # now in man/figures
-```
+The [`gtfs_traveltimes()`
+function`](https://atfutures.github.io/gtfs-router/reference/gtfs_traveltimes.html)
+calculates minimal travel times from any nominated stop to all other stops
+within a feed. It requires the two parameters of start station, and a vector of
+two values specifying earliest and latest desired start times. The following
+code illustrates:
 
 ```{r isochrone, eval = TRUE, message = FALSE}
 gtfs <- extract_gtfs (filename)
-gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
-x <- gtfs_isochrone (gtfs,
-                     from = "S+U Zoologischer Garten Bhf",
-                     start_time = 12 * 3600 + 1200,
-                     end_time = 12 * 3600 + 1200 + 10 * 60)
+gtfs <- gtfs_timetable (gtfs)
+x <- gtfs_traveltimes (gtfs,
+                       from = "S+U Zoologischer Garten Bhf",
+                       start_time_limits = c (12, 13) * 3600)
 ```
 
-The function returns an object of class `gtfs_isochrone` containing
-[`sf`](https://github.com/r-spatial/sf)-formatted sets of start and end points,
-along with all intermediate ("mid") points, and routes. An additional item
-contains the non-convex (alpha) hull enclosing the routed points.
-This requires the packages
-[`geodist`](https://github.com/hypertidy/geodist), 
-[`sf`](https://cran.r-project.org/package=sf),
-[`alphahull`](https://cran.r-project.org/package=alphahull), and
-[`mapview`](https://cran.r-project.org/package=mapview) to be installed.
-Isochrone objects have their own plot method:
-```{r plot, eval = FALSE, message = FALSE}
-plot (x)
+The function returns a simple table detailing all stations reachable with
+services departing from the nominated station and start times:
+
+```{r iso-results1}
+head (x)
 ```
-```{r mapshot, eval = !isochrone_exists, echo = FALSE}
-m <- plot (x)
-mapview::mapshot (m, file = "./vignettes/isochrone.png")
-```
-<img src="man/figures/isochrone.png" width = "80%"/>
-
-
-The isochrone hull also quantifies its total area and width-to-length ratio.
-
 
 
 

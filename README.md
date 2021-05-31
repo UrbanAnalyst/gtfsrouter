@@ -1,3 +1,11 @@
+---
+output:
+  md_document:
+    variant: markdown\_github
+  rmarkdown::html_vignette:
+    self_contained: no
+title: gtfsrouter
+---
 
 # gtfsrouter <a href='https://atfutures.github.io/gtfs-router/'><img src='man/figures/gtfsrouter.png' align="right" height=210 width=182/></a>
 
@@ -17,16 +25,10 @@ details.
 
 ## Installation
 
-To install:
-
-``` r
-remotes::install_github("atfutures/gtfs-router")
-```
-
 You can install latest stable version of `gtfsrouter` from CRAN with:
 
 ``` r
-install.packages("gtfsrouter") # current CRAN version
+install.packages("gtfsrouter")
 ```
 
 Alternatively, current development versions can be installed using any
@@ -63,7 +65,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/Rtmpj3YiSa/vbb.zip"
+    ## [1] "/tmp/RtmpmSAND5/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -82,57 +84,57 @@ gtfs_route (gtfs,
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
 
-| route\_name | trip\_name    | stop\_name                      | arrival\_time | departure\_time |
-|:------------|:--------------|:--------------------------------|:--------------|:----------------|
-| U8          | S+U Wittenau  | U Schonleinstr. (Berlin)        | 12:09:00      | 12:09:00        |
-| U8          | S+U Wittenau  | U Kottbusser Tor (Berlin)       | 12:11:00      | 12:11:00        |
-| U8          | S+U Wittenau  | U Moritzplatz (Berlin)          | 12:13:00      | 12:13:00        |
-| U8          | S+U Wittenau  | U Heinrich-Heine-Str. (Berlin)  | 12:14:30      | 12:14:30        |
-| U8          | S+U Wittenau  | S+U Jannowitzbrucke (Berlin)    | 12:15:30      | 12:15:30        |
-| S3          | S Spandau Bhf | S+U Jannowitzbrucke (Berlin)    | 12:20:54      | 12:21:24        |
-| S3          | S Spandau Bhf | S+U Alexanderplatz Bhf (Berlin) | 12:22:54      | 12:23:42        |
-| S3          | S Spandau Bhf | S Hackescher Markt (Berlin)     | 12:24:54      | 12:25:24        |
-| S3          | S Spandau Bhf | S+U Friedrichstr. Bhf (Berlin)  | 12:26:54      | 12:27:42        |
-| S3          | S Spandau Bhf | S+U Berlin Hauptbahnhof         | 12:29:36      | 12:30:12        |
+| route\_name | trip\_name       | stop\_name                      | arrival\_time | departure\_time |
+|:------------|:-----------------|:--------------------------------|:--------------|:----------------|
+| U8          | U Paracelsus-Bad | U Schonleinstr. (Berlin)        | 12:04:00      | 12:04:00        |
+| U8          | U Paracelsus-Bad | U Kottbusser Tor (Berlin)       | 12:06:00      | 12:06:00        |
+| U8          | U Paracelsus-Bad | U Moritzplatz (Berlin)          | 12:08:00      | 12:08:00        |
+| U8          | U Paracelsus-Bad | U Heinrich-Heine-Str. (Berlin)  | 12:09:30      | 12:09:30        |
+| U8          | U Paracelsus-Bad | S+U Jannowitzbrucke (Berlin)    | 12:10:30      | 12:10:30        |
+| S5          | S Westkreuz      | S+U Jannowitzbrucke (Berlin)    | 12:15:24      | 12:15:54        |
+| S5          | S Westkreuz      | S+U Alexanderplatz Bhf (Berlin) | 12:17:24      | 12:18:12        |
+| S5          | S Westkreuz      | S Hackescher Markt (Berlin)     | 12:19:24      | 12:19:54        |
+| S5          | S Westkreuz      | S+U Friedrichstr. Bhf (Berlin)  | 12:21:24      | 12:22:12        |
+| S5          | S Westkreuz      | S+U Berlin Hauptbahnhof         | 12:24:06      | 12:24:42        |
 
-### gtfs\_isochrone
+### gtfs\_traveltimes
 
-*This function will soon be deprecated, to be replaced by
-[`gtfs_traveltimes()`.](https://atfutures.github.io/gtfs-router/articles/traveltimes.html)*
-
-Isochrones from a nominated station - lines delineating the range
-reachable within a given time - can be extracted with the
-`gtfs_isochrone()` function, which returns a list of all stations
-reachable within the specified time period from the nominated station.
+The [`gtfs_traveltimes()`
+function\`](https://atfutures.github.io/gtfs-router/reference/gtfs_traveltimes.html)
+calculates minimal travel times from any nominated stop to all other
+stops within a feed. It requires the two parameters of start station,
+and a vector of two values specifying earliest and latest desired start
+times. The following code illustrates:
 
 ``` r
 gtfs <- extract_gtfs (filename)
-gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
-x <- gtfs_isochrone (gtfs,
-                     from = "S+U Zoologischer Garten Bhf",
-                     start_time = 12 * 3600 + 1200,
-                     end_time = 12 * 3600 + 1200 + 10 * 60)
+gtfs <- gtfs_timetable (gtfs)
+x <- gtfs_traveltimes (gtfs,
+                       from = "S+U Zoologischer Garten Bhf",
+                       start_time_limits = c (12, 13) * 3600)
 ```
 
-The function returns an object of class `gtfs_isochrone` containing
-[`sf`](https://github.com/r-spatial/sf)-formatted sets of start and end
-points, along with all intermediate (“mid”) points, and routes. An
-additional item contains the non-convex (alpha) hull enclosing the
-routed points. This requires the packages
-[`geodist`](https://github.com/hypertidy/geodist),
-[`sf`](https://cran.r-project.org/package=sf),
-[`alphahull`](https://cran.r-project.org/package=alphahull), and
-[`mapview`](https://cran.r-project.org/package=mapview) to be installed.
-Isochrone objects have their own plot method:
+The function returns a simple table detailing all stations reachable
+with services departing from the nominated station and start times:
 
 ``` r
-plot (x)
+head (x)
 ```
 
-<img src="man/figures/isochrone.png" width = "80%"/>
-
-The isochrone hull also quantifies its total area and width-to-length
-ratio.
+    ##   start_time duration ntransfers      stop_id               stop_name stop_lon
+    ## 1   12:01:54 00:03:30          0 060003102223     S Bellevue (Berlin) 13.34710
+    ## 2   12:01:54 00:10:24          1 060003102224     S Bellevue (Berlin) 13.34710
+    ## 3   12:01:54 00:01:24          0 060003103233   S Tiergarten (Berlin) 13.33624
+    ## 4   12:08:54 00:05:30          1 060003103234   S Tiergarten (Berlin) 13.33624
+    ## 5   12:01:54 00:06:06          0 060003201213 S+U Berlin Hauptbahnhof 13.36892
+    ## 6   12:01:54 00:14:42          1 060003201214 S+U Berlin Hauptbahnhof 13.36892
+    ##   stop_lat
+    ## 1 52.51995
+    ## 2 52.51995
+    ## 3 52.51396
+    ## 4 52.51396
+    ## 5 52.52585
+    ## 6 52.52585
 
 ## Additional Functionality
 
