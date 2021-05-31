@@ -65,7 +65,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpmSAND5/vbb.zip"
+    ## [1] "/tmp/RtmpvEQnBZ/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -136,28 +136,39 @@ head (x)
     ## 5 52.52585
     ## 6 52.52585
 
+### gtfs\_transfer\_table
+
+Feeds should include a “transfers.txt” table detailing all possible
+transfers between nearby stations, yet many feeds omit these tables,
+rendering them unusable for routing because transfers between services
+can not be calculated. The `gtfsrouter` package also includes a
+function,
+[`gtfs_transfer_table()`](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html),
+which can calculate a transfer table for a given feed, with transfer
+times calculated either using straight-line distances (the default), or
+using more realistic pedestrian times routed through the underlying
+street network.
+
+This function can also be used to enable routing through multiple
+adjacent or overlapping GTFS feeds. The feeds need simply be merged
+through binding the rows of all tables, and the resultant aggregate feed
+submitted to the
+[`gtfs_transfer_table()`](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
+function. This transfer table will retain all transfers specified in the
+original feeds, yet be augmented by all possible transfers between the
+multiple systems up to a user-specified maximal distance stops.
+
 ## Additional Functionality
 
 There are many ways to construct GTFS feeds. For background information,
 see [`gtfs.org`](http://gtfs.org), and particularly their [GTFS
 Examples](https://docs.google.com/document/d/16inL5BVcM1aU-_DcFJay_tC6Ni0wPa0nvQEstueG5k4/edit).
-
 Feeds may include a “frequencies.txt” table which defines “service
 periods”, and overrides any schedule information during the specified
 times. The `gtfsrouter` package includes a function,
 [`frequencies_to_stop_times()`](https://atfutures.github.io/gtfs-router/reference/frequencies_to_stop_times.html),
 to convert “frequencies.txt” tables to equivalent “stop\_times.txt”
-entries, to enable the feed to be used for routine.
-
-Feeds may also omit a “transfers.txt” table which otherwise defines
-transfer abilities and times between different services. Feeds without
-this table can generally not be used for routing, and they exclude the
-possibility of transferring between multiple services. The `gtfsrouter`
-package also includes a function,
-[`gtfs_transfer_table()`](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html),
-which can calculate a transfer table for a given feed, with transfer
-times calculated either using straight-line distances (the default), or
-using more realistic times routed through the underlying street network.
+entries, to enable the feed to be used for routing.
 
 ## Contributors
 
