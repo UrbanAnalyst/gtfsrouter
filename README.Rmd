@@ -90,13 +90,14 @@ function`](https://atfutures.github.io/gtfs-router/reference/gtfs_traveltimes.ht
 calculates minimal travel times from any nominated stop to all other stops
 within a feed. It requires the two parameters of start station, and a vector of
 two values specifying earliest and latest desired start times. The following
-code illustrates:
+code returns the fastest travel times to all stations within the feed for
+services which leave the nominated station between 12:00 and 13:00 on a Monday:
 
 ```{r isochrone, eval = TRUE, message = FALSE}
 gtfs <- extract_gtfs (filename)
-gtfs <- gtfs_timetable (gtfs)
+gtfs <- gtfs_timetable (gtfs, day = "Monday")
 x <- gtfs_traveltimes (gtfs,
-                       from = "S+U Zoologischer Garten Bhf",
+                       from = "Alexanderplatz",
                        start_time_limits = c (12, 13) * 3600)
 ```
 

@@ -65,7 +65,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/RtmpvEQnBZ/vbb.zip"
+    ## [1] "/tmp/Rtmp6Hws2u/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -104,13 +104,15 @@ function\`](https://atfutures.github.io/gtfs-router/reference/gtfs_traveltimes.h
 calculates minimal travel times from any nominated stop to all other
 stops within a feed. It requires the two parameters of start station,
 and a vector of two values specifying earliest and latest desired start
-times. The following code illustrates:
+times. The following code returns the fastest travel times to all
+stations within the feed for services which leave the nominated station
+between 12:00 and 13:00 on a Monday:
 
 ``` r
 gtfs <- extract_gtfs (filename)
-gtfs <- gtfs_timetable (gtfs)
+gtfs <- gtfs_timetable (gtfs, day = "Monday")
 x <- gtfs_traveltimes (gtfs,
-                       from = "S+U Zoologischer Garten Bhf",
+                       from = "Alexanderplatz",
                        start_time_limits = c (12, 13) * 3600)
 ```
 
@@ -122,12 +124,12 @@ head (x)
 ```
 
     ##   start_time duration ntransfers      stop_id               stop_name stop_lon
-    ## 1   12:01:54 00:03:30          0 060003102223     S Bellevue (Berlin) 13.34710
-    ## 2   12:01:54 00:10:24          1 060003102224     S Bellevue (Berlin) 13.34710
-    ## 3   12:01:54 00:01:24          0 060003103233   S Tiergarten (Berlin) 13.33624
-    ## 4   12:08:54 00:05:30          1 060003103234   S Tiergarten (Berlin) 13.33624
-    ## 5   12:01:54 00:06:06          0 060003201213 S+U Berlin Hauptbahnhof 13.36892
-    ## 6   12:01:54 00:14:42          1 060003201214 S+U Berlin Hauptbahnhof 13.36892
+    ## 1   12:03:42 00:14:12          1 060003102223     S Bellevue (Berlin) 13.34710
+    ## 2   12:00:42 00:08:36          0 060003102224     S Bellevue (Berlin) 13.34710
+    ## 3   12:00:42 00:15:06          1 060003103233   S Tiergarten (Berlin) 13.33624
+    ## 4   12:00:42 00:10:42          0 060003103234   S Tiergarten (Berlin) 13.33624
+    ## 5   12:03:42 00:11:18          1 060003201213 S+U Berlin Hauptbahnhof 13.36892
+    ## 6   12:00:42 00:05:54          0 060003201214 S+U Berlin Hauptbahnhof 13.36892
     ##   stop_lat
     ## 1 52.51995
     ## 2 52.51995
