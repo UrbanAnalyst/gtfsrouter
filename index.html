@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.229</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.230</span>
       </span>
     </div>
 
@@ -105,7 +105,7 @@
 <span class="va">tempfiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">filename</span> <span class="op">&lt;-</span> <span class="va">tempfiles</span> <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span> <span class="op">(</span><span class="st">"vbb.zip"</span>, <span class="va">tempfiles</span><span class="op">)</span><span class="op">]</span>
 <span class="va">filename</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">## [1] "/tmp/RtmpvEQnBZ/vbb.zip"</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">## [1] "/tmp/Rtmp6Hws2u/vbb.zip"</span></span></code></pre></div>
 <p>For normal package use, <code>filename</code> will specify the name of the local GTFS data stored as a single <code>.zip</code> file.</p>
 <div id="gtfs_route" class="section level3">
 <h3 class="hasAnchor">
@@ -203,23 +203,23 @@
 <div id="gtfs_traveltimes" class="section level3">
 <h3 class="hasAnchor">
 <a href="#gtfs_traveltimes" class="anchor"></a>gtfs_traveltimes</h3>
-<p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_traveltimes.html"><code>gtfs_traveltimes()</code> function`</a> calculates minimal travel times from any nominated stop to all other stops within a feed. It requires the two parameters of start station, and a vector of two values specifying earliest and latest desired start times. The following code illustrates:</p>
+<p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_traveltimes.html"><code>gtfs_traveltimes()</code> function`</a> calculates minimal travel times from any nominated stop to all other stops within a feed. It requires the two parameters of start station, and a vector of two values specifying earliest and latest desired start times. The following code returns the fastest travel times to all stations within the feed for services which leave the nominated station between 12:00 and 13:00 on a Monday:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">filename</span><span class="op">)</span>
-<span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span>
+<span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span>, day <span class="op">=</span> <span class="st">"Monday"</span><span class="op">)</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_traveltimes.html">gtfs_traveltimes</a></span> <span class="op">(</span><span class="va">gtfs</span>,
-                       from <span class="op">=</span> <span class="st">"S+U Zoologischer Garten Bhf"</span>,
+                       from <span class="op">=</span> <span class="st">"Alexanderplatz"</span>,
                        start_time_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span> <span class="op">(</span><span class="fl">12</span>, <span class="fl">13</span><span class="op">)</span> <span class="op">*</span> <span class="fl">3600</span><span class="op">)</span></code></pre></div>
 <p>The function returns a simple table detailing all stations reachable with services departing from the nominated station and start times:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span> <span class="op">(</span><span class="va">x</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">##   start_time duration ntransfers      stop_id               stop_name stop_lon</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="co">## 1   12:01:54 00:03:30          0 060003102223     S Bellevue (Berlin) 13.34710</span></span>
-<span id="cb10-3"><a href="#cb10-3"></a><span class="co">## 2   12:01:54 00:10:24          1 060003102224     S Bellevue (Berlin) 13.34710</span></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="co">## 3   12:01:54 00:01:24          0 060003103233   S Tiergarten (Berlin) 13.33624</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a><span class="co">## 4   12:08:54 00:05:30          1 060003103234   S Tiergarten (Berlin) 13.33624</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a><span class="co">## 5   12:01:54 00:06:06          0 060003201213 S+U Berlin Hauptbahnhof 13.36892</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a><span class="co">## 6   12:01:54 00:14:42          1 060003201214 S+U Berlin Hauptbahnhof 13.36892</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">## 1   12:03:42 00:14:12          1 060003102223     S Bellevue (Berlin) 13.34710</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">## 2   12:00:42 00:08:36          0 060003102224     S Bellevue (Berlin) 13.34710</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">## 3   12:00:42 00:15:06          1 060003103233   S Tiergarten (Berlin) 13.33624</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">## 4   12:00:42 00:10:42          0 060003103234   S Tiergarten (Berlin) 13.33624</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">## 5   12:03:42 00:11:18          1 060003201213 S+U Berlin Hauptbahnhof 13.36892</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">## 6   12:00:42 00:05:54          0 060003201214 S+U Berlin Hauptbahnhof 13.36892</span></span>
 <span id="cb10-8"><a href="#cb10-8"></a><span class="co">##   stop_lat</span></span>
 <span id="cb10-9"><a href="#cb10-9"></a><span class="co">## 1 52.51995</span></span>
 <span id="cb10-10"><a href="#cb10-10"></a><span class="co">## 2 52.51995</span></span>
