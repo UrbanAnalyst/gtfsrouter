@@ -14,25 +14,25 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
   
-  
-```{r pkg-load, echo = FALSE, message = FALSE}
-library (gtfsrouter)
-#devtools::load_all (".", export_all = FALSE)
-```
+`gtfsrouter` includes a function,
+[`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html),
+to efficiently calculate travel times from a nominated station to all other
+stations within a GTFS feed. The function takes only two main parameters, the
+first specifying a departure station, and the second specifying a pair of
+`start_time_limits` determining the earliest and latest possible departure
+times from that station. The function will then return the fastest connections
+to all possible end stations for services departing within the specified
+`start_time_limits`.
 
-The function
-[`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html)
-calculates travel times from a nominated departure station and time to all
-reachable stations. In addition to specifying a departure station, the main
-parameter required by the function is a pair of `start_time_limits` specifying
-the earliest and latest possible start times. For example, travel times to all
-stations for services leaving a nominated station between 12:00 and 13:00 can
-be extracted by specifying `start_time_limits = c (12 * 3600, 13 * 3600)`. The
-following code uses the internal Berlin data to demonstrate, starting by
-reading the GTFS data and constructing a timetable for a specified day, in
-order to speed up subsequent routing calculations.
+For example, travel times to all stations for services leaving a nominated
+station between 12:00 and 13:00 can be extracted by specifying
+`start_time_limits = c (12, 13) * 3600`. The following code uses the internal
+Berlin data to demonstrate, starting by reading the GTFS data and constructing
+a timetable for a specified day, in order to speed up subsequent routing
+calculations.
 
 ```{r berlin_gtfs}
+library (gtfsrouter)
 berlin_gtfs_to_zip ()
 f <- file.path (tempdir (), "vbb.zip")
 gtfs <- extract_gtfs (f, quiet = TRUE)
