@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.230</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.231</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
       <h1 data-toc-skip>Travel Times</h1>
                         <h4 class="author">Mark Padgham &amp; Alexandra Kapp</h4>
             
-            <h4 class="date">2021-06-01</h4>
+            <h4 class="date">2021-06-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ATFutures/gtfs-router/blob/master/vignettes/traveltimes.Rmd"><code>vignettes/traveltimes.Rmd</code></a></small>
       <div class="hidden name"><code>traveltimes.Rmd</code></div>
@@ -79,9 +79,11 @@
 
     
     
-<p>The function <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> calculates travel times from a nominated departure station and time to all reachable stations. In addition to specifying a departure station, the main parameter required by the function is a pair of <code>start_time_limits</code> specifying the earliest and latest possible start times. For example, travel times to all stations for services leaving a nominated station between 12:00 and 13:00 can be extracted by specifying <code>start_time_limits = c (12 * 3600, 13 * 3600)</code>. The following code uses the internal Berlin data to demonstrate, starting by reading the GTFS data and constructing a timetable for a specified day, in order to speed up subsequent routing calculations.</p>
+<p><code>gtfsrouter</code> includes a function, <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a>, to efficiently calculate travel times from a nominated station to all other stations within a GTFS feed. The function takes only two main parameters, the first specifying a departure station, and the second specifying a pair of <code>start_time_limits</code> determining the earliest and latest possible departure times from that station. The function will then return the fastest connections to all possible end stations for services departing within the specified <code>start_time_limits</code>.</p>
+<p>For example, travel times to all stations for services leaving a nominated station between 12:00 and 13:00 can be extracted by specifying <code>start_time_limits = c (12, 13) * 3600</code>. The following code uses the internal Berlin data to demonstrate, starting by reading the GTFS data and constructing a timetable for a specified day, in order to speed up subsequent routing calculations.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/ATFutures/gtfs-router">gtfsrouter</a></span><span class="op">)</span>
+<span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span>
 <span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span>
 <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span>, day <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
