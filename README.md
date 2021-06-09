@@ -1,11 +1,3 @@
----
-output:
-  md_document:
-    variant: markdown\_github
-  rmarkdown::html_vignette:
-    self_contained: no
-title: gtfsrouter
----
 
 # gtfsrouter <a href='https://atfutures.github.io/gtfs-router/'><img src='man/figures/gtfsrouter.png' align="right" height=210 width=182/></a>
 
