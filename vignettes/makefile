@@ -1,4 +1,4 @@
-LFILE = gtfsrouter
+LFILE = traveltimes
 
 all: knith
 #all: knith open 
