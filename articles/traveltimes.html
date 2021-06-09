@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.231</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.233</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
       <h1 data-toc-skip>Travel Times</h1>
                         <h4 class="author">Mark Padgham &amp; Alexandra Kapp</h4>
             
-            <h4 class="date">2021-06-03</h4>
+            <h4 class="date">2021-06-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ATFutures/gtfs-router/blob/master/vignettes/traveltimes.Rmd"><code>vignettes/traveltimes.Rmd</code></a></small>
       <div class="hidden name"><code>traveltimes.Rmd</code></div>
@@ -80,14 +80,14 @@
     
     
 <p><code>gtfsrouter</code> includes a function, <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a>, to efficiently calculate travel times from a nominated station to all other stations within a GTFS feed. The function takes only two main parameters, the first specifying a departure station, and the second specifying a pair of <code>start_time_limits</code> determining the earliest and latest possible departure times from that station. The function will then return the fastest connections to all possible end stations for services departing within the specified <code>start_time_limits</code>.</p>
-<p>For example, travel times to all stations for services leaving a nominated station between 12:00 and 13:00 can be extracted by specifying <code>start_time_limits = c (12, 13) * 3600</code>. The following code uses the internal Berlin data to demonstrate, starting by reading the GTFS data and constructing a timetable for a specified day, in order to speed up subsequent routing calculations.</p>
+<p>For example, travel times to all stations for services leaving a nominated station between 12:00 and 13:00 can be extracted by specifying <code>start_time_limits = c (12, 13) * 3600</code>. The following code uses the internal Berlin data to demonstrate, starting by reading the GTFS data and constructing a timetable for a specified day. This second step, achieved by calling the <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_timetable.html"><code>gtfs_timetable()</code> function</a>, is necessary prior to calculating travel times.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/ATFutures/gtfs-router">gtfsrouter</a></span><span class="op">)</span>
 <span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span>
 <span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span>
 <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span>, day <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> function may then be called with the following code:</p>
+<p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> function may then be called by specifying a start station (<code>from</code>), and <code>start_time_limits</code>, as in the following code:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span>
 <span class="va">start_time_limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>, <span class="fl">13</span> <span class="op">*</span> <span class="fl">3600</span><span class="op">)</span>
@@ -117,11 +117,11 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span> <span class="op">(</span><span class="va">tt</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 697</code></pre>
-<p>The total number of stations contained within the sample GTFS data are:</p>
+<p>This relatively low number is because the <a href="https://atfutures.github.io/gtfs-router/reference/berlin_gtfs_to_zip.html"><code>berlin_gtfs_to_zip()</code> function</a> creates only a small sample portion of a full feed, extending over only one hour and containing a small number of stations. The total number of stations reachable from the Alexanderplatz station during these times are:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 957</code></pre>
-<p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> function does not generally record travel times to every station within a system. The number of stations reached is generally controlled by an additional parameter, <code>max_traveltime</code>, which defaults to one hour. The maximum traveltimes returned from the above call are:</p>
+<p>That number is equal to the total number of stops in the feed, although in general the <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> will return travel times to only a subset of all potentially reachable stations, for two main reasons. First, not all stations may actually be reachable from a given station, and travel times will only be returned for those that are. Secondly, the <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> function has an additional parameter, <code>max_traveltime</code>, and only returns travel times to stations able to be reached within this upper limit. The default value is 3600, or one hour. For the token feed used here, the maximum travel times returned are:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">hms</span><span class="fu">::</span><span class="fu"><a href="https://hms.tidyverse.org/reference/hms.html">hms</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span> <span class="op">(</span><span class="va">tt</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## 00:53:36</code></pre>
@@ -135,7 +135,9 @@
 <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span> <span class="op">(</span><span class="va">tt</span><span class="op">)</span>; <span class="fu">hms</span><span class="fu">::</span><span class="fu"><a href="https://hms.tidyverse.org/reference/hms.html">hms</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span> <span class="op">(</span><span class="va">tt</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="co">## [1] 8556</span>
 <span class="co">## 01:00:00</span></code></pre></div>
-<p>The number of stations reached in the full feed is far more, and the maximum trip duration is indeed precisely one hour. The reason the function does not automatically return information of all reachable stations is that calculation times increase non-linearly with numbers of stations reached. The following code estimates calculation times as a function both of <code>max_traveltime</code>, and numbers of stations reached.</p>
+<p>The number of stations reached in the full feed is far more, and the maximum trip duration is indeed precisely one hour. This parameter of <code>max_traveltime</code> defaults to the relatively short value of one hour because calculation times increase non-linearly with numbers of stations reached. The following graphs show calculation times as a function both of <code>max_traveltime</code>, and numbers of stations reached.</p>
+<details><summary>Click one the arrow to the left to see code used to generate these results</summary><p>
+</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">maxt</span> <span class="op">&lt;-</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">0</span><span class="op">:</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">1800</span> <span class="co"># 1-6 hours in half-hour intervals</span>
 <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span> <span class="op">(</span><span class="va">maxt</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span>
@@ -159,8 +161,10 @@
       xlab <span class="op">=</span> <span class="st">"Thousands of Stations Reached"</span>,
       ylab <span class="op">=</span> <span class="st">"Calculation Time (seconds)"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/lines.html">lines</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">n_stns</span>, <span class="va">dat</span><span class="op">$</span><span class="va">calc_time</span><span class="op">)</span></code></pre></div>
+
+</details><p><br></p>
 <p><img src="traveltimes_files/figure-html/timing-manual-1.png" width="700"></p>
-<p>Those graphs show that increasing the <code>max_traveltime</code> parameter leads to approximately linear increases in the calculation times required for <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> to execute, while relationships with numbers of stations actually reached are highly non-linear. The panel on the right side shows that increases in <code>max_traveltime</code> eventually have little effect on increasing numbers of stations reached, yet increase computation times considerably. Values for <code>max_traveltime</code> should accordingly only be adjusted after first determining appropriate values. In particular, note that although the Berlin GTFS has a large number of distinct stops:</p>
+<p>Those graphs show that increasing the <code>max_traveltime</code> parameter leads to approximately linear increases in the calculation times required for <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> to execute, while relationships with numbers of stations actually reached are highly non-linear. The panel on the right side shows that increases in <code>max_traveltime</code> eventually have little effect on increasing numbers of stations reached, yet increases computation times considerably. Values for <code>max_traveltime</code> should accordingly only be adjusted after first determining appropriate values. In particular, note that although the Berlin GTFS has a large number of distinct stops:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span><span class="op">)</span>
 <span class="co">## [1] 41577</span></code></pre></div>
@@ -203,7 +207,7 @@
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">fastest_ntr</span> <span class="op">-</span> <span class="va">dat</span><span class="op">$</span><span class="va">min_tr_ntr</span><span class="op">)</span>
 <span class="co">## [1] 0.2818428</span></code></pre></div>
-<p>And minimal-transfer trips take on average just under 4 minutes longer, while requiring 0.28 fewer trips. Most fastest trips are nevertheless also minimal-transfer trips, as can be seen by the number of identical values returned by these two queries.</p>
+<p>Minimal-transfer trips take on average just under 4 minutes longer, while requiring 0.28 fewer trips. Most fastest trips are nevertheless also minimal-transfer trips, as can be seen by the number of identical values returned by these two queries.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">min_tr_ntr</span> <span class="op">==</span> <span class="va">dat</span><span class="op">$</span><span class="va">fastest_ntr</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">)</span>
 <span class="co">## [1] 0.6875221</span></code></pre></div>
