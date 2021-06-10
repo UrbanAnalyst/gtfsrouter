@@ -51,10 +51,10 @@ class Iso
 
         struct OneCon {
             bool is_transfer = false;
-            size_t prev_stn;
+            size_t prev_stn,
+                   trip;
             int departure_time,
                 arrival_time,
-                trip,
                 ntransfers,
                 initial_depart;
         };
@@ -102,7 +102,8 @@ class Iso
 
 struct BackTrace
 {
-    std::vector <int> trip, end_station, end_times;
+    std::vector <size_t> trip;
+    std::vector <int> end_station, end_times;
 };
 
 namespace iso {
@@ -178,7 +179,7 @@ size_t trace_back_prev_index (
         const Iso & iso,
         const size_t & stn,
         const int & departure_time,
-        const int & trip_id,
+        const size_t & trip_id,
         const bool &minimise_transfers
         );
 

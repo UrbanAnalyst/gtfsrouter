@@ -581,7 +581,7 @@ size_t iso::trace_back_prev_index (
         const Iso & iso,
         const size_t & stn,
         const int & departure_time,
-        const int & trip_id,
+        const size_t & trip_id,
         const bool &minimise_transfers
         )
 {
