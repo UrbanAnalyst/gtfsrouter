@@ -63,8 +63,9 @@ Rcpp::List iso::trace_back_isochrones (
         const bool &minimise_transfers
         )
 {
-    const size_t nend = std::accumulate (iso.is_end_stn.begin (),
-            iso.is_end_stn.end (), 0L);
+    const size_t nend = static_cast <size_t> (
+            std::accumulate (iso.is_end_stn.begin (),
+                iso.is_end_stn.end (), 0L));
 
     std::vector <size_t> end_stations (nend);
     size_t count = 0;
@@ -151,8 +152,7 @@ Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
             arrival_time,
             transfer_map,
             start_stations_set,
-            minimise_transfers,
-            max_traveltime);
+            minimise_transfers);
 
     Rcpp::IntegerMatrix res = iso::trace_back_traveltimes (
             iso,

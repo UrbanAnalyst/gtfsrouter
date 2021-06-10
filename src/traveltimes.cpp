@@ -260,15 +260,13 @@ void iso::trace_forward_traveltimes (
         const std::vector <int> & arrival_time,
         const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
         const std::unordered_set <size_t> & start_stations_set,
-        const bool & minimise_transfers,
-        const int & max_traveltime)
+        const bool & minimise_transfers)
 {
     const size_t nrows = departure_station.size ();
 
     std::unordered_map <size_t, bool> stations;
     for (size_t a: arrival_station)
         stations.emplace (std::make_pair (a, false));
-    const int nstations = static_cast <int> (stations.size ());
 
     bool stop = false;
 
