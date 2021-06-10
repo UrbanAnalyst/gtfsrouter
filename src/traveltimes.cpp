@@ -93,7 +93,7 @@ bool iso::fill_one_iso (
         Iso &iso) {
 
     bool fill_vals = false, is_end_stn = false, same_trip = false;
-    int prev_trip = -1L;
+    int prev_trip = -1L; // int to allow -1L flag
     int ntransfers = INFINITE_INT;
     int latest_initial = -1L;
 
@@ -184,7 +184,7 @@ bool iso::fill_one_iso (
                             departure_time);
 
                     latest_initial = st.initial_depart;
-                    prev_trip = st.trip;
+                    prev_trip = static_cast <int> (st.trip);
                     ntransfers = st.ntransfers;
 
                 }
@@ -266,7 +266,7 @@ void iso::trace_forward_traveltimes (
     const size_t nrows = departure_station.size ();
 
     std::unordered_map <size_t, bool> stations;
-    for (int a: arrival_station)
+    for (size_t a: arrival_station)
         stations.emplace (std::make_pair (a, false));
     const int nstations = static_cast <int> (stations.size ());
 
@@ -507,7 +507,7 @@ void iso::trace_back_one_stn (
     backtrace.trip.push_back (this_trip);
     backtrace.end_times.push_back (arrival_time);
 
-    int temp = 0;
+    size_t temp = 0;
 
     while (prev_index < INFINITE_INT)
     {
