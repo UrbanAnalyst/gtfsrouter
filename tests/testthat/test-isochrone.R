@@ -5,6 +5,8 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
 
 is_test_workflow <- identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage")
 
+testthat::skip_on_cran ()
+
 if (!is_test_workflow) {
 
 test_that("gtfs_isochrone", {
