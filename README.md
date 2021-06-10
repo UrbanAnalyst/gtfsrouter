@@ -1,4 +1,3 @@
-
 # gtfsrouter <a href='https://atfutures.github.io/gtfs-router/'><img src='man/figures/gtfsrouter.png' align="right" height=210 width=182/></a>
 
 [![R build
@@ -57,7 +56,7 @@ filename <- tempfiles [grep ("vbb.zip", tempfiles)]
 filename
 ```
 
-    ## [1] "/tmp/Rtmp6Hws2u/vbb.zip"
+    ## [1] "/tmp/Rtmppvw1ly/vbb.zip"
 
 For normal package use, `filename` will specify the name of the local
 GTFS data stored as a single `.zip` file.
@@ -129,6 +128,9 @@ head (x)
     ## 4 52.51396
     ## 5 52.52585
     ## 6 52.52585
+
+Further details are provided in a [separate
+vignette](https://atfutures.github.io/gtfs-router/articles/traveltimes.html).
 
 ### gtfs\_transfer\_table
 

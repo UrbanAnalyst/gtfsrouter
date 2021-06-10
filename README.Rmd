@@ -1,14 +1,4 @@
 
----
-title: "gtfsrouter"
-output:
-  rmarkdown::html_vignette:
-    self_contained: no
-
-  md_document:
-    variant: markdown_github
----
-
 # gtfsrouter <a href='https://atfutures.github.io/gtfs-router/'><img src='man/figures/gtfsrouter.png' align="right" height=210 width=182/></a>
 
 [![R build
@@ -107,6 +97,9 @@ services departing from the nominated station and start times:
 ```{r iso-results1}
 head (x)
 ```
+
+Further details are provided in a [separate
+vignette](https://atfutures.github.io/gtfs-router/articles/traveltimes.html).
 
 ### gtfs_transfer_table
 
