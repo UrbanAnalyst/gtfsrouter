@@ -1,6 +1,6 @@
 # CRAN notes for gtfsrouter_0.0.5 submission
 
-The submission generates no notes or warnings on:
+Current CRAN errors on linux-debian-gcc and macos=arm64 are related to failures in udunits2 and units, and not this package. Other than that the submission generates no notes or warnings on:
 
 * Ubuntu 18.04: R-oldrelease, R-release, R-devel
 * Windows: R-oldrelease, R-release, R-devel
