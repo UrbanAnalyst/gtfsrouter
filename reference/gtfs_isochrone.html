@@ -73,7 +73,7 @@ of all stations reachable to the specified end_time." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.239</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.243</span>
       </span>
     </div>
 
@@ -226,15 +226,13 @@ shapes.</p>
 </div><div class='output co'>#&gt; <span class='message'>Day not specified; extracting timetable for thursday</span></div><div class='input'><span class='va'>from</span> <span class='op'>&lt;-</span> <span class='st'>"Alexanderplatz"</span>
 <span class='va'>start_time</span> <span class='op'>&lt;-</span> <span class='fl'>12</span> <span class='op'>*</span> <span class='fl'>3600</span> <span class='op'>+</span> <span class='fl'>600</span>
 <span class='va'>end_time</span> <span class='op'>&lt;-</span> <span class='va'>start_time</span> <span class='op'>+</span> <span class='fl'>600</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span>  <span class='co'># function is deprecated!</span>
 <span class='va'>ic</span> <span class='op'>&lt;-</span> <span class='fu'>gtfs_isochrone</span> <span class='op'>(</span><span class='va'>g</span>,
                       from <span class='op'>=</span> <span class='va'>from</span>,
                       start_time <span class='op'>=</span> <span class='va'>start_time</span>,
                       end_time <span class='op'>=</span> <span class='va'>end_time</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: 'gtfs_isochrone' is deprecated.</span>
-#&gt; <span class='warning'>Use 'gtfs_traveltimes' instead.</span>
-#&gt; <span class='warning'>See help("Deprecated")</span></div><div class='output co'>#&gt; <span class='message'>Loading required namespace: lwgeom</span></div><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span> <span class='op'>(</span><span class='va'>ic</span><span class='op'>)</span>
-<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in plot(ic): object 'ic' not found</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
