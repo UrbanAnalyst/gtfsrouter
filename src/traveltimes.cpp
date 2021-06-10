@@ -651,7 +651,7 @@ bool iso::update_best_connection (
 }
 
 
-const bool iso::is_transfer_connected (
+bool iso::is_transfer_connected (
         const Iso & iso,
         const size_t & station,
         const int & transfer_time
@@ -665,7 +665,7 @@ const bool iso::is_transfer_connected (
 // Return a dummy value of 0 for stations which have not yet been reached, so
 // they will be connected by transfer no matter what; otherwise return actual
 // minimal journey time to that station.
-const bool iso::is_transfer_in_isochrone (
+bool iso::is_transfer_in_isochrone (
         Iso & iso,
         const size_t & station,
         const int & transfer_time
@@ -678,7 +678,7 @@ const bool iso::is_transfer_in_isochrone (
     return (journey <= iso.get_max_traveltime ());
 }
 
-const bool iso::is_start_stn (
+bool iso::is_start_stn (
     const std::unordered_set <size_t> &start_stations_set,
     const size_t &stn)
 {
@@ -693,7 +693,7 @@ const bool iso::is_start_stn (
 // prior station of B (departure_station), so check over all connections for
 // departure station (= B) to check that none of the listed "departure_station"
 // -- NOT arrival_station -- values are A.
-const bool iso::arrival_already_visited (
+bool iso::arrival_already_visited (
         const Iso & iso,
         const size_t & departure_station,
         const size_t & arrival_station)
