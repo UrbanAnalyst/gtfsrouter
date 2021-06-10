@@ -23,6 +23,8 @@ vbb/
 ^\.github$
 ^\.pre-commit-config\.yaml$
 ^temp*
-WORDLIST$
+^inst/precommit$
+^inst/WORDLIST$
 precommit/
 ^\.hooks$
+^r5
