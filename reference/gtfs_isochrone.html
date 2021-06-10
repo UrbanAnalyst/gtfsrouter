@@ -40,8 +40,8 @@
 
 
 <meta property="og:title" content="gtfs_isochrone — gtfs_isochrone" />
-<meta property="og:description" content="Calculate a single isochrone from a given start station, returning the list
-of all stations reachable to the specified end_time." />
+<meta property="og:description" content="NOTE: This function has been deprecated. Please use gtfs_traveltimes
+instead." />
 
 
 
@@ -73,7 +73,7 @@ of all stations reachable to the specified end_time." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.244</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.247</span>
       </span>
     </div>
 
@@ -115,8 +115,8 @@ of all stations reachable to the specified end_time." />
     </div>
 
     <div class="ref-description">
-    <p>Calculate a single isochrone from a given start station, returning the list
-of all stations reachable to the specified <code>end_time</code>.</p>
+    <p>NOTE: This function has been deprecated. Please use <a href='gtfs_traveltimes.html'>gtfs_traveltimes</a>
+instead.</p>
     </div>
 
     <pre class="usage"><span class='fu'>gtfs_isochrone</span><span class='op'>(</span>
@@ -217,6 +217,10 @@ individual routes. A non-convex ("alpha") hull is also returned (as an
 <span class="pkg">sf</span> <code>POLYGON</code> object), including measures of area and "elongation",
 which equals zero for a circle, and increases towards one for more elongated
 shapes.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Calculate a single isochrone from a given start station, returning the list
+of all stations reachable to the specified <code>end_time</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='berlin_gtfs_to_zip.html'>berlin_gtfs_to_zip</a></span> <span class='op'>(</span><span class='op'>)</span>

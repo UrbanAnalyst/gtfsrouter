@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.244</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.247</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@
 <span class="va">tempfiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">filename</span> <span class="op">&lt;-</span> <span class="va">tempfiles</span> <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span> <span class="op">(</span><span class="st">"vbb.zip"</span>, <span class="va">tempfiles</span><span class="op">)</span><span class="op">]</span>
 <span class="va">filename</span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">## [1] "/tmp/Rtmp6Hws2u/vbb.zip"</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">## [1] "/tmp/Rtmppvw1ly/vbb.zip"</span></span></code></pre></div>
 <p>For normal package use, <code>filename</code> will specify the name of the local GTFS data stored as a single <code>.zip</code> file.</p>
 <div id="gtfs_route" class="section level3">
 <h3 class="hasAnchor">
@@ -224,6 +224,7 @@
 <span id="cb10-12"><a href="#cb10-12"></a><span class="co">## 4 52.51396</span></span>
 <span id="cb10-13"><a href="#cb10-13"></a><span class="co">## 5 52.52585</span></span>
 <span id="cb10-14"><a href="#cb10-14"></a><span class="co">## 6 52.52585</span></span></code></pre></div>
+<p>Further details are provided in a <a href="https://atfutures.github.io/gtfs-router/articles/traveltimes.html">separate vignette</a>.</p>
 </div>
 <div id="gtfs_transfer_table" class="section level3">
 <h3 class="hasAnchor">
