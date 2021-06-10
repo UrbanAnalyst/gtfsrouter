@@ -41,11 +41,11 @@
 #' from <- "Alexanderplatz"
 #' start_time <- 12 * 3600 + 600
 #' end_time <- start_time + 600
+#' \dontrun{ # function is deprecated!
 #' ic <- gtfs_isochrone (g,
 #'                       from = from,
 #'                       start_time = start_time,
 #'                       end_time = end_time)
-#' \dontrun{
 #' plot (ic)
 #' }
 #' @export
