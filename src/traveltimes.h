@@ -79,7 +79,7 @@ class Iso
             connections.resize (n);
         }
 
-        const size_t extend (const size_t n) {
+        size_t extend (const size_t n) {
             const size_t s = connections [n].convec.size () + 1L;
 
             connections [n].convec.resize (s);
@@ -94,7 +94,7 @@ class Iso
             return s;
         }
 
-        const int get_max_traveltime () {
+        int get_max_traveltime () {
             return max_traveltime;
         }
 
@@ -190,23 +190,23 @@ bool update_best_connection (
         const bool &minimise_transfers
         );
 
-const bool is_transfer_in_isochrone (
+bool is_transfer_in_isochrone (
         Iso & iso,
         const size_t & station,
         const int & transfer_time
         );
 
-const bool is_transfer_connected (
+bool is_transfer_connected (
         const Iso & iso,
         const size_t & station,
         const int & transfer_time
         );
 
-const bool is_start_stn (
+bool is_start_stn (
     const std::unordered_set <size_t> &start_stations_set,
     const size_t &stn);
 
-const bool arrival_already_visited (
+bool arrival_already_visited (
         const Iso & iso,
         const size_t & departure_station,
         const size_t & arrival_station);
