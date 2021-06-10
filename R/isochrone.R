@@ -243,7 +243,7 @@ route_midpoints <- function (x) {
                         rep (i$earliest_arrival [1], nrow (i) - 2))
     departure <- do.call (c, departure)
 
-    duration <- hms::hms (as.integer (arrival) - departure)
+    duration <- hms::hms (as.integer (arrival) - as.integer (departure))
 
     transfers <- do.call (c, lapply (x, function (i)
                                      i$ntransfers [-c (1, nrow (i))]))
