@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.234</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.239</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
       <h1 data-toc-skip>Travel Times</h1>
                         <h4 class="author">Mark Padgham &amp; Alexandra Kapp</h4>
             
-            <h4 class="date">2021-06-09</h4>
+            <h4 class="date">2021-06-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ATFutures/gtfs-router/blob/master/vignettes/traveltimes.Rmd"><code>vignettes/traveltimes.Rmd</code></a></small>
       <div class="hidden name"><code>traveltimes.Rmd</code></div>
@@ -90,7 +90,7 @@
 <p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> function may then be called by specifying a start station (<code>from</code>), and <code>start_time_limits</code>, as in the following code:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span>
-<span class="va">start_time_limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>, <span class="fl">13</span> <span class="op">*</span> <span class="fl">3600</span><span class="op">)</span>
+<span class="va">start_time_limits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span> <span class="op">(</span><span class="fl">12</span>, <span class="fl">13</span><span class="op">)</span> <span class="op">*</span> <span class="fl">3600</span>
 <span class="va">tt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_traveltimes.html">gtfs_traveltimes</a></span><span class="op">(</span><span class="va">gtfs</span>,
                        from <span class="op">=</span> <span class="va">from</span>,
                        start_time_limits <span class="op">=</span> <span class="va">start_time_limits</span><span class="op">)</span>
@@ -121,7 +121,7 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 957</code></pre>
-<p>That number is equal to the total number of stops in the feed, although in general the <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> will return travel times to only a subset of all potentially reachable stations, for two main reasons. First, not all stations may actually be reachable from a given station, and travel times will only be returned for those that are. Secondly, the <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> function has an additional parameter, <code>max_traveltime</code>, and only returns travel times to stations able to be reached within this upper limit. The default value is 3600, or one hour. For the token feed used here, the maximum travel times returned are:</p>
+<p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> returns travel times to only a subset of all potentially reachable stations (697 instead of 957) for two main reasons. First, not all stations may actually be reachable from a given station, and travel times will only be returned for those that are. Secondly, the <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html"><code>gtfs_traveltimes()</code></a> function has an additional parameter, <code>max_traveltime</code>, and only returns travel times to stations able to be reached within this upper limit. The default value is 3600, or one hour. For the token feed used here, the maximum travel times returned are:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">hms</span><span class="fu">::</span><span class="fu"><a href="https://hms.tidyverse.org/reference/hms.html">hms</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span> <span class="op">(</span><span class="va">tt</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## 00:53:36</code></pre>
