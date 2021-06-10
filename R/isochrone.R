@@ -123,6 +123,10 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time,
     if (length (stns) < 2)
         stop ("No isochrone possible") # nocov
 
+    # rcpp_isochrone returns a list with elements of both int and size_t, with
+    # the mixed storage mode converted in R to numeric and not integer.
+    stns <- lapply (stns, as.integer)
+
     index <- 3 * 1:((length (stns) - 1) / 3) - 2
     trips <- stns [index + 1]
     earliest_arrival <- stns [index + 2]
