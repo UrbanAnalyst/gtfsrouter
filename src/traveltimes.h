@@ -102,8 +102,8 @@ class Iso
 
 struct BackTrace
 {
-    std::vector <size_t> trip;
-    std::vector <int> end_station, end_times;
+    std::vector <size_t> trip, end_station;;
+    std::vector <int> end_times;
 };
 
 namespace iso {

@@ -503,7 +503,7 @@ void iso::trace_back_one_stn (
     size_t departure_stn = iso.connections [stn].convec [prev_index].prev_stn;
     size_t this_trip = iso.connections [stn].convec [prev_index].trip;
 
-    backtrace.end_station.push_back (static_cast <int> (stn));
+    backtrace.end_station.push_back (stn);
     backtrace.trip.push_back (this_trip);
     backtrace.end_times.push_back (arrival_time);
 
@@ -524,7 +524,7 @@ void iso::trace_back_one_stn (
             this_trip = iso.connections [stn].convec [prev_index].trip;
             arrival_time = iso.connections [stn].convec [prev_index].arrival_time;
 
-            backtrace.end_station.push_back (static_cast <int> (stn));
+            backtrace.end_station.push_back (stn);
 
             departure_time = iso.connections [stn].convec [prev_index].departure_time;
             departure_stn = iso.connections [stn].convec [prev_index].prev_stn;
@@ -560,7 +560,7 @@ size_t iso::trace_back_first (
     size_t prev_index = INFINITE_INT;
     int shortest_journey = INFINITE_INT;
 
-    int index = 0;
+    size_t index = 0;
     for (auto st: iso.connections [stn].convec)
     {
         const int journey = st.arrival_time - st.initial_depart;
@@ -591,7 +591,7 @@ size_t iso::trace_back_prev_index (
 
     bool same_trip = false;
 
-    int index = 0;
+    size_t index = 0;
     for (auto st: iso.connections [stn].convec)
     {
         if (st.arrival_time <= departure_time)
