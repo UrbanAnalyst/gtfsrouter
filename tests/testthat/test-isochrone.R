@@ -3,6 +3,9 @@ context("isochrone")
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
              identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
+is_test_workflow <- identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage")
+
+if (!is_test_workflow) {
 
 test_that("gtfs_isochrone", {
               berlin_gtfs_to_zip ()
@@ -62,3 +65,4 @@ test_that("isochrone errors", {
                                             end_time = 14 * 3600 + 2400)),
                             "There are no scheduled services after that time")
              })
+} # end if !is_test_workflow
