@@ -167,11 +167,11 @@ Rcpp::IntegerMatrix iso::trace_back_traveltimes (
         const bool &minimise_transfers
         )
 {
-    const size_t nst = iso.is_end_stn.size ();
+    const int nst = static_cast <int> (iso.is_end_stn.size ());
 
     Rcpp::IntegerMatrix res (nst, 3);
 
-    int count = 0;
+    size_t count = 0;
 
     for (auto s: iso.connections)
     {
