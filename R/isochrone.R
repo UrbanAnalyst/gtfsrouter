@@ -1,5 +1,8 @@
 #' gtfs_isochrone
 #'
+#' NOTE: This function has been deprecated. Please use \link{gtfs_traveltimes}
+#' instead.
+#'
 #' Calculate a single isochrone from a given start station, returning the list
 #' of all stations reachable to the specified `end_time`.
 #'

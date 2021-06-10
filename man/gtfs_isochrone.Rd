@@ -77,6 +77,10 @@ which equals zero for a circle, and increases towards one for more elongated
 shapes.
 }
 \description{
+NOTE: This function has been deprecated. Please use \link{gtfs_traveltimes}
+instead.
+}
+\details{
 Calculate a single isochrone from a given start station, returning the list
 of all stations reachable to the specified \code{end_time}.
 }
