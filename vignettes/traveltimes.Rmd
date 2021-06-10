@@ -48,7 +48,7 @@ function may then be called by specifying a start station (`from`), and
 
 ```{r traveltimes}
 from <- "Alexanderplatz"
-start_time_limits <- c(12 * 3600, 13 * 3600)
+start_time_limits <- c (12, 13) * 3600
 tt <- gtfs_traveltimes(gtfs,
                        from = from,
                        start_time_limits = start_time_limits)
@@ -77,13 +77,12 @@ reachable from the `r from` station during these times are:
 nrow (gtfs$stops)
 ```
 
-That number is equal to the total number of stops in the feed, although in
-general the
+The
 [`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html)
-will return travel times to only a subset of all potentially reachable
-stations, for two main reasons. First, not all stations may actually be
-reachable from a given station, and travel times will only be returned for
-those that are. Secondly, the 
+returns travel times to only a subset of all potentially reachable stations 
+(`r nrow (tt)` instead of `r nrow (gtfs$stops)`) for two main reasons. First,
+not all stations may actually be reachable from a given station, and travel
+times will only be returned for those that are. Secondly, the
 [`gtfs_traveltimes()`](https://atfutures.github.io/gtfs-router/reference/gtfs_isochrone.html)
 function has an additional parameter, `max_traveltime`, and only returns travel
 times to stations able to be reached within this upper limit. The default value
