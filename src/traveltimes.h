@@ -177,7 +177,7 @@ size_t trace_back_first (
 size_t trace_back_prev_index (
         const Iso & iso,
         const size_t & stn,
-        const size_t & departure_time,
+        const int & departure_time,
         const int & trip_id,
         const bool &minimise_transfers
         );
