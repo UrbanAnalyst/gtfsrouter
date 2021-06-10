@@ -54,6 +54,8 @@ gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
                             route_pattern = NULL, minimise_transfers = FALSE,
                             hull_alpha = 0.1, quiet = FALSE) {
 
+    .Deprecated ("gtfs_traveltimes")
+
     requireNamespace ("geodist")
     requireNamespace ("lwgeom")
 

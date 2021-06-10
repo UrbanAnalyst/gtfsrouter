@@ -2,7 +2,7 @@
 
 Major changes:
 
-- Add new `gtfs_traveltimes` function
+- Add new `gtfs_traveltimes` function and deprecate `gtfs_isochrone`
 
 Minor changes:
 
