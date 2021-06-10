@@ -10,10 +10,12 @@ g2 <- gtfs_timetable (g, day = 3, quiet = TRUE)
 
 test_that("gtfs_traveltimes", {
               from <- "Alexanderplatz"
-              start_times <- 8 * 3600 + c (0, 60) * 60 # 8:00-9:00
+              start_times <- c (12, 13) * 3600
               res <- gtfs_traveltimes (g2, from, start_times)
               expect_is (res, "data.frame")
               expect_equal (ncol (res), 7)
+              expect_true (nrow (res) > 100)
+              expect_true (nrow (res) < nrow (g2$stops))
 
               expect_identical (names (res), c ("start_time",
                                                 "duration",
