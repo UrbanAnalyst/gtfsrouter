@@ -6,7 +6,7 @@ The submission generates no notes or warnings on:
 * Windows: R-oldrelease, R-release, R-devel
 * win-builder (R-release, R-devel, R-oldrelease)
 
-C++ source code in package also generates no warnings with Clang++ -Weverything
+C++ source code in package also generates no warnings with either Clang++ -Weverything or UBSAN
 
 ## valgrind memory leak
 
