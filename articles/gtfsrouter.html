@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.262</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.4.264</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
       <h1 data-toc-skip>gtfsrouter</h1>
                         <h4 class="author">Mark Padgham</h4>
             
-            <h4 class="date">2021-06-10</h4>
+            <h4 class="date">2021-06-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ATFutures/gtfs-router/blob/master/vignettes/gtfsrouter.Rmd"><code>vignettes/gtfsrouter.Rmd</code></a></small>
       <div class="hidden name"><code>gtfsrouter.Rmd</code></div>
@@ -92,11 +92,13 @@
 </ol>
 <p>The one thing neither of these packages enable is the use of GTFS data for transit routing. The <code>gtfsrouter</code> package enables both one-to-one and one-to-many routing. Functionality is demonstrated here through the sample data set included with the package, provided by the “Verkehrsverbund Berlin-Brandenburg” (VBB; or Transport Network Berlin-Brandenburg). The <code>berlin_gtfs</code> data represents a reduced version of the full GTFS data, containing only six tables, and a timetable reduced to the single hour between 12:00-13:00. Like all GTFS software including <a href="https://github.com/r-transit/tidytransit"><code>tidytransit</code></a>, this package is designed to work directly with GTFS data in <code>.zip</code>-archived format, and so includes a helper function, <code><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip()</a></code>, which exports the internal data set to a locally-stored <code>.zip</code> archive in the <code><a href="https://rdrr.io/r/base/tempfile.html">tempdir()</a></code> of the current <strong>R</strong> session. These data can be exported and re-imported with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<pre><code>## [1] "/tmp/RtmpQaXty7/vbb.zip"</code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></code></pre></div>
 <pre><code>## ▶ Unzipping GTFS archive
 ✔ Unzipped GTFS archive  
@@ -112,13 +114,13 @@
 <h1 class="hasAnchor">
 <a href="#routing" class="anchor"></a>2. Routing</h1>
 <p>The primary routing function is <code><a href="../reference/gtfs_route.html">gtfs_route()</a></code>, the example of which uses the <code>gtfs</code> data for the VBB created as described above. In simplest form, routing requires a start and end point, defaulting to the current time as desired start time, and routing for the current day of the week.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Innsbrucker Platz"</span>
 <span class="va">to</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span>
 <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
             from <span class="op">=</span> <span class="va">from</span>,
             to <span class="op">=</span> <span class="va">to</span><span class="op">)</span></code></pre></div>
-<pre><code>## Day not specified; extracting timetable for thursday</code></pre>
+<pre><code>## Day not specified; extracting timetable for friday</code></pre>
 <table class="table">
 <thead><tr class="header">
 <th align="left">route_name</th>
@@ -250,7 +252,7 @@
 </tbody>
 </table>
 <p>Both the start time and day of the week can be explicitly specified:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
                      from <span class="op">=</span> <span class="va">from</span>,
                      to <span class="op">=</span> <span class="va">to</span>,
@@ -261,7 +263,7 @@
 <a href="#gtfs-timetables" class="anchor"></a>2.1 GTFS Timetables</h2>
 <p>The <code>gtfsrouter</code> package uses the <a href="https://arxiv.org/abs/1703.05997">Connection Scan Algorithm</a>, which requires converting the “stop_times” table to a column-wise timetable. The “stop_times” table has row-wise entries for each distinct “trip_id”, with consecutive rows for a given value of “trip_id” holding sequential values for stops and associated times (and potentially additional variables). In contrast, the timetables processed by this package have separate columns for departure and arrival stations and times. All routing queries pre-process the original GTFS data with the <code><a href="../reference/gtfs_timetable.html">gtfs_timetable()</a></code> function, which appends this timetable data, along with two single-column tables of stop and trip ID values. (The timetable itself contains strictly integer values for stops and trips, which are indices into these latter tables.)</p>
 <p>The only important point of that from a user’s perspective is that routing queries will be faster if this pre-processing step is explicitly implemented with <code><a href="../reference/gtfs_timetable.html">gtfs_timetable()</a></code> prior to calling <code><a href="../reference/gtfs_route.html">gtfs_route()</a></code>. This is easy to demonstrate using the sample data:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></code></pre></div>
 <pre><code>## ▶ Unzipping GTFS archive
 ✔ Unzipped GTFS archive  
@@ -271,7 +273,7 @@
 ✔ Converted stop times to seconds 
 ## ▶ Converting transfer times to seconds
 ✔ Converted transfer times to seconds</code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Innsbrucker Platz"</span>
 <span class="va">to</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span>
 <span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span> <span class="op">(</span>
@@ -282,32 +284,32 @@
                 day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span>
     <span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.059   0.000   0.059</code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+##   0.065   0.000   0.066</code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "calendar"   "routes"     "trips"      "stop_times" "stops"     
 ## [6] "transfers"</code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># explicit pre-processing to extract timetable for Sunday</span>
 <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span>,
                         day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "calendar"   "routes"     "trips"      "stop_times" "stops"     
 ## [6] "transfers"  "timetable"  "stop_ids"   "trip_ids"</code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span> <span class="op">(</span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
                          from <span class="op">=</span> <span class="va">from</span>,
                          to <span class="op">=</span> <span class="va">to</span>,
                          start_time <span class="op">=</span> <span class="st">"12:00:00"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.045   0.000   0.045</code></pre>
+##    0.05    0.00    0.05</code></pre>
 <p>Note that the <code>day</code> parameter is used to extract the timetable, after which it is no longer required in the actual call to <code><a href="../reference/gtfs_route.html">gtfs_route()</a></code>.</p>
 </div>
 <div id="routing-by-mode-of-transport" class="section level2">
 <h2 class="hasAnchor">
 <a href="#routing-by-mode-of-transport" class="anchor"></a>2.2. Routing by mode of transport</h2>
 <p>It is also possible to filter by desired mode of transport. This is done by matching the pattern to those given in the <code>route_short_name</code> column of the <code>gtfs$route</code> table:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">route</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
@@ -394,7 +396,7 @@
 </tbody>
 </table>
 <p>These short names will differ for each GTFS, with the two primary train systems in Berlin being the underground trains denoted “U” (although not always travelling underground), and street-level trains denoted “S”. The default route from Innsbrucker Platz to Alexanderplatz above was via two “U” services. We can also specify that we’d prefer to travel by “S” services, noting that the <code>route_pattern = "S"</code> specifies a <code>route_short_name</code> that <em>starts with</em> (<code>"^"</code>) “S”:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
             from <span class="op">=</span> <span class="va">from</span>,
             to <span class="op">=</span> <span class="va">to</span>,
@@ -501,7 +503,7 @@
 <h2 class="hasAnchor">
 <a href="#routing-for-earliest-arrivals-or-earliest-departures" class="anchor"></a>2.3. Routing for earliest arrivals or earliest departures</h2>
 <p>The above route with the “S” services leaves one minute later, and arrives two minutes later. Importantly, <code><a href="../reference/gtfs_route.html">gtfs_route()</a></code> searches by default for the service which arrives at the nominated destination station at the earliest time. This may not always be the first available service departing from the nominated start station. Routing with the earliest <em>departing</em> service, instead of the earliest <em>arriving</em> service, can be specified with the binary <code>earliest_arrival</code> parameter:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span>
 <span class="va">to</span> <span class="op">&lt;-</span> <span class="st">"Pankow"</span>
 <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
@@ -592,7 +594,7 @@
 </tbody>
 </table>
 <p>And the earliest-departing route arrives at Pankow at 12:20:42, departing Alexanderplatz at 12:00:42. In contrast, the earliest-arriving service is:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
             from <span class="op">=</span> <span class="va">from</span>,
             to <span class="op">=</span> <span class="va">to</span>,
@@ -667,7 +669,7 @@
 <a href="#convenience-functions-go_home-and-go_to_work" class="anchor"></a>3. Convenience Functions: <code>go_home()</code> and <code>go_to_work()</code>
 </h1>
 <p>The <code>gtfsrouter</code> package is intended both to enable statistical analyses of GTFS data sets, as well as for personal, pragmatic purposes. In the latter regard, the package provides two “convenience” functions to allow single-call queries for next available services to “home” and “work” stations. These functions require some initial set-up through specifying environmental variables, but once done can be executed as single calls from any <strong>R</strong> session to return the next available service.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/go_home.html">go_home</a></span> <span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>##    route_name              trip_name                            stop_name
 ## 1          S7 S Potsdam Hauptbahnhof      S+U Alexanderplatz Bhf (Berlin)
@@ -697,21 +699,21 @@
 ## 12     12:46:54       12:47:24</code></pre>
 <p>The complementary function, <code><a href="../reference/go_to_work.html">go_to_work()</a></code> routes in the reverse direction. These functions are intended to allow real-time queries of public transport schedules from within the comfort of an <strong>R</strong> session, and will generally be much quicker – and hopefully easier – than the arguably burdensome necessity of switching attention from productive <strong>R</strong> programming to the usual app or website otherwise needed to answer the simple question of when I ought to leave today?</p>
 <p>Successfully calling that function requires setting three environmental variables:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span> <span class="op">(</span><span class="st">"gtfs_home"</span> <span class="op">=</span> <span class="st">"&lt;my home station&gt;"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span> <span class="op">(</span><span class="st">"gtfs_work"</span> <span class="op">=</span> <span class="st">"&lt;my work station&gt;"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv</a></span> <span class="op">(</span><span class="st">"gtfs_data"</span> <span class="op">=</span> <span class="st">"/full/path/to/gtfs.zip"</span><span class="op">)</span></code></pre></div>
 <p>along with execution of the single command:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/process_gtfs_local.html">process_gtfs_local</a></span> <span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>This command attempts to reduce the size of the locally-stored GTFS data to the minimum required for local routing, and saves the result as an internal <code>.Rds</code> object in the same location as the <code>gtfs_data</code> environmental variable. Having done that, <code><a href="../reference/go_home.html">go_home()</a></code> will search for the next available service from the nominated work station to the nominated home station, while <code><a href="../reference/go_to_work.html">go_to_work()</a></code> will search for connections in the other direction.</p>
 <p>An even easier way to use these functions is to automatically load those environmental variables at the start of each <strong>R</strong> session, which can be achieved simply by creating a file named <code>.Renviron</code> in the user’s root directory (or opening if it already exists), and pasting or appending the definitions to that file - in this case, without the <strong>R</strong>-specific <code><a href="https://rdrr.io/r/base/Sys.setenv.html">Sys.setenv()</a></code> calls:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1"></a><span class="ex">gtfs_home</span> = <span class="st">"&lt;my home station&gt;"</span></span>
-<span id="cb26-2"><a href="#cb26-2"></a><span class="ex">gtfs_work</span> = <span class="st">"&lt;my work station&gt;"</span></span>
-<span id="cb26-3"><a href="#cb26-3"></a><span class="ex">gtfs_data</span> = <span class="st">"/full/path/to/gtfs.zip"</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1"></a><span class="ex">gtfs_home</span> = <span class="st">"&lt;my home station&gt;"</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="ex">gtfs_work</span> = <span class="st">"&lt;my work station&gt;"</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="ex">gtfs_data</span> = <span class="st">"/full/path/to/gtfs.zip"</span></span></code></pre></div>
 <p>Of course, this function will only route using locally-stored data, so it is up to the user to ensure their local copy of <code>gtfs.zip</code> is kept up to date.</p>
 <p>The functions include one additional feature. Having found the next service with <code><a href="../reference/go_home.html">go_home()</a></code>, I may suspect that I can keep working until the following service. The simple parameter <code>wait</code> enables searching for that following service:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/go_home.html">go_home</a></span> <span class="op">(</span>wait <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <pre><code>##    route_name       trip_name                        stop_name arrival_time
 ## 1          U8 S+U Hermannstr. S+U Alexanderplatz (Berlin) [U8]     12:23:30
