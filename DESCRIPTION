@@ -1,6 +1,6 @@
 Package: gtfsrouter
 Title: Routing with GTFS (General Transit Feed Specification) Data
-Version: 0.0.4.264
+Version: 0.0.5
 Authors@R: 
     c(person(given = "Mark",
              family = "Padgham",

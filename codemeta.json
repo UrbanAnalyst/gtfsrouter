@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/ATFutures/gtfs-router",
   "issueTracker": "https://github.com/ATFutures/gtfs-router/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.4.264",
+  "version": "0.0.5",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -305,7 +305,7 @@
     }
   ],
   "readme": "https://github.com/ATFutures/gtfs-router/blob/main/README.md",
-  "fileSize": "6292.018KB",
+  "fileSize": "6292.014KB",
   "contIntegration": "https://codecov.io/gh/ATFutures/gtfs-router",
   "developmentStatus": "https://www.repostatus.org/#active",
   "keywords": [
