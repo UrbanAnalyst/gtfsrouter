@@ -9,10 +9,8 @@ Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repost
 [![CRAN
 Downloads](http://cranlogs.r-pkg.org/badges/grand-total/gtfsrouter?color=orange)](https://cran.r-project.org/package=gtfsrouter)
 
-**R** package for routing with [GTFS (General Transit Feed
-Specification)](https://developers.google.com/transit/gtfs/) data. See
-[the website](https://atfutures.github.io/gtfs-router/) for full
-details.
+**R** package for public transport routing with [GTFS (General Transit
+Feed Specification)](https://developers.google.com/transit/gtfs/) data.
 
 ## Installation
 
@@ -22,8 +20,8 @@ You can install latest stable version of `gtfsrouter` from CRAN with:
 install.packages("gtfsrouter")
 ```
 
-Alternatively, current development versions can be installed using any
-of the following options:
+Alternatively, the current development version can be installed using
+any of the following options:
 
 ``` r
 # install.packages("remotes")
@@ -40,26 +38,25 @@ library(gtfsrouter)
 packageVersion("gtfsrouter")
 ```
 
-    ## [1] '0.0.4.213'
+    ## [1] '0.0.4.264'
 
 ## Main functions
 
 The main functions can be demonstrated with sample data included with
-the package from Berlin (the Verkehrverbund Berlin Brandenburg, or VBB).
-GTFS data are always stored as `.zip` files, and these sample data can
-be written to local storage with the function `berlin_gtfs_to_zip()`.
+the package from Berlin (the “Verkehrverbund Berlin Brandenburg”, or
+VBB). GTFS data are always stored as `.zip` files, and these sample data
+can be written to the temporary directory (`tempdir()`) of the current R
+session with the function `berlin_gtfs_to_zip()`.
 
 ``` r
-berlin_gtfs_to_zip()
-tempfiles <- list.files (tempdir (), full.names = TRUE)
-filename <- tempfiles [grep ("vbb.zip", tempfiles)]
-filename
+filename <- berlin_gtfs_to_zip()
+print (filename)
 ```
 
-    ## [1] "/tmp/Rtmppvw1ly/vbb.zip"
+    ## [1] "/tmp/Rtmpg8V203/vbb.zip"
 
-For normal package use, `filename` will specify the name of the local
-GTFS data stored as a single `.zip` file.
+For normal package use, `filename` will specify the name of a local GTFS
+`.zip` file.
 
 ### gtfs\_route
 
@@ -68,9 +65,9 @@ as the following code:
 
 ``` r
 gtfs <- extract_gtfs (filename)
-gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
+gtfs <- gtfs_timetable (gtfs, day = "Wed") # A pre-processing step to speed up queries
 gtfs_route (gtfs,
-            from = "Schonlein",
+            from = "Tegel",
             to = "Berlin Hauptbahnhof",
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
@@ -97,7 +94,7 @@ stops within a feed. It requires the two parameters of start station,
 and a vector of two values specifying earliest and latest desired start
 times. The following code returns the fastest travel times to all
 stations within the feed for services which leave the nominated station
-between 12:00 and 13:00 on a Monday:
+(“Alexanderplatz”) between 12:00 and 13:00 on a Monday:
 
 ``` r
 gtfs <- extract_gtfs (filename)
@@ -114,20 +111,14 @@ with services departing from the nominated station and start times:
 head (x)
 ```
 
-    ##   start_time duration ntransfers      stop_id               stop_name stop_lon
-    ## 1   12:03:42 00:14:12          1 060003102223     S Bellevue (Berlin) 13.34710
-    ## 2   12:00:42 00:08:36          0 060003102224     S Bellevue (Berlin) 13.34710
-    ## 3   12:00:42 00:15:06          1 060003103233   S Tiergarten (Berlin) 13.33624
-    ## 4   12:00:42 00:10:42          0 060003103234   S Tiergarten (Berlin) 13.33624
-    ## 5   12:03:42 00:11:18          1 060003201213 S+U Berlin Hauptbahnhof 13.36892
-    ## 6   12:00:42 00:05:54          0 060003201214 S+U Berlin Hauptbahnhof 13.36892
-    ##   stop_lat
-    ## 1 52.51995
-    ## 2 52.51995
-    ## 3 52.51396
-    ## 4 52.51396
-    ## 5 52.52585
-    ## 6 52.52585
+| start\_time | duration | ntransfers | stop\_id     | stop\_name              | stop\_lon | stop\_lat |
+|:------------|:---------|-----------:|:-------------|:------------------------|----------:|----------:|
+| 12:03:42    | 00:14:12 |          1 | 060003102223 | S Bellevue (Berlin)     |  13.34710 |  52.51995 |
+| 12:00:42    | 00:08:36 |          0 | 060003102224 | S Bellevue (Berlin)     |  13.34710 |  52.51995 |
+| 12:00:42    | 00:15:06 |          1 | 060003103233 | S Tiergarten (Berlin)   |  13.33624 |  52.51396 |
+| 12:00:42    | 00:10:42 |          0 | 060003103234 | S Tiergarten (Berlin)   |  13.33624 |  52.51396 |
+| 12:03:42    | 00:11:18 |          1 | 060003201213 | S+U Berlin Hauptbahnhof |  13.36892 |  52.52585 |
+| 12:00:42    | 00:05:54 |          0 | 060003201214 | S+U Berlin Hauptbahnhof |  13.36892 |  52.52585 |
 
 Further details are provided in a [separate
 vignette](https://atfutures.github.io/gtfs-router/articles/traveltimes.html).

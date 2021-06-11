@@ -9,9 +9,8 @@ status](https://github.com/atfutures/gtfs-router/workflows/R-CMD-check/badge.svg
 [![CRAN Downloads](http://cranlogs.r-pkg.org/badges/grand-total/gtfsrouter?color=orange)](https://cran.r-project.org/package=gtfsrouter)
 
 
-**R** package for routing with [GTFS (General Transit Feed
-Specification)](https://developers.google.com/transit/gtfs/) data. See [the
-website](https://atfutures.github.io/gtfs-router/) for full details.
+**R** package for public transport routing with [GTFS (General Transit Feed
+Specification)](https://developers.google.com/transit/gtfs/) data.
 
 ## Installation
 
@@ -20,8 +19,9 @@ You can install latest stable version of `gtfsrouter` from CRAN with:
 install.packages("gtfsrouter")
 ```
 
-Alternatively, current development versions can be installed using any of the
-following options:
+Alternatively, the current development version can be installed using any of
+the following options:
+
 ```{r gh-installation, eval = FALSE}
 # install.packages("remotes")
 remotes::install_git("https://git.sr.ht/~mpadge/gtfsrouter")
@@ -39,27 +39,29 @@ packageVersion("gtfsrouter")
 ## Main functions
 
 The main functions can be demonstrated with sample data included with the
-package from Berlin (the Verkehrverbund Berlin Brandenburg, or VBB). GTFS data
-are always stored as `.zip` files, and these sample data can be written to local
-storage with the function `berlin_gtfs_to_zip()`.
+package from Berlin (the "Verkehrverbund Berlin Brandenburg", or VBB). GTFS
+data are always stored as `.zip` files, and these sample data can be written to
+the temporary directory (`tempdir()`) of the current R session with the
+function `berlin_gtfs_to_zip()`.
+
 ```{r create-zip, eval = TRUE}
-berlin_gtfs_to_zip()
-tempfiles <- list.files (tempdir (), full.names = TRUE)
-filename <- tempfiles [grep ("vbb.zip", tempfiles)]
-filename
+filename <- berlin_gtfs_to_zip()
+print (filename)
 ```
-For normal package use, `filename` will specify the name of the local GTFS data
-stored as a single `.zip` file. 
+
+For normal package use, `filename` will specify the name of a local GTFS `.zip`
+file. 
 
 ### gtfs_route
 
 Given the name of a GTFS `.zip` file, `filename`, routing is as simple as the
 following code:
+
 ```{r example-echo, echo = TRUE, eval = FALSE}
 gtfs <- extract_gtfs (filename)
-gtfs <- gtfs_timetable (gtfs) # A pre-processing step to speed up queries
+gtfs <- gtfs_timetable (gtfs, day = "Wed") # A pre-processing step to speed up queries
 gtfs_route (gtfs,
-            from = "Schonlein",
+            from = "Tegel",
             to = "Berlin Hauptbahnhof",
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
@@ -81,7 +83,8 @@ calculates minimal travel times from any nominated stop to all other stops
 within a feed. It requires the two parameters of start station, and a vector of
 two values specifying earliest and latest desired start times. The following
 code returns the fastest travel times to all stations within the feed for
-services which leave the nominated station between 12:00 and 13:00 on a Monday:
+services which leave the nominated station ("Alexanderplatz") between 12:00 and
+13:00 on a Monday:
 
 ```{r isochrone, eval = TRUE, message = FALSE}
 gtfs <- extract_gtfs (filename)
@@ -94,8 +97,11 @@ x <- gtfs_traveltimes (gtfs,
 The function returns a simple table detailing all stations reachable with
 services departing from the nominated station and start times:
 
-```{r iso-results1}
+```{r iso-results1-fakey, eval = FALSE}
 head (x)
+```
+```{r iso-results1, eval = TRUE, echo = FALSE}
+knitr::kable (head (x))
 ```
 
 Further details are provided in a [separate
