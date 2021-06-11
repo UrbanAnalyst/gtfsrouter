@@ -1,4 +1,4 @@
-# v 0.0.4.00x
+# v 0.0.5
 
 Major changes:
 
@@ -13,6 +13,8 @@ Minor changes:
 - `route_pattern` arguments (to `gtfs_route/isochrone/timetable()` functions)
   can now be used to exclude specified patterns by prefixing them with "!" (see
   #53)
+- The `berlin_gtfs_to_zip()` function now returns the path to the GTFS zip file
+  it creates.
 - Fix bug with `max_transfers` parameter of `gtfs_route()` function (see #47)
 - Fix bug when column names do not exactly match expected values (#70; thanks
   to @AlexandraKapp)

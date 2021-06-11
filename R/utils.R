@@ -3,7 +3,7 @@
 #' Write a zip archive of the internal package data, \link{berlin_gtfs} to
 #' a file named "vbb.zip" to `tempdir()`.
 #'
-#' @return Nothing
+#' @return Path to newly created zip file
 #' @export
 berlin_gtfs_to_zip <- function () {
     flist <- c ("calendar.txt", "routes.txt", "trips.txt",
@@ -24,8 +24,11 @@ berlin_gtfs_to_zip <- function () {
         stop ("Unable to write files to tempdir()") # nocov
 
     flist <- file.path (tempdir (), flist)
-    utils::zip (file.path (tempdir (), "vbb.zip"), files = flist, flags = "-q")
-    invisible (file.remove (flist))
+    zipname <- file.path (tempdir (), "vbb.zip")
+    utils::zip (zipname, files = flist, flags = "-q")
+    chk <- file.remove (flist)
+
+    return (zipname)
 }
 
 convert_time <- function (my_time) {

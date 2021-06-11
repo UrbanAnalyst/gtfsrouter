@@ -7,7 +7,7 @@
 berlin_gtfs_to_zip()
 }
 \value{
-Nothing
+Path to newly created zip file
 }
 \description{
 Write a zip archive of the internal package data, \link{berlin_gtfs} to
