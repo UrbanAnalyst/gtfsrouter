@@ -117,7 +117,9 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
     # services.
     message (cli::symbol$play,
              cli::col_green (" Expanding to include in-place transfers"))
-    sxy <- paste0 (gtfs$stops$stop_lon, "==", gtfs$stops$stop_lat)
+    sxy <- paste0 (round (gtfs$stops$stop_lon, digits = 6),
+                   "==",
+                   round (gtfs$stops$stop_lat, digits = 6))
     transfers <- pbapply::pblapply (transfers, function (i) {
                     index <- which (gtfs$stops$stop_id %in% i)
                     gtfs$stops$stop_id [which (sxy %in% sxy [index])]
