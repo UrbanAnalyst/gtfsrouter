@@ -87,7 +87,7 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
              cli::col_green (" Finding neighbouring services for each stop"))
 
     # reduce down to unique (lon, lat) pairs:
-    xy <- gtfs$stops [, c ("stop_lon", "stop_lat")]
+    xy <- round (gtfs$stops [, c ("stop_lon", "stop_lat")], digits = 6)
     xy_char <- paste0 (xy$stop_lon, "==", xy$stop_lat)
     index <- which (!duplicated (xy_char))
     index_back <- match (xy_char, xy_char [index])
