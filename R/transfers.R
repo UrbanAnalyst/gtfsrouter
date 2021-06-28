@@ -201,6 +201,19 @@ append_to_transfer_table <- function (gtfs, transfers) {
                                    "to_stop_id",
                                    "transfer_type",
                                    "min_transfer_time")]
+
+    # Exclude any transfers with type == 3 in original table; see #76
+    tr3_index <- which (tr_old$transfer_type == 3)
+    if (length (tr3_index) > 0) {
+        from_to_old <- paste0 (tr_old$from_stop_id [tr3_index],
+                               "==",
+                               tr_old$to_stop_id [tr3_index])
+        from_to_new <- paste0 (transfers$from_stop_id,
+                               "==",
+                               transfers$to_stop_id)
+        transfers <- transfers [which (!from_to_new %in% from_to_old), ]
+    }
+
     transfers <- rbind (tr_old, transfers)
     # duplicates always indexes the first values, so will always retain the
     # original entries in favour of those generated in the `gtfs_transfer_table`
