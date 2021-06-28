@@ -49,10 +49,12 @@ gtfs_transfer_table <- function (gtfs, d_limit = 200, min_transfer_time = 120,
 
     transfer_times [transfer_times < min_transfer_time] <- min_transfer_time
 
+    index <- which (!duplicated (transfers [, c ("from", "to")]))
+
     data.table::data.table (from_stop_id = transfers$from,
                             to_stop_id = transfers$to,
                             transfer_type = 2,
-                            min_transfer_time = ceiling (transfer_times))
+                            min_transfer_time = ceiling (transfer_times)) [index, ]
 }
 
 dl_net <- function (gtfs) {
