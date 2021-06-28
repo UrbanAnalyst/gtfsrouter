@@ -107,11 +107,12 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
 
     transfers <- rcpp_transfer_nbs (stops, ss_serv, ss_stop, d, d_limit)
 
+    names (transfers) <- stops$stop_id
+
     transfers <- transfers [index_back]
     message ("\r", cli::col_green (cli::symbol$tick,
                                    " Found neighbouring services for each stop"))
 
-    names (transfers) <- stops$stop_id
     index <- which (vapply (transfers, function (i)
                             length (i) > 0,
                             logical (1)))
