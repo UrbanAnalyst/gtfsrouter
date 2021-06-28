@@ -35,10 +35,10 @@ Modified version of the \code{gtfs} input with additional transfers table.
 Construct a transfer table for a GTFS feed.
 }
 \examples{
-# Use the following lines to extract a street network for a given GTFS feed.
-# The result can then be passed as the `network` parameter.
-\dontrun{
-library (dodgr)
-net <- dodgr_streetnet_sc (pts = gtfs$stops [, c ("stop_lon", "stop_lat")])
-}
+berlin_gtfs_to_zip ()
+f <- file.path (tempdir (), "vbb.zip")
+g <- extract_gtfs (f, quiet = TRUE)
+g <- gtfs_transfer_table (g, d_limit = 200)
+# g$transfers then has fewer rows than original, because original transfer
+# table contains duplicated rows.
 }
