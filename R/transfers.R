@@ -97,16 +97,10 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
     d <- geodist::geodist (stops [, c ("stop_lon", "stop_lat")],
                            measure = "haversine")
 
-    requireNamespace ("pbapply")
-    transfers <- pbapply::pblapply (seq (nrow (stops)), function (i) {
-        stopi <- stops$stop_id [i]
-        nbs <- stops$stop_id [which (d [i, ] < d_limit)]
-        services <-
-            unique (stop_service$services [stop_service$stop_id == stopi])
-        service_stops <-
-            unique (stop_service$stop_id [stop_service$services %in% services])
-        nbs [which (!nbs %in% service_stops)]
-    })
+    ss_serv <- stop_service [order (stop_service$services), ]
+    ss_stop <- stop_service [order (stop_service$stop_id), ]
+
+    transfers <- rcpp_transfer_nbs (stops, ss_serv, ss_stop, d, d_limit)
 
     transfers <- transfers [index_back]
     message (cli::col_green (cli::symbol$tick,

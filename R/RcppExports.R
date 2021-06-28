@@ -48,6 +48,15 @@ rcpp_csa <- function(timetable, transfers, nstations, ntrips, start_stations, en
     .Call(`_gtfsrouter_rcpp_csa`, timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time, max_transfers)
 }
 
+#' rcpp_transfer_nbs
+#'
+#' Get nbs of every station within range dlim
+#'
+#' @noRd
+rcpp_transfer_nbs <- function(stops, ss_serv, ss_stop, dmat, dlim) {
+    .Call(`_gtfsrouter_rcpp_transfer_nbs`, stops, ss_serv, ss_stop, dmat, dlim)
+}
+
 #' rcpp_isochrone
 #'
 #' Calculate isochrones using Connection Scan Algorithm for GTFS data. Works
