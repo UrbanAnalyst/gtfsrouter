@@ -84,7 +84,8 @@ join_service_id_to_stops <- function (gtfs) {
 
 get_transfer_list <- function (gtfs, stop_service, d_limit) {
     message (cli::symbol$play,
-             cli::col_green (" Finding neighbouring services for each stop"))
+             cli::col_green (" Finding neighbouring services for each stop"),
+             appendLF = FALSE)
 
     # reduce down to unique (lon, lat) pairs:
     xy <- round (gtfs$stops [, c ("stop_lon", "stop_lat")], digits = 6)
@@ -103,25 +104,10 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
     transfers <- rcpp_transfer_nbs (stops, ss_serv, ss_stop, d, d_limit)
 
     transfers <- transfers [index_back]
-    message (cli::col_green (cli::symbol$tick,
-                             " Found neighbouring services for each stop"))
+    message ("\r", cli::col_green (cli::symbol$tick,
+                                   " Found neighbouring services for each stop"))
 
-    # Then append transfers to stops with same (lon, lat) pairs
-    # TODO: Check service IDs, and only include in-place transfers to different
-    # services.
-    message (cli::symbol$play,
-             cli::col_green (" Expanding to include in-place transfers"))
-    sxy <- paste0 (round (gtfs$stops$stop_lon, digits = 6),
-                   "==",
-                   round (gtfs$stops$stop_lat, digits = 6))
-    transfers <- pbapply::pblapply (transfers, function (i) {
-                    index <- which (gtfs$stops$stop_id %in% i)
-                    gtfs$stops$stop_id [which (sxy %in% sxy [index])]
-    })
-
-
-
-    names (transfers) <- gtfs$stops$stop_id
+    names (transfers) <- stops$stop_id
     index <- which (vapply (transfers, function (i)
                             length (i) > 0,
                             logical (1)))
@@ -133,17 +119,14 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
     transfers <- data.frame (do.call (rbind, transfers),
                              stringsAsFactors = FALSE)
     transfers$from_lon <-
-        gtfs$stops$stop_lon [match (transfers$from, gtfs$stops$stop_id)]
+        stops$stop_lon [match (transfers$from, stops$stop_id)]
     transfers$from_lat <-
-        gtfs$stops$stop_lat [match (transfers$from, gtfs$stops$stop_id)]
+        stops$stop_lat [match (transfers$from, stops$stop_id)]
     transfers$to_lon <-
-        gtfs$stops$stop_lon [match (transfers$to, gtfs$stops$stop_id)]
+        stops$stop_lon [match (transfers$to, stops$stop_id)]
     transfers$to_lat <-
-        gtfs$stops$stop_lat [match (transfers$to, gtfs$stops$stop_id)]
+        stops$stop_lat [match (transfers$to, stops$stop_id)]
     transfers <- transfers [which (transfers$from != transfers$to), ]
-
-    message (cli::col_green (cli::symbol$tick,
-                             " Expanded to include in-place transfers"))
 
     return (transfers)
 }
