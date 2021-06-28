@@ -19,7 +19,8 @@ test_that ("transfers works", {
                                                  "transfer_type",
                                                  "min_transfer_time"))
               expect_true (all (x200$transfer_type == 2))
-              expect_equal (min (x200$min_transfer_time), 0)
+              # 200 metres translates to < 200 seconds, so:
+              expect_true (all (x200$min_transfer_time < 200))
 
               expect_message (
                     x500 <- gtfs_transfer_table (g,
@@ -31,4 +32,6 @@ test_that ("transfers works", {
               expect_true (all (x200$to_stop_id %in% x500$to_stop_id))
               expect_false (all (x500$from_stop_id %in% x200$from_stop_id))
               expect_false (all (x500$to_stop_id %in% x200$to_stop_id))
+              expect_true (mean (x500$min_transfer_time) >
+                           mean (x200$min_transfer_time))
 })
