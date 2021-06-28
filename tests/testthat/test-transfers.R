@@ -9,29 +9,31 @@ test_that ("transfers works", {
               expect_silent (g <- extract_gtfs (f, quiet = TRUE))
 
               expect_message (
-                    x200 <- gtfs_transfer_table (g,
+                    g200 <- gtfs_transfer_table (g,
                                                  d_limit = 200,
                                                  min_transfer_time = 0))
 
-              expect_is (x200, "data.table")
-              expect_identical (names (x200), c ("from_stop_id",
-                                                 "to_stop_id",
-                                                 "transfer_type",
-                                                 "min_transfer_time"))
-              expect_true (all (x200$transfer_type == 2))
-              # 200 metres translates to < 200 seconds, so:
-              expect_true (all (x200$min_transfer_time < 200))
+              expect_is (g200, "gtfs")
+              tr200 <- g200$transfers
+              expect_is (tr200, "data.table")
+              expect_identical (names (tr200),
+                                c ("from_stop_id",
+                                   "to_stop_id",
+                                   "transfer_type",
+                                   "min_transfer_time"))
+              expect_true (all (tr200$transfer_type %in% c (1, 2)))
 
               expect_message (
-                    x500 <- gtfs_transfer_table (g,
+                    g500 <- gtfs_transfer_table (g,
                                                  d_limit = 500,
                                                  min_transfer_time = 0))
 
-              expect_true (nrow (x500) > nrow (x200))
-              expect_true (all (x200$from_stop_id %in% x500$from_stop_id))
-              expect_true (all (x200$to_stop_id %in% x500$to_stop_id))
-              expect_false (all (x500$from_stop_id %in% x200$from_stop_id))
-              expect_false (all (x500$to_stop_id %in% x200$to_stop_id))
-              expect_true (mean (x500$min_transfer_time) >
-                           mean (x200$min_transfer_time))
+              tr500 <- g500$transfers
+              expect_true (nrow (tr500) > nrow (tr200))
+              expect_true (all (tr200$from_stop_id %in% tr500$from_stop_id))
+              expect_true (all (tr200$to_stop_id %in% tr500$to_stop_id))
+              expect_false (all (tr500$from_stop_id %in% tr200$from_stop_id))
+              expect_false (all (tr500$to_stop_id %in% tr200$to_stop_id))
+              expect_true (mean (tr500$min_transfer_time) >
+                           mean (tr200$min_transfer_time))
 })
