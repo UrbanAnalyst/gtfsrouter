@@ -49,12 +49,17 @@ gtfs_transfer_table <- function (gtfs, d_limit = 200, min_transfer_time = 120,
 
     transfer_times [transfer_times < min_transfer_time] <- min_transfer_time
 
-    index <- which (!duplicated (transfers [, c ("from", "to")]))
+    transfers <- data.table::data.table (from_stop_id = transfers$from,
+                                 to_stop_id = transfers$to,
+                                 transfer_type = 2,
+                                 min_transfer_time = ceiling (transfer_times))
 
-    data.table::data.table (from_stop_id = transfers$from,
-                            to_stop_id = transfers$to,
-                            transfer_type = 2,
-                            min_transfer_time = ceiling (transfer_times)) [index, ]
+    index <- which (!duplicated (transfers [, c ("from_stop_id",
+                                                 "to_stop_id")]))
+
+    gtfs <- append_to_transfer_table (gtfs, transfers [index, ])
+
+    return (gtfs)
 }
 
 dl_net <- function (gtfs) {
@@ -170,4 +175,38 @@ get_network_times <- function (network, transfers) {
     from_index <- match (from_ids, from_to)
     to_index <- match (to_ids, from_to)
     x [to_index + (from_index - 1) * nrow (x)]
+}
+
+#' Append new transfer table to pre-existing one if present
+#'
+#' @param gtfs The original feed which may or may not have a transfers table
+#' @param transfers New transfer table constructed from main body of
+#' `gtfs_transfer_table` function.
+#'
+#' @note "transfers.txt" may have additional columns which are discarded here
+#' (such as 'from/to_route_id' or 'from/to_trip_id'), so the result may remove
+#' information from original transfer tables.
+#' @noRd
+append_to_transfer_table <- function (gtfs, transfers) {
+
+    if (!"transfers" %in% names (gtfs)) {
+
+        gtfs$transfers <- transfers
+        return (gtfs)
+    }
+
+    # remove any duplicated rows from original:
+    index <- which (!duplicated (gtfs$transfers [, c ("from_stop_id", "to_stop_id")]))
+    tr_old <- gtfs$transfers [index, c ("from_stop_id",
+                                   "to_stop_id",
+                                   "transfer_type",
+                                   "min_transfer_time")]
+    transfers <- rbind (tr_old, transfers)
+    # duplicates always indexes the first values, so will always retain the
+    # original entries in favour of those generated in the `gtfs_transfer_table`
+    # fn.
+    index <- which (!duplicated (transfers [, c ("from_stop_id", "to_stop_id")]))
+    gtfs$transfers <- transfers [index, ]
+
+    return (gtfs)
 }
