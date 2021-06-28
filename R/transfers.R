@@ -25,6 +25,7 @@
 #' }
 gtfs_transfer_table <- function (gtfs, d_limit = 200, min_transfer_time = 120,
                                  network = NULL, network_times = FALSE) {
+
     if (is.null (network) & network_times)
         network <- dl_net (gtfs)
 
@@ -55,6 +56,7 @@ gtfs_transfer_table <- function (gtfs, d_limit = 200, min_transfer_time = 120,
 }
 
 dl_net <- function (gtfs) {
+
     stops <- gtfs$stops [, c ("stop_lon", "stop_lat")]
     requireNamespace ("digest")
     hash <- digest::digest (stops)
@@ -73,6 +75,7 @@ dl_net <- function (gtfs) {
 # join service IDs on to stop table, so we can select only those stops
 # that are part of different services
 join_service_id_to_stops <- function (gtfs) {
+
     stop_service <- gtfs$stop_times [, c ("trip_id", "stop_id")]
     stop_service <- stop_service [!duplicated (stop_service), ]
     stop_service$services <- gtfs$trips$service_id [match (stop_service$trip_id,
@@ -83,6 +86,7 @@ join_service_id_to_stops <- function (gtfs) {
 }
 
 get_transfer_list <- function (gtfs, stop_service, d_limit) {
+
     message (cli::symbol$play,
              cli::col_green (" Finding neighbouring services for each stop"),
              appendLF = FALSE)
@@ -132,6 +136,7 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
 }
 
 get_network_times <- function (network, transfers) {
+
     # convert net to contracted dodgr form:
     message (cli::symbol$play,
              cli::col_green (" Contracting street network ... "))
