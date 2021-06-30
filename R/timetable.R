@@ -137,11 +137,27 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
 
     day <- convert_day (day, quiet)
 
-    # Find indices of all services on nominated days
-    index <- lapply (day, function (i)
-                     which (gtfs$calendar [, get (i)] == 1))
-    index <- sort (unique (do.call (c, index)))
-    service_id <- gtfs$calendar [index, ] [, service_id]
+    # calendar.txt may be omitted if "calendar_dates" contains all days of
+    # service.
+    if (!"calendar" %in% names (gtfs)) {
+
+        requireNamespace ("lubridate")
+        dates <- strptime (gtfs$calendar_dates$date, "%Y%m%d")
+        weekdays <- lubridate::wday (dates, label = TRUE)
+        weekdays <- tolower (as.character (weekdays))
+
+        index <- which (weekdays == substring (day, 1, 3))
+        service_id <- unique (gtfs$calendar_dates$service_id [index])
+
+    } else {
+
+        # Find indices of all services on nominated days
+        index <- lapply (day, function (i)
+                         which (gtfs$calendar [, get (i)] == 1))
+        index <- sort (unique (do.call (c, index)))
+        service_id <- gtfs$calendar [index, ] [, service_id]
+    }
+
     index <- which (gtfs$trips [, service_id] %in% service_id)
     gtfs$trips <- gtfs$trips [index, ]
     index <- which (gtfs$stop_times [, trip_id] %in% gtfs$trips [, trip_id])

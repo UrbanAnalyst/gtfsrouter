@@ -4,6 +4,10 @@ Major changes:
 
 - `gtfs_transfer_table()` function now much faster due to re-coding in C++
 
+Minor changes:
+
+- `gtfs_timetable()` modified to work on feeds which do not have "calendar.txt"
+
 
 # v 0.0.5
 
