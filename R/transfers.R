@@ -12,6 +12,8 @@
 #' @param network_times If `TRUE`, transfer times are calculated by routing
 #' throughout the underlying street network. If this is not provided as the
 #' `net` parameter, it will be automatically downloaded.
+#' @param quiet Set to `TRUE` to suppress screen messages
+#'
 #' @return Modified version of the `gtfs` input with additional transfers table.
 #'
 #' @export
@@ -23,21 +25,30 @@
 #' g <- gtfs_transfer_table (g, d_limit = 200)
 #' # g$transfers then has fewer rows than original, because original transfer
 #' # table contains duplicated rows.
-gtfs_transfer_table <- function (gtfs, d_limit = 200, min_transfer_time = 120,
-                                 network = NULL, network_times = FALSE) {
+gtfs_transfer_table <- function (gtfs,
+                                 d_limit = 200,
+                                 min_transfer_time = 120,
+                                 network = NULL,
+                                 network_times = FALSE,
+                                 quiet = FALSE) {
 
     if (is.null (network) & network_times)
         network <- dl_net (gtfs)
 
     stop_service <- join_service_id_to_stops (gtfs)
 
-    transfers <- get_transfer_list (gtfs, stop_service, d_limit)
+    transfers <- get_transfer_list (gtfs, stop_service, d_limit, quiet)
 
     if (network_times) {
-        message ("The following stages may take some time. ",
-                 "Please be patient.")
-        transfer_times <- get_network_times (network, transfers)
+
+        if (!quiet)
+            message ("The following stages may take some time. ",
+                     "Please be patient.")
+
+        transfer_times <- get_network_times (network, transfers, quiet)
+
     } else {
+
         xyf <- transfers [, c ("from_lon", "from_lat")]
         xyt <- transfers [, c ("to_lon", "to_lat")]
         transfer_times <- geodist::geodist (xyf, xyt, paired = TRUE,
@@ -92,11 +103,13 @@ join_service_id_to_stops <- function (gtfs) {
     return (stop_service)
 }
 
-get_transfer_list <- function (gtfs, stop_service, d_limit) {
+get_transfer_list <- function (gtfs, stop_service, d_limit, quiet = FALSE) {
 
-    message (cli::symbol$play,
-             cli::col_green (" Finding neighbouring services for each stop"),
-             appendLF = FALSE)
+    if (!quiet)
+        message (cli::symbol$play,
+                 cli::col_green (" Finding neighbouring services ",
+                                 "for each stop"),
+                 appendLF = FALSE)
 
     # reduce down to unique (lon, lat) pairs:
     xy <- round (gtfs$stops [, c ("stop_lon", "stop_lat")], digits = 6)
@@ -117,8 +130,11 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
     names (transfers) <- stops$stop_id
 
     transfers <- transfers [index_back]
-    message ("\r", cli::col_green (cli::symbol$tick,
-                                   " Found neighbouring services for each stop"))
+
+    if (!quiet)
+        message ("\r", cli::col_green (cli::symbol$tick,
+                                       " Found neighbouring services ",
+                                       "for each stop"))
 
     index <- which (vapply (transfers, function (i)
                             length (i) > 0,
@@ -143,11 +159,13 @@ get_transfer_list <- function (gtfs, stop_service, d_limit) {
     return (transfers)
 }
 
-get_network_times <- function (network, transfers) {
+get_network_times <- function (network, transfers, quiet = FALSE) {
 
     # convert net to contracted dodgr form:
-    message (cli::symbol$play,
-             cli::col_green (" Contracting street network ... "))
+    if (!quiet)
+        message (cli::symbol$play,
+                 cli::col_green (" Contracting street network ... "))
+
     requireNamespace ("dodgr")
     dodgr::dodgr_cache_off ()
     net <- dodgr::weight_streetnet (network, wt_profile = "foot")
@@ -161,16 +179,21 @@ get_network_times <- function (network, transfers) {
     from_to <- unique (c (from_ids, to_ids))
 
     netc <- dodgr::dodgr_contract_graph (net, verts = from_to)
-    message (cli::col_green (cli::symbol$tick, " Contracted street network"))
 
-    # then calculate network times:
-    message (cli::symbol$play,
-             cli::col_green (paste0 (" Calculating transfer times between ",
-                                     length (from_to), " pairs of stops")))
+    if (!quiet) {
+        message (cli::col_green (cli::symbol$tick, " Contracted street network"))
+
+        message (cli::symbol$play,
+                 cli::col_green (" Calculating transfer times between ",
+                                 length (from_to), " pairs of stops"))
+    }
+
     x <- dodgr::dodgr_times (netc, from = from_to, to = from_to)
-    message (cli::col_green (cli::symbol$tick,
-                             paste0 (" Calculated transfer times between ",
-                                     length (from_to), " pairs of stops")))
+
+    if (!quiet)
+        message (cli::col_green (cli::symbol$tick,
+                                 " Calculated transfer times between ",
+                                 length (from_to), " pairs of stops"))
 
     from_index <- match (from_ids, from_to)
     to_index <- match (to_ids, from_to)

@@ -9,7 +9,8 @@ gtfs_transfer_table(
   d_limit = 200,
   min_transfer_time = 120,
   network = NULL,
-  network_times = FALSE
+  network_times = FALSE,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -27,6 +28,8 @@ encompassed by the GTFS feed (see Examples).}
 \item{network_times}{If \code{TRUE}, transfer times are calculated by routing
 throughout the underlying street network. If this is not provided as the
 \code{net} parameter, it will be automatically downloaded.}
+
+\item{quiet}{Set to \code{TRUE} to suppress screen messages}
 }
 \value{
 Modified version of the \code{gtfs} input with additional transfers table.
