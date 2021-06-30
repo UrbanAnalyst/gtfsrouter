@@ -1,3 +1,10 @@
+# v 0.0.5.00x
+
+Major changes:
+
+- `gtfs_transfer_table()` function now much faster due to re-coding in C++
+
+
 # v 0.0.5
 
 Major changes:
