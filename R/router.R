@@ -172,6 +172,22 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
 
     if (is.na (max_transfers))
         max_transfers <- .Machine$integer.max
+
+    if (!"transfers" %in% names (gtfs)) {
+
+        # dummy empty transfer table
+        gtfs$transfers <- data.table::data.table (
+                                        from_stop_id = integer (),
+                                        to_stop_id = integer (),
+                                        transfer_type = integer (),
+                                        min_transfer_time = numeric (),
+                                        from_route_id = character (),
+                                        to_route_id = character (),
+                                        from_trip_id = integer (),
+                                        to_trip_id = integer ()
+                                        )
+    }
+
     route <- rcpp_csa (gtfs$timetable, gtfs$transfers,
                        nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
                        start_stns, end_stns, start_time, max_transfers)
