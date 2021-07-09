@@ -35,9 +35,7 @@ gtfs_transfer_table <- function (gtfs,
     if (is.null (network) & network_times)
         network <- dl_net (gtfs)
 
-    stop_service <- join_service_id_to_stops (gtfs)
-
-    transfers <- get_transfer_list (gtfs, stop_service, d_limit, quiet)
+    transfers <- get_transfer_list (gtfs, d_limit, quiet)
 
     if (network_times) {
 
@@ -90,20 +88,7 @@ dl_net <- function (gtfs) {
     return (net)
 }
 
-# join service IDs on to stop table, so we can select only those stops
-# that are part of different services
-join_service_id_to_stops <- function (gtfs) {
-
-    stop_service <- gtfs$stop_times [, c ("trip_id", "stop_id")]
-    stop_service <- stop_service [!duplicated (stop_service), ]
-    stop_service$services <- gtfs$trips$service_id [match (stop_service$trip_id,
-                                                           gtfs$trips$trip_id)]
-    stop_service$trip_id <- NULL
-    stop_service <- stop_service [which (!duplicated (stop_service)), ]
-    return (stop_service)
-}
-
-get_transfer_list <- function (gtfs, stop_service, d_limit, quiet = FALSE) {
+get_transfer_list <- function (gtfs, d_limit, quiet = FALSE) {
 
     if (!quiet)
         message (cli::symbol$play,
@@ -112,24 +97,23 @@ get_transfer_list <- function (gtfs, stop_service, d_limit, quiet = FALSE) {
                  appendLF = FALSE)
 
     # reduce down to unique (lon, lat) pairs:
-    xy <- round (gtfs$stops [, c ("stop_lon", "stop_lat")], digits = 6)
-    xy_char <- paste0 (xy$stop_lon, "==", xy$stop_lat)
-    index <- which (!duplicated (xy_char))
-    index_back <- match (xy_char, xy_char [index])
+    #xy <- round (gtfs$stops [, c ("stop_lon", "stop_lat")], digits = 6)
+    #xy_char <- paste0 (xy$stop_lon, "==", xy$stop_lat)
+    #index <- which (!duplicated (xy_char))
+    #index_back <- match (xy_char, xy_char [index])
+
+    index <- seq (nrow (gtfs$stops))
 
     stops <- gtfs$stops [index, ]
     requireNamespace ("geodist")
     d <- geodist::geodist (stops [, c ("stop_lon", "stop_lat")],
                            measure = "haversine")
 
-    ss_serv <- stop_service [order (stop_service$services), ]
-    ss_stop <- stop_service [order (stop_service$stop_id), ]
+    transfers <- rcpp_transfer_nbs (stops, d, d_limit)
 
-    transfers <- rcpp_transfer_nbs (stops, ss_serv, ss_stop, d, d_limit)
+    #transfers <- transfers [index_back]
 
-    names (transfers) <- stops$stop_id
-
-    transfers <- transfers [index_back]
+    names (transfers) <- gtfs$stops$stop_id
 
     if (!quiet)
         message ("\r", cli::col_green (cli::symbol$tick,
