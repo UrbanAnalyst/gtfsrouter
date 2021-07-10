@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5.021</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5.023</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
       <h1 data-toc-skip>gtfsrouter</h1>
                         <h4 class="author">Mark Padgham</h4>
             
-            <h4 class="date">2021-07-09</h4>
+            <h4 class="date">2021-07-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ATFutures/gtfs-router/blob/master/vignettes/gtfsrouter.Rmd"><code>vignettes/gtfsrouter.Rmd</code></a></small>
       <div class="hidden name"><code>gtfsrouter.Rmd</code></div>
@@ -93,7 +93,7 @@
 <p>The one thing neither of these packages enable is the use of GTFS data for transit routing. The <code>gtfsrouter</code> package enables both one-to-one and one-to-many routing. Functionality is demonstrated here through the sample data set included with the package, provided by the “Verkehrsverbund Berlin-Brandenburg” (VBB; or Transport Network Berlin-Brandenburg). The <code>berlin_gtfs</code> data represents a reduced version of the full GTFS data, containing only six tables, and a timetable reduced to the single hour between 12:00-13:00. Like all GTFS software including <a href="https://github.com/r-transit/tidytransit"><code>tidytransit</code></a>, this package is designed to work directly with GTFS data in <code>.zip</code>-archived format, and so includes a helper function, <code><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip()</a></code>, which exports the internal data set to a locally-stored <code>.zip</code> archive in the <code><a href="https://rdrr.io/r/base/tempfile.html">tempdir()</a></code> of the current <strong>R</strong> session. These data can be exported and re-imported with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "/tmp/RtmpJx3V6b/vbb.zip"</code></pre>
+<pre><code>## [1] "/tmp/RtmpMa2ZMX/vbb.zip"</code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></code></pre></div>
@@ -120,7 +120,7 @@
 <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,
             from <span class="op">=</span> <span class="va">from</span>,
             to <span class="op">=</span> <span class="va">to</span><span class="op">)</span></code></pre></div>
-<pre><code>## Day not specified; extracting timetable for friday</code></pre>
+<pre><code>## Day not specified; extracting timetable for saturday</code></pre>
 <table class="table">
 <thead><tr class="header">
 <th align="left">route_name</th>
@@ -284,7 +284,7 @@
                 day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span>
     <span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.069   0.000   0.069</code></pre>
+##   0.067   0.000   0.068</code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "calendar"   "routes"     "trips"      "stop_times" "stops"     
@@ -302,7 +302,7 @@
                          to <span class="op">=</span> <span class="va">to</span>,
                          start_time <span class="op">=</span> <span class="st">"12:00:00"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.047   0.000   0.047</code></pre>
+##   0.053   0.000   0.052</code></pre>
 <p>Note that the <code>day</code> parameter is used to extract the timetable, after which it is no longer required in the actual call to <code><a href="../reference/gtfs_route.html">gtfs_route()</a></code>.</p>
 </div>
 <div id="routing-by-mode-of-transport" class="section level2">
@@ -671,32 +671,32 @@
 <p>The <code>gtfsrouter</code> package is intended both to enable statistical analyses of GTFS data sets, as well as for personal, pragmatic purposes. In the latter regard, the package provides two “convenience” functions to allow single-call queries for next available services to “home” and “work” stations. These functions require some initial set-up through specifying environmental variables, but once done can be executed as single calls from any <strong>R</strong> session to return the next available service.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/go_home.html">go_home</a></span> <span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>##    route_name              trip_name                            stop_name
-## 1          S7 S Potsdam Hauptbahnhof      S+U Alexanderplatz Bhf (Berlin)
-## 2          S7 S Potsdam Hauptbahnhof          S Hackescher Markt (Berlin)
-## 3          S7 S Potsdam Hauptbahnhof       S+U Friedrichstr. Bhf (Berlin)
-## 4          S2          S Lichtenrade       S+U Friedrichstr. Bhf (Berlin)
-## 5          S2          S Lichtenrade       S+U Brandenburger Tor (Berlin)
-## 6          S2          S Lichtenrade     S+U Potsdamer Platz Bhf (Berlin)
-## 7          S2          S Lichtenrade          S Anhalter Bahnhof (Berlin)
-## 8          S2          S Lichtenrade S+U Yorckstr. S2 S25 S26 U7 (Berlin)
-## 9          S2          S Lichtenrade              S Sudkreuz Bhf (Berlin)
-## 10        S46              S Westend              S Sudkreuz Bhf (Berlin)
-## 11        S46              S Westend                S Schoneberg (Berlin)
-## 12        S46              S Westend       S+U Innsbrucker Platz (Berlin)
+<pre><code>##    route_name              trip_name                        stop_name
+## 1          S7 S Potsdam Hauptbahnhof  S+U Alexanderplatz Bhf (Berlin)
+## 2          S7 S Potsdam Hauptbahnhof      S Hackescher Markt (Berlin)
+## 3          S7 S Potsdam Hauptbahnhof   S+U Friedrichstr. Bhf (Berlin)
+## 4          S1          S Wannsee Bhf   S+U Friedrichstr. Bhf (Berlin)
+## 5          S1          S Wannsee Bhf   S+U Brandenburger Tor (Berlin)
+## 6          S1          S Wannsee Bhf S+U Potsdamer Platz Bhf (Berlin)
+## 7          S1          S Wannsee Bhf      S Anhalter Bahnhof (Berlin)
+## 8          S1          S Wannsee Bhf     S+U Yorckstr. S1 U7 (Berlin)
+## 9          S1          S Wannsee Bhf   S Julius-Leber-Brucke (Berlin)
+## 10         S1          S Wannsee Bhf            S Schoneberg (Berlin)
+## 11        S46  S+U Gesundbrunnen Bhf            S Schoneberg (Berlin)
+## 12        S46  S+U Gesundbrunnen Bhf   S+U Innsbrucker Platz (Berlin)
 ##    arrival_time departure_time
 ## 1      12:19:54       12:20:42
 ## 2      12:21:54       12:22:24
 ## 3      12:23:54       12:24:42
-## 4      12:28:00       12:28:42
-## 5      12:29:54       12:30:24
-## 6      12:31:54       12:32:24
-## 7      12:34:00       12:34:30
-## 8      12:36:42       12:37:12
-## 9      12:39:18       12:39:54
-## 10     12:43:00       12:43:42
-## 11     12:45:12       12:45:42
-## 12     12:46:54       12:47:24</code></pre>
+## 4      12:25:30       12:26:12
+## 5      12:27:24       12:27:54
+## 6      12:29:24       12:29:54
+## 7      12:31:30       12:32:18
+## 8      12:34:42       12:35:12
+## 9      12:36:24       12:36:54
+## 10     12:38:18       12:38:48
+## 11     12:43:12       12:43:42
+## 12     12:44:54       12:45:24</code></pre>
 <p>The complementary function, <code><a href="../reference/go_to_work.html">go_to_work()</a></code> routes in the reverse direction. These functions are intended to allow real-time queries of public transport schedules from within the comfort of an <strong>R</strong> session, and will generally be much quicker – and hopefully easier – than the arguably burdensome necessity of switching attention from productive <strong>R</strong> programming to the usual app or website otherwise needed to answer the simple question of when I ought to leave today?</p>
 <p>Successfully calling that function requires setting three environmental variables:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
