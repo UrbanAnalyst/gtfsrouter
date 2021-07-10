@@ -108,7 +108,7 @@ get_transfer_list <- function (gtfs, d_limit, quiet = FALSE) {
     d <- geodist::geodist (stops [index, c ("stop_lon", "stop_lat")],
                            measure = "haversine")
 
-    transfers <- rcpp_transfer_nbs (stops, d, d_limit, index_back)
+    transfers <- rcpp_transfer_nbs (stops, d, d_limit, index_back - 1L)
 
     names (transfers) <- stops$stop_id
 
