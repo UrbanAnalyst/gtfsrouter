@@ -97,23 +97,20 @@ get_transfer_list <- function (gtfs, d_limit, quiet = FALSE) {
                  appendLF = FALSE)
 
     # reduce down to unique (lon, lat) pairs:
-    #xy <- round (gtfs$stops [, c ("stop_lon", "stop_lat")], digits = 6)
-    #xy_char <- paste0 (xy$stop_lon, "==", xy$stop_lat)
-    #index <- which (!duplicated (xy_char))
-    #index_back <- match (xy_char, xy_char [index])
+    xy <- round (gtfs$stops [, c ("stop_lon", "stop_lat")], digits = 6)
+    xy_char <- paste0 (xy$stop_lon, "==", xy$stop_lat)
+    index <- which (!duplicated (xy_char))
+    index_back <- match (xy_char, xy_char [index])
 
-    index <- seq (nrow (gtfs$stops))
+    stops <- gtfs$stops
 
-    stops <- gtfs$stops [index, ]
     requireNamespace ("geodist")
-    d <- geodist::geodist (stops [, c ("stop_lon", "stop_lat")],
+    d <- geodist::geodist (stops [index, c ("stop_lon", "stop_lat")],
                            measure = "haversine")
 
-    transfers <- rcpp_transfer_nbs (stops, d, d_limit)
+    transfers <- rcpp_transfer_nbs (stops, d, d_limit, index_back)
 
-    #transfers <- transfers [index_back]
-
-    names (transfers) <- gtfs$stops$stop_id
+    names (transfers) <- stops$stop_id
 
     if (!quiet)
         message ("\r", cli::col_green (cli::symbol$tick,
