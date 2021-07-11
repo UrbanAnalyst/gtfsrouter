@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5.023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5.025</span>
       </span>
     </div>
 
@@ -178,13 +178,13 @@ that case will generally take longer.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='berlin_gtfs_to_zip.html'>berlin_gtfs_to_zip</a></span> <span class='op'>(</span><span class='op'>)</span> <span class='co'># Write sample feed from Berlin, Germany to tempdir</span>
-</div><div class='output co'>#&gt; [1] "/tmp/RtmpMq4WNl/vbb.zip"</div><div class='input'><span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span> <span class='op'>(</span><span class='op'>)</span>, <span class='st'>"vbb.zip"</span><span class='op'>)</span> <span class='co'># name of feed</span>
+</div><div class='output co'>#&gt; [1] "/tmp/Rtmpgf64SL/vbb.zip"</div><div class='input'><span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span> <span class='op'>(</span><span class='op'>)</span>, <span class='st'>"vbb.zip"</span><span class='op'>)</span> <span class='co'># name of feed</span>
 <span class='va'>gtfs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='extract_gtfs.html'>extract_gtfs</a></span> <span class='op'>(</span><span class='va'>f</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>▶<span style='color: #00BB00;'> Unzipping GTFS archive</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✔ Unzipped GTFS archive  </span></span></div><div class='output co'>#&gt; <span class='message'>▶<span style='color: #00BB00;'> Extracting GTFS feed</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✔ Extracted GTFS feed </span></span></div><div class='output co'>#&gt; <span class='message'>▶<span style='color: #00BB00;'> Converting stop times to seconds</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✔ Converted stop times to seconds </span></span></div><div class='output co'>#&gt; <span class='message'>▶<span style='color: #00BB00;'> Converting transfer times to seconds</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>✔ Converted transfer times to seconds </span></span></div><div class='input'><span class='va'>from</span> <span class='op'>&lt;-</span> <span class='st'>"Innsbrucker Platz"</span> <span class='co'># U-bahn station, not "S"</span>
 <span class='va'>to</span> <span class='op'>&lt;-</span> <span class='st'>"Alexanderplatz"</span>
 <span class='va'>start_time</span> <span class='op'>&lt;-</span> <span class='fl'>12</span> <span class='op'>*</span> <span class='fl'>3600</span> <span class='op'>+</span> <span class='fl'>120</span> <span class='co'># 12:02</span>
 <span class='va'>route</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> <span class='op'>(</span><span class='va'>gtfs</span>, from <span class='op'>=</span> <span class='va'>from</span>, to <span class='op'>=</span> <span class='va'>to</span>, start_time <span class='op'>=</span> <span class='va'>start_time</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Day not specified; extracting timetable for saturday</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Day not specified; extracting timetable for sunday</span></div><div class='input'>
 <span class='co'># Specify day of week</span>
 <span class='va'>route</span> <span class='op'>&lt;-</span> <span class='fu'><a href='gtfs_route.html'>gtfs_route</a></span> <span class='op'>(</span><span class='va'>gtfs</span>, from <span class='op'>=</span> <span class='va'>from</span>, to <span class='op'>=</span> <span class='va'>to</span>, start_time <span class='op'>=</span> <span class='va'>start_time</span>,
                      day <span class='op'>=</span> <span class='st'>"Sunday"</span><span class='op'>)</span>
