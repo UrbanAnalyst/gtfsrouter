@@ -13,8 +13,8 @@ reference:
     - gtfs_route
     - go_home
     - go_to_work
-    - gtfs_isochrone
     - gtfs_traveltimes
+    - gtfs_isochrone
     - gtfs_route_headway
   - title: Data Extraction and Pre-Processing
     contents:
