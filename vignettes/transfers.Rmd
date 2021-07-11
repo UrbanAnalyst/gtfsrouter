@@ -1,0 +1,73 @@
+---
+title: "Transfer Tables"
+author: "Mark Padgham"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: false
+    theme: flatly
+vignette: >
+  %\VignetteIndexEntry{Transfer Tables}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+GTFS feeds may include a table of possible transfers between stops, and
+potentially between specific connecting services. Many feeds nevertheless omit
+transfer tables, making them difficult if not impossible to use for routing.
+The `gtfsrouter` package includes a function,
+[`gtfs_transfer_table()`](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html),
+which calculates and inserts a transfer table into a feed.
+
+This function can also be demonstrated with the very small feed included with this package, by first running
+[`berlin_gtfs_to_zip()`](https://atfutures.github.io/gtfs-router/reference/berlin_gtfs_to_zip.html)
+to create the feed in the temporary directory of the current R session.
+
+
+```{r berlin_gtfs}
+library (gtfsrouter)
+f <- berlin_gtfs_to_zip ()
+gtfs <- extract_gtfs (f, quiet = TRUE)
+summary (gtfs)
+```
+
+The `summary` functions demonstrates that the feed includes a transfers table
+with `r nrow (gtfs$transfers)` transfers, as required for successful routing
+like with the following code:
+
+```{r}
+gtfs_route (gtfs,
+            from = "Friedrichstr.",
+            to = "Rosenthaler Platz",
+            start_time = 12 * 3600,
+            day = "Monday")
+```
+
+That trip requires a transfer, and is possible because the feed has a table
+specifying the possibility of transferring at the "S+U Gesundbrunnen Bhf"
+station. Removing the transfers table demonstrates what typically happens when
+attempting to calculate routes on feeds which lack this information:
+
+```{r}
+gtfs$transfers <- NULL
+gtfs_route (gtfs,
+            from = "Friedrichstr.",
+            to = "Rosenthaler Platz",
+            start_time = 12 * 3600,
+            day = "Monday")
+```
+
+No transfer is able to be make, and so no route is found. The following line
+reinstates a transfer table in the feed.
+
+```{r}
+gtfs <- gtfs_transfer_table (gtfs, d_limit = 200)
+summary (gtfs)
+gtfs_route (gtfs,
+            from = "Friedrichstr.",
+            to = "Rosenthaler Platz",
+            start_time = 12 * 3600,
+            day = "Monday")
+```

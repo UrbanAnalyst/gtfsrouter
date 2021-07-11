@@ -1,4 +1,4 @@
-LFILE = traveltimes
+LFILE = transfers
 
 all: knith
 #all: knith open 
