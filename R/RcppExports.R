@@ -53,8 +53,8 @@ rcpp_csa <- function(timetable, transfers, nstations, ntrips, start_stations, en
 #' Get nbs of every station within range dlim
 #'
 #' @noRd
-rcpp_transfer_nbs <- function(stops, dmat, dlim, index) {
-    .Call(`_gtfsrouter_rcpp_transfer_nbs`, stops, dmat, dlim, index)
+rcpp_transfer_nbs <- function(stops, dmat, dlim) {
+    .Call(`_gtfsrouter_rcpp_transfer_nbs`, stops, dmat, dlim)
 }
 
 #' rcpp_isochrone
