@@ -124,7 +124,9 @@ rows of all tables, and the resultant aggregate feed submitted to the
 [`gtfs_transfer_table()`](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
 function. This transfer table will retain all transfers specified in the
 original feeds, yet be augmented by all possible transfers between the multiple
-systems up to a user-specified maximal distance stops.
+systems up to a user-specified maximal distance. Further details of this
+function are also provided in another [separate
+vignette](https://atfutures.github.io/gtfs-router/articles/transfers.html).
 
 
 

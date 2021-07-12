@@ -38,7 +38,7 @@ library(gtfsrouter)
 packageVersion("gtfsrouter")
 ```
 
-    ## [1] '0.0.4.264'
+    ## [1] '0.0.5.29'
 
 ## Main functions
 
@@ -53,7 +53,7 @@ filename <- berlin_gtfs_to_zip()
 print (filename)
 ```
 
-    ## [1] "/tmp/Rtmpg8V203/vbb.zip"
+    ## [1] "/tmp/RtmpkOdkEf/vbb.zip"
 
 For normal package use, `filename` will specify the name of a local GTFS
 `.zip` file.
@@ -143,7 +143,9 @@ submitted to the
 [`gtfs_transfer_table()`](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
 function. This transfer table will retain all transfers specified in the
 original feeds, yet be augmented by all possible transfers between the
-multiple systems up to a user-specified maximal distance stops.
+multiple systems up to a user-specified maximal distance. Further
+details of this function are also provided in another [separate
+vignette](https://atfutures.github.io/gtfs-router/articles/transfers.html).
 
 ## Additional Functionality
 
