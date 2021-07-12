@@ -30,14 +30,18 @@ to create the feed in the temporary directory of the current R session.
 library (gtfsrouter)
 f <- berlin_gtfs_to_zip ()
 gtfs <- extract_gtfs (f, quiet = TRUE)
-summary (gtfs)
 ```
 
-The `summary` functions demonstrates that the feed includes a transfers table
-with `r nrow (gtfs$transfers)` transfers, as required for successful routing
-like with the following code:
+The transfers table of the feed looks like this:
 
-```{r}
+```{r transfers-struct}
+gtfs$transfers
+```
+
+A transfers table is required for successful routing between different
+services, like with the following code:
+
+```{r route1}
 gtfs_route (gtfs,
             from = "Friedrichstr.",
             to = "Rosenthaler Platz",
@@ -50,7 +54,7 @@ specifying the possibility of transferring at the "S+U Gesundbrunnen Bhf"
 station. Removing the transfers table demonstrates what typically happens when
 attempting to calculate routes on feeds which lack this information:
 
-```{r}
+```{r no-transfers}
 gtfs$transfers <- NULL
 gtfs_route (gtfs,
             from = "Friedrichstr.",
@@ -59,15 +63,218 @@ gtfs_route (gtfs,
             day = "Monday")
 ```
 
-No transfer is able to be make, and so no route is found. The following line
-reinstates a transfer table in the feed.
+No transfer is able to be make, and so no route is found. [The
+`gtfs_transfer_table()`
+function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
+automatically calculates and adds a transfer table to a feed, enabling it once
+again to be used to generate routes:
 
-```{r}
+```{r transfer-table-200}
 gtfs <- gtfs_transfer_table (gtfs, d_limit = 200)
-summary (gtfs)
 gtfs_route (gtfs,
             from = "Friedrichstr.",
             to = "Rosenthaler Platz",
             start_time = 12 * 3600,
             day = "Monday")
 ```
+
+That route is considerably faster than the original one, because it utilises
+a transfer (at "S+U Alexanderplatz") which is not in the original transfers
+table. That particular transfer highlights the most important caveat to using [the
+`gtfs_transfer_table()`
+function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html),
+that tables may and often will still require some degree of manual checking and
+adjustment to make them usable, as demonstrated in the following section.
+
+## Modifying transfer tables
+
+The second route generated above after using [the `gtfs_transfer_table()`
+function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
+includes a transfer at "S+U Alexanderplatz" from a route named "S7" to one
+named "U8". This train station is in fact one of the largest stations in
+Berlin, with the "S" routes using elevated platforms above ground, and the "U"
+denoting underground. The "U8" in particular is quite a long way underground,
+and while transfer in the indicated time of just under three minutes may be
+theoretically possible, it would likely require running, and ought not be
+generally presumed to reflect a viable transfer.
+
+Note further that the actual locations of these stations can be extracted with
+the following lines:
+
+```{r}
+r <- gtfs_route (gtfs,
+                 from = "Friedrichstr.",
+                 to = "Rosenthaler Platz",
+                 start_time = 12 * 3600,
+                 day = "Monday",
+                 include_ids = TRUE)
+stns <- r$stop_id [3:4] # the transfer station IDs
+gtfs$stops [match (stns, gtfs$stops$stop_id), ]
+```
+
+The distance between them is:
+
+```{r}
+s <- gtfs$stops [match (stns, gtfs$stops$stop_id), ]
+as.numeric (geodist::geodist (s [1, ], s [2, ]))
+```
+
+The transfer table algorithm presumes a pedestrian speed of 4km / hour, which
+is 1.11 m/s, meaning this distance should be able to be covered in just over
+50 seconds.
+
+In this case, it would be more realistic to add additional time penalties for
+transferring between underground and overground services, to reflect the extra
+time required to travel up or down between stops. The sample feed included with
+this package only has "U" and "S" routes. The following code demonstrates how
+to use this distinction to add additional time penalties to the transfers
+table. The first step is to find the `trip_id` values of all "S" and "U"
+services, which is itself a two-step procedure to first extract `route_id`
+values and then match these to `trip_id` values. Procedures may vary between
+feeds, but in the case of Berlin, the routes are all identified by their
+`route_short_name`, as follows:
+
+```{r}
+S_routes <- gtfs$routes$route_id [grep ("^S", gtfs$routes$route_short_name)]
+U_routes <- gtfs$routes$route_id [grep ("^U", gtfs$routes$route_short_name)]
+S_trips <- gtfs$trips$trip_id [which (gtfs$trips$route_id %in% S_routes)]
+U_trips <- gtfs$trips$trip_id [which (gtfs$trips$route_id %in% U_routes)]
+```
+
+The following code then uses those `trip_id` values to extract all
+corresponding stops.
+
+```{r}
+S_stops <- gtfs$stop_times$stop_id [which (gtfs$stop_times$trip_id %in% S_trips)]
+S_stops <- unique (S_stops)
+U_stops <- gtfs$stop_times$stop_id [which (gtfs$stop_times$trip_id %in% U_trips)]
+U_stops <- unique (U_stops)
+```
+
+Although in Berlin the stops for "U" and "S" services are strictly separated,
+this may not be the case for all other feeds. It might, for example, be useful
+to remove stops which are used by both types of services, leaving stops that
+can only serve as transfers between different kinds of services. The following
+two lines suffice for that: 
+
+```{r}
+S_stops <- S_stops [which (!S_stops %in% U_stops)]
+U_stops <- U_stops [which (!U_stops %in% S_stops)]
+```
+
+All we then need to do is to add additional transfers times for any transfers
+between these two sets of stops, arbitrarily choosing here a value of
+2 minutes:
+
+```{r}
+index <- which ((gtfs$transfers$from_stop_id %in% S_stops &
+                 gtfs$transfers$to_stop_id %in% U_stops) |
+                (gtfs$transfers$from_stop_id %in% U_stops &
+                 gtfs$transfers$to_stop_id %in% S_stops))
+gtfs$transfers$min_transfer_time [index] <-
+    gtfs$transfers$min_transfer_time [index]  + 120
+```
+
+Our route query then returns the following:
+
+```{r}
+gtfs_route (gtfs,
+            from = "Friedrichstr.",
+            to = "Rosenthaler Platz",
+            start_time = 12 * 3600,
+            day = "Monday")
+```
+
+The route follows exactly the same connections, but the transfer at
+Alexanderplatz now connects with a service 5 minutes later.
+
+
+## Transfer Distances
+
+[The `gtfs_transfer_table()`
+function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
+includes an additional parameter, `d_limit`, quantifying the maximum
+permissible walking distance between transfers, with a default value of 200
+metres. Increasing this value generates greater numbers of possible transfers,
+as the following code illustrates, starting by removing and re-creating the
+transfer table, followed by adding the additional penalties for transfers
+between the two types of services, this time constructed as a function for easy
+re-use:
+
+```{r}
+gtfs$transfers <- NULL
+gtfs <- gtfs_transfer_table (gtfs, d_limit = 500)
+
+transfer_penalties <- function (gtfs, penalty = 120) {
+
+    S_stops <- gtfs$stop_times$stop_id [which (gtfs$stop_times$trip_id %in% S_trips)]
+    S_stops <- unique (S_stops)
+    U_stops <- gtfs$stop_times$stop_id [which (gtfs$stop_times$trip_id %in% U_trips)]
+    U_stops <- unique (U_stops)
+
+    S_stops <- S_stops [which (!S_stops %in% U_stops)]
+    U_stops <- U_stops [which (!U_stops %in% S_stops)]
+
+    index <- which ((gtfs$transfers$from_stop_id %in% S_stops &
+                     gtfs$transfers$to_stop_id %in% U_stops) |
+                    (gtfs$transfers$from_stop_id %in% U_stops &
+                     gtfs$transfers$to_stop_id %in% S_stops))
+    gtfs$transfers$min_transfer_time [index] <-
+        gtfs$transfers$min_transfer_time [index]  + 120
+
+    return (gtfs)
+}
+gtfs <- transfer_penalties (gtfs)
+```
+
+Submitting the same routing query now gives the following:
+
+```{r}
+gtfs_route (gtfs,
+            from = "Friedrichstr.",
+            to = "Rosenthaler Platz",
+            start_time = 12 * 3600,
+            day = "Monday")
+```
+
+The route departs and arrives at the same time, but now includes an additional
+walking transfer over a distance which can be calculated by repeating the lines
+above:
+
+```{r}
+r <- gtfs_route (gtfs,
+                 from = "Friedrichstr.",
+                 to = "Rosenthaler Platz",
+                 start_time = 12 * 3600,
+                 day = "Monday",
+                 include_ids = TRUE)
+s <- gtfs$stops [match (r$stop_id [2:3], gtfs$stops$stop_id), ]
+as.numeric (geodist::geodist (s [1, ], s [2, ]))
+```
+
+At a speed of 1.11m/s, this would take just under 6 minutes. With the
+additional penalty of 2 minutes for transferring from an "S" to a "U" service,
+this transfer would require just under 8 minutes, which is less than the time
+given in the route of just over 8.5 minutes. This demonstrates how increasing
+maximal walking distances increases numbers of possible transfers.
+
+The following code shows the sizes of transfer tables as a function of maximal
+walking distances:
+
+```{r}
+d_limit <- 1:20 * 100
+n <- vapply (d_limit, function (i) {
+                 gtfs$transfer <- NULL
+                 gtfs <- gtfs_transfer_table (gtfs, d_limit = i)
+                 nrow (gtfs$transfers)
+                 }, integer (1))
+d_limit <- d_limit / 1000 # in km
+n <- n / 1000 # in thousands
+plot (d_limit, n, type = "l", col = "red", lwd = 2,
+      xlab = "Maximal transfer distance",
+      ylab = "Number of transfers (1000s)")
+```
+
+The line is initially flat because this number (around 3,300) is the number of
+transfers possible between stops which have identical spatial locations (and so
+a distance of 0.0). Numbers of transfers can never be less than this number.
