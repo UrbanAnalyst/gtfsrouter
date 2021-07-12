@@ -35,7 +35,7 @@ gtfs_transfer_table <- function (gtfs,
     if (is.null (network) & network_times)
         network <- dl_net (gtfs)
 
-    transfers <- get_transfer_list (gtfs, d_limit, quiet)
+    transfers <- get_transfer_list (gtfs, d_limit)
 
     if (network_times) {
 
@@ -88,19 +88,14 @@ dl_net <- function (gtfs) {
     return (net)
 }
 
-get_transfer_list <- function (gtfs, d_limit, quiet = FALSE) {
-
-    if (!quiet)
-        message (cli::symbol$play,
-                 cli::col_green (" Finding neighbouring services ",
-                                 "for each stop"),
-                 appendLF = FALSE)
+get_transfer_list <- function (gtfs, d_limit) {
 
     # reduce down to unique (lon, lat) pairs:
     xy <- round (gtfs$stops [, c ("stop_lon", "stop_lat")], digits = 6)
     xy_char <- paste0 (xy$stop_lon, "==", xy$stop_lat)
     index <- which (!duplicated (xy_char))
-    index_back <- match (xy_char, xy_char [index])
+    index_back <- lapply (xy_char [index], function (i)
+                          which (xy_char == i))
 
     stops <- gtfs$stops
 
@@ -108,36 +103,38 @@ get_transfer_list <- function (gtfs, d_limit, quiet = FALSE) {
     d <- geodist::geodist (stops [index, c ("stop_lon", "stop_lat")],
                            measure = "haversine")
 
-    tr_short <- rcpp_transfer_nbs (stops [index, ], d, d_limit)
-    
-    transfers <- tr_short [index_back]
+    nbs <- apply (d, 1, function (i) {
+                      j <- which (i <= d_limit & !is.na (i))
+                      ret <- integer (0)
+                      if (length (j) > 0) {
+                          ret <- unlist (lapply (j, function (k)
+                                                 index_back [[k]]))
+                      }
+                      return (ret) })
 
-    names (transfers) <- stops$stop_id
+    nbs <- lapply (seq_along (nbs), function (i) {
+                   out <- c (nbs [[i]], index_back [[i]])
+                   out <- sort (unique (out))
+                   return (out [which (!out == i)])
+                      })
+    index_back <- match (xy_char, xy_char [index])
+    transfers <- nbs [index_back]
 
-    if (!quiet)
-        message ("\r", cli::col_green (cli::symbol$tick,
-                                       " Found neighbouring services ",
-                                       "for each stop"))
-
-    index <- which (vapply (transfers, function (i)
-                            length (i) > 0,
-                            logical (1)))
-    transfers <- transfers [index]
-    for (i in seq (transfers)) {
-        transfers [[i]] <- cbind (from = names (transfers) [i],
-                                  to = transfers [[i]])
+    lens <- vapply (transfers, length, integer (1))
+    for (i in which (lens > 0)) {
+        transfers [[i]] <- cbind (from = gtfs$stops$stop_id [i],
+                                  to = gtfs$stops$stop_id [transfers [[i]]])
     }
     transfers <- data.frame (do.call (rbind, transfers),
                              stringsAsFactors = FALSE)
-    transfers$from_lon <-
-        stops$stop_lon [match (transfers$from, stops$stop_id)]
-    transfers$from_lat <-
-        stops$stop_lat [match (transfers$from, stops$stop_id)]
-    transfers$to_lon <-
-        stops$stop_lon [match (transfers$to, stops$stop_id)]
-    transfers$to_lat <-
-        stops$stop_lat [match (transfers$to, stops$stop_id)]
-    transfers <- transfers [which (transfers$from != transfers$to), ]
+
+    index <- match (transfers$from, stops$stop_id)
+    transfers$from_lon <- stops$stop_lon [index]
+    transfers$from_lat <- stops$stop_lat [index]
+
+    index <- match (transfers$to, stops$stop_id)
+    transfers$to_lon <- stops$stop_lon [index]
+    transfers$to_lat <- stops$stop_lat [index]
 
     return (transfers)
 }
