@@ -20,8 +20,13 @@ test_that ("transfers works", {
                                 c ("from_stop_id",
                                    "to_stop_id",
                                    "transfer_type",
-                                   "min_transfer_time"))
+                                   "min_transfer_time",
+                                   "from_route_id",
+                                   "to_route_id",
+                                   "from_trip_id",
+                                   "to_trip_id"))
               expect_true (all (tr200$transfer_type %in% c (1, 2)))
+              expect_true (nrow (tr200) > nrow (g$transfers))
 
               expect_silent (
                     g500 <- gtfs_transfer_table (g,
