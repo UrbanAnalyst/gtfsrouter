@@ -418,7 +418,7 @@ The effect of different distances can also be examined using the internal data
 set provided with this package. The following function generates travel times
 for a given `d_limit` a random sample of starting stations:
 
-```{r travel_times_d_limit-fn, messages = FALSE}
+```{r travel_times_d_limit-fn, message = FALSE}
 library (dplyr)
 
 travel_times_d_limit <- function (gtfs, from, d_limit = 200) {
