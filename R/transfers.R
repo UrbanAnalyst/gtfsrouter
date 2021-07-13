@@ -198,14 +198,13 @@ append_to_transfer_table <- function (gtfs, transfers) {
         return (gtfs)
     }
 
-    # remove any duplicated rows from original:
-    index <- which (!duplicated (gtfs$transfers [, c ("from_stop_id", "to_stop_id")]))
-    tr_old <- gtfs$transfers [index, c ("from_stop_id",
-                                   "to_stop_id",
-                                   "transfer_type",
-                                   "min_transfer_time")]
 
     # Exclude any transfers with type == 3 in original table; see #76
+    # These generally prohibit connectiosn between specified routes or services,
+    # but including them as general transfers in a table will nevertheless
+    # automatically connect these. Current approach is to just remove these,
+    # although that should be done better ...
+    tr_old <- gtfs$transfers
     tr3_index <- which (tr_old$transfer_type == 3)
     if (length (tr3_index) > 0) {
         from_to_old <- paste0 (tr_old$from_stop_id [tr3_index],
@@ -217,12 +216,26 @@ append_to_transfer_table <- function (gtfs, transfers) {
         transfers <- transfers [which (!from_to_new %in% from_to_old), ]
     }
 
-    transfers <- rbind (tr_old, transfers)
-    # duplicates always indexes the first values, so will always retain the
-    # original entries in favour of those generated in the `gtfs_transfer_table`
-    # fn.
-    index <- which (!duplicated (transfers [, c ("from_stop_id", "to_stop_id")]))
-    gtfs$transfers <- transfers [index, ]
+    # Expand table columns to match previous table:
+    index <- which (!names (tr_old) %in% names (transfers))
+    n <- nrow (transfers)
+    for (i in index) {
+        fn <- class (tr_old [[i]])
+        nm_i <- names (tr_old) [i]
+        if (fn == "character") {
+            transfers [[nm_i]] <- rep (do.call (fn, list (1)), n)
+        } else {
+            transfers [[nm_i]] <- rep (NA, n)
+            storage.mode (transfers [[nm_i]]) <- fn
+        }
+    }
+
+    # Finally remove any new transfers that are in original table
+    from_to_old <- paste0 (tr_old$from_stop_id, "==", tr_old$to_stop_id)
+    from_to_new <- paste0 (transfers$from_stop_id, "==", transfers$to_stop_id)
+    transfers <- transfers [which (!from_to_new %in% from_to_old), ]
+
+    gtfs$transfers <- rbind (tr_old, transfers)
 
     return (gtfs)
 }
