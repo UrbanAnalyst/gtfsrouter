@@ -15,13 +15,16 @@ vignette: >
 ---
   
 GTFS feeds may include a table of possible transfers between stops, and
-potentially between specific connecting services. Many feeds nevertheless omit
-transfer tables, making them difficult if not impossible to use for routing.
-The `gtfsrouter` package includes a function,
+potentially between specific connecting services. There feeds are nevertheless
+optional, and many feeds omit transfer tables, making them difficult if not
+impossible to use for routing. The `gtfsrouter` package includes a function,
 [`gtfs_transfer_table()`](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html),
 which calculates and inserts a transfer table into a feed.
 
-This function can also be demonstrated with the very small feed included with this package, by first running
+## Basic Usage
+
+This function can also be demonstrated with the very small feed included with
+this package, by first running
 [`berlin_gtfs_to_zip()`](https://atfutures.github.io/gtfs-router/reference/berlin_gtfs_to_zip.html)
 to create the feed in the temporary directory of the current R session.
 
@@ -82,9 +85,64 @@ That route is considerably faster than the original one, because it utilises
 a transfer (at "S+U Alexanderplatz") which is not in the original transfers
 table. That particular transfer highlights the most important caveat to using [the
 `gtfs_transfer_table()`
-function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html),
+function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html):
 that tables may and often will still require some degree of manual checking and
 adjustment to make them usable, as demonstrated in the following section.
+
+## Extending transfer tables
+
+The above example first removed the transfer table by setting `gtfs$transfers
+<- NULL`. Applying [the `gtfs_transfer_table()`
+function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
+to a feed which already has a transfer table will extend that table by adding
+any additional transfers within the specified distance ([see
+below](#transfer-distances)). Any transfers already present in the transfers
+table will be retained as is, and the table will be extended by adding any new
+transfers not present in the original table.
+
+Transfers are calculated based on distance alone, and do not utilise any
+information on routes or trips. Some feeds, such as the [example Berlin feed
+included with this
+package](https://atfutures.github.io/gtfs-router/reference/berlin_gtfs_to_zip.html),
+include transfer information between specific routes and services, resulting in
+a transfers table in which station pairs are repeated numerous times for
+distinct combinations of routes and services:
+
+```{r transfer-table-size}
+gtfs <- extract_gtfs (f, quiet = TRUE) # 'f' is the location generated above
+nrow (gtfs$transfers)
+length (which (!duplicated (gtfs$transfers [, c ("from_stop_id", "to_stop_id")])))
+```
+```{r  transfer-table-size-data, echo = FALSE}
+n0 <- nrow (gtfs$transfers)
+n1 <- length (which (!duplicated (gtfs$transfers [, c ("from_stop_id", "to_stop_id")])))
+```
+
+The table only has `r format (n1, big.mark = ",")` unique pairs of `from` and
+`to` stops, yet details `r format (n0, big.mark = ",")` possibles ways of
+transferring between these stops. Removing and re-generating these transfers
+gives the following results:
+
+```{r transfer-table-regen}
+gtfs$transfers <- NULL
+gtfs <- gtfs_transfer_table (gtfs)
+nrow (gtfs$transfers)
+```
+
+The [`gtfs_transfer_table()`
+function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
+generates `r nrow (gtfs$transfers) - n1` additional transfers not present in
+the original feed, but as stated contains no information on transfers between
+specific routes or trips. Alternatively, using the function to extend the
+existing table, rather than re-generate it, gives the following result:
+
+```{r transfer-table-regen2}
+gtfs <- extract_gtfs (f, quiet = TRUE)
+gtfs <- gtfs_transfer_table (gtfs)
+nrow (gtfs$transfers)
+```
+
+
 
 ## Modifying transfer tables
 
@@ -121,18 +179,19 @@ as.numeric (geodist::geodist (s [1, ], s [2, ]))
 
 The transfer table algorithm presumes a pedestrian speed of 4km / hour, which
 is 1.11 m/s, meaning this distance should be able to be covered in just over
-50 seconds.
+50 seconds. In reality, it would be impossible to run between these two stops
+in 50 seconds, primarily because of a need to traverse 3 or 4 vertical levels.
 
-In this case, it would be more realistic to add additional time penalties for
-transferring between underground and overground services, to reflect the extra
-time required to travel up or down between stops. The sample feed included with
-this package only has "U" and "S" routes. The following code demonstrates how
-to use this distinction to add additional time penalties to the transfers
-table. The first step is to find the `trip_id` values of all "S" and "U"
-services, which is itself a two-step procedure to first extract `route_id`
-values and then match these to `trip_id` values. Procedures may vary between
-feeds, but in the case of Berlin, the routes are all identified by their
-`route_short_name`, as follows:
+We now demonstrate how to add more realistic transfer times, by adding
+additional time penalties for transferring between underground and overground
+services, to reflect the extra time required to travel up or down between
+stops. The sample feed included with this package only has "U" and "S" routes.
+The following code demonstrates how to use this distinction to add additional
+time penalties to the transfers table. The first step is to find the `trip_id`
+values of all "S" and "U" services, which is itself a two-step procedure to
+first extract `route_id` values and then match these to `trip_id` values.
+Procedures may vary between feeds, but in the case of Berlin, the routes are
+all identified by their `route_short_name`, as follows:
 
 ```{r SU_routes}
 S_routes <- gtfs$routes$route_id [grep ("^S", gtfs$routes$route_short_name)]
@@ -185,11 +244,16 @@ gtfs_route (gtfs,
             day = "Monday")
 ```
 
-The route follows exactly the same connections, but the transfer at
-Alexanderplatz now connects with a service 5 minutes later.
+The route follows exactly the same connections, but now allows a far more
+realistic time of just over 5 minutes for the transfer at Alexanderplatz.
+This exemplifies that, while [the `gtfs_transfer_table()`
+function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
+can "automatically" generate transfer tables, these will often still need
+manual tweaking and adjustment to reflect the unique characteristics of any
+given system.
 
 
-## Transfer distances
+## Transfer distances {#transfer-distances}
 
 [The `gtfs_transfer_table()`
 function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
