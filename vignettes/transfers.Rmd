@@ -142,11 +142,51 @@ gtfs <- gtfs_transfer_table (gtfs)
 nrow (gtfs$transfers)
 ```
 
+Note that each call to
+[`gtfs_transfer_table()`](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
+will only extend the table through adding any transfers not present in the
+previous table, and that no transfers will be removed. The following code uses
+the `d_limit` parameter [described below](#transfer-distances) to calculate
+transfer tables for increasing maximal transfer distances.
+
+```{r transfer-table-extend}
+gtfs <- extract_gtfs (f, quiet = TRUE)
+vapply (0:10, function (i) {
+            gtfs <- gtfs_transfer_table (gtfs, d_limit = i * 100)
+            return (nrow (gtfs$transfers))
+           }, integer (1))
+```
+
+The transfer table increases in size with each call, and retains all transfers
+generated from all previous calls. Because each call involves extending the
+transfer table, the table at each stage may be used for routing with transfers
+out to each specified distance. Subsequently reducing the transfer distance
+would then not be appropriate, as the table would still retain all transfers at
+previously-calculated (longer) distances:
+
+```{r transfers-reduce-d_lim}
+gtfs <- gtfs_transfer_table (gtfs, d_limit = 100)
+nrow (gtfs$transfers)
+```
+
+In this case, the table would first have to be removed (`gtfs$transfers <-
+NULL`), and the recalculated at the specified distance.
+
+```{r transfers-reduce-d_lim2}
+gtfs$transfers <- NULL
+gtfs <- gtfs_transfer_table (gtfs, d_limit = 100)
+nrow (gtfs$transfers)
+```
+
 
 
 ## Modifying transfer tables
 
-The second route generated above after using [the `gtfs_transfer_table()`
+This section demonstrates that transfer tables generated using [the
+`gtfs_transfer_table()`
+function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
+often need to be manually modified to ensure sensible results. The second route
+generated above after using [the `gtfs_transfer_table()`
 function](https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html)
 includes a transfer at "S+U Alexanderplatz" from a route named "S7" to one
 named "U8". This train station is in fact one of the largest stations in
