@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5.036</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5.037</span>
       </span>
     </div>
 
@@ -93,7 +93,7 @@
 <p>The one thing neither of these packages enable is the use of GTFS data for transit routing. The <code>gtfsrouter</code> package enables both one-to-one and one-to-many routing. Functionality is demonstrated here through the sample data set included with the package, provided by the “Verkehrsverbund Berlin-Brandenburg” (VBB; or Transport Network Berlin-Brandenburg). The <code>berlin_gtfs</code> data represents a reduced version of the full GTFS data, containing only six tables, and a timetable reduced to the single hour between 12:00-13:00. Like all GTFS software including <a href="https://github.com/r-transit/tidytransit"><code>tidytransit</code></a>, this package is designed to work directly with GTFS data in <code>.zip</code>-archived format, and so includes a helper function, <code><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip()</a></code>, which exports the internal data set to a locally-stored <code>.zip</code> archive in the <code><a href="https://rdrr.io/r/base/tempfile.html">tempdir()</a></code> of the current <strong>R</strong> session. These data can be exported and re-imported with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "/tmp/RtmpCqPReJ/vbb.zip"</code></pre>
+<pre><code>## [1] "/tmp/RtmpcpFB7N/vbb.zip"</code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></code></pre></div>
@@ -284,7 +284,7 @@
                 day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span>
     <span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.074   0.000   0.075</code></pre>
+##   0.067   0.000   0.066</code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "calendar"   "routes"     "trips"      "stop_times" "stops"     
@@ -302,7 +302,7 @@
                          to <span class="op">=</span> <span class="va">to</span>,
                          start_time <span class="op">=</span> <span class="st">"12:00:00"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.056   0.000   0.057</code></pre>
+##   0.050   0.001   0.050</code></pre>
 <p>Note that the <code>day</code> parameter is used to extract the timetable, after which it is no longer required in the actual call to <code><a href="../reference/gtfs_route.html">gtfs_route()</a></code>.</p>
 </div>
 <div id="routing-by-mode-of-transport" class="section level2">
