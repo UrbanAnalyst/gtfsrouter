@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5.037</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.5.038</span>
       </span>
     </div>
 
@@ -378,17 +378,9 @@
 <p>The <code>gtfsrouter</code> package is nevertheless not intended to be used only to generate individual routing queries, but also includes <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_traveltimes.html">the <code>gtfs_traveltimes()</code> function</a> designed to enable efficient estimation of travel times anywhere in a system from any nominated station. The result of this function will obviously be influenced by the transfers table, and in particular by the maximal walking distance used to construct transfer tables with <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html">the <code>gtfs_transfer_table()</code> function</a>.</p>
 <p>The effect of different distances can also be examined using the internal data set provided with this package. The following function generates travel times for a given <code>d_limit</code> a random sample of starting stations:</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## 
-## Attaching package: 'dplyr'</code></pre>
-<pre><code>## The following objects are masked from 'package:stats':
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">travel_times_d_limit</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">gtfs</span>, <span class="va">from</span>, <span class="va">d_limit</span> <span class="op">=</span> <span class="fl">200</span><span class="op">)</span> <span class="op">{</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span> <span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
+
+<span class="va">travel_times_d_limit</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">gtfs</span>, <span class="va">from</span>, <span class="va">d_limit</span> <span class="op">=</span> <span class="fl">200</span><span class="op">)</span> <span class="op">{</span>
 
     <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span> <span class="op">&lt;-</span> <span class="cn">NULL</span>
     <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span>, d_limit <span class="op">=</span> <span class="va">d_limit</span><span class="op">)</span>
@@ -422,7 +414,7 @@
     <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span> <span class="op">(</span><span class="va">res</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>This function returns travel times from all stations listed in <code>from</code> to all other (reachable) stations for the specified value of <code>d_limit</code>. The following lines then compare these travel times between identical origin and destination stations for a range of distance limits.</p>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">from</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span><span class="op">$</span><span class="va">stop_name</span>, size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>
 <span class="va">d_limit</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">100</span>
 <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span> <span class="op">(</span><span class="va">d_limit</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span>
@@ -453,9 +445,9 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_log10</a></span> <span class="op">(</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span> <span class="op">(</span><span class="st">"time difference (minutes)"</span><span class="op">)</span></code></pre></div>
 <p><img src="transfers_files/figure-html/plot1-1.png" width="700"></p>
-<p>And these additional transfer possibilities can make a significant difference to estimated travel times. Note, however, that the travel times only changed for 866 stations, while the value of <code>nsame</code> value recording numbers of stations for which travel times did not change was 3,768. Travel times may also increase as additional transfers may be used to reduce numbers of connecting services required for a particular trip, and the algorithm generally searches for connections with minimal numbers of transfers.</p>
+<p>And these additional transfer possibilities can make a significant difference to estimated travel times. Note, however, that the travel times only changed for 711 stations, while the value of <code>nsame</code> value recording numbers of stations for which travel times did not change was 4,245. Travel times may also increase as additional transfers may be used to reduce numbers of connecting services required for a particular trip, and the algorithm generally searches for connections with minimal numbers of transfers.</p>
 <p>The following code the quantifies the overall effect of these reductions in travel times, measured as the linear reduction in comparison with travel times calculated using the original transfers table provided with the feed. The function also returns the proportion of all stations for which travel times were affected by the modified transfer table.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transfer_difference</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">gtfs</span>,
                                  <span class="va">nsamples</span> <span class="op">=</span> <span class="fl">10</span>,
                                  <span class="va">d_limit</span> <span class="op">=</span> <span class="fl">200</span>,
@@ -502,7 +494,7 @@
             USE.NAMES <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 <span class="op">}</span></code></pre></div>
 <p>That function can then be used to loop over a range of values of <code>d_limit</code>, and to examine the results with the following code:</p>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">d_limit</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">100</span>
 <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span> <span class="op">(</span><span class="va">d_limit</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span>
              <span class="fu">transfer_difference</span> <span class="op">(</span><span class="va">gtfs</span>,
@@ -520,14 +512,14 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span> <span class="op">(</span>pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span> <span class="op">(</span>method <span class="op">=</span> <span class="st">"loess"</span>, formula <span class="op">=</span> <span class="st">"y ~ x"</span><span class="op">)</span></code></pre></div>
 <p><img src="transfers_files/figure-html/transfer_d_limit_results-1.png" width="700"></p>
-<p>That result shows that travel times do decrease with increasing limits of maximal transfer distance, although the overall effect is very minimal. The object <code>d</code> also records the proportion of station pairs for which modifications to the transfers table actually changed travel times, which in this case amounts to a mean value of 0.01, clearly revealing that very few trips actually change.</p>
+<p>That result shows that travel times do decrease with increasing limits of maximal transfer distance, although the overall effect is very minimal. The object <code>d</code> also records the proportion of station pairs for which modifications to the transfers table actually changed travel times, which in this case amounts to a mean value of 0.0076, clearly revealing that very few trips actually change.</p>
 <div id="a-more-realistic-example" class="section level3">
 <h3 class="hasAnchor">
 <a href="#a-more-realistic-example" class="anchor"></a>A more realistic example</h3>
 <p>The following results apply the code given above to the full feed for Stuttgart, Germany, showing what might more typically be expected as the <code>d_limit</code> parameter is increased.</p>
 <p><img src="transfers_files/figure-html/stuttgart-results-1.png" width="700"></p>
 <p>The decrease in travel times in this case approaches 15% as transfers are implemented with walks of up to 1km, although values are highly variable depending on starting stations. The equivalent proportion of stops for which these transfers actually change travel times is shown in the following graph:</p>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span> <span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span> <span class="op">(</span>x <span class="op">=</span> <span class="va">d_limit</span>, y <span class="op">=</span> <span class="va">prop</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span> <span class="op">(</span>pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span> <span class="op">(</span>method <span class="op">=</span> <span class="st">"loess"</span>, formula <span class="op">=</span> <span class="st">"y ~ x"</span><span class="op">)</span></code></pre></div>
