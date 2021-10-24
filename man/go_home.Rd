@@ -18,7 +18,7 @@ A \code{data.frame} specifying the next available route from work to home.
 }
 \description{
 Use local environmental variables specifying home and work stations and
-locations of locally-stored GTFS data to route from work to home locationn
+locations of locally-stored GTFS data to route from work to home location
 with next available service.
 }
 \details{

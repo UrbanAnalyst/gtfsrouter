@@ -1,7 +1,7 @@
 #' go_home
 #'
 #' Use local environmental variables specifying home and work stations and
-#' locations of locally-stored GTFS data to route from work to home locationn
+#' locations of locally-stored GTFS data to route from work to home location
 #' with next available service.
 #'
 #' @param wait An integer specifying the n-th next service. That is, `wait = n`
