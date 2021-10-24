@@ -23,6 +23,7 @@
 #' from <- "Alexanderplatz"
 #' start_times <- 12 * 3600 + c (0, 60) * 60 # 8:00-9:00
 #' res <- gtfs_traveltimes (g, from, start_times)
+#' @family main
 #' @export
 gtfs_traveltimes <- function (gtfs,
                               from,

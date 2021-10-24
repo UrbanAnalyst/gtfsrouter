@@ -118,3 +118,10 @@ gt <- gtfs_timetable (gtfs, day = "Sunday", route_pattern = "^S")
 route <- gtfs_route (gt, from = from, to = to, start_time = start_time)
 
 }
+\seealso{
+Other main: 
+\code{\link{gtfs_isochrone}()},
+\code{\link{gtfs_route_headway}()},
+\code{\link{gtfs_traveltimes}()}
+}
+\concept{main}

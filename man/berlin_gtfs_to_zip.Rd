@@ -13,3 +13,9 @@ Path to newly created zip file
 Write a zip archive of the internal package data, \link{berlin_gtfs} to
 a file named "vbb.zip" to \code{tempdir()}.
 }
+\seealso{
+Other extract: 
+\code{\link{extract_gtfs}()},
+\code{\link{gtfs_timetable}()}
+}
+\concept{extract}

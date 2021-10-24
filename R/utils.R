@@ -4,6 +4,7 @@
 #' a file named "vbb.zip" to `tempdir()`.
 #'
 #' @return Path to newly created zip file
+#' @family extract
 #' @export
 berlin_gtfs_to_zip <- function () {
     flist <- c ("calendar.txt", "routes.txt", "trips.txt",

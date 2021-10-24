@@ -17,3 +17,9 @@ Process a local GTFS data set with environmental variables described in
 \link{go_home} into a condensed version for use in \link{go_home} and
 \code{go_to_work} functions.
 }
+\seealso{
+Other additional: 
+\code{\link{go_home}()},
+\code{\link{go_to_work}()}
+}
+\concept{additional}

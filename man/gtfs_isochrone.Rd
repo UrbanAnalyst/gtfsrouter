@@ -100,3 +100,10 @@ ic <- gtfs_isochrone (g,
 plot (ic)
 }
 }
+\seealso{
+Other main: 
+\code{\link{gtfs_route_headway}()},
+\code{\link{gtfs_route}()},
+\code{\link{gtfs_traveltimes}()}
+}
+\concept{main}

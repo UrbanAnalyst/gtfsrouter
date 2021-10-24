@@ -17,3 +17,8 @@ to equivalent 'arrival_time' and 'departure_time' values in \code{stop_times}.
 Convert a GTFS 'frequencies' table to equivalent 'stop_times' that can be
 used for routing.
 }
+\seealso{
+Other augment: 
+\code{\link{gtfs_transfer_table}()}
+}
+\concept{augment}

@@ -32,6 +32,7 @@
 #' @inheritParams gtfs_route
 #' @inherit gtfs_route return examples
 #'
+#' @family extract
 #' @export
 gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
                             quiet = FALSE) {

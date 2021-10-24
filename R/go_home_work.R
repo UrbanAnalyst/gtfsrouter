@@ -55,6 +55,7 @@
 #' go_home ()
 #' go_home (3)
 #' }
+#' @family additional
 #' @export
 go_home <- function (wait = 0, start_time) {
 
@@ -93,6 +94,7 @@ go_home <- function (wait = 0, start_time) {
 #' go_to_work (3)
 #' }
 #' @export
+#' @family additional
 go_to_work <- function (wait = 0, start_time) {
 
     go_home_work (home = FALSE, wait = wait, start_time)
@@ -161,6 +163,7 @@ get_rds_name <- function (f) {
 #' behave strangely, try re-running this function with a higher value of this
 #' parameter.
 #'
+#' @family additional
 #' @export
 process_gtfs_local <- function (expand = 2) {
 

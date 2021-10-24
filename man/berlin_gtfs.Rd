@@ -61,4 +61,5 @@ gt <- gtfs_timetable (gtfs, day = "Sunday", route_pattern = "^S")
 route <- gtfs_route (gt, from = from, to = to, start_time = start_time)
 
 }
+\concept{data}
 \keyword{datasets}

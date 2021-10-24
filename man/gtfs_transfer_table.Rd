@@ -44,4 +44,10 @@ g <- extract_gtfs (f, quiet = TRUE)
 g <- gtfs_transfer_table (g, d_limit = 200)
 # g$transfers then has fewer rows than original, because original transfer
 # table contains duplicated rows.
+
 }
+\seealso{
+Other augment: 
+\code{\link{frequencies_to_stop_times}()}
+}
+\concept{augment}

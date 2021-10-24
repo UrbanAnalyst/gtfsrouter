@@ -24,6 +24,7 @@
 #' f <- file.path (tempdir (), "vbb.zip") # name of feed
 #' gtfs <- extract_gtfs (f)
 #'
+#' @family extract
 #' @export
 extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
 

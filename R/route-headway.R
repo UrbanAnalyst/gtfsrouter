@@ -17,6 +17,7 @@ headway_times <- function (gtfs, start_stns, end_stns, start_time) {
 #' @param quiet If `TRUE`, display a progress bar
 #' @return A single vector of integer values containing headways between all
 #' services across a single 24-hour period
+#' @family main
 #' @export
 gtfs_route_headway <- function (gtfs, from, to, quiet = FALSE) {
 

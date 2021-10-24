@@ -37,3 +37,9 @@ f <- file.path (tempdir (), "vbb.zip") # name of feed
 gtfs <- extract_gtfs (f)
 
 }
+\seealso{
+Other extract: 
+\code{\link{berlin_gtfs_to_zip}()},
+\code{\link{gtfs_timetable}()}
+}
+\concept{extract}

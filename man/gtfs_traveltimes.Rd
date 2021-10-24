@@ -81,3 +81,10 @@ from <- "Alexanderplatz"
 start_times <- 12 * 3600 + c (0, 60) * 60 # 8:00-9:00
 res <- gtfs_traveltimes (g, from, start_times)
 }
+\seealso{
+Other main: 
+\code{\link{gtfs_isochrone}()},
+\code{\link{gtfs_route_headway}()},
+\code{\link{gtfs_route}()}
+}
+\concept{main}

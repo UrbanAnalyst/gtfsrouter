@@ -51,6 +51,7 @@
 #'                       end_time = end_time)
 #' plot (ic)
 #' }
+#' @family main
 #' @export
 gtfs_isochrone <- function (gtfs, from, start_time, end_time, day = NULL,
                             from_is_id = FALSE, grep_fixed = TRUE,

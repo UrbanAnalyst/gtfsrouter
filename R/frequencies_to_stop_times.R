@@ -10,6 +10,7 @@
 #'
 #' @importFrom data.table shift
 #'
+#' @family augment
 #' @export
 frequencies_to_stop_times <- function(gtfs)  {
     # check if gtfs is a gtfs class of object

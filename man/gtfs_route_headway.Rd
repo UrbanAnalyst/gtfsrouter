@@ -26,3 +26,10 @@ services across a single 24-hour period
 Calculate a vector of headway values -- that is, time intervals between
 consecutive services -- for all routes between two specified stations.
 }
+\seealso{
+Other main: 
+\code{\link{gtfs_isochrone}()},
+\code{\link{gtfs_route}()},
+\code{\link{gtfs_traveltimes}()}
+}
+\concept{main}

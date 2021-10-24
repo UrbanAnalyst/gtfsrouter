@@ -17,6 +17,7 @@
 #'
 #' @name gtfsrouter
 #' @docType package
+#' @family package
 #' @importFrom Rcpp evalCpp
 #' @useDynLib gtfsrouter, .registration = TRUE
 NULL
@@ -33,6 +34,7 @@ NULL
 #'
 #' @name berlin_gtfs
 #' @docType data
+#' @family data
 #' @keywords datasets
 #' @format A list of five \pkg{data.table} items necessary for routing:
 #' \itemize{

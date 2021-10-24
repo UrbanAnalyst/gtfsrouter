@@ -77,3 +77,9 @@ gt <- gtfs_timetable (gtfs, day = "Sunday", route_pattern = "^S")
 route <- gtfs_route (gt, from = from, to = to, start_time = start_time)
 
 }
+\seealso{
+Other extract: 
+\code{\link{berlin_gtfs_to_zip}()},
+\code{\link{extract_gtfs}()}
+}
+\concept{extract}
