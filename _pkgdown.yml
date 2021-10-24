@@ -7,28 +7,22 @@ templates:
 reference:
   - title: Package doc
     contents:
-    - gtfsrouter-package
+    - has_concept("package")
   - title: The Main Functions
     contents:
-    - gtfs_route
-    - go_home
-    - go_to_work
-    - gtfs_traveltimes
-    - gtfs_isochrone
-    - gtfs_route_headway
+    - has_concept("main")
   - title: Data Extraction and Pre-Processing
     contents:
-    - extract_gtfs
-    - berlin_gtfs_to_zip
-    - gtfs_timetable
-    - process_gtfs_local
+    - has_concept("extract")
   - title: Data Augmentation
     contents:
-    - frequencies_to_stop_times
-    - gtfs_transfer_table
+    - has_concept("augment")
+  - title: Additional Functions
+    contents:
+    - has_concept("additional")
   - title: Package data
     contents:
-    - berlin_gtfs
+    - has_concept("data")
 
 articles:
   - title: The gtfsrouter package
