@@ -1,22 +1,19 @@
 {
-  "@context": [
-    "https://doi.org/10.5063/schema/codemeta-2.0",
-    "http://schema.org"
-  ],
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "gtfsrouter",
-  "description": "Use GTFS (General Transit Feed Specification) data for\n    routing from nominated start and end stations, and for extracting\n    isochrones from nominated start station.",
+  "description": "Use GTFS (General Transit Feed Specification) data for routing from nominated start and end stations, and for extracting isochrones from nominated start station.",
   "name": "gtfsrouter: Routing with GTFS (General Transit Feed Specification) Data",
   "codeRepository": "https://github.com/ATFutures/gtfs-router",
   "issueTracker": "https://github.com/ATFutures/gtfs-router/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.5.045",
+  "version": "0.0.5.46",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.1.1 (2021-08-10)",
+  "runtimePlatform": "R version 4.1.2 (2021-11-01)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -46,8 +43,6 @@
       "email": "alk@mobilityinstitute.com"
     }
   ],
-  "copyrightHolder": {},
-  "funder": {},
   "maintainer": [
     {
       "@type": "Person",
@@ -262,14 +257,14 @@
       "sameAs": "https://CRAN.R-project.org/package=testthat"
     }
   ],
-  "softwareRequirements": [
-    {
+  "softwareRequirements": {
+    "1": {
       "@type": "SoftwareApplication",
       "identifier": "R",
       "name": "R",
       "version": ">= 2.10"
     },
-    {
+    "2": {
       "@type": "SoftwareApplication",
       "identifier": "cli",
       "name": "cli",
@@ -281,7 +276,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=cli"
     },
-    {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "data.table",
       "name": "data.table",
@@ -293,7 +288,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=data.table"
     },
-    {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "geodist",
       "name": "geodist",
@@ -305,12 +300,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=geodist"
     },
-    {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "methods",
       "name": "methods"
     },
-    {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "Rcpp",
       "name": "Rcpp",
@@ -323,25 +318,13 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/cxx11"
-    }
-  ],
+    "SystemRequirements": "C++11"
+  },
+  "fileSize": "6057.238KB",
+  "releaseNotes": "https://github.com/ATFutures/gtfs-router/blob/master/NEWS.md",
   "readme": "https://github.com/ATFutures/gtfs-router/blob/main/README.md",
-  "fileSize": "8583.514KB",
-  "contIntegration": [
-    "https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check",
-    "https://codecov.io/gh/ATFutures/gtfs-router"
-  ],
+  "contIntegration": ["https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check", "https://codecov.io/gh/ATFutures/gtfs-router"],
   "developmentStatus": "https://www.repostatus.org/#active",
-  "keywords": [
-    "gtfs",
-    "public-transportation",
-    "router",
-    "gtfs-router",
-    "r-package"
-  ],
-  "relatedLink": "https://CRAN.R-project.org/package=gtfsrouter",
-  "releaseNotes": "https://github.com/ATFutures/gtfs-router/blob/master/NEWS.md"
+  "keywords": ["gtfs", "public-transportation", "router", "gtfs-router", "r-package"],
+  "relatedLink": "https://CRAN.R-project.org/package=gtfsrouter"
 }

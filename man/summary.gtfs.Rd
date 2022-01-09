@@ -22,3 +22,11 @@ summary (g)
 g <- gtfs_timetable (g)
 summary (g) # also summarizes additional timetable information
 }
+\seealso{
+Other additional: 
+\code{\link{go_home}()},
+\code{\link{go_to_work}()},
+\code{\link{plot.gtfs_ischrone}},
+\code{\link{process_gtfs_local}()}
+}
+\concept{additional}

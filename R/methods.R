@@ -4,6 +4,7 @@
 #' @param object A `gtfs` object to be summarised
 #' @param ... ignored here
 #'
+#' @family additional
 #' @examples
 #' berlin_gtfs_to_zip ()
 #' f <- file.path (tempdir (), "vbb.zip")
@@ -30,6 +31,7 @@ summary.gtfs <- function (object, ...) {
 #' @name plot.gtfs_ischrone
 #' @param x object to be plotted
 #' @param ... ignored here
+#' @family additional
 #' @export
 plot.gtfs_isochrone <- function (x, ...) {
     requireNamespace ("sf")

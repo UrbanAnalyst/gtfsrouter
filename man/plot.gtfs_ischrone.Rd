@@ -15,3 +15,11 @@
 \description{
 plot.gtfs_isochrone
 }
+\seealso{
+Other additional: 
+\code{\link{go_home}()},
+\code{\link{go_to_work}()},
+\code{\link{process_gtfs_local}()},
+\code{\link{summary.gtfs}()}
+}
+\concept{additional}
