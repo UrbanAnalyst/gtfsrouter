@@ -1,0 +1,46 @@
+title: gtfsrouter
+
+templates:
+  params:
+    bootswatch: cerulean
+
+reference:
+  - title: Package doc
+    contents:
+    - has_concept("package")
+  - title: The Main Functions
+    contents:
+    - has_concept("main")
+  - title: Data Extraction and Pre-Processing
+    contents:
+    - has_concept("extract")
+  - title: Data Augmentation
+    contents:
+    - has_concept("augment")
+  - title: Additional Functions
+    contents:
+    - has_concept("additional")
+  - title: Package data
+    contents:
+    - has_concept("data")
+
+articles:
+  - title: The gtfsrouter package
+    contents:
+    - gtfsrouter
+    - traveltimes
+    - transfers
+
+navbar:
+  title: gtfsrouter
+  type: default
+  left:
+  - text: Home
+    href: index.html
+  - text: Vignettes
+    href: articles/index.html
+  - text: Functions
+    href: reference/index.html
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/ATFutures/gtfs-router

@@ -1,0 +1,138 @@
+
+# hex sticker script
+
+Images from
+https://www.onlinewebfonts.com/icon/
+
+Modify images in gimp by:
+1. Layer -> Transparent -> Add Alpha Channel
+2. (Fuzzy) Select bits to delete + select -> delete all background
+3. Export as png with no background
+
+Can then convert to eps if desired, but direct loading png below also works the
+same. All black colours were adjusted to gray 0.8
+
+```{r}
+library (ggplot2)
+# trace outline of hexagon from centre bottom point in anti-clockwise direction
+s3 <- sqrt (3) / 2
+border <- data.frame (x = 1 + c (rep (-s3, 2), 0, rep (s3, 2), 0, -s3),
+                      y = 1 + c (0.5, -0.5, -1, -0.5, 0.5, 1, 0.5))
+asp <- diff (range (border$x)) / diff (range (border$y)) # aspect ratio for image
+
+fbus <- "bus.png"
+ftrain <- "train-cut.png"
+ftram <- "tram.png"
+
+dbus0 <- data.frame (x = 0.4, y = 1.35, image = fbus)
+dtrain0 <- data.frame (x = 0.4, y = 0.7, image = ftrain)
+dtram0 <- data.frame (x = 0.4, y = 1.10, image = ftram)
+
+dbus1 <- data.frame (x = 1, y = 0.4, image = fbus)
+dtrain1 <- data.frame (x = 1, y = 1, image = ftrain)
+dtram1 <- data.frame (x = 1, y = 1.63, image = ftram)
+
+dtram2 <- data.frame (x = 1.6, y = 0.60, image = ftram)
+dbus2 <- data.frame (x = 1.6, y = 0.90, image = fbus)
+dtrain2 <- data.frame (x = 1.6, y = 1.3, image = ftrain)
+
+hex <- ggplot() +
+    ggimage::geom_image (aes_ (x = ~x, y = ~y, image = ~image), dbus0,
+                         size = 0.2, asp = 1) +
+    ggimage::geom_image (aes_ (x = ~x, y = ~y, image = ~image), dtrain0,
+                         size = 0.2, asp = 1) +
+    ggimage::geom_image (aes_ (x = ~x, y = ~y, image = ~image), dtram0,
+                         size = 0.2, asp = 1) +
+    ggimage::geom_image (aes_ (x = ~x, y = ~y, image = ~image), dbus1,
+                         size = 0.4, asp = 1) +
+    ggimage::geom_image (aes_ (x = ~x, y = ~y, image = ~image), dtrain1,
+                         size = 0.4, asp = 1) +
+    ggimage::geom_image (aes_ (x = ~x, y = ~y, image = ~image), dtram1,
+                         size = 0.4, asp = 1) +
+    ggimage::geom_image (aes_ (x = ~x, y = ~y, image = ~image), dbus2,
+                         size = 0.2, asp = 1) +
+    ggimage::geom_image (aes_ (x = ~x, y = ~y, image = ~image), dtrain2,
+                         size = 0.2, asp = 1) +
+    ggimage::geom_image (aes_ (x = ~x, y = ~y, image = ~image), dtram2,
+                         size = 0.2, asp = 1) +
+    geom_polygon (aes_ (x = ~x, y = ~y), data = border,
+                 size = 6, fill = NA, color = "#55BB55") +
+    scale_x_continuous (expand = c (0.02, 0.02)) +
+    scale_y_continuous (expand = c (0.02, 0.02))
+print (hex)
+```
+```{r}
+add_one_lab <- function (hex, lab_dat, aes, fs) {
+
+    hex <- hex + ggplot2::geom_text (dat = lab_dat,
+                                     mapping = aes,
+                                     size = fs,
+                                     colour = '#555555',
+                                     family = 'SF Alien Encounters', 
+                                     fontface = 1,
+                                     nudge_y = -0.02,
+                                     nudge_x = 0.02)
+    hex <- hex + ggplot2::geom_text (dat = lab_dat,
+                                     mapping = aes,
+                                     size = fs,
+                                     colour = '#55BB55',
+                                     fontface = 1,
+                                     family = 'SF Alien Encounters')
+    return (hex)
+}
+
+lab_dat <- data.frame (x = 1 - 0.0001,
+                       y = 1.2 + 0.0001,
+                       lab = 'gtfs')
+aes <- ggplot2::aes (x, y, label = lab)
+fs <- 32 # font size
+hex <- add_one_lab (hex, lab_dat, aes, fs)
+
+lab_dat <- data.frame (x = 1 - 0.0001,
+                       y = 0.8 + 0.0001,
+                       lab = 'router')
+aes <- ggplot2::aes (x, y, label = lab)
+fs <- 32 # font size
+hex <- add_one_lab (hex, lab_dat, aes, fs)
+
+
+th <- theme_minimal ()
+th$panel.background <- element_rect (fill = "transparent", size = 0)
+th$line <- element_blank ()
+th$axis.text <- element_blank ()
+th$axis.title <- element_blank ()
+th$plot.margin <- margin (rep (unit (0, 'null'), 4))
+#th$plot.margin <- margin (rep (unit (-0.5, 'line'), 4))
+th$legend.position <- 'none'
+th$axis.ticks.length <- unit (0, 'null')
+
+hex <- hex + th
+print (hex)
+```
+
+
+
+from https://databasefaq.com/index.php/answer/182192/r-fonts-ggplot2-eps-error-using-arial-in-eps-figure-with-extrafont-package
+```{r}
+fname <- "gtfsrouter.eps"
+library(showtext)
+## add the Arial font
+font_add("SF Alien Encounters",
+         regular = "SFAlienEncounters.ttf",
+         bold = "SFAlienEncountersSolid.ttf",
+         italic = "SFAlienEncounters-Italic.ttf",
+         bolditalic = "SFAlienEncountersSolid-Ital.ttf")
+
+setEPS()
+postscript(fname)
+showtext_begin() ## call this function after opening a device
+hex + theme_minimal (base_family = "SF Alien Encounters") +
+    theme (axis.line = element_blank(),
+           axis.text.x = element_blank(),
+           axis.text.y = element_blank(),
+           axis.ticks = element_blank(),
+           axis.title.x = element_blank(),
+           axis.title.y = element_blank())
+dev.off()
+ggsave ("gtfsrouter.png", hex)
+```
