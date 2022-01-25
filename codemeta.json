@@ -7,7 +7,7 @@
   "codeRepository": "https://github.com/ATFutures/gtfs-router",
   "issueTracker": "https://github.com/ATFutures/gtfs-router/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.5.47",
+  "version": "0.0.5.049",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -323,8 +323,17 @@
   "fileSize": "6057.238KB",
   "releaseNotes": "https://github.com/ATFutures/gtfs-router/blob/master/NEWS.md",
   "readme": "https://github.com/ATFutures/gtfs-router/blob/main/README.md",
-  "contIntegration": ["https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check", "https://codecov.io/gh/ATFutures/gtfs-router"],
+  "contIntegration": [
+    "https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check",
+    "https://codecov.io/gh/ATFutures/gtfs-router"
+  ],
   "developmentStatus": "https://www.repostatus.org/#active",
-  "keywords": ["gtfs", "public-transportation", "router", "gtfs-router", "r-package"],
+  "keywords": [
+    "gtfs",
+    "public-transportation",
+    "router",
+    "gtfs-router",
+    "r-package"
+  ],
   "relatedLink": "https://CRAN.R-project.org/package=gtfsrouter"
 }

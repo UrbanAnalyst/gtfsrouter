@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.047</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.049</span>
       </span>
     </div>
 
@@ -72,7 +72,7 @@
       <h1 data-toc-skip>Transfer Tables</h1>
                         <h4 data-toc-skip class="author">Mark Padgham</h4>
             
-            <h4 data-toc-skip class="date">2022-01-14</h4>
+            <h4 data-toc-skip class="date">2022-01-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ATFutures/gtfs-router/blob/HEAD/vignettes/transfers.Rmd" class="external-link"><code>vignettes/transfers.Rmd</code></a></small>
       <div class="hidden name"><code>transfers.Rmd</code></div>
@@ -447,7 +447,7 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span> <span class="op">(</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span> <span class="op">(</span><span class="st">"time difference (minutes)"</span><span class="op">)</span></code></pre></div>
 <p><img src="transfers_files/figure-html/plot1-1.png" width="700"></p>
-<p>And these additional transfer possibilities can make a significant difference to estimated travel times. Note, however, that the travel times only changed for 733 stations, while the value of <code>nsame</code> value recording numbers of stations for which travel times did not change was 4,074. Travel times may also increase as additional transfers may be used to reduce numbers of connecting services required for a particular trip, and the algorithm generally searches for connections with minimal numbers of transfers.</p>
+<p>And these additional transfer possibilities can make a significant difference to estimated travel times. Note, however, that the travel times only changed for 872 stations, while the value of <code>nsame</code> value recording numbers of stations for which travel times did not change was 5,246. Travel times may also increase as additional transfers may be used to reduce numbers of connecting services required for a particular trip, and the algorithm generally searches for connections with minimal numbers of transfers.</p>
 <p>The following code the quantifies the overall effect of these reductions in travel times, measured as the linear reduction in comparison with travel times calculated using the original transfers table provided with the feed. The function also returns the proportion of all stations for which travel times were affected by the modified transfer table.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">transfer_difference</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">gtfs</span>,
@@ -548,7 +548,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
