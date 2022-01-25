@@ -2,10 +2,10 @@
 
 [![R build
 status](https://github.com/atfutures/gtfs-router/workflows/R-CMD-check/badge.svg)](https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check)
-[![codecov](https://codecov.io/gh/ATFutures/gtfs-router/branch/master/graph/badge.svg)](https://codecov.io/gh/ATFutures/gtfs-router)
+[![codecov](https://codecov.io/gh/ATFutures/gtfs-router/branch/main/graph/badge.svg)](https://codecov.io/gh/ATFutures/gtfs-router)
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/gtfsrouter)](https://cran.r-project.org/package=gtfsrouter)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/gtfsrouter)](https://cran.r-project.org/package=gtfsrouter)
 [![CRAN
 Downloads](http://cranlogs.r-pkg.org/badges/grand-total/gtfsrouter?color=orange)](https://cran.r-project.org/package=gtfsrouter)
 
@@ -38,7 +38,7 @@ library(gtfsrouter)
 packageVersion("gtfsrouter")
 ```
 
-    ## [1] '0.0.5.29'
+    ## [1] '0.0.5.35'
 
 ## Main functions
 
@@ -53,12 +53,12 @@ filename <- berlin_gtfs_to_zip()
 print (filename)
 ```
 
-    ## [1] "/tmp/RtmpkOdkEf/vbb.zip"
+    ## [1] "/tmp/RtmpdLhdSc/vbb.zip"
 
 For normal package use, `filename` will specify the name of a local GTFS
 `.zip` file.
 
-### gtfs\_route
+### gtfs_route
 
 Given the name of a GTFS `.zip` file, `filename`, routing is as simple
 as the following code:
@@ -72,20 +72,20 @@ gtfs_route (gtfs,
             start_time = 12 * 3600 + 120) # 12:02 in seconds
 ```
 
-| route\_name | trip\_name       | stop\_name                      | arrival\_time | departure\_time |
-|:------------|:-----------------|:--------------------------------|:--------------|:----------------|
-| U8          | U Paracelsus-Bad | U Schonleinstr. (Berlin)        | 12:04:00      | 12:04:00        |
-| U8          | U Paracelsus-Bad | U Kottbusser Tor (Berlin)       | 12:06:00      | 12:06:00        |
-| U8          | U Paracelsus-Bad | U Moritzplatz (Berlin)          | 12:08:00      | 12:08:00        |
-| U8          | U Paracelsus-Bad | U Heinrich-Heine-Str. (Berlin)  | 12:09:30      | 12:09:30        |
-| U8          | U Paracelsus-Bad | S+U Jannowitzbrucke (Berlin)    | 12:10:30      | 12:10:30        |
-| S5          | S Westkreuz      | S+U Jannowitzbrucke (Berlin)    | 12:15:24      | 12:15:54        |
-| S5          | S Westkreuz      | S+U Alexanderplatz Bhf (Berlin) | 12:17:24      | 12:18:12        |
-| S5          | S Westkreuz      | S Hackescher Markt (Berlin)     | 12:19:24      | 12:19:54        |
-| S5          | S Westkreuz      | S+U Friedrichstr. Bhf (Berlin)  | 12:21:24      | 12:22:12        |
-| S5          | S Westkreuz      | S+U Berlin Hauptbahnhof         | 12:24:06      | 12:24:42        |
+| route_name | trip_name        | stop_name                       | arrival_time | departure_time |
+|:-----------|:-----------------|:--------------------------------|:-------------|:---------------|
+| U8         | U Paracelsus-Bad | U Schonleinstr. (Berlin)        | 12:04:00     | 12:04:00       |
+| U8         | U Paracelsus-Bad | U Kottbusser Tor (Berlin)       | 12:06:00     | 12:06:00       |
+| U8         | U Paracelsus-Bad | U Moritzplatz (Berlin)          | 12:08:00     | 12:08:00       |
+| U8         | U Paracelsus-Bad | U Heinrich-Heine-Str. (Berlin)  | 12:09:30     | 12:09:30       |
+| U8         | U Paracelsus-Bad | S+U Jannowitzbrucke (Berlin)    | 12:10:30     | 12:10:30       |
+| S5         | S Westkreuz      | S+U Jannowitzbrucke (Berlin)    | 12:15:24     | 12:15:54       |
+| S5         | S Westkreuz      | S+U Alexanderplatz Bhf (Berlin) | 12:17:24     | 12:18:12       |
+| S5         | S Westkreuz      | S Hackescher Markt (Berlin)     | 12:19:24     | 12:19:54       |
+| S5         | S Westkreuz      | S+U Friedrichstr. Bhf (Berlin)  | 12:21:24     | 12:22:12       |
+| S5         | S Westkreuz      | S+U Berlin Hauptbahnhof         | 12:24:06     | 12:24:42       |
 
-### gtfs\_traveltimes
+### gtfs_traveltimes
 
 The [`gtfs_traveltimes()`
 function\`](https://atfutures.github.io/gtfs-router/reference/gtfs_traveltimes.html)
@@ -111,19 +111,19 @@ with services departing from the nominated station and start times:
 head (x)
 ```
 
-| start\_time | duration | ntransfers | stop\_id     | stop\_name              | stop\_lon | stop\_lat |
-|:------------|:---------|-----------:|:-------------|:------------------------|----------:|----------:|
-| 12:03:42    | 00:14:12 |          1 | 060003102223 | S Bellevue (Berlin)     |  13.34710 |  52.51995 |
-| 12:00:42    | 00:08:36 |          0 | 060003102224 | S Bellevue (Berlin)     |  13.34710 |  52.51995 |
-| 12:00:42    | 00:15:06 |          1 | 060003103233 | S Tiergarten (Berlin)   |  13.33624 |  52.51396 |
-| 12:00:42    | 00:10:42 |          0 | 060003103234 | S Tiergarten (Berlin)   |  13.33624 |  52.51396 |
-| 12:03:42    | 00:11:18 |          1 | 060003201213 | S+U Berlin Hauptbahnhof |  13.36892 |  52.52585 |
-| 12:00:42    | 00:05:54 |          0 | 060003201214 | S+U Berlin Hauptbahnhof |  13.36892 |  52.52585 |
+| start_time | duration | ntransfers | stop_id      | stop_name               | stop_lon | stop_lat |
+|:-----------|:---------|-----------:|:-------------|:------------------------|---------:|---------:|
+| 12:03:42   | 00:14:12 |          1 | 060003102223 | S Bellevue (Berlin)     | 13.34710 | 52.51995 |
+| 12:00:42   | 00:08:36 |          0 | 060003102224 | S Bellevue (Berlin)     | 13.34710 | 52.51995 |
+| 12:00:42   | 00:15:06 |          1 | 060003103233 | S Tiergarten (Berlin)   | 13.33624 | 52.51396 |
+| 12:00:42   | 00:10:42 |          0 | 060003103234 | S Tiergarten (Berlin)   | 13.33624 | 52.51396 |
+| 12:03:42   | 00:11:18 |          1 | 060003201213 | S+U Berlin Hauptbahnhof | 13.36892 | 52.52585 |
+| 12:00:42   | 00:05:54 |          0 | 060003201214 | S+U Berlin Hauptbahnhof | 13.36892 | 52.52585 |
 
 Further details are provided in a [separate
 vignette](https://atfutures.github.io/gtfs-router/articles/traveltimes.html).
 
-### gtfs\_transfer\_table
+### gtfs_transfer_table
 
 Feeds should include a “transfers.txt” table detailing all possible
 transfers between nearby stations, yet many feeds omit these tables,
@@ -156,7 +156,7 @@ Feeds may include a “frequencies.txt” table which defines “service
 periods”, and overrides any schedule information during the specified
 times. The `gtfsrouter` package includes a function,
 [`frequencies_to_stop_times()`](https://atfutures.github.io/gtfs-router/reference/frequencies_to_stop_times.html),
-to convert “frequencies.txt” tables to equivalent “stop\_times.txt”
+to convert “frequencies.txt” tables to equivalent “stop_times.txt”
 entries, to enable the feed to be used for routing.
 
 ## Contributors
