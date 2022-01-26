@@ -2,7 +2,7 @@
 
 [![R build
 status](https://github.com/atfutures/gtfs-router/workflows/R-CMD-check/badge.svg)](https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check)
-[![codecov](https://codecov.io/gh/ATFutures/gtfs-router/branch/main/graph/badge.svg)](https://codecov.io/gh/ATFutures/gtfs-router)
+[![codecov](https://codecov.io/gh/ATFutures/gtfs-router/branch/main/graph/badge.svg)](https://app.codecov.io/gh/ATFutures/gtfs-router)
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/gtfsrouter)](https://cran.r-project.org/package=gtfsrouter)
@@ -53,7 +53,7 @@ filename <- berlin_gtfs_to_zip()
 print (filename)
 ```
 
-    ## [1] "/tmp/RtmpdLhdSc/vbb.zip"
+    ## [1] "/tmp/Rtmp1crKJM/vbb.zip"
 
 For normal package use, `filename` will specify the name of a local GTFS
 `.zip` file.
@@ -150,7 +150,7 @@ vignette](https://atfutures.github.io/gtfs-router/articles/transfers.html).
 ## Additional Functionality
 
 There are many ways to construct GTFS feeds. For background information,
-see [`gtfs.org`](http://gtfs.org), and particularly their [GTFS
+see [`gtfs.org`](https://gtfs.org), and particularly their [GTFS
 Examples](https://docs.google.com/document/d/16inL5BVcM1aU-_DcFJay_tC6Ni0wPa0nvQEstueG5k4/edit).
 Feeds may include a “frequencies.txt” table which defines “service
 periods”, and overrides any schedule information during the specified
