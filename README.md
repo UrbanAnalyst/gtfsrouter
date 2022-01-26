@@ -161,19 +161,17 @@ entries, to enable the feed to be used for routing.
 
 ## Contributors
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the
-[`allcontributors`
-package](https://github.com/ropenscilabs/allcontributors) following the
-[all-contributors](https://allcontributors.org) specification.
-Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropenscilabs/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
 
 ### Code
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -200,18 +198,15 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ATFutures/gtfs-router/commits?author=polettif">polettif</a>
 </td>
 </tr>
+
 </table>
 
-### Issues
+
+### Issue Authors
 
 <table>
+
 <tr>
-<td align="center">
-<a href="https://github.com/tbuckl">
-<img src="https://avatars.githubusercontent.com/u/98956?u=9580c2ee3c03cbbe44ac8180b0f6a6725b0415f0&v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Atbuckl">tbuckl</a>
-</td>
 <td align="center">
 <a href="https://github.com/sridharraman">
 <img src="https://avatars.githubusercontent.com/u/570692?v=4" width="100px;" alt=""/>
@@ -219,26 +214,8 @@ Contributions of any kind are welcome!
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Asridharraman">sridharraman</a>
 </td>
 <td align="center">
-<a href="https://github.com/tuesd4y">
-<img src="https://avatars.githubusercontent.com/u/13107179?u=cfcc7852d1bed6e2b17fa3f985cebf743c43b299&v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Atuesd4y">tuesd4y</a>
-</td>
-<td align="center">
-<a href="https://github.com/luukvdmeer">
-<img src="https://avatars.githubusercontent.com/u/26540305?u=c576e87314499815cbf698b7781ee58fd1d773e2&v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aluukvdmeer">luukvdmeer</a>
-</td>
-<td align="center">
-<a href="https://github.com/Robinlovelace">
-<img src="https://avatars.githubusercontent.com/u/1825120?u=461318c239e721dc40668e4b0ce6cc47731328ac&v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3ARobinlovelace">Robinlovelace</a>
-</td>
-<td align="center">
 <a href="https://github.com/orlandoandradeb">
-<img src="https://avatars.githubusercontent.com/u/48104481?v=4" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/48104481?u=66d48bb0e7efb664a94eace3472aa6a06960a7f4&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aorlandoandradeb">orlandoandradeb</a>
 </td>
@@ -248,17 +225,15 @@ Contributions of any kind are welcome!
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3AMaxime2506">Maxime2506</a>
 </td>
-</tr>
-<tr>
 <td align="center">
 <a href="https://github.com/chinhqho">
-<img src="https://avatars.githubusercontent.com/u/47441312?v=4" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/47441312?u=577d1dca03b4bb904bb45f1e6205b11144c900cd&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Achinhqho">chinhqho</a>
 </td>
 <td align="center">
 <a href="https://github.com/federicotallis">
-<img src="https://avatars.githubusercontent.com/u/25511806?v=4" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/25511806?u=f074beb69d1984dad98483c5b43a4d42402542dc&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Afedericotallis">federicotallis</a>
 </td>
@@ -274,6 +249,10 @@ Contributions of any kind are welcome!
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aloanho23">loanho23</a>
 </td>
+</tr>
+
+
+<tr>
 <td align="center">
 <a href="https://github.com/dcooley">
 <img src="https://avatars.githubusercontent.com/u/8093396?u=2c8d9162f246d90d433034d212b29a19e0f245c1&v=4" width="100px;" alt=""/>
@@ -286,8 +265,74 @@ Contributions of any kind are welcome!
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Adhersz">dhersz</a>
 </td>
+<td align="center">
+<a href="https://github.com/bernd886">
+<img src="https://avatars.githubusercontent.com/u/56547410?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Abernd886">bernd886</a>
+</td>
+<td align="center">
+<a href="https://github.com/stefan-overkamp">
+<img src="https://avatars.githubusercontent.com/u/55497288?u=946d42a5f3d068a44b43ee8e5f5fd5065d968419&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Astefan-overkamp">stefan-overkamp</a>
+</td>
+<td align="center">
+<a href="https://github.com/luukvdmeer">
+<img src="https://avatars.githubusercontent.com/u/26540305?u=c576e87314499815cbf698b7781ee58fd1d773e2&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aluukvdmeer">luukvdmeer</a>
+</td>
+<td align="center">
+<a href="https://github.com/szaboildi">
+<img src="https://avatars.githubusercontent.com/u/10348398?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aszaboildi">szaboildi</a>
+</td>
+<td align="center">
+<a href="https://github.com/cseveren">
+<img src="https://avatars.githubusercontent.com/u/30906872?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Acseveren">cseveren</a>
+</td>
 </tr>
+
 </table>
+
+
+### Issue Contributors
+
+<table>
+
+<tr>
+<td align="center">
+<a href="https://github.com/tbuckl">
+<img src="https://avatars.githubusercontent.com/u/98956?u=9580c2ee3c03cbbe44ac8180b0f6a6725b0415f0&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Atbuckl">tbuckl</a>
+</td>
+<td align="center">
+<a href="https://github.com/tuesd4y">
+<img src="https://avatars.githubusercontent.com/u/13107179?u=cfcc7852d1bed6e2b17fa3f985cebf743c43b299&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Atuesd4y">tuesd4y</a>
+</td>
+<td align="center">
+<a href="https://github.com/Robinlovelace">
+<img src="https://avatars.githubusercontent.com/u/1825120?u=461318c239e721dc40668e4b0ce6cc47731328ac&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3ARobinlovelace">Robinlovelace</a>
+</td>
+<td align="center">
+<a href="https://github.com/abyrd">
+<img src="https://avatars.githubusercontent.com/u/112871?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Aabyrd">abyrd</a>
+</td>
+</tr>
+
+</table>
+
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
