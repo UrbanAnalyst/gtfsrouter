@@ -65,8 +65,8 @@ multiple entries.}
 \item{max_transfers}{If not \code{NA}, specify a desired maximum number of
 transfers for the route (including but not exceeding this number). This
 parameter may be used to generate alternative routes with fewer transfers,
-although actual numbers of transfers may still exceed this number if a value
-is specified which exceeds the minimal feasible number of transfers.}
+although actual numbers of transfers may still exceed this number if the
+value specified is less than the minimal feasible number of transfers.}
 
 \item{from_to_are_ids}{Set to \code{TRUE} to enable \code{from} and \code{to} parameter to
 specify entries in \code{stop_id} rather than \code{stop_name} column of the \code{stops}
