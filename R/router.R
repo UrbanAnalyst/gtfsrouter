@@ -35,8 +35,8 @@
 #' @param max_transfers If not `NA`, specify a desired maximum number of
 #' transfers for the route (including but not exceeding this number). This
 #' parameter may be used to generate alternative routes with fewer transfers,
-#' although actual numbers of transfers may still exceed this number if a value
-#' is specified which exceeds the minimal feasible number of transfers.
+#' although actual numbers of transfers may still exceed this number if the
+#' value specified is less than the minimal feasible number of transfers.
 #' @param from_to_are_ids Set to `TRUE` to enable `from` and `to` parameter to
 #' specify entries in `stop_id` rather than `stop_name` column of the `stops`
 #' table.
