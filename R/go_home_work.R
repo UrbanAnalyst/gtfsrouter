@@ -104,9 +104,12 @@ go_home_work <- function (home = TRUE, wait, start_time) {
 
     vars <- get_envvars ()
     fname <- get_rds_name (vars$file)
-    if (!file.exists (fname))
-        stop ("This function requires the GTFS data to be pre-processed ",
-              "with 'process_gtfs_local'.")
+    if (!file.exists (fname)) {
+        stop (
+            "This function requires the GTFS data to be pre-processed ",
+            "with 'process_gtfs_local'."
+        )
+    }
 
     gtfs <- readRDS (fname)
     suppressMessages (gtfs <- gtfs_timetable (gtfs))
@@ -117,8 +120,9 @@ go_home_work <- function (home = TRUE, wait, start_time) {
         from <- vars$home
         to <- vars$work
     }
-    if (missing (start_time))
-        start_time <- NULL # nocov
+    if (missing (start_time)) {
+        start_time <- NULL
+    } # nocov
     res <- gtfs_route (gtfs, from = from, to = to, start_time = start_time)
     if (wait > 0) {
         for (i in seq (wait)) {
@@ -133,18 +137,26 @@ get_envvars <- function () {
 
     if (Sys.getenv ("gtfs_home") == "" |
         Sys.getenv ("gtfs_work") == "" |
-        Sys.getenv ("gtfs_data") == "")
-        stop ("This function requires environmental variables gtfs_home, ",
-              "gtfs_work, and gtfs_data; see ?go_home for details.")
+        Sys.getenv ("gtfs_data") == "") {
+        stop (
+            "This function requires environmental variables gtfs_home, ",
+            "gtfs_work, and gtfs_data; see ?go_home for details."
+        )
+    }
 
     f <- (Sys.getenv ("gtfs_data"))
-    if (!file.exists (f))
-        stop ("File ", f, " specified by environmental variable ",
-              "'gtfs_data' does not exist")
+    if (!file.exists (f)) {
+        stop (
+            "File ", f, " specified by environmental variable ",
+            "'gtfs_data' does not exist"
+        )
+    }
 
-    list (home = Sys.getenv ("gtfs_home"),
-          work = Sys.getenv ("gtfs_work"),
-          file = Sys.getenv ("gtfs_data"))
+    list (
+        home = Sys.getenv ("gtfs_home"),
+        work = Sys.getenv ("gtfs_work"),
+        file = Sys.getenv ("gtfs_data")
+    )
 }
 
 get_rds_name <- function (f) {
@@ -178,10 +190,14 @@ process_gtfs_local <- function (expand = 2) {
 
     gtfs$routes <- gtfs$routes [, c ("route_id", "route_short_name")]
     gtfs$stops <- gtfs$stops [, c ("stop_id", "stop_name")]
-    gtfs$transfers <- gtfs$transfers [, c ("from_stop_id", "to_stop_id",
-                                           "min_transfer_time")]
-    gtfs$trips <- gtfs$trips [, c ("route_id", "service_id", "trip_id",
-                                   "trip_headsign")]
+    gtfs$transfers <- gtfs$transfers [, c (
+        "from_stop_id", "to_stop_id",
+        "min_transfer_time"
+    )]
+    gtfs$trips <- gtfs$trips [, c (
+        "route_id", "service_id", "trip_id",
+        "trip_headsign"
+    )]
 
     fname <- get_rds_name (vars$file)
     saveRDS (gtfs, fname)
@@ -194,19 +210,27 @@ reduce_to_local_stops <- function (gtfs, expand = 2) {
         stop_id <- trip_id <- NULL
 
     vars <- get_envvars ()
-    xy <- rbind (gtfs$stops [grep (vars$home, gtfs$stops [, stop_name]),
-                             c ("stop_lon", "stop_lat")],
-                 gtfs$stops [grep (vars$work, gtfs$stops [, stop_name]),
-                             c ("stop_lon", "stop_lat")])
+    xy <- rbind (
+        gtfs$stops [
+            grep (vars$home, gtfs$stops [, stop_name]),
+            c ("stop_lon", "stop_lat")
+        ],
+        gtfs$stops [
+            grep (vars$work, gtfs$stops [, stop_name]),
+            c ("stop_lon", "stop_lat")
+        ]
+    )
     bb <- apply (xy, 2, range)
     bb <- apply (bb, 2, function (i) mean (i) + c (-expand, expand) * diff (i))
     xlim <- bb [, 1]
     ylim <- bb [, 2]
 
-    index <- which (gtfs$stops [, stop_lon] > xlim [1] &
-                    gtfs$stops [, stop_lon] < xlim [2] &
-                    gtfs$stops [, stop_lat] > ylim [1] &
-                    gtfs$stops [, stop_lat] < ylim [2])
+    index <- which (
+        gtfs$stops [, stop_lon] > xlim [1] &
+            gtfs$stops [, stop_lon] < xlim [2] &
+            gtfs$stops [, stop_lat] > ylim [1] &
+            gtfs$stops [, stop_lat] < ylim [2]
+    )
     stop_ids <- gtfs$stops [index, stop_id]
 
     # reduce stops
@@ -218,7 +242,7 @@ reduce_to_local_stops <- function (gtfs, expand = 2) {
 
     # reduce transfers
     index <- which (gtfs$transfers [, from_stop_id] %in% stop_ids |
-                    gtfs$transfers [, to_stop_id] %in% stop_ids)
+        gtfs$transfers [, to_stop_id] %in% stop_ids)
     gtfs$transfers <- gtfs$transfers [index, ]
 
     # get reduced trip_ids from stop_times
