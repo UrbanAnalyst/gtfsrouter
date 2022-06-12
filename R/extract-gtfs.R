@@ -45,18 +45,23 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
     e <- extract_objs_into_env (flist, quiet = quiet)
 
     if (nrow (e$routes) == 0 | nrow (e$stops) == 0 |
-        nrow (e$stop_times) == 0 | nrow (e$trips) == 0)
-        stop (filename, " does not appear to be a GTFS file; ",
-              "it must minimally contain\n  ",
-              paste (need_these_files, collapse = ", "))
+        nrow (e$stop_times) == 0 | nrow (e$trips) == 0) {
+        stop (
+            filename, " does not appear to be a GTFS file; ",
+            "it must minimally contain\n  ",
+            paste (need_these_files, collapse = ", ")
+        )
+    }
 
     e$stops <- convert_stops (e$stops, stn_suffixes)
 
     e$stop_times <- convert_stop_times (e$stop_times, stn_suffixes, quiet)
 
     if (!missing_transfers) {
-        e$transfers <- convert_transfers (e$transfers, e$stop_times,
-                                          min_transfer_time, quiet)
+        e$transfers <- convert_transfers (
+            e$transfers, e$stop_times,
+            min_transfer_time, quiet
+        )
     }
 
     e$trips <- e$trips [, trip_id := paste0 (trip_id)]
@@ -74,43 +79,55 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
 
 unzip_gtfs <- function (filename, quiet = FALSE) {
 
-    #flist <- utils::unzip (filename, list = TRUE)
+    # flist <- utils::unzip (filename, list = TRUE)
     # the fread(cmd = paste0 ("unzip -p ..")) stuff is not portable, and has
     # issues on windows, so unzip all into tempdir and work from there
 
-    if (!quiet)
+    if (!quiet) {
         message (cli::symbol$play, cli::col_green (" Unzipping GTFS archive"),
-                 appendLF = FALSE)
+            appendLF = FALSE
+        )
+    }
 
     flist <- utils::unzip (filename, exdir = tempdir ())
 
-    if (!quiet)
-        message ("\r", cli::col_green (cli::symbol$tick,
-                                       " Unzipped GTFS archive  "))
+    if (!quiet) {
+        message ("\r", cli::col_green (
+            cli::symbol$tick,
+            " Unzipped GTFS archive  "
+        ))
+    }
 
     return (flist)
 }
 
 check_extract_pars <- function (filename, stn_suffixes) {
 
-    if (is.null (filename))
+    if (is.null (filename)) {
         stop ("filename must be given")
-    if (!file.exists (filename))
+    }
+    if (!file.exists (filename)) {
         stop ("filename ", filename, " does not exist")
-    if (!(is.null (stn_suffixes) | is.character (stn_suffixes)))
+    }
+    if (!(is.null (stn_suffixes) | is.character (stn_suffixes))) {
         stop ("stn_suffixes must be a character vector")
+    }
 
 }
 
 all_files_exist <- function (filename, flist, need_these_files) {
 
-    checks <- vapply (need_these_files, function (i)
-                      any (grepl (paste0 (i, ".txt"), flist)), logical (1))
+    checks <- vapply (need_these_files, function (i) {
+        any (grepl (paste0 (i, ".txt"), flist))
+    }, logical (1))
 
-    if (!all (checks))
-        stop (filename, " does not appear to be a GTFS file; ",
-              "it must minimally contain\n  ",
-              paste (need_these_files, collapse = ", "))
+    if (!all (checks)) {
+        stop (
+            filename, " does not appear to be a GTFS file; ",
+            "it must minimally contain\n  ",
+            paste (need_these_files, collapse = ", ")
+        )
+    }
 }
 
 type_missing <- function (flist, type) {
@@ -119,10 +136,13 @@ type_missing <- function (flist, type) {
 
     if (!any (grepl (type, flist))) {
         msg <- paste ("This feed contains no", type)
-        if (type == "transfers.txt")
-            msg <- paste (msg,
-                          "\n  A transfers.txt table may be constructed",
-                          "with the 'gtfs_transfer_table' function")
+        if (type == "transfers.txt") {
+            msg <- paste (
+                msg,
+                "\n  A transfers.txt table may be constructed",
+                "with the 'gtfs_transfer_table' function"
+            )
+        }
         warning (msg, call. = FALSE)
         ret <- TRUE
     }
@@ -132,20 +152,22 @@ type_missing <- function (flist, type) {
 
 extract_objs_into_env <- function (flist, quiet = FALSE) {
 
-    if (!quiet)
+    if (!quiet) {
         message (cli::symbol$play, cli::col_green (" Extracting GTFS feed"),
-                 appendLF = FALSE)
+            appendLF = FALSE
+        )
+    }
 
     # Get types of all fields according to standards, via fns defined in
     # gtfs-reference-fields.R (see #74)
     fields <- gtfs_reference_fields ()
     types <- gtfs_reference_types ()
     fields <- lapply (fields, function (i) {
-                          n <- names (i)
-                          these_types <- do.call (rbind, i) [, 1]
-                          ret <- types [match (these_types, names (types))]
-                          names (ret) <- n
-                          return (ret)  })
+        n <- names (i)
+        these_types <- do.call (rbind, i) [, 1]
+        ret <- types [match (these_types, names (types))]
+        names (ret) <- n
+        return (ret)  })
 
     e <- new.env ()
     for (f in seq (flist)) {
@@ -154,24 +176,30 @@ extract_objs_into_env <- function (flist, quiet = FALSE) {
         fname <- tools::file_path_sans_ext (basename (flist [f]))
         these_fields <- fields [[fname]]
         fhdr <- data.table::fread (flist [f],
-                                   integer64 = "character",
-                                   nrows = 1)
+            integer64 = "character",
+            nrows = 1
+        )
         classes <- these_fields [which (names (these_fields) %in% names (fhdr))]
 
         fout <- data.table::fread (flist [f],
-                                   integer64 = "character",
-                                   showProgress = FALSE,
-                                   colClasses = classes)
+            integer64 = "character",
+            showProgress = FALSE,
+            colClasses = classes
+        )
 
         assign (gsub (".txt", "", basename (flist [f])),
-                value = fout,
-                envir = e)
+            value = fout,
+            envir = e
+        )
         chk <- file.remove (flist [f]) # nolint
     }
 
-    if (!quiet)
-        message ("\r", cli::col_green (cli::symbol$tick,
-                                       " Extracted GTFS feed "))
+    if (!quiet) {
+        message ("\r", cli::col_green (
+            cli::symbol$tick,
+            " Extracted GTFS feed "
+        ))
+    }
 
     return (e)
 }
@@ -183,9 +211,10 @@ remove_terminal_sn <- function (stop_ids, stn_suffixes) {
     if (!is.null (stn_suffixes)) {
         for (i in stn_suffixes) {
             index <- grep (paste0 (i, "$"), stop_ids)
-            if (length (index) > 0)
+            if (length (index) > 0) {
                 stop_ids [index] <-
                     gsub (paste0 (i, "$"), "", stop_ids [index])
+            }
         }
     }
     # nocov end
@@ -211,8 +240,8 @@ convert_stops <- function (stops, stn_suffixes) {
 
     stops <- rectify_col_names (stops, "stop_id")
 
-    if (storage.mode(stops$stop_id) != "character") {
-        stops$stop_id <- as.character(stops$stop_id)
+    if (storage.mode (stops$stop_id) != "character") {
+        stops$stop_id <- as.character (stops$stop_id)
     }
 
     stops [, stop_id := remove_terminal_sn (stops [, stop_id], stn_suffixes)]
@@ -233,21 +262,28 @@ convert_stop_times <- function (stop_times, stn_suffixes, quiet) {
     stop_times <- rectify_col_names (stop_times, "departure_time")
     stop_times <- rectify_col_names (stop_times, "trip_id")
 
-    stop_times [, stop_id := remove_terminal_sn (stop_times [, stop_id],
-                                                 stn_suffixes)]
+    stop_times [, stop_id := remove_terminal_sn (
+        stop_times [, stop_id],
+        stn_suffixes
+    )]
 
-    if (!quiet)
+    if (!quiet) {
         message (cli::symbol$play,
-                 cli::col_green (" Converting stop times to seconds"),
-                 appendLF = FALSE)
+            cli::col_green (" Converting stop times to seconds"),
+            appendLF = FALSE
+        )
+    }
 
     stop_times [, arrival_time := rcpp_time_to_seconds (arrival_time)]
     stop_times [, departure_time := rcpp_time_to_seconds (departure_time)]
     stop_times [, trip_id := paste0 (trip_id)]
 
-    if (!quiet)
-        message ("\r", cli::col_green (cli::symbol$tick,
-                                       " Converted stop times to seconds "))
+    if (!quiet) {
+        message ("\r", cli::col_green (
+            cli::symbol$tick,
+            " Converted stop times to seconds "
+        ))
+    }
 
     return (stop_times)
 }
@@ -260,25 +296,30 @@ convert_transfers <- function (transfers,
     # suppress no visible binding notes:
     stop_id <- from_stop_id <- to_stop_id <- NULL
 
-    if (!quiet)
+    if (!quiet) {
         message (cli::symbol$play,
-                 cli::col_green (" Converting transfer times to seconds"),
-                 appendLF = FALSE)
+            cli::col_green (" Converting transfer times to seconds"),
+            appendLF = FALSE
+        )
+    }
 
     transfer <- stop_times [, stop_id] %in% transfers [, from_stop_id]
-    #stop_times <-
-    #stop_times [, transfer := transfer] [order (departure_time)]
+    # stop_times <-
+    # stop_times [, transfer := transfer] [order (departure_time)]
     stop_times <- stop_times [, transfer := transfer]
 
     index <- which (transfers [, from_stop_id] %in% stop_times [, stop_id] &
-                    transfers [, to_stop_id] %in% stop_times [, stop_id])
+        transfers [, to_stop_id] %in% stop_times [, stop_id])
     transfers <- transfers [index, ]
     transfers [, min_transfer_time :=
-               replace (min_transfer_time, is.na (min_transfer_time), 0)]
+        replace (min_transfer_time, is.na (min_transfer_time), 0)]
 
-    if (!quiet)
-        message ("\r", cli::col_green (cli::symbol$tick,
-                                       " Converted transfer times to seconds "))
+    if (!quiet) {
+        message ("\r", cli::col_green (
+            cli::symbol$tick,
+            " Converted transfer times to seconds "
+        ))
+    }
 
     return (transfers)
 }

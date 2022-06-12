@@ -19,7 +19,7 @@ with next available service."><!-- mathjax --><script src="https://cdnjs.cloudfl
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.056</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.059</span>
       </span>
     </div>
 
@@ -123,59 +123,59 @@ largely unavoidable.</p>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span> <span class="op">(</span><span class="st">"gtfs_data"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="process_gtfs_local.html">process_gtfs_local</a></span> <span class="op">(</span><span class="op">)</span> <span class="co"># If not already done</span></span>
 <span class="r-in"><span class="fu">go_home</span> <span class="op">(</span>start_time <span class="op">=</span> <span class="st">"12:00"</span><span class="op">)</span> <span class="co"># next available service after 12:00</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    route_name       trip_name                        stop_name arrival_time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          U8 S+U Hermannstr. S+U Alexanderplatz (Berlin) [U8]     12:03:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          U8 S+U Hermannstr.     S+U Jannowitzbrucke (Berlin)     12:05:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          U8 S+U Hermannstr.   U Heinrich-Heine-Str. (Berlin)     12:06:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          U8 S+U Hermannstr.           U Moritzplatz (Berlin)     12:08:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          U8 S+U Hermannstr.        U Kottbusser Tor (Berlin)     12:10:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          U8 S+U Hermannstr.         U Schonleinstr. (Berlin)     12:11:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7          U8 S+U Hermannstr.          U Hermannplatz (Berlin)     12:13:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8          U8 S+U Hermannstr.            U Boddinstr. (Berlin)     12:15:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9          U8 S+U Hermannstr.             U Leinestr. (Berlin)     12:16:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10         U8 S+U Hermannstr.         S+U Hermannstr. (Berlin)     12:17:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11        S41  S Sudkreuz Bhf         S+U Hermannstr. (Berlin)     12:19:24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12        S41  S Sudkreuz Bhf           S+U Tempelhof (Berlin)     12:23:12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    departure_time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        12:03:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        12:05:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        12:06:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        12:08:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        12:10:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        12:11:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        12:13:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8        12:15:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        12:16:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       12:17:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       12:19:54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       12:23:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    route_name        trip_name                              stop_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          S3    S Spandau Bhf        S+U Alexanderplatz Bhf (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          S3    S Spandau Bhf            S Hackescher Markt (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          S3    S Spandau Bhf         S+U Friedrichstr. Bhf (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          U6 U Alt-Mariendorf         S+U Friedrichstr. Bhf (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          U6 U Alt-Mariendorf           U Franzosische Str. (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          U6 U Alt-Mariendorf                  U Stadtmitte (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          U6 U Alt-Mariendorf U Kochstr./Checkpoint Charlie (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          U6 U Alt-Mariendorf              U Hallesches Tor (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          U6 U Alt-Mariendorf                 U Mehringdamm (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         U6 U Alt-Mariendorf        U Platz der Luftbrucke (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11         U6 U Alt-Mariendorf                  U Paradestr. (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12         U6 U Alt-Mariendorf                 S+U Tempelhof (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    arrival_time departure_time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      12:02:54       12:03:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      12:04:54       12:05:24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      12:06:54       12:07:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      12:14:00       12:14:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      12:15:00       12:15:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      12:16:30       12:16:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      12:17:30       12:17:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      12:19:00       12:19:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      12:20:30       12:21:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     12:23:00       12:23:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     12:24:30       12:24:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     12:26:00       12:26:00</span>
 <span class="r-in"><span class="fu">go_home</span> <span class="op">(</span><span class="fl">3</span>, start_time <span class="op">=</span> <span class="st">"12:00"</span><span class="op">)</span> <span class="co"># Wait until third service after that</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    route_name       trip_name                        stop_name arrival_time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          U8 S+U Hermannstr. S+U Alexanderplatz (Berlin) [U8]     12:13:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          U8 S+U Hermannstr.     S+U Jannowitzbrucke (Berlin)     12:15:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          U8 S+U Hermannstr.   U Heinrich-Heine-Str. (Berlin)     12:16:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          U8 S+U Hermannstr.           U Moritzplatz (Berlin)     12:18:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          U8 S+U Hermannstr.        U Kottbusser Tor (Berlin)     12:20:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          U8 S+U Hermannstr.         U Schonleinstr. (Berlin)     12:21:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7          U8 S+U Hermannstr.          U Hermannplatz (Berlin)     12:23:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8          U8 S+U Hermannstr.            U Boddinstr. (Berlin)     12:25:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9          U8 S+U Hermannstr.             U Leinestr. (Berlin)     12:26:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10         U8 S+U Hermannstr.         S+U Hermannstr. (Berlin)     12:27:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11        S41  S Sudkreuz Bhf         S+U Hermannstr. (Berlin)     12:29:24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12        S41  S Sudkreuz Bhf           S+U Tempelhof (Berlin)     12:33:12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    departure_time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        12:13:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        12:15:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        12:16:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        12:18:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        12:20:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        12:21:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        12:23:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8        12:25:00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        12:26:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       12:27:30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       12:29:54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       12:33:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    route_name             trip_name                        stop_name</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          U8       S+U Hermannstr. S+U Alexanderplatz (Berlin) [U8]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          U8       S+U Hermannstr.     S+U Jannowitzbrucke (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          U8       S+U Hermannstr.   U Heinrich-Heine-Str. (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          U8       S+U Hermannstr.           U Moritzplatz (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          U8       S+U Hermannstr.        U Kottbusser Tor (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          U8       S+U Hermannstr.         U Schonleinstr. (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          U8       S+U Hermannstr.          U Hermannplatz (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          U8       S+U Hermannstr.            U Boddinstr. (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          U8       S+U Hermannstr.             U Leinestr. (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         U8       S+U Hermannstr.         S+U Hermannstr. (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11        S46 S+U Gesundbrunnen Bhf         S+U Hermannstr. (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12        S46 S+U Gesundbrunnen Bhf           S+U Tempelhof (Berlin)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    arrival_time departure_time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1      12:18:30       12:18:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      12:20:00       12:20:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      12:21:30       12:21:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      12:23:00       12:23:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5      12:25:00       12:25:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      12:26:30       12:26:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7      12:28:30       12:28:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      12:30:00       12:30:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9      12:31:30       12:31:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10     12:32:30       12:32:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11     12:34:54       12:35:24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12     12:38:42       12:39:12</span>
 <span class="r-in"><span class="co"># Generally, `start_time` will not be specified, in which case `go_home` will</span></span>
 <span class="r-in"><span class="co"># return next available service from current system time, so calls will</span></span>
 <span class="r-in"><span class="co"># generally be as simple as:</span></span>
