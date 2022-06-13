@@ -15,15 +15,20 @@
 #' @export
 summary.gtfs <- function (object, ...) {
     msg <- "A gtfs "
-    if (attr (object, "filtered"))
+    if (attr (object, "filtered")) {
         msg <- paste0 (msg, "timetable ")
-    message (msg, "object with the following tables and ",
-             "respective numbers of entries in each:")
+    }
+    message (
+        msg, "object with the following tables and ",
+        "respective numbers of entries in each:"
+    )
     print (vapply (object, nrow, numeric (1)))
-    if (!"transfers" %in% names (object))
+    if (!"transfers" %in% names (object)) {
         message ("Note: This feed contains no transfers.txt table")
-    if (!"calendar" %in% names (object))
+    }
+    if (!"calendar" %in% names (object)) {
         message ("Note: This feed contains no calendar.txt table")
+    }
 }
 
 #' plot.gtfs_isochrone
@@ -44,9 +49,15 @@ plot.gtfs_isochrone <- function (x, ...) {
     m <- leafem::addFeatures (m, x$hull, color = "orange", alpha.regions = 0.2)
     m <- leafem::addFeatures (m, x$routes, colour = "blue")
     m <- leafem::addFeatures (m, x$start_point, radius = 5, color = "green")
-    m <- leafem::addFeatures (m, x$end_points, radius = 4, color = "red",
-                               fill = TRUE, fillOpacity = 0.8,
-                               fillColor = "red")
+    m <- leafem::addFeatures (
+        m,
+        x$end_points,
+        radius = 4,
+        color = "red",
+        fill = TRUE,
+        fillOpacity = 0.8,
+        fillColor = "red"
+    )
 
     print (m)
     invisible (m)
