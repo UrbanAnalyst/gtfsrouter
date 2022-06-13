@@ -33,16 +33,20 @@ gtfs_transfer_table <- function (gtfs,
                                  network_times = FALSE,
                                  quiet = FALSE) {
 
-    if (is.null (network) & network_times)
+    if (is.null (network) & network_times) {
         network <- dl_net (gtfs)
+    }
 
     transfers <- get_transfer_list (gtfs, d_limit)
 
     if (network_times) {
 
-        if (!quiet)
-            message ("The following stages may take some time. ",
-                     "Please be patient.")
+        if (!quiet) {
+            message (
+                "The following stages may take some time. ",
+                "Please be patient."
+            )
+        }
 
         transfer_times <- get_network_times (network, transfers, quiet)
 
@@ -50,8 +54,12 @@ gtfs_transfer_table <- function (gtfs,
 
         xyf <- transfers [, c ("from_lon", "from_lat")]
         xyt <- transfers [, c ("to_lon", "to_lat")]
-        transfer_times <- geodist::geodist (xyf, xyt, paired = TRUE,
-                                            measure = "haversine")
+        transfer_times <- geodist::geodist (
+            xyf,
+            xyt,
+            paired = TRUE,
+            measure = "haversine"
+        )
         # use max speed of 4km/h, as for OpenTripPlanner pedestrian speed
         # -> 4000 / 3600 = 1.11 m / s
         transfer_times <- transfer_times / 1.111111
@@ -59,13 +67,17 @@ gtfs_transfer_table <- function (gtfs,
 
     transfer_times [transfer_times < min_transfer_time] <- min_transfer_time
 
-    transfers <- data.table::data.table (from_stop_id = transfers$from,
-                                 to_stop_id = transfers$to,
-                                 transfer_type = 2,
-                                 min_transfer_time = ceiling (transfer_times))
+    transfers <- data.table::data.table (
+        from_stop_id = transfers$from,
+        to_stop_id = transfers$to,
+        transfer_type = 2,
+        min_transfer_time = ceiling (transfer_times)
+    )
 
-    index <- which (!duplicated (transfers [, c ("from_stop_id",
-                                                 "to_stop_id")]))
+    index <- which (!duplicated (transfers [, c (
+        "from_stop_id",
+        "to_stop_id"
+    )]))
 
     gtfs <- append_to_transfer_table (gtfs, transfers [index, ])
 
@@ -83,8 +95,9 @@ dl_net <- function (gtfs) {
         requireNamespace ("dodgr")
         net <- dodgr::dodgr_streetnet_sc (pts = stops)
         saveRDS (net, file = net_name)
-    } else
+    } else {
         net <- readRDS (net_name)
+    }
 
     return (net)
 }
@@ -95,39 +108,45 @@ get_transfer_list <- function (gtfs, d_limit) {
     xy <- round (gtfs$stops [, c ("stop_lon", "stop_lat")], digits = 6)
     xy_char <- paste0 (xy$stop_lon, "==", xy$stop_lat)
     index <- which (!duplicated (xy_char))
-    index_back <- lapply (xy_char [index], function (i)
-                          which (xy_char == i))
+    index_back <- lapply (xy_char [index], function (i) {
+        which (xy_char == i)
+    })
 
     stops <- gtfs$stops
 
     requireNamespace ("geodist")
     d <- geodist::geodist (stops [index, c ("stop_lon", "stop_lat")],
-                           measure = "haversine")
+        measure = "haversine"
+    )
 
     nbs <- apply (d, 1, function (i) {
-                      j <- which (i <= d_limit & !is.na (i))
-                      ret <- integer (0)
-                      if (length (j) > 0) {
-                          ret <- unlist (lapply (j, function (k)
-                                                 index_back [[k]]))
-                      }
-                      return (ret) })
+        j <- which (i <= d_limit & !is.na (i))
+        ret <- integer (0)
+        if (length (j) > 0) {
+            ret <- unlist (lapply (j, function (k) {
+                index_back [[k]]
+            }))
+        }
+        return (ret) })
 
     nbs <- lapply (seq_along (nbs), function (i) {
-                   out <- c (nbs [[i]], index_back [[i]])
-                   out <- sort (unique (out))
-                   return (out [which (!out == i)])
-                      })
+        out <- c (nbs [[i]], index_back [[i]])
+        out <- sort (unique (out))
+        return (out [which (!out == i)])
+    })
     index_back <- match (xy_char, xy_char [index])
     transfers <- nbs [index_back]
 
     lens <- vapply (transfers, length, integer (1))
     for (i in which (lens > 0)) {
-        transfers [[i]] <- cbind (from = gtfs$stops$stop_id [i],
-                                  to = gtfs$stops$stop_id [transfers [[i]]])
+        transfers [[i]] <- cbind (
+            from = gtfs$stops$stop_id [i],
+            to = gtfs$stops$stop_id [transfers [[i]]]
+        )
     }
     transfers <- data.frame (do.call (rbind, transfers),
-                             stringsAsFactors = FALSE)
+        stringsAsFactors = FALSE
+    )
 
     index <- match (transfers$from, stops$stop_id)
     transfers$from_lon <- stops$stop_lon [index]
@@ -143,9 +162,12 @@ get_transfer_list <- function (gtfs, d_limit) {
 get_network_times <- function (network, transfers, quiet = FALSE) {
 
     # convert net to contracted dodgr form:
-    if (!quiet)
-        message (cli::symbol$play,
-                 cli::col_green (" Contracting street network ... "))
+    if (!quiet) {
+        message (
+            cli::symbol$play,
+            cli::col_green (" Contracting street network ... ")
+        )
+    }
 
     requireNamespace ("dodgr")
     dodgr::dodgr_cache_off ()
@@ -162,19 +184,29 @@ get_network_times <- function (network, transfers, quiet = FALSE) {
     netc <- dodgr::dodgr_contract_graph (net, verts = from_to)
 
     if (!quiet) {
-        message (cli::col_green (cli::symbol$tick, " Contracted street network"))
+        message (cli::col_green (
+            cli::symbol$tick,
+            " Contracted street network"
+        ))
 
-        message (cli::symbol$play,
-                 cli::col_green (" Calculating transfer times between ",
-                                 length (from_to), " pairs of stops"))
+        message (
+            cli::symbol$play,
+            cli::col_green (
+                " Calculating transfer times between ",
+                length (from_to), " pairs of stops"
+            )
+        )
     }
 
     x <- dodgr::dodgr_times (netc, from = from_to, to = from_to)
 
-    if (!quiet)
-        message (cli::col_green (cli::symbol$tick,
-                                 " Calculated transfer times between ",
-                                 length (from_to), " pairs of stops"))
+    if (!quiet) {
+        message (cli::col_green (
+            cli::symbol$tick,
+            " Calculated transfer times between ",
+            length (from_to), " pairs of stops"
+        ))
+    }
 
     from_index <- match (from_ids, from_to)
     to_index <- match (to_ids, from_to)
@@ -208,12 +240,16 @@ append_to_transfer_table <- function (gtfs, transfers) {
     tr_old <- gtfs$transfers
     tr3_index <- which (tr_old$transfer_type == 3)
     if (length (tr3_index) > 0) {
-        from_to_old <- paste0 (tr_old$from_stop_id [tr3_index],
-                               "==",
-                               tr_old$to_stop_id [tr3_index])
-        from_to_new <- paste0 (transfers$from_stop_id,
-                               "==",
-                               transfers$to_stop_id)
+        from_to_old <- paste0 (
+            tr_old$from_stop_id [tr3_index],
+            "==",
+            tr_old$to_stop_id [tr3_index]
+        )
+        from_to_new <- paste0 (
+            transfers$from_stop_id,
+            "==",
+            transfers$to_stop_id
+        )
         transfers <- transfers [which (!from_to_new %in% from_to_old), ]
     }
 
