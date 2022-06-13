@@ -1,10 +1,19 @@
 
 headway_times <- function (gtfs, start_stns, end_stns, start_time) {
+
     from_to_are_ids <- include_ids <- FALSE # nolint
     max_transfers <- .Machine$integer.max
-    route <- rcpp_csa (gtfs$timetable, gtfs$transfers,
-                       nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
-                       start_stns, end_stns, start_time, max_transfers)
+
+    route <- rcpp_csa (
+        gtfs$timetable,
+        gtfs$transfers,
+        nrow (gtfs$stop_ids),
+        nrow (gtfs$trip_ids),
+        start_stns, end_stns,
+        start_time,
+        max_transfers
+    )
+
     return (range (route$time))
 }
 
@@ -29,18 +38,23 @@ gtfs_route_headway <- function (gtfs, from, to, quiet = FALSE) {
 
     start_time <- 0
     heads <- NULL
-    if (!quiet)
+    if (!quiet) {
         pb <- utils::txtProgressBar (style = 3)
+    }
+
     while (start_time < (24 * 3600)) {
+
         gtfs$timetable <- gtfs$timetable [departure_time >= start_time, ]
         times <- headway_times (gtfs, start_stns, end_stns, start_time)
         heads <- rbind (heads, unname (times))
         start_time <- times [1] + 1
-        if (!quiet)
+        if (!quiet) {
             utils::setTxtProgressBar (pb, start_time / (24 * 3600))
+        }
     }
-    if (!quiet)
+    if (!quiet) {
         close (pb)
+    }
 
     # reduce down to latest departures for any duplicated arrival times
     # and then extract only the corresponding departure times
