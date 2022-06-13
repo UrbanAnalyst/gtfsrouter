@@ -184,7 +184,10 @@ get_network_times <- function (network, transfers, quiet = FALSE) {
     netc <- dodgr::dodgr_contract_graph (net, verts = from_to)
 
     if (!quiet) {
-        message (cli::col_green (cli::symbol$tick, " Contracted street network"))
+        message (cli::col_green (
+            cli::symbol$tick,
+            " Contracted street network"
+        ))
 
         message (
             cli::symbol$play,
