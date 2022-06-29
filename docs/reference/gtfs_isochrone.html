@@ -18,7 +18,7 @@ instead."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.072</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.083</span>
       </span>
     </div>
 
@@ -58,19 +58,19 @@ instead.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gtfs_isochrone</span><span class="op">(</span>
-  <span class="va">gtfs</span>,
-  <span class="va">from</span>,
-  <span class="va">start_time</span>,
-  <span class="va">end_time</span>,
-  day <span class="op">=</span> <span class="cn">NULL</span>,
-  from_is_id <span class="op">=</span> <span class="cn">FALSE</span>,
-  grep_fixed <span class="op">=</span> <span class="cn">TRUE</span>,
-  route_pattern <span class="op">=</span> <span class="cn">NULL</span>,
-  minimise_transfers <span class="op">=</span> <span class="cn">FALSE</span>,
-  hull_alpha <span class="op">=</span> <span class="fl">0.1</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gtfs_isochrone</span><span class="op">(</span></span>
+<span>  <span class="va">gtfs</span>,</span>
+<span>  <span class="va">from</span>,</span>
+<span>  <span class="va">start_time</span>,</span>
+<span>  <span class="va">end_time</span>,</span>
+<span>  day <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  from_is_id <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  grep_fixed <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  route_pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  minimise_transfers <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  hull_alpha <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -78,32 +78,46 @@ instead.</p>
     <dl><dt>gtfs</dt>
 <dd><p>A set of GTFS data returned from <a href="extract_gtfs.html">extract_gtfs</a> or, for more
 efficient queries, pre-processed with <a href="gtfs_timetable.html">gtfs_timetable</a>.</p></dd>
+
+
 <dt>from</dt>
 <dd><p>Name, ID, or approximate (lon, lat) coordinates of start station
 (as <code>stop_name</code> or <code>stop_id</code> entry in the <code>stops</code> table, or a vector of two
 numeric values).</p></dd>
+
+
 <dt>start_time</dt>
 <dd><p>Desired departure time at <code>from</code> station, either in seconds
 after midnight, a vector of two or three integers (hours, minutes) or (hours,
 minutes, seconds), an object of class <a href="https://rdrr.io/r/base/difftime.html" class="external-link">difftime</a>, <span class="pkg">hms</span>, or
 <span class="pkg">lubridate</span>.</p></dd>
+
+
 <dt>end_time</dt>
 <dd><p>End time to calculate isochrone</p></dd>
+
+
 <dt>day</dt>
 <dd><p>Day of the week on which to calculate route, either as an
 unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
 between 1 = Sunday and 7 = Saturday. If not given, the current day will be
 used. (Not used if <code>gtfs</code> has already been prepared with
 <a href="gtfs_timetable.html">gtfs_timetable</a>.)</p></dd>
+
+
 <dt>from_is_id</dt>
 <dd><p>Set to <code>TRUE</code> to enable <code>from</code> parameter to specify entry
 in <code>stop_id</code> rather than <code>stop_name</code> column of the <code>stops</code> table (same as
 <code>from_to_are_ids</code> parameter of <a href="gtfs_route.html">gtfs_route</a>).</p></dd>
+
+
 <dt>grep_fixed</dt>
 <dd><p>If <code>FALSE</code>, match station names (when passed as character
 string) with <code>grep(..., fixed = FALSE)</code>, to allow use of <code>grep</code> expressions.
 This is useful to refine matches in cases where desired stations may match
 multiple entries.</p></dd>
+
+
 <dt>route_pattern</dt>
 <dd><p>Using only those routes matching given pattern, for
 example, "^U" for routes starting with "U" (as commonly used for underground
@@ -112,25 +126,36 @@ routes except those matching the pattern -- prepend the value with "!"; for
 example "!^U" will include all services except those starting with "U". (This
 parameter is not used at all if <code>gtfs</code> has already been prepared with
 <a href="gtfs_timetable.html">gtfs_timetable</a>.)</p></dd>
+
+
 <dt>minimise_transfers</dt>
 <dd><p>If <code>TRUE</code>, isochrones are calculated with
 minimal-transfer connections to each end point, even if those connections are
 slower than alternative connections with transfers.</p></dd>
+
+
 <dt>hull_alpha</dt>
 <dd><p>alpha value of non-convex hulls returned as part of result
 (see ?alphashape::ashape for details).</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Set to <code>TRUE</code> to suppress screen messages (currently just
 regarding timetable construction).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>An object of class <code>gtfs_isochrone</code>, including <span class="pkg">sf</span>-formatted
+    
+
+<p>An object of class <code>gtfs_isochrone</code>, including <span class="pkg">sf</span>-formatted
 points representing the <code>from</code> station (<code>start_point</code>), the terminal end
 stations (<code>end_points</code>), and all intermediate stations (<code>mid_points</code>) each
 with the earliest possible arrival time, along with lines representing the
 individual routes. A non-convex ("alpha") hull is also returned (as an
-<span class="pkg">sf</span><code>POLYGON</code> object), including measures of area and "elongation",
+<span class="pkg">sf</span></p>
+<p></p>
+<p><code>POLYGON</code> object), including measures of area and "elongation",
 which equals zero for a circle, and increases towards one for more elongated
 shapes.</p>
     </div>
@@ -149,10 +174,10 @@ of all stations reachable to the specified <code>end_time</code>.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp3CzGvo/vbb.zip"</span>
-<span class="r-in"><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpO3K7To/vbb.zip"</span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Unzipping GTFS archive</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Unzipped GTFS archive  </span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Extracting GTFS feed</span></span>
@@ -161,19 +186,19 @@ of all stations reachable to the specified <code>end_time</code>.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Converted stop times to seconds </span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Converting transfer times to seconds</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Converted transfer times to seconds </span></span>
-<span class="r-in"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Day not specified; extracting timetable for monday</span>
-<span class="r-in"><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span></span>
-<span class="r-in"><span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">600</span></span>
-<span class="r-in"><span class="va">end_time</span> <span class="op">&lt;-</span> <span class="va">start_time</span> <span class="op">+</span> <span class="fl">600</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># function is deprecated!</span></span>
-<span class="r-in"><span class="va">ic</span> <span class="op">&lt;-</span> <span class="fu">gtfs_isochrone</span> <span class="op">(</span><span class="va">g</span>,</span>
-<span class="r-in">                      from <span class="op">=</span> <span class="va">from</span>,</span>
-<span class="r-in">                      start_time <span class="op">=</span> <span class="va">start_time</span>,</span>
-<span class="r-in">                      end_time <span class="op">=</span> <span class="va">end_time</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span> <span class="op">(</span><span class="va">ic</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">g</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Day not specified; extracting timetable for wednesday</span>
+<span class="r-in"><span><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span></span></span>
+<span class="r-in"><span><span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">600</span></span></span>
+<span class="r-in"><span><span class="va">end_time</span> <span class="op">&lt;-</span> <span class="va">start_time</span> <span class="op">+</span> <span class="fl">600</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span>  <span class="co"># function is deprecated!</span></span></span>
+<span class="r-in"><span><span class="va">ic</span> <span class="op">&lt;-</span> <span class="fu">gtfs_isochrone</span> <span class="op">(</span><span class="va">g</span>,</span></span>
+<span class="r-in"><span>                      from <span class="op">=</span> <span class="va">from</span>,</span></span>
+<span class="r-in"><span>                      start_time <span class="op">=</span> <span class="va">start_time</span>,</span></span>
+<span class="r-in"><span>                      end_time <span class="op">=</span> <span class="va">end_time</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span> <span class="op">(</span><span class="va">ic</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot(ic):</span> object 'ic' not found</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -188,7 +213,7 @@ of all stations reachable to the specified <code>end_time</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

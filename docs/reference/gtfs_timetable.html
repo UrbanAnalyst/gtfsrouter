@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.072</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.083</span>
       </span>
     </div>
 
@@ -56,24 +56,28 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gtfs_timetable</span><span class="op">(</span>
-  <span class="va">gtfs</span>,
-  day <span class="op">=</span> <span class="cn">NULL</span>,
-  date <span class="op">=</span> <span class="cn">NULL</span>,
-  route_pattern <span class="op">=</span> <span class="cn">NULL</span>,
-  quiet <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gtfs_timetable</span><span class="op">(</span></span>
+<span>  <span class="va">gtfs</span>,</span>
+<span>  day <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  date <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  route_pattern <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>gtfs</dt>
 <dd><p>A set of GTFS data returned from <a href="extract_gtfs.html">extract_gtfs</a>.</p></dd>
+
+
 <dt>day</dt>
 <dd><p>Day of the week on which to calculate route, either as an
 unambiguous string (so "tu" and "th" for Tuesday and Thursday), or a number
 between 1 = Sunday and 7 = Saturday. If not given, the current day will be
 used - unless the following 'date' parameter is give.</p></dd>
+
+
 <dt>date</dt>
 <dd><p>Some systems do not specify days of the week within their
 'calendar' table; rather they provide full timetables for specified calendar
@@ -82,19 +86,26 @@ number representing 'yyyymmdd' will filter the data to the specified date.
 Also the 'calendar' is scanned for services that operate on the selected
 date. Therefore also a merge of feeds that combine 'calendar' and
 'calendar_dates' options is covered.</p></dd>
+
+
 <dt>route_pattern</dt>
 <dd><p>Using only those routes matching given pattern, for
 example, "^U" for routes starting with "U" (as commonly used for underground
 or subway routes. To negative the <code>route_pattern</code> -- that is, to include all
 routes except those matching the patter -- prepend the value with "!"; for
 example "!^U" with include all services except those starting with "U".</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>Set to <code>TRUE</code> to suppress screen messages (currently just
 regarding timetable construction).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>The input data with an addition items, <code>timetable</code>, <code>stations</code>, and
+    
+
+<p>The input data with an addition items, <code>timetable</code>, <code>stations</code>, and
 <code>trips</code>, containing data formatted for more efficient use with
 <a href="gtfs_route.html">gtfs_route</a> (see Note).</p>
     </div>
@@ -114,10 +125,10 @@ that case will generally take longer.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span> <span class="co"># Write sample feed from Berlin, Germany to tempdir</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp3CzGvo/vbb.zip"</span>
-<span class="r-in"><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span> <span class="co"># name of feed</span></span>
-<span class="r-in"><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span> <span class="co"># Write sample feed from Berlin, Germany to tempdir</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpO3K7To/vbb.zip"</span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span> <span class="co"># name of feed</span></span></span>
+<span class="r-in"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Unzipping GTFS archive</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Unzipped GTFS archive  </span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Extracting GTFS feed</span></span>
@@ -126,28 +137,28 @@ that case will generally take longer.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Converted stop times to seconds </span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Converting transfer times to seconds</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Converted transfer times to seconds </span></span>
-<span class="r-in"><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Innsbrucker Platz"</span> <span class="co"># U-bahn station, not "S"</span></span>
-<span class="r-in"><span class="va">to</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span></span>
-<span class="r-in"><span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">120</span> <span class="co"># 12:02</span></span>
-<span class="r-in"><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="va">start_time</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Day not specified; extracting timetable for monday</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Specify day of week</span></span>
-<span class="r-in"><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="va">start_time</span>,</span>
-<span class="r-in">                     day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># specify travel by "U" = underground only</span></span>
-<span class="r-in"><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="va">start_time</span>,</span>
-<span class="r-in">                     day <span class="op">=</span> <span class="st">"Sunday"</span>, route_pattern <span class="op">=</span> <span class="st">"^U"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># specify travel by "S" = street-level only (not underground)</span></span>
-<span class="r-in"><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="va">start_time</span>,</span>
-<span class="r-in">                     day <span class="op">=</span> <span class="st">"Sunday"</span>, route_pattern <span class="op">=</span> <span class="st">"^S"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Route queries are generally faster if the GTFS data are pre-processed with</span></span>
-<span class="r-in"><span class="co"># `gtfs_timetable()`:</span></span>
-<span class="r-in"><span class="va">gt</span> <span class="op">&lt;-</span> <span class="fu">gtfs_timetable</span> <span class="op">(</span><span class="va">gtfs</span>, day <span class="op">=</span> <span class="st">"Sunday"</span>, route_pattern <span class="op">=</span> <span class="st">"^S"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gt</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="va">start_time</span><span class="op">)</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span><span class="va">from</span> <span class="op">&lt;-</span> <span class="st">"Innsbrucker Platz"</span> <span class="co"># U-bahn station, not "S"</span></span></span>
+<span class="r-in"><span><span class="va">to</span> <span class="op">&lt;-</span> <span class="st">"Alexanderplatz"</span></span></span>
+<span class="r-in"><span><span class="va">start_time</span> <span class="op">&lt;-</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">120</span> <span class="co"># 12:02</span></span></span>
+<span class="r-in"><span><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="va">start_time</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Day not specified; extracting timetable for wednesday</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Specify day of week</span></span></span>
+<span class="r-in"><span><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="va">start_time</span>,</span></span>
+<span class="r-in"><span>                     day <span class="op">=</span> <span class="st">"Sunday"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># specify travel by "U" = underground only</span></span></span>
+<span class="r-in"><span><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="va">start_time</span>,</span></span>
+<span class="r-in"><span>                     day <span class="op">=</span> <span class="st">"Sunday"</span>, route_pattern <span class="op">=</span> <span class="st">"^U"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># specify travel by "S" = street-level only (not underground)</span></span></span>
+<span class="r-in"><span><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="va">start_time</span>,</span></span>
+<span class="r-in"><span>                     day <span class="op">=</span> <span class="st">"Sunday"</span>, route_pattern <span class="op">=</span> <span class="st">"^S"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Route queries are generally faster if the GTFS data are pre-processed with</span></span></span>
+<span class="r-in"><span><span class="co"># `gtfs_timetable()`:</span></span></span>
+<span class="r-in"><span><span class="va">gt</span> <span class="op">&lt;-</span> <span class="fu">gtfs_timetable</span> <span class="op">(</span><span class="va">gtfs</span>, day <span class="op">=</span> <span class="st">"Sunday"</span>, route_pattern <span class="op">=</span> <span class="st">"^S"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">route</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gt</span>, from <span class="op">=</span> <span class="va">from</span>, to <span class="op">=</span> <span class="va">to</span>, start_time <span class="op">=</span> <span class="va">start_time</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -162,7 +173,7 @@ that case will generally take longer.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

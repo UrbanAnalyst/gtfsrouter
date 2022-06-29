@@ -33,7 +33,7 @@ gtfs_transfer_table <- function (gtfs,
                                  network_times = FALSE,
                                  quiet = FALSE) {
 
-    if (is.null (network) & network_times) {
+    if (is.null (network) && network_times) {
         network <- dl_net (gtfs)
     }
 

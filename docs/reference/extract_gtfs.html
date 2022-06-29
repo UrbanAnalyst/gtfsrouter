@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.072</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.083</span>
       </span>
     </div>
 
@@ -56,24 +56,31 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">extract_gtfs</span><span class="op">(</span>filename <span class="op">=</span> <span class="cn">NULL</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span>, stn_suffixes <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">extract_gtfs</span><span class="op">(</span>filename <span class="op">=</span> <span class="cn">NULL</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span>, stn_suffixes <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>filename</dt>
 <dd><p>Name of GTFS archive</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>If <code>FALSE</code>, display progress information on screen</p></dd>
+
+
 <dt>stn_suffixes</dt>
 <dd><p>Any values provided will be removed from terminal
 characters of station IDs. Useful for feeds like NYC for which some stations
 are appended with values of "N" and "S" to indicate directions. Specifying
 <code>stn_suffixes = c ("N", "S")</code> will automatically remove these suffixes.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>List of several <span class="pkg">data.table</span> objects corresponding to the tables
+    
+
+<p>List of several <span class="pkg">data.table</span> objects corresponding to the tables
 present in the nominated GTFS data set.</p>
     </div>
     <div id="note">
@@ -94,10 +101,10 @@ function to the two time columns of the "stop_times" table.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span> <span class="co"># Write sample feed from Berlin, Germany to tempdir</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp3CzGvo/vbb.zip"</span>
-<span class="r-in"><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span> <span class="co"># name of feed</span></span>
-<span class="r-in"><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu">extract_gtfs</span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span> <span class="co"># Write sample feed from Berlin, Germany to tempdir</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpO3K7To/vbb.zip"</span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span> <span class="co"># name of feed</span></span></span>
+<span class="r-in"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu">extract_gtfs</span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Unzipping GTFS archive</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Unzipped GTFS archive  </span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Extracting GTFS feed</span></span>
@@ -106,7 +113,7 @@ function to the two time columns of the "stop_times" table.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Converted stop times to seconds </span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Converting transfer times to seconds</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Converted transfer times to seconds </span></span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -121,7 +128,7 @@ function to the two time columns of the "stop_times" table.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -18,7 +18,7 @@ consecutive services -- for all routes between two specified stations."><!-- mat
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.072</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.083</span>
       </span>
     </div>
 
@@ -58,7 +58,7 @@ consecutive services -- for all routes between two specified stations.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gtfs_route_headway</span><span class="op">(</span><span class="va">gtfs</span>, <span class="va">from</span>, <span class="va">to</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gtfs_route_headway</span><span class="op">(</span><span class="va">gtfs</span>, <span class="va">from</span>, <span class="va">to</span>, quiet <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -66,18 +66,27 @@ consecutive services -- for all routes between two specified stations.</p>
     <dl><dt>gtfs</dt>
 <dd><p>A set of GTFS data returned from <a href="extract_gtfs.html">extract_gtfs</a> or, for more
 efficient queries, pre-processed with <a href="gtfs_timetable.html">gtfs_timetable</a>.</p></dd>
+
+
 <dt>from</dt>
 <dd><p>Names, IDs, or approximate (lon, lat) coordinates of start
 stations (as <code>stop_name</code> or <code>stop_id</code> entry in the <code>stops</code> table, or a vector
 of two numeric values). See Note.</p></dd>
+
+
 <dt>to</dt>
 <dd><p>Corresponding Names, IDs, or coordinates of end station.</p></dd>
+
+
 <dt>quiet</dt>
 <dd><p>If <code>TRUE</code>, display a progress bar</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A single vector of integer values containing headways between all
+    
+
+<p>A single vector of integer values containing headways between all
 services across a single 24-hour period</p>
     </div>
     <div id="see-also">
@@ -100,7 +109,7 @@ services across a single 24-hour period</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

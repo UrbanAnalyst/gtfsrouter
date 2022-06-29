@@ -36,8 +36,8 @@ gtfs_traveltimes <- function (gtfs,
                               max_traveltime = 60 * 60,
                               quiet = FALSE) {
 
-    if (!all (is.numeric (max_traveltime)) |
-        all (max_traveltime <= 0) |
+    if (!all (is.numeric (max_traveltime)) ||
+        all (max_traveltime <= 0) ||
         length (max_traveltime) > 1) {
         stop ("max_traveltime must be a single number greater than 0",
             call. = FALSE

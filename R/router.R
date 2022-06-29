@@ -179,7 +179,7 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
         include_ids, max_transfers
     )
 
-    if (earliest_arrival & !is.null (res)) {
+    if (earliest_arrival && !is.null (res)) {
         arrival_time <- max_arrival_time (res)
         gtfs$timetable <- reverse_timetable (gtfs$timetable, arrival_time)
         # reverse start and end stations:
@@ -210,7 +210,7 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
                       include_ids, max_transfers) {
 
     # no visible binding note:
-    trip_id <- trip_headsign <- route_id <- route_short_name <- NULL
+    trip_ids <- NULL
 
     if (is.na (max_transfers)) {
         max_transfers <- .Machine$integer.max
@@ -242,54 +242,13 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
 
     route$trip_id <- gtfs$trip_ids [, trip_ids] [route$trip_number]
 
-    # map_one_trip maps the integer-valued stations back on to actual station
-    # names. This is done seperately for each distinct trip so trip identifiers
-    # can also be easily added
-    trip_ids <- gtfs$trip_ids [unique (route$trip_number)] [, trip_ids]
-    # trips with from_to_are_ids can end with trip_ids of NA from transfers
-    trip_ids <- trip_ids [!is.na (trip_ids)]
-    res <- do.call (rbind, lapply (trip_ids, function (i) {
-        map_one_trip (gtfs, route, i)
-    }))
-    res <- res [order (res$departure_time), ]
-    rownames (res) <- seq (nrow (res))
-
-    # Then insert routes and trip headsigns
-    res$trip_name <- NA_character_
-    if ("trip_headsign" %in% names (gtfs$trips)) {
-        index <- match (res$trip_id, gtfs$trips [, trip_id])
-        res$trip_name <- gtfs$trips [index, trip_headsign]
-    }
-
-    index <- match (res$trip_id, gtfs$trips [, trip_id])
-    res$route_id <- gtfs$trips [index, route_id]
-    index <- match (res$route_id, gtfs$routes [, route_id])
-    res$route_name <- gtfs$routes [index, route_short_name]
-
-    col_order <- c (
-        "route_id",
-        "route_name",
-        "trip_id",
-        "trip_name",
-        "stop_id",
-        "stop_name",
-        "arrival_time",
-        "departure_time"
-    )
-    if (!include_ids) {
-        col_order <- col_order [c (2, 4, 6:8)]
-    }
-    res <- res [, col_order]
-
-    if (all (is.na (res$trip_name))) {
-        res$trip_name <- NULL
-    } # nocov
+    res <- map_all_trips (gtfs, route, include_ids)
 
     # timetables scanned in reverse do not add terminal transfers, so these have
     # to be done here
     from_stop_id <- to_stop_id <- NULL # suppress no visible binding notes
     end_stop <- utils::tail (route$stop_number, 1)
-    if (route$stop_number [1] %in% end_stns & !end_stop %in% start_stns) {
+    if (route$stop_number [1] %in% end_stns && !end_stop %in% start_stns) {
         tr <- gtfs$transfers [from_stop_id == end_stop &
             to_stop_id %in% start_stns]
         index <- which (tr$min_transfer_time == min (tr$min_transfer_time))
@@ -304,7 +263,7 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
     }
 
     # Add any terminal transfers to actual destination
-    if (is.na (route$trip_id [1]) | is.na (utils::tail (route$trip_id, 1))) {
+    if (is.na (route$trip_id [1]) || is.na (utils::tail (route$trip_id, 1))) {
 
         if (is.na (route$trip_id [1])) {
             n <- 1
@@ -334,7 +293,7 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
 
 # convert from and to values to indices into gtfs$stations
 from_to_to_stations <- function (stns, gtfs, from_to_are_ids, grep_fixed) {
-    if (is.character (stns) | is.null (nrow (stns))) {
+    if (is.character (stns) || is.null (nrow (stns))) {
         ret <- lapply (stns, function (i) {
             unique (station_name_to_ids (
                 i,
@@ -355,7 +314,7 @@ from_to_to_stations <- function (stns, gtfs, from_to_are_ids, grep_fixed) {
         if (!is.list (ret)) { # for single row stns
             ret <- list (as.integer (ret))
         }
-    } else if (is.numeric (stns) & length (stns) == 2) {
+    } else if (is.numeric (stns) && length (stns) == 2) {
         ret <- list (station_name_to_ids (
             stns,
             gtfs,
@@ -464,6 +423,57 @@ map_one_trip <- function (gtfs, route, route_name = "") {
         arrival_time = trip_stop_arrival,
         stringsAsFactors = FALSE
     )
+}
+
+# map_one_trip maps the integer-valued stations back on to actual station
+# names. This is done seperately for each distinct trip so trip identifiers
+# can also be easily added
+map_all_trips <- function (gtfs, route, include_ids) {
+
+    # no visible binding note:
+    trip_id <- trip_headsign <- route_id <- route_short_name <- NULL
+
+    trip_ids <- gtfs$trip_ids [unique (route$trip_number)] [, trip_ids]
+    # trips with from_to_are_ids can end with trip_ids of NA from transfers
+    trip_ids <- trip_ids [!is.na (trip_ids)]
+    res <- do.call (rbind, lapply (trip_ids, function (i) {
+        map_one_trip (gtfs, route, i)
+    }))
+    res <- res [order (res$departure_time), ]
+    rownames (res) <- seq (nrow (res))
+
+    # Then insert routes and trip headsigns
+    res$trip_name <- NA_character_
+    if ("trip_headsign" %in% names (gtfs$trips)) {
+        index <- match (res$trip_id, gtfs$trips [, trip_id])
+        res$trip_name <- gtfs$trips [index, trip_headsign]
+    }
+
+    index <- match (res$trip_id, gtfs$trips [, trip_id])
+    res$route_id <- gtfs$trips [index, route_id]
+    index <- match (res$route_id, gtfs$routes [, route_id])
+    res$route_name <- gtfs$routes [index, route_short_name]
+
+    col_order <- c (
+        "route_id",
+        "route_name",
+        "trip_id",
+        "trip_name",
+        "stop_id",
+        "stop_name",
+        "arrival_time",
+        "departure_time"
+    )
+    if (!include_ids) {
+        col_order <- col_order [c (2, 4, 6:8)]
+    }
+    res <- res [, col_order]
+
+    if (all (is.na (res$trip_name))) {
+        res$trip_name <- NULL
+    } # nocov
+
+    return (res)
 }
 
 # get arrival time of single routing result in seconds

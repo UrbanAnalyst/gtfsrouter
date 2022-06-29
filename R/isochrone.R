@@ -197,10 +197,12 @@ get_isotrips <- function (gtfs, start_stns, start_time, end_time,
         tr$ntransfers [index] <- ntransfers
 
         e <- hms::hms (earliest_arrival [[i]])
-        ret <- data.frame (cbind (s,
+
+        return (data.frame (cbind (
+            s,
             tr,
             earliest_arrival = e
-        ))
+        )))
     })
 
     # Then cut them down to within the alloted isochrone durations:

@@ -135,8 +135,8 @@ go_home_work <- function (home = TRUE, wait, start_time) {
 
 get_envvars <- function () {
 
-    if (Sys.getenv ("gtfs_home") == "" |
-        Sys.getenv ("gtfs_work") == "" |
+    if (Sys.getenv ("gtfs_home") == "" ||
+        Sys.getenv ("gtfs_work") == "" ||
         Sys.getenv ("gtfs_data") == "") {
         stop (
             "This function requires environmental variables gtfs_home, ",
