@@ -179,7 +179,7 @@ gtfs_route1 <- function (gtfs, start_stns, end_stns, start_time,
         include_ids, max_transfers
     )
 
-    if (earliest_arrival & !is.null (res)) {
+    if (earliest_arrival && !is.null (res)) {
         arrival_time <- max_arrival_time (res)
         gtfs$timetable <- reverse_timetable (gtfs$timetable, arrival_time)
         # reverse start and end stations:
@@ -289,7 +289,7 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
     # to be done here
     from_stop_id <- to_stop_id <- NULL # suppress no visible binding notes
     end_stop <- utils::tail (route$stop_number, 1)
-    if (route$stop_number [1] %in% end_stns & !end_stop %in% start_stns) {
+    if (route$stop_number [1] %in% end_stns && !end_stop %in% start_stns) {
         tr <- gtfs$transfers [from_stop_id == end_stop &
             to_stop_id %in% start_stns]
         index <- which (tr$min_transfer_time == min (tr$min_transfer_time))
@@ -304,7 +304,7 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
     }
 
     # Add any terminal transfers to actual destination
-    if (is.na (route$trip_id [1]) | is.na (utils::tail (route$trip_id, 1))) {
+    if (is.na (route$trip_id [1]) || is.na (utils::tail (route$trip_id, 1))) {
 
         if (is.na (route$trip_id [1])) {
             n <- 1
@@ -334,7 +334,7 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
 
 # convert from and to values to indices into gtfs$stations
 from_to_to_stations <- function (stns, gtfs, from_to_are_ids, grep_fixed) {
-    if (is.character (stns) | is.null (nrow (stns))) {
+    if (is.character (stns) || is.null (nrow (stns))) {
         ret <- lapply (stns, function (i) {
             unique (station_name_to_ids (
                 i,
@@ -355,7 +355,7 @@ from_to_to_stations <- function (stns, gtfs, from_to_are_ids, grep_fixed) {
         if (!is.list (ret)) { # for single row stns
             ret <- list (as.integer (ret))
         }
-    } else if (is.numeric (stns) & length (stns) == 2) {
+    } else if (is.numeric (stns) && length (stns) == 2) {
         ret <- list (station_name_to_ids (
             stns,
             gtfs,
