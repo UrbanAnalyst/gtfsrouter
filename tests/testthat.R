@@ -1,4 +1,4 @@
-library(testthat)
-library(gtfsrouter)
+library (testthat)
+library (gtfsrouter)
 
-test_check("gtfsrouter")
+test_check ("gtfsrouter")
