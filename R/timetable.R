@@ -57,9 +57,9 @@ gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
             # nocov end
         }
         if (!is.null (date)) {
-            gtfs_cp <- filter_by_date (gtfs_cp, date)
-        } # nocov - not in test data
-        else { # default day = NULL to current day
+            gtfs_cp <- filter_by_date (gtfs_cp, date) # nocov - not in test data
+        } else {
+            # default day = NULL to current day
             gtfs_cp <- filter_by_day (gtfs_cp, day, quiet = quiet)
         }
         if (!is.null (route_pattern)) {
