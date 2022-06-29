@@ -44,8 +44,8 @@ extract_gtfs <- function (filename = NULL, quiet = FALSE, stn_suffixes = NULL) {
 
     e <- extract_objs_into_env (flist, quiet = quiet)
 
-    if (nrow (e$routes) == 0 | nrow (e$stops) == 0 |
-        nrow (e$stop_times) == 0 | nrow (e$trips) == 0) {
+    if (nrow (e$routes) == 0 || nrow (e$stops) == 0 ||
+        nrow (e$stop_times) == 0 || nrow (e$trips) == 0) {
         stop (
             filename, " does not appear to be a GTFS file; ",
             "it must minimally contain\n  ",
@@ -109,7 +109,7 @@ check_extract_pars <- function (filename, stn_suffixes) {
     if (!file.exists (filename)) {
         stop ("filename ", filename, " does not exist")
     }
-    if (!(is.null (stn_suffixes) | is.character (stn_suffixes))) {
+    if (!(is.null (stn_suffixes) || is.character (stn_suffixes))) {
         stop ("stn_suffixes must be a character vector")
     }
 
