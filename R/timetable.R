@@ -42,7 +42,7 @@ gtfs_timetable <- function (gtfs, day = NULL, date = NULL, route_pattern = NULL,
     gtfs_cp <- data.table::copy (gtfs)
 
     if (!attr (gtfs_cp, "filtered")) {
-        if (is.null (date) & is.null (day)) {
+        if (is.null (date) && is.null (day)) {
             # nocov start
             if (!check_calendar (gtfs)) {
                 stop ("This appears to be a GTFS feed which uses a ",
@@ -253,7 +253,7 @@ filter_by_date <- function (gtfs, date = NULL) {
     })
     index_day <- sort (unique (do.call (c, index_day)))
 
-    if (length (index) == 0 & length (index_day) == 0) {
+    if (length (index) == 0 && length (index_day) == 0) {
         stop ("date does not match any values in the provided GTFS data")
     }
     exception_type <- gtfs$calendar_dates$exception_type [index]
