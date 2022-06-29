@@ -152,7 +152,7 @@ frequencies_to_stop_times <- function (gtfs) {
         gtfs_cp$trips,
         trip_id_mapping,
         by = "trip_id",
-        all.y = T
+        all.y = TRUE
     )
     gtfs_cp$trips$trip_id <- gtfs_cp$trips$trip_id_f
     # rm trip_id_f:
