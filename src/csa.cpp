@@ -205,7 +205,12 @@ CSA_Return csa::main_csa_loop (
                     csa_out.n_transfers [csa_in.departure_station [i] ] <= csa_pars.max_transfers) ||
                 is_connected [csa_in.trip_id [i]])
         {
-            if (csa_in.arrival_time [i] <= csa_out.earliest_connection [csa_in.arrival_station [i] ])
+            const bool time_earlier = csa_in.arrival_time [i] < csa_out.earliest_connection [csa_in.arrival_station [i] ];
+            const bool time_equal = csa_in.arrival_time [i] == csa_out.earliest_connection [csa_in.arrival_station [i] ];
+            const bool less_transfers = csa_out.n_transfers [csa_in.departure_station [i] ] <
+                    csa_out.n_transfers [csa_in.arrival_station [i] ];
+
+            if (time_earlier || (time_equal && less_transfers))
             {
                 csa::fill_one_csa_out (csa_out, csa_in,
                         csa_in.arrival_station [i], i);
