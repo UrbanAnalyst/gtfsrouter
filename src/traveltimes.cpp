@@ -287,10 +287,6 @@ void iso::trace_forward_traveltimes (
                 departure_time [i])
             continue;
 
-        //if (iso::arrival_already_visited (iso,
-        //            departure_station [i], arrival_station [i]))
-        //    continue;
-
         bool filled = iso::fill_one_iso (departure_station [i],
                 arrival_station [i], trip_id [i], departure_time [i],
                 arrival_time [i], is_start_stn,
