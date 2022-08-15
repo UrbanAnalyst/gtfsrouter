@@ -84,3 +84,4 @@ rcpp_isochrone <- function(timetable, transfers, nstations, start_stations, star
 rcpp_traveltimes <- function(timetable, transfers, nstations, start_stations, start_time_min, start_time_max, minimise_transfers, max_traveltime) {
     .Call(`_gtfsrouter_rcpp_traveltimes`, timetable, transfers, nstations, start_stations, start_time_min, start_time_max, minimise_transfers, max_traveltime)
 }
+

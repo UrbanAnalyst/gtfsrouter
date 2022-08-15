@@ -37,6 +37,10 @@ gtfs_transfer_table <- function (gtfs,
         network <- dl_net (gtfs)
     }
 
+    # d_limit in r5 is 1000m on street networks:
+    # https://github.com/conveyal/r5/blob/dev/src/main/java/com/conveyal/r5/transit/TransitLayer.java#L69-L73 # nolint
+    # implemented at:
+    # https://github.com/conveyal/r5/blob/dev/src/main/java/com/conveyal/r5/transit/TransferFinder.java#L128 # nolint
     transfers <- get_transfer_list (gtfs, d_limit)
 
     if (network_times) {
