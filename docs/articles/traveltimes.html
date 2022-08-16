@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.089</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.091</span>
       </span>
     </div>
 
@@ -86,7 +86,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/ATFutures/gtfs-router" class="external-link">gtfsrouter</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpCUUw3g/vbb.zip"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/RtmpaQ0FqM/vbb.zip"</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span></span>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -100,11 +100,11 @@
 <span>                       start_time_limits <span class="op">=</span> <span class="va">start_time_limits</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tt</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   start_time duration ntransfers      stop_id               stop_name stop_lon</span></span>
-<span><span class="co">## 1   12:03:42 00:14:12          1 060003102223     S Bellevue (Berlin) 13.34710</span></span>
+<span><span class="co">## 1   12:00:42 00:14:42          1 060003102223     S Bellevue (Berlin) 13.34710</span></span>
 <span><span class="co">## 2   12:00:42 00:08:36          0 060003102224     S Bellevue (Berlin) 13.34710</span></span>
 <span><span class="co">## 3   12:00:42 00:15:06          1 060003103233   S Tiergarten (Berlin) 13.33624</span></span>
 <span><span class="co">## 4   12:00:42 00:10:42          0 060003103234   S Tiergarten (Berlin) 13.33624</span></span>
-<span><span class="co">## 5   12:03:42 00:11:18          1 060003201213 S+U Berlin Hauptbahnhof 13.36892</span></span>
+<span><span class="co">## 5   12:00:42 00:14:18          1 060003201213 S+U Berlin Hauptbahnhof 13.36892</span></span>
 <span><span class="co">## 6   12:00:42 00:05:54          0 060003201214 S+U Berlin Hauptbahnhof 13.36892</span></span>
 <span><span class="co">##   stop_lat</span></span>
 <span><span class="co">## 1 52.51995</span></span>
@@ -128,7 +128,7 @@
 <p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_traveltimes.html" class="external-link"><code>gtfs_traveltimes()</code></a>, returns travel times to only a subset of all potentially reachable stations (697 instead of 957) for two main reasons. First, not all stations may actually be reachable from a given station, and travel times will only be returned for those that are. Secondly, the <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_traveltimes.html" class="external-link"><code>gtfs_traveltimes()</code></a>, function has an additional parameter, <code>max_traveltime</code>, and only returns travel times to stations able to be reached within this upper limit. The default value is 3600, or one hour. For the token feed used here, the maximum travel times returned are:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">hms</span><span class="fu">::</span><span class="fu"><a href="https://hms.tidyverse.org/reference/hms.html" class="external-link">hms</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span> <span class="op">(</span><span class="va">tt</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## 00:53:36</span></span></code></pre>
+<pre><code><span><span class="co">## 00:58:00</span></span></code></pre>
 <p>In this case that value actually reflects the restricted data included in the sample data set, but applying the function to an actual GTFS feed will by default record traveltimes to all stations reachable within one hour. The following shows a more realistic example using a full version of the Berlin GTFS data:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="st">"/&lt;path&gt;/&lt;to&gt;/vbb.zip"</span><span class="op">)</span></span>

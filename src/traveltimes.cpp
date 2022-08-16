@@ -93,6 +93,10 @@ bool iso::fill_one_iso (
         Iso &iso) {
 
     bool fill_vals = false, is_end_stn = false, same_trip = false;
+    bool is_transfer = false;
+    // is_transfer is used to increment "implicit" transfers to different
+    // services from same stop_id, which do not otherwise appear as transfers.
+
     int prev_trip = -1L; // int to allow -1L flag
     int ntransfers = INFINITE_INT;
     int latest_initial = -1L;
@@ -135,15 +139,13 @@ bool iso::fill_one_iso (
             if (fill_here || is_end_stn)
             {
                 // Bunch of AND conditions written separately for clarity.
-                bool update = false;
-                same_trip = false;
+                same_trip = (st.trip == trip_id);
                 // only follow same trip if it has equal fewest transfers
-                if (minimise_transfers && st.trip == trip_id && st.ntransfers <= ntransfers)
-                {
-                    same_trip = true;
-                    if (st.initial_depart > latest_initial)
-                        update = true;
-                }
+                bool update = (minimise_transfers &&
+                        same_trip &&
+                        st.ntransfers <= ntransfers &&
+                        st.initial_depart > latest_initial);
+
                 if (!update)
                 {
                     update = (ntransfers == INFINITE_INT);
@@ -194,6 +196,7 @@ bool iso::fill_one_iso (
                     latest_initial = st.initial_depart;
                     prev_trip = static_cast <int> (st.trip);
                     ntransfers = st.ntransfers;
+                    is_transfer = st.is_transfer;
                 }
             }
 
@@ -248,6 +251,13 @@ bool iso::fill_one_iso (
         iso.earliest_departure [arrival_station] = departure_time;
     } else
     {
+        if (!same_trip && !is_transfer)
+        {
+            // connections flagged with 'is_transfer' have already had transfers
+            // incremented; this increments only "implicit" transfers from same
+            // stop_id to different service (trip_id)
+            ntransfers++;
+        }
         iso.connections [arrival_station].convec [s].ntransfers = ntransfers;
         iso.connections [arrival_station].convec [s].initial_depart = latest_initial;
     }
