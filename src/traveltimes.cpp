@@ -145,15 +145,20 @@ bool iso::fill_one_iso (
                         update = true;
                 }
                 if (!update)
+                {
                     update = (ntransfers == INFINITE_INT);
+                }
+
                 if (!same_trip)
                 {
                     // only update if departure is after listed initial depart
                     update = departure_time > st.initial_depart;
                     // and if connection is a transfer, then only if
                     // arrival_time < listed departure time
-                    if (update & st.is_transfer)
+                    if (update && st.is_transfer)
+                    {
                         update = departure_time >= st.arrival_time;
+                    }
 
                     // for !minimise_transfers, update if:
                     // 1. st.initial_depart > latest_initial OR
