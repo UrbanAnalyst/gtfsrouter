@@ -433,7 +433,7 @@ map_all_trips <- function (gtfs, route, include_ids) {
     # no visible binding note:
     trip_id <- trip_headsign <- route_id <- route_short_name <- NULL
 
-    trip_ids <- gtfs$trip_ids [unique (route$trip_number)] [, trip_ids]
+    trip_ids <- unique (route$trip_id [order (route$time)])
     # trips with from_to_are_ids can end with trip_ids of NA from transfers
     trip_ids <- trip_ids [!is.na (trip_ids)]
     res <- do.call (rbind, lapply (trip_ids, function (i) {
