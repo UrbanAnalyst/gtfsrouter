@@ -131,11 +131,12 @@ bool iso::fill_one_iso (
             else if (!not_end_stn)
                 is_end_stn = is_end_stn ||
                     ((departure_time - st.initial_depart) <= iso.get_max_traveltime ());
-            
+
             if (fill_here || is_end_stn)
             {
                 // Bunch of AND conditions written separately for clarity.
-                bool update = same_trip = false;
+                bool update = false;
+                same_trip = false;
                 // only follow same trip if it has equal fewest transfers
                 if (minimise_transfers && st.trip == trip_id && st.ntransfers <= ntransfers)
                 {
@@ -144,15 +145,20 @@ bool iso::fill_one_iso (
                         update = true;
                 }
                 if (!update)
+                {
                     update = (ntransfers == INFINITE_INT);
+                }
+
                 if (!same_trip)
                 {
                     // only update if departure is after listed initial depart
                     update = departure_time > st.initial_depart;
                     // and if connection is a transfer, then only if
                     // arrival_time < listed departure time
-                    if (update & st.is_transfer)
+                    if (update && st.is_transfer)
+                    {
                         update = departure_time >= st.arrival_time;
+                    }
 
                     // for !minimise_transfers, update if:
                     // 1. st.initial_depart > latest_initial OR
@@ -179,14 +185,15 @@ bool iso::fill_one_iso (
                             ", " << st.ntransfers <<
                             "); init = " << latest_initial <<
                             " -> " << st.initial_depart <<
-                            "; prev_stn = " << st.prev_stn,
+                            "; prev_stn = " << st.prev_stn <<
+                            " on trip#" << st.trip << " -> " << trip_id <<
+                            "; is_transfer = " << st.is_transfer,
                             departure_station, arrival_station,
                             departure_time);
 
                     latest_initial = st.initial_depart;
                     prev_trip = static_cast <int> (st.trip);
                     ntransfers = st.ntransfers;
-
                 }
             }
 
@@ -268,8 +275,6 @@ void iso::trace_forward_traveltimes (
     for (size_t a: arrival_station)
         stations.emplace (std::make_pair (a, false));
 
-    bool stop = false;
-
     for (size_t i = 0; i < nrows; i++)
     {
         if (departure_time [i] < start_time_min)
@@ -286,10 +291,6 @@ void iso::trace_forward_traveltimes (
                 iso.earliest_departure [departure_station [i]] >
                 departure_time [i])
             continue;
-
-        //if (iso::arrival_already_visited (iso,
-        //            departure_station [i], arrival_station [i]))
-        //    continue;
 
         bool filled = iso::fill_one_iso (departure_station [i],
                 arrival_station [i], trip_id [i], departure_time [i],
@@ -331,11 +332,6 @@ void iso::trace_forward_traveltimes (
 
             } // end for t over transfer map
         } // end if filled
-
-        if (stop)
-        {
-            break;
-        }
     } // end for i over nrows of timetable
 }
 
