@@ -131,11 +131,12 @@ bool iso::fill_one_iso (
             else if (!not_end_stn)
                 is_end_stn = is_end_stn ||
                     ((departure_time - st.initial_depart) <= iso.get_max_traveltime ());
-            
+
             if (fill_here || is_end_stn)
             {
                 // Bunch of AND conditions written separately for clarity.
-                bool update = same_trip = false;
+                bool update = false;
+                same_trip = false;
                 // only follow same trip if it has equal fewest transfers
                 if (minimise_transfers && st.trip == trip_id && st.ntransfers <= ntransfers)
                 {
@@ -179,14 +180,14 @@ bool iso::fill_one_iso (
                             ", " << st.ntransfers <<
                             "); init = " << latest_initial <<
                             " -> " << st.initial_depart <<
-                            "; prev_stn = " << st.prev_stn,
+                            "; prev_stn = " << st.prev_stn <<
+                            " on trip#" << st.trip << " -> " << trip_id,
                             departure_station, arrival_station,
                             departure_time);
 
                     latest_initial = st.initial_depart;
                     prev_trip = static_cast <int> (st.trip);
                     ntransfers = st.ntransfers;
-
                 }
             }
 

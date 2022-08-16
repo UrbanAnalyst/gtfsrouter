@@ -10,15 +10,17 @@
  * lines allow reverse tracing between nominated station pairs and times. Just
  * switch it on, and progressively modify the values to trace backwards to
  * identify where and why any problems arise.
- * Note that DEPARTURE_STATION has to be specified to debug transfers
+ *
+ * These lines dump debug info for the journey from DEPARTURE_STATION to
+ * ARRIVAL_STATION, including all transfers from DEPARTURE_STATION.
  */
 
 // ----- debugging output START -----
 //#define DEBUG
-#define DEPARTURE_STATION 20715
-#define ARRIVAL_STATION 16418
-#define DEPARTURE_TIME_MIN 28000
-#define DEPARTURE_TIME_MAX 30000
+#define DEPARTURE_STATION 2114
+#define ARRIVAL_STATION 2109
+#define DEPARTURE_TIME_MIN 28800
+#define DEPARTURE_TIME_MAX 31500
 
 #ifdef DEBUG
 #define DEBUGMSG(msg, depstn, arrstn, deptime) \
