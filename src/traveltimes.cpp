@@ -181,7 +181,8 @@ bool iso::fill_one_iso (
                             "); init = " << latest_initial <<
                             " -> " << st.initial_depart <<
                             "; prev_stn = " << st.prev_stn <<
-                            " on trip#" << st.trip << " -> " << trip_id,
+                            " on trip#" << st.trip << " -> " << trip_id <<
+                            "; is_transfer = " << st.is_transfer,
                             departure_station, arrival_station,
                             departure_time);
 
@@ -269,8 +270,6 @@ void iso::trace_forward_traveltimes (
     for (size_t a: arrival_station)
         stations.emplace (std::make_pair (a, false));
 
-    bool stop = false;
-
     for (size_t i = 0; i < nrows; i++)
     {
         if (departure_time [i] < start_time_min)
@@ -328,11 +327,6 @@ void iso::trace_forward_traveltimes (
 
             } // end for t over transfer map
         } // end if filled
-
-        if (stop)
-        {
-            break;
-        }
     } // end for i over nrows of timetable
 }
 
