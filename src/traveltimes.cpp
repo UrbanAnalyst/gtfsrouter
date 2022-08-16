@@ -422,10 +422,9 @@ void iso::fill_one_transfer (
     DEBUGMSGTR("---TR: (" << arrival_station << " -> " <<
             trans_dest << "), time(" <<
             arrival_time << " -> " <<
-            trans_time << "), dur = " <<
-            trans_time << " - " << latest_initial <<
+            trans_time << ") - " << latest_initial <<
             " = " << trans_time - latest_initial <<
-            " with " << ntransfers << " transfers",
+            "s with " << ntransfers << " transfers",
             trans_dest, arrival_time);
 }
 
