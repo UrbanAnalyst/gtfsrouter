@@ -24,8 +24,12 @@ void iso::trace_forward_traveltimes (
         if (departure_time [i] < start_time_min)
             continue; // # nocov - these lines already removed in R fn.
 
-        const bool is_start_stn = iso::is_start_stn (start_stations_set,
-                departure_station [i]);
+        // connections can also arrive at one of the departure stations, and
+        // these are also flagged as start stations to prevent transfers being
+        // constructed from the arrival/start station.
+        const bool is_start_stn =
+            iso::is_start_stn (start_stations_set, departure_station [i]) ||
+            iso::is_start_stn (start_stations_set, arrival_station [i]);
 
         if (is_start_stn && departure_time [i] > start_time_max)
             continue;
