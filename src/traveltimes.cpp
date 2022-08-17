@@ -31,10 +31,12 @@ void iso::trace_forward_traveltimes (
             continue;
 
         if (!is_start_stn &&
-                iso.earliest_departure [departure_station [i]] < INFINITE_INT &&
-                iso.earliest_departure [departure_station [i]] >
-                departure_time [i])
+                (iso.earliest_departure [departure_station [i]] == INFINITE_INT ||
+                 (iso.earliest_departure [departure_station [i]] < INFINITE_INT &&
+                  iso.earliest_departure [departure_station [i]] > departure_time [i])))
+        {
             continue;
+        }
 
         bool filled = iso::fill_one_iso (departure_station [i],
                 arrival_station [i], trip_id [i], departure_time [i],
@@ -46,7 +48,12 @@ void iso::trace_forward_traveltimes (
             stations [arrival_station [i]] = true;
         }
 
-        if (filled && transfer_map.find (arrival_station [i]) != transfer_map.end ())
+        // Exclude transfers from start stations; see #88. These can't be
+        // included because they can't be allocated a start time from the
+        // timetable, so are effectively considered to take no time, allowing
+        // the algorithm to jump to nearby stations at same start time, which
+        // mucks everything up.
+        if (!is_start_stn && filled && transfer_map.find (arrival_station [i]) != transfer_map.end ())
         {
             for (auto t: transfer_map.at (arrival_station [i]))
             {
@@ -130,6 +137,7 @@ bool iso::fill_one_iso (
         // final value of is_end_stn is then only true is also !not_end_stn.
 
         bool not_end_stn = false;
+
         for (auto st: iso.connections [departure_station].convec)
         {
             // don't fill any connections > max_traveltime
