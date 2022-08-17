@@ -1,6 +1,6 @@
 Package: gtfsrouter
 Title: Routing with GTFS (General Transit Feed Specification) Data
-Version: 0.0.5.095
+Version: 0.0.5.096
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre")),
     person("Marcin", "Stepniak", , "marcinstepniak@ucm.es", role = "aut",
@@ -22,7 +22,6 @@ Imports:
     methods,
     Rcpp (>= 0.12.6)
 Suggests:
-    alphahull,
     digest,
     dodgr,
     dplyr,
@@ -30,14 +29,11 @@ Suggests:
     here,
     hms,
     knitr,
-    leafem,
     lubridate,
     lwgeom,
-    mapview,
     markdown,
     pbapply,
     rmarkdown,
-    sf,
     testthat
 LinkingTo:
     Rcpp
@@ -47,5 +43,5 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: yes
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 SystemRequirements: C++11

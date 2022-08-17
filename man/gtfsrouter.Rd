@@ -17,8 +17,8 @@ nominated GTFS data set.
 with local environmental variables
 \item \code{\link[=go_to_work]{go_to_work()}}: Automatic routing between work and home stations
 specified with local environmental variables
-\item \code{\link[=gtfs_isochrone]{gtfs_isochrone()}}: One-to-many routing from a nominated start station
-to all stations reachable within a specified travel duration.
+\item \code{\link[=gtfs_traveltimes]{gtfs_traveltimes()}}: One-to-many routing from a nominated start
+station to all stations reachable within a specified travel duration.
 }
 }
 

@@ -71,7 +71,6 @@ go_home (3)
 \seealso{
 Other additional: 
 \code{\link{go_to_work}()},
-\code{\link{plot.gtfs_ischrone}},
 \code{\link{process_gtfs_local}()},
 \code{\link{summary.gtfs}()}
 }

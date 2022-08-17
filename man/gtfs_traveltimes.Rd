@@ -83,7 +83,6 @@ res <- gtfs_traveltimes (g, from, start_times)
 }
 \seealso{
 Other main: 
-\code{\link{gtfs_isochrone}()},
 \code{\link{gtfs_route_headway}()},
 \code{\link{gtfs_route}()}
 }

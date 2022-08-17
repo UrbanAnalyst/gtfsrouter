@@ -21,7 +21,6 @@ Process a local GTFS data set with environmental variables described in
 Other additional: 
 \code{\link{go_home}()},
 \code{\link{go_to_work}()},
-\code{\link{plot.gtfs_ischrone}},
 \code{\link{summary.gtfs}()}
 }
 \concept{additional}

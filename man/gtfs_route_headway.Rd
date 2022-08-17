@@ -28,7 +28,6 @@ consecutive services -- for all routes between two specified stations.
 }
 \seealso{
 Other main: 
-\code{\link{gtfs_isochrone}()},
 \code{\link{gtfs_route}()},
 \code{\link{gtfs_traveltimes}()}
 }
