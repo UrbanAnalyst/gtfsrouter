@@ -64,8 +64,6 @@ void iso::trace_forward_iso (
                             trans_dest,
                             trans_duration,
                             minimise_transfers,
-                            start_time,
-                            false, // !is_start
                             iso);
                 }
 
@@ -287,28 +285,6 @@ void iso::trace_forward_traveltimes (
     for (size_t a: arrival_station)
         stations.emplace (std::make_pair (a, false));
 
-    // Fill initial transfers from start station:
-    for (auto s: start_stations_set)
-    {
-        for (auto t: transfer_map.at (s))
-        {
-            const size_t trans_dest = t.first;
-            const int trans_duration = t.second;
-
-            iso::fill_one_transfer (
-                    INFINITE_INT, // departure_station param
-                    s, // arrival_station param
-                    start_time_min, // arrival_time param
-                    trans_dest,
-                    trans_duration,
-                    minimise_transfers,
-                    start_time_min,
-                    true, // is_start
-                    iso);
-
-        } // end for t over transfer map
-    } // end for s over start_stations_set
-
     for (size_t i = 0; i < nrows; i++)
     {
         if (departure_time [i] < start_time_min)
@@ -352,8 +328,6 @@ void iso::trace_forward_traveltimes (
                             trans_dest,
                             trans_duration,
                             minimise_transfers,
-                            start_time_min,
-                            false, // !is_start
                             iso);
 
                     if (stations.find (trans_dest) !=
@@ -385,8 +359,6 @@ void iso::fill_one_transfer (
         const size_t &trans_dest,
         const int &trans_duration,
         const bool &minimise_transfers,
-        const int &start_time,
-        const bool &is_start,
         Iso &iso)
 {
     const int trans_time = arrival_time + trans_duration;
@@ -400,7 +372,7 @@ void iso::fill_one_transfer (
         insert_transfer = iso::is_transfer_in_isochrone (
                 iso, arrival_station, trans_time);
 
-    if (!insert_transfer && !is_start)
+    if (!insert_transfer)
         return;
 
     if (iso.earliest_departure [trans_dest] == INFINITE_INT ||
@@ -445,10 +417,6 @@ void iso::fill_one_transfer (
     }
 
     iso.connections [trans_dest].convec [s].ntransfers = ntransfers + 1;
-    if (is_start)
-    {
-        latest_initial = start_time;
-    }
     iso.connections [trans_dest].convec [s].initial_depart = latest_initial;
 
     DEBUGMSGTR("---TR: (" << arrival_station << " -> " <<
