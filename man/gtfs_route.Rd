@@ -102,15 +102,32 @@ start_time <- 12 * 3600 + 120 # 12:02
 route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time)
 
 # Specify day of week
-route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time,
-                     day = "Sunday")
+route <- gtfs_route (
+    gtfs,
+    from = from,
+    to = to,
+    start_time = start_time,
+    day = "Sunday"
+)
 
 # specify travel by "U" = underground only
-route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time,
-                     day = "Sunday", route_pattern = "^U")
+route <- gtfs_route (
+    gtfs,
+    from = from,
+    to = to,
+    start_time = start_time,
+    day = "Sunday",
+    route_pattern = "^U"
+)
 # specify travel by "S" = street-level only (not underground)
-route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time,
-                     day = "Sunday", route_pattern = "^S")
+route <- gtfs_route (
+    gtfs,
+    from = from,
+    to = to,
+    start_time = start_time,
+    day = "Sunday",
+    route_pattern = "^S"
+)
 
 # Route queries are generally faster if the GTFS data are pre-processed with
 # `gtfs_timetable()`:
@@ -120,7 +137,6 @@ route <- gtfs_route (gt, from = from, to = to, start_time = start_time)
 }
 \seealso{
 Other main: 
-\code{\link{gtfs_isochrone}()},
 \code{\link{gtfs_route_headway}()},
 \code{\link{gtfs_traveltimes}()}
 }

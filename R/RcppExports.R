@@ -57,20 +57,6 @@ rcpp_transfer_nbs <- function(stops, dmat, dlim) {
     .Call(`_gtfsrouter_rcpp_transfer_nbs`, stops, dmat, dlim)
 }
 
-#' rcpp_isochrone
-#'
-#' Calculate isochrones using Connection Scan Algorithm for GTFS data. Works
-#' largely as rcpp_csa. Returns a list of integer vectors, with [i] holding
-#' sequences of stations on a given route, the end one being the terminal
-#' isochrone point, and [i+1] holding correpsonding trip numbers.
-#'
-#' All elements of all data are 1-indexed
-#'
-#' @noRd
-rcpp_isochrone <- function(timetable, transfers, nstations, start_stations, start_time, end_time, minimise_transfers) {
-    .Call(`_gtfsrouter_rcpp_isochrone`, timetable, transfers, nstations, start_stations, start_time, end_time, minimise_transfers)
-}
-
 #' rcpp_traveltimes
 #'
 #' Calculate isochrones using Connection Scan Algorithm for GTFS data. Works

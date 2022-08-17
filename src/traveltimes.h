@@ -110,19 +110,6 @@ struct BackTrace
 
 namespace iso {
 
-void trace_forward_iso (
-        Iso & iso,
-        const int & start_time,
-        const int & end_time,
-        const std::vector <size_t> & departure_station,
-        const std::vector <size_t> & arrival_station,
-        const std::vector <size_t> & trip_id,
-        const std::vector <int> & departure_time,
-        const std::vector <int> & arrival_time,
-        const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
-        const std::unordered_set <size_t> & start_stations_set,
-        const bool & minimise_transfers);
-
 bool fill_one_iso (
         const size_t &departure_station,
         const size_t &arrival_station,
@@ -213,12 +200,7 @@ bool arrival_already_visited (
         const size_t & departure_station,
         const size_t & arrival_station);
 
-// The only two Rcpp functions:
-Rcpp::List trace_back_isochrones (
-        const Iso & iso,
-        const bool &minimise_transfers
-        );
-
+// The only Rcpp function:
 Rcpp::IntegerMatrix trace_back_traveltimes (
         const Iso & iso,
         const bool &minimise_transfers
@@ -234,16 +216,6 @@ void trace_back_one_stn (
 
 
 } // end namespace iso
-
-// ---- isochrone.cpp
-Rcpp::List rcpp_isochrone (
-        Rcpp::DataFrame timetable,
-        Rcpp::DataFrame transfers,
-        const size_t nstations,
-        const std::vector <size_t> start_stations,
-        const int start_time,
-        const int end_time,
-        const bool minimise_transfers);
 
 Rcpp::IntegerMatrix rcpp_traveltimes (Rcpp::DataFrame timetable,
         Rcpp::DataFrame transfers,

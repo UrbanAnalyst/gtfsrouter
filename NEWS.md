@@ -3,6 +3,8 @@
 Major changes:
 
 - `gtfs_transfer_table()` function now much faster due to re-coding in C++
+- Removed previously deprecated `gtfs_isochrone()` function; now entirely
+  replaced by `gtfs_traveltimes()`.
 
 Minor changes:
 

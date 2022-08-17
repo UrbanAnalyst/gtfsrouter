@@ -26,7 +26,6 @@ summary (g) # also summarizes additional timetable information
 Other additional: 
 \code{\link{go_home}()},
 \code{\link{go_to_work}()},
-\code{\link{plot.gtfs_ischrone}},
 \code{\link{process_gtfs_local}()}
 }
 \concept{additional}
