@@ -1,5 +1,96 @@
 #include "traveltimes.h"
 
+void iso::trace_forward_traveltimes (
+        Iso & iso,
+        const int & start_time_min,
+        const int & start_time_max,
+        const std::vector <size_t> & departure_station,
+        const std::vector <size_t> & arrival_station,
+        const std::vector <size_t> & trip_id,
+        const std::vector <int> & departure_time,
+        const std::vector <int> & arrival_time,
+        const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
+        const std::unordered_set <size_t> & start_stations_set,
+        const bool & minimise_transfers)
+{
+    const size_t nrows = departure_station.size ();
+
+    std::unordered_map <size_t, bool> stations;
+    for (size_t a: arrival_station)
+        stations.emplace (std::make_pair (a, false));
+
+    for (size_t i = 0; i < nrows; i++)
+    {
+        if (departure_time [i] < start_time_min)
+            continue; // # nocov - these lines already removed in R fn.
+
+        // connections can also arrive at one of the departure stations, and
+        // these are also flagged as start stations to prevent transfers being
+        // constructed from the arrival/start station.
+        const bool is_start_stn =
+            iso::is_start_stn (start_stations_set, departure_station [i]) ||
+            iso::is_start_stn (start_stations_set, arrival_station [i]);
+
+        if (is_start_stn && departure_time [i] > start_time_max)
+            continue;
+
+        if (!is_start_stn &&
+                (iso.earliest_departure [departure_station [i]] == INFINITE_INT ||
+                 (iso.earliest_departure [departure_station [i]] < INFINITE_INT &&
+                  iso.earliest_departure [departure_station [i]] > departure_time [i])))
+        {
+            continue;
+        }
+
+        bool filled = iso::fill_one_iso (departure_station [i],
+                arrival_station [i], trip_id [i], departure_time [i],
+                arrival_time [i], is_start_stn,
+                minimise_transfers, iso);
+
+        if (filled && !stations.at (arrival_station [i]))
+        {
+            stations [arrival_station [i]] = true;
+        }
+
+        // Exclude transfers from start stations; see #88. These can't be
+        // included because they can't be allocated a start time from the
+        // timetable, so are effectively considered to take no time, allowing
+        // the algorithm to jump to nearby stations at same start time, which
+        // mucks everything up.
+        if (!is_start_stn && filled && transfer_map.find (arrival_station [i]) != transfer_map.end ())
+        {
+            for (auto t: transfer_map.at (arrival_station [i]))
+            {
+                const size_t trans_dest = t.first;
+                const int trans_duration = t.second;
+
+                if (!iso::is_start_stn (start_stations_set, trans_dest))
+                {
+                    iso::fill_one_transfer (
+                            departure_station [i],
+                            arrival_station [i],
+                            arrival_time [i],
+                            trans_dest,
+                            trans_duration,
+                            minimise_transfers,
+                            iso);
+
+                    if (stations.find (trans_dest) !=
+                            stations.end ())
+                    {
+                        if (!stations.at (trans_dest))
+                        {
+                            stations [trans_dest] = true;
+                        }
+                    }
+                }
+
+            } // end for t over transfer map
+        } // end if filled
+    } // end for i over nrows of timetable
+}
+
+
 
 //' Translate one timetable line into values at arrival station
 //'
@@ -50,6 +141,7 @@ bool iso::fill_one_iso (
         // final value of is_end_stn is then only true is also !not_end_stn.
 
         bool not_end_stn = false;
+
         for (auto st: iso.connections [departure_station].convec)
         {
             // don't fill any connections > max_traveltime
@@ -191,86 +283,6 @@ bool iso::fill_one_iso (
     }
 
     return fill_vals;
-}
-
-
-void iso::trace_forward_traveltimes (
-        Iso & iso,
-        const int & start_time_min,
-        const int & start_time_max,
-        const std::vector <size_t> & departure_station,
-        const std::vector <size_t> & arrival_station,
-        const std::vector <size_t> & trip_id,
-        const std::vector <int> & departure_time,
-        const std::vector <int> & arrival_time,
-        const std::unordered_map <size_t, std::unordered_map <size_t, int> > & transfer_map,
-        const std::unordered_set <size_t> & start_stations_set,
-        const bool & minimise_transfers)
-{
-    const size_t nrows = departure_station.size ();
-
-    std::unordered_map <size_t, bool> stations;
-    for (size_t a: arrival_station)
-        stations.emplace (std::make_pair (a, false));
-
-    for (size_t i = 0; i < nrows; i++)
-    {
-        if (departure_time [i] < start_time_min)
-            continue; // # nocov - these lines already removed in R fn.
-
-        const bool is_start_stn = iso::is_start_stn (start_stations_set,
-                departure_station [i]);
-
-        if (is_start_stn && departure_time [i] > start_time_max)
-            continue;
-
-        if (!is_start_stn &&
-                iso.earliest_departure [departure_station [i]] < INFINITE_INT &&
-                iso.earliest_departure [departure_station [i]] >
-                departure_time [i])
-            continue;
-
-        bool filled = iso::fill_one_iso (departure_station [i],
-                arrival_station [i], trip_id [i], departure_time [i],
-                arrival_time [i], is_start_stn,
-                minimise_transfers, iso);
-
-        if (filled && !stations.at (arrival_station [i]))
-        {
-            stations [arrival_station [i]] = true;
-        }
-
-        if (filled && transfer_map.find (arrival_station [i]) != transfer_map.end ())
-        {
-            for (auto t: transfer_map.at (arrival_station [i]))
-            {
-                const size_t trans_dest = t.first;
-                const int trans_duration = t.second;
-
-                if (!iso::is_start_stn (start_stations_set, trans_dest))
-                {
-                    iso::fill_one_transfer (
-                            departure_station [i],
-                            arrival_station [i],
-                            arrival_time [i],
-                            trans_dest,
-                            trans_duration,
-                            minimise_transfers,
-                            iso);
-
-                    if (stations.find (trans_dest) !=
-                            stations.end ())
-                    {
-                        if (!stations.at (trans_dest))
-                        {
-                            stations [trans_dest] = true;
-                        }
-                    }
-                }
-
-            } // end for t over transfer map
-        } // end if filled
-    } // end for i over nrows of timetable
 }
 
 
