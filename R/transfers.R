@@ -181,8 +181,8 @@ get_network_times <- function (network, transfers, quiet = FALSE) {
 
     xyf <- transfers [, c ("from_lon", "from_lat")]
     xyt <- transfers [, c ("to_lon", "to_lat")]
-    from_ids <- v$id [dodgr::match_points_to_graph (v, xyf)]
-    to_ids <- v$id [dodgr::match_points_to_graph (v, xyt)]
+    from_ids <- v$id [dodgr::match_points_to_verts (v, xyf)]
+    to_ids <- v$id [dodgr::match_points_to_verts (v, xyt)]
     from_to <- unique (c (from_ids, to_ids))
 
     netc <- dodgr::dodgr_contract_graph (net, verts = from_to)

@@ -9,6 +9,7 @@ Major changes:
 Minor changes:
 
 - `gtfs_timetable()` modified to work on feeds which do not have "calendar.txt"
+- Fix `transfer_times` function with updated dodgr `match_pts_to_verts` fn
 
 
 # v 0.0.5
