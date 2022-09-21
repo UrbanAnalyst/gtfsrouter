@@ -116,7 +116,6 @@ bool iso::fill_one_iso (
     // is_transfer is used to increment "implicit" transfers to different
     // services from same stop_id, which do not otherwise appear as transfers.
 
-    int prev_trip = -1L; // int to allow -1L flag
     int ntransfers = INFINITE_INT;
     int latest_initial = -1L;
 
@@ -214,7 +213,6 @@ bool iso::fill_one_iso (
                             departure_time);
 
                     latest_initial = st.initial_depart;
-                    prev_trip = static_cast <int> (st.trip);
                     ntransfers = st.ntransfers;
                     is_transfer = st.is_transfer;
                 }
