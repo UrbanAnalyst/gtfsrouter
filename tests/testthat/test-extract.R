@@ -9,6 +9,9 @@ test_that ("extract non gtfs", {
     writeLines ("blah", con)
     close (con)
     fz <- file.path (tempdir (), "vbb.zip")
+    if (file.exists (fz)) {
+        chk <- file.remove (fz)
+    }
     chk <- zip (fz, file = f)
 
     msg <- paste0 (fz, " does not appear to be a GTFS file")

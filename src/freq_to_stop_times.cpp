@@ -19,6 +19,8 @@ Rcpp::List rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
 
     for (size_t i = 0; i < ntrips; i++)
     {
+        Rcpp::checkUserInterrupt ();
+
         const int headway = f_headway [i];
         const int start_time = f_start_time [i];
         const int end_time = f_end_time [i];
