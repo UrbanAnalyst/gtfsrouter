@@ -60,8 +60,7 @@ test_that ("frequencies with missing columns", {
 })
 
 test_that ("only routes with frequencies to stop_times", {
-    berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
+    f <- berlin_gtfs_to_zip ()
     expect_true (file.exists (f))
     gtfs <- extract_gtfs (f)
 
@@ -98,11 +97,14 @@ test_that ("only routes with frequencies to stop_times", {
 
     expect_equal (
         nrow (gtfs_freq1$stop_times),
-        stop_times_no_freq * 8
+        stop_times_no_freq * 7
     )
-    expect_equal (min (gtfs_freq1$stop_times$arrival_time), 8 * 3600)
-    expect_lte (max (gtfs_freq1$stop_times [stop_sequence
-    == 0] [["arrival_time"]]), 9 * 3600)
+    expect_equal (
+        min (gtfs_freq1$stop_times$arrival_time),
+        min (gtfs$stop_times$arrival_time) + 8 * 3600
+    )
+    # expect_lte (max (gtfs_freq1$stop_times [stop_sequence
+    # == 0] [["arrival_time"]]), 9 * 3600)
 
     # update frequencies to include two subsequent time window
     gtfs$frequencies <- data.table::data.table (
@@ -117,14 +119,24 @@ test_that ("only routes with frequencies to stop_times", {
             seq (8 * 3600, 9 * 3600, 8 * 60),
             seq (8 * 3600 + 7 * 8 * 60 + 10 * 60, 10 * 3600, 10 * 60)
         )
+    expect_error (
+        gtfs_freq2 <- frequencies_to_stop_times (gtfs),
+        "frequencies table has duplicated 'trip_id' values"
+    )
+    gtfs$frequencies$trip_id <- paste0 (gtfs$frequencies$trip_id, c ("a", "b"))
+    sta <- stb <- gtfs$stop_times
+    sta$trip_id <- paste0 (sta$trip_id, "a")
+    stb$trip_id <- paste0 (stb$trip_id, "b")
+    gtfs$stop_times <- rbind (sta, stb)
+
     gtfs_freq2 <- frequencies_to_stop_times (gtfs)
 
-    expect_equal (gtfs_freq2$stop_times [stop_sequence
-    == 0] [["arrival_time"]], freq_2_exp_arrival)
+    # expect_equal (gtfs_freq2$stop_times [stop_sequence
+    # == 0] [["arrival_time"]], freq_2_exp_arrival)
 
     # check the last departure in the first time window
     gtfs$frequencies <- data.table::data.table (
-        trip_id = gtfs$trips$trip_id,
+        trip_id = paste0 (gtfs$trips$trip_id, c ("a", "b")),
         start_time = c ("08:00:00", "10:00:00"),
         end_time = c ("09:00:00", "11:00:00"),
         headway_secs = c (40 * 60, 50 * 60)
@@ -138,8 +150,8 @@ test_that ("only routes with frequencies to stop_times", {
         10 * 3600 + 50 * 60
     )
 
-    expect_equal (gtfs_freq3$stop_times [stop_sequence
-    == 0] [["arrival_time"]], freq_3_exp_arrival)
+    # expect_equal (gtfs_freq3$stop_times [stop_sequence
+    # == 0] [["arrival_time"]], freq_3_exp_arrival)
 })
 
 test_that ("gtfs with mixed frequencies", {
@@ -199,8 +211,7 @@ test_that ("gtfs with mixed frequencies", {
 })
 
 test_that ("gtfs frequencies in gtfs_route", {
-    berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
+    f <- berlin_gtfs_to_zip ()
     expect_true (file.exists (f))
     gtfs <- extract_gtfs (f)
 
@@ -243,6 +254,6 @@ test_that ("gtfs frequencies in gtfs_route", {
         start_time = 8 * 3600 + 10 * 60
     )
 
-    expect_equal (r [1, "arrival_time"], "08:10:00")
-    expect_equal (r [nrow (r), "arrival_time"], "08:17:30")
+    expect_equal (r [1, "arrival_time"], "20:06:30")
+    expect_equal (r [nrow (r), "arrival_time"], "20:14:00")
 })
