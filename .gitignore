@@ -3,6 +3,9 @@
 .RData
 inst/doc
 aaa\.Rmd*
+feeds/
+r5/
+data-raw/
 # History files
 .Rhistory
 .Rapp.history
