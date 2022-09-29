@@ -63,6 +63,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_freq_to_stop_times
+Rcpp::List rcpp_freq_to_stop_times(Rcpp::DataFrame frequencies, Rcpp::List stop_times, const int n_timetables);
+RcppExport SEXP _gtfsrouter_rcpp_freq_to_stop_times(SEXP frequenciesSEXP, SEXP stop_timesSEXP, SEXP n_timetablesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type frequencies(frequenciesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type stop_times(stop_timesSEXP);
+    Rcpp::traits::input_parameter< const int >::type n_timetables(n_timetablesSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_freq_to_stop_times(frequencies, stop_times, n_timetables));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_transfer_nbs
 Rcpp::List rcpp_transfer_nbs(Rcpp::DataFrame stops, const double dlim);
 RcppExport SEXP _gtfsrouter_rcpp_transfer_nbs(SEXP stopsSEXP, SEXP dlimSEXP) {
@@ -99,6 +112,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_gtfsrouter_rcpp_time_to_seconds", (DL_FUNC) &_gtfsrouter_rcpp_time_to_seconds, 1},
     {"_gtfsrouter_rcpp_make_timetable", (DL_FUNC) &_gtfsrouter_rcpp_make_timetable, 3},
     {"_gtfsrouter_rcpp_csa", (DL_FUNC) &_gtfsrouter_rcpp_csa, 8},
+    {"_gtfsrouter_rcpp_freq_to_stop_times", (DL_FUNC) &_gtfsrouter_rcpp_freq_to_stop_times, 3},
     {"_gtfsrouter_rcpp_transfer_nbs", (DL_FUNC) &_gtfsrouter_rcpp_transfer_nbs, 2},
     {"_gtfsrouter_rcpp_traveltimes", (DL_FUNC) &_gtfsrouter_rcpp_traveltimes, 8},
     {NULL, NULL, 0}

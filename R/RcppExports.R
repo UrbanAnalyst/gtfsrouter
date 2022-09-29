@@ -48,6 +48,13 @@ rcpp_csa <- function(timetable, transfers, nstations, ntrips, start_stations, en
     .Call(`_gtfsrouter_rcpp_csa`, timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time, max_transfers)
 }
 
+#' rcpp_freq_to_stop_times
+#'
+#' @noRd
+rcpp_freq_to_stop_times <- function(frequencies, stop_times, n_timetables) {
+    .Call(`_gtfsrouter_rcpp_freq_to_stop_times`, frequencies, stop_times, n_timetables)
+}
+
 #' Haversine for variable x and y
 #'
 #' @return single distance
