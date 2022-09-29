@@ -114,6 +114,12 @@ make_timetable <- function (gtfs) {
     trip_ids <- force_char (unique (gtfs$trips [, trip_id]))
     gtfs$stop_times [, trip_id := force_char (trip_id)]
     gtfs$stop_times [, stop_id := force_char (stop_id)]
+
+    # trip_id values may be modified by rcpp_freqs_to_stop_times, by appending
+    # "_[0-9]+", so need to grep for actual 'trip_id' values in 'stop_times'
+    # table here:
+    index <- grep (paste0 (trip_ids, collapse = "|"), gtfs$stop_times$trip_id)
+    trip_ids <- unique (gtfs$stop_times$trip_id [index])
     tt <- rcpp_make_timetable (gtfs$stop_times, stop_ids, trip_ids)
     # tt has [departure/arrival_station, departure/arrival_time,
     # trip_id], where the station and trip values are 1-based indices into
@@ -174,7 +180,10 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
 
     index <- which (gtfs$trips [, service_id] %in% service_id)
     gtfs$trips <- gtfs$trips [index, ]
-    index <- which (gtfs$stop_times [, trip_id] %in% gtfs$trips [, trip_id])
+    # trip_id values in stop_times can be modified by rcpp_freq_to_stop_times,
+    # which appends "_[0:9]+" values.
+    trip_ids <- paste0 (gtfs$trips [, trip_id], collapse = "|")
+    index <- grep (trip_ids, gtfs$stop_times [, trip_id])
     gtfs$stop_times <- gtfs$stop_times [index, ]
 
     return (gtfs)
