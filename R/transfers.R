@@ -56,17 +56,9 @@ gtfs_transfer_table <- function (gtfs,
 
     } else {
 
-        xyf <- transfers [, c ("from_lon", "from_lat")]
-        xyt <- transfers [, c ("to_lon", "to_lat")]
-        transfer_times <- geodist::geodist (
-            xyf,
-            xyt,
-            paired = TRUE,
-            measure = "haversine"
-        )
         # use max speed of 4km/h, as for OpenTripPlanner pedestrian speed
         # -> 4000 / 3600 = 1.11 m / s
-        transfer_times <- transfer_times / 1.111111
+        transfer_times <- transfers$d / 1.111111
     }
 
     transfer_times [transfer_times < min_transfer_time] <- min_transfer_time
@@ -108,57 +100,33 @@ dl_net <- function (gtfs) {
 
 get_transfer_list <- function (gtfs, d_limit) {
 
-    # reduce down to unique (lon, lat) pairs:
-    xy <- round (gtfs$stops [, c ("stop_lon", "stop_lat")], digits = 6)
-    xy_char <- paste0 (xy$stop_lon, "==", xy$stop_lat)
-    index <- which (!duplicated (xy_char))
-    index_back <- lapply (xy_char [index], function (i) {
-        which (xy_char == i)
-    })
-
-    stops <- gtfs$stops
-
-    requireNamespace ("geodist")
-    d <- geodist::geodist (stops [index, c ("stop_lon", "stop_lat")],
-        measure = "haversine"
-    )
-
-    nbs <- apply (d, 1, function (i) {
-        j <- which (i <= d_limit & !is.na (i))
-        ret <- integer (0)
-        if (length (j) > 0) {
-            ret <- unlist (lapply (j, function (k) {
-                index_back [[k]]
-            }))
-        }
-        return (ret) })
-
-    nbs <- lapply (seq_along (nbs), function (i) {
-        out <- c (nbs [[i]], index_back [[i]])
-        out <- sort (unique (out))
-        return (out [which (!out == i)])
-    })
-    index_back <- match (xy_char, xy_char [index])
-    transfers <- nbs [index_back]
+    transfers <- rcpp_transfer_nbs (gtfs$stops, d_limit)
+    nstops <- nrow (gtfs$stops)
+    index <- seq (nstops)
+    dists <- transfers [index + nstops]
+    transfers <- transfers [index]
 
     lens <- vapply (transfers, length, integer (1))
     for (i in which (lens > 0)) {
         transfers [[i]] <- cbind (
             from = gtfs$stops$stop_id [i],
-            to = gtfs$stops$stop_id [transfers [[i]]]
+            to = gtfs$stops$stop_id [transfers [[i]]],
+            d = dists [[i]]
         )
     }
     transfers <- data.frame (do.call (rbind, transfers),
         stringsAsFactors = FALSE
     )
 
-    index <- match (transfers$from, stops$stop_id)
-    transfers$from_lon <- stops$stop_lon [index]
-    transfers$from_lat <- stops$stop_lat [index]
+    index <- match (transfers$from, gtfs$stops$stop_id)
+    transfers$from_lon <- gtfs$stops$stop_lon [index]
+    transfers$from_lat <- gtfs$stops$stop_lat [index]
 
-    index <- match (transfers$to, stops$stop_id)
-    transfers$to_lon <- stops$stop_lon [index]
-    transfers$to_lat <- stops$stop_lat [index]
+    index <- match (transfers$to, gtfs$stops$stop_id)
+    transfers$to_lon <- gtfs$stops$stop_lon [index]
+    transfers$to_lat <- gtfs$stops$stop_lat [index]
+
+    transfers$d <- as.numeric (transfers$d)
 
     return (transfers)
 }
