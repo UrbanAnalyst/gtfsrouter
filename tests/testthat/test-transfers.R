@@ -45,8 +45,6 @@ test_that ("transfers works", {
     expect_true (nrow (tr500) > nrow (tr200))
     expect_true (all (tr200$from_stop_id %in% tr500$from_stop_id))
     expect_true (all (tr200$to_stop_id %in% tr500$to_stop_id))
-    expect_true (all (tr500$from_stop_id %in% tr200$from_stop_id))
-    expect_true (all (tr500$to_stop_id %in% tr200$to_stop_id))
     expect_true (mean (tr500$min_transfer_time) >
         mean (tr200$min_transfer_time))
 })
