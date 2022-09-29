@@ -48,13 +48,25 @@ rcpp_csa <- function(timetable, transfers, nstations, ntrips, start_stations, en
     .Call(`_gtfsrouter_rcpp_csa`, timetable, transfers, nstations, ntrips, start_stations, end_stations, start_time, max_transfers)
 }
 
+#' Haversine for variable x and y
+#'
+#' @return single distance
+#'
+#' @note The sxd and syd values could be calculated in arrays, each value of
+#' which could be determined with only n operations, rather than the n2 used
+#' here. Doing so, however, requires very large C arrays which are often
+#' problematic, so this is safer.
+#'
+#' @noRd
+NULL
+
 #' rcpp_transfer_nbs
 #'
 #' Get nbs of every station within range dlim
 #'
 #' @noRd
-rcpp_transfer_nbs <- function(stops, dmat, dlim) {
-    .Call(`_gtfsrouter_rcpp_transfer_nbs`, stops, dmat, dlim)
+rcpp_transfer_nbs <- function(stops, dlim) {
+    .Call(`_gtfsrouter_rcpp_transfer_nbs`, stops, dlim)
 }
 
 #' rcpp_traveltimes

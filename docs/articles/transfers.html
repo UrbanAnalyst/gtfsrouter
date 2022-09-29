@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.102</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.104</span>
       </span>
     </div>
 
@@ -72,7 +72,7 @@
       <h1 data-toc-skip>Transfer Tables</h1>
                         <h4 data-toc-skip class="author">Mark Padgham</h4>
             
-            <h4 data-toc-skip class="date">2022-09-21</h4>
+            <h4 data-toc-skip class="date">2022-09-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ATFutures/gtfs-router/blob/HEAD/vignettes/transfers.Rmd" class="external-link"><code>vignettes/transfers.Rmd</code></a></small>
       <div class="hidden name"><code>transfers.Rmd</code></div>
@@ -194,13 +194,13 @@
 <code class="sourceCode R"><span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 2779</span></span></code></pre>
-<p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html" class="external-link"><code>gtfs_transfer_table()</code> function</a> generates 550 additional transfers not present in the original feed, but as stated contains no information on transfers between specific routes or trips. Alternatively, using the function to extend the existing table, rather than re-generate it, gives the following result:</p>
+<pre><code><span><span class="co">## [1] 1894</span></span></code></pre>
+<p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html" class="external-link"><code>gtfs_transfer_table()</code> function</a> generates -335 additional transfers not present in the original feed, but as stated contains no information on transfers between specific routes or trips. Alternatively, using the function to extend the existing table, rather than re-generate it, gives the following result:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 10445</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 10369</span></span></code></pre>
 <p>Note that each call to <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html" class="external-link"><code>gtfs_transfer_table()</code></a> will only extend the table through adding any transfers not present in the previous table, and that no transfers will be removed. The following code uses the <code>d_limit</code> parameter <a href="#transfer-distances">described below</a> to calculate transfer tables for increasing maximal transfer distances.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -208,18 +208,18 @@
 <span>            <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span>, d_limit <span class="op">=</span> <span class="va">i</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
 <span>            <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">)</span><span class="op">)</span></span>
 <span>           <span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span> <span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##  [1] 10287 10367 10445 10553 10741 10999 11753 12719 13803 15045 16219</span></span></code></pre>
+<pre><code><span><span class="co">##  [1] 10211 10291 10369 10477 10665 10923 11677 12645 13729 14971 16149</span></span></code></pre>
 <p>The transfer table increases in size with each call, and retains all transfers generated from all previous calls. Because each call involves extending the transfer table, the table at each stage may be used for routing with transfers out to each specified distance. Subsequently reducing the transfer distance would then not be appropriate, as the table would still retain all transfers at previously-calculated (longer) distances:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span>, d_limit <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 10367</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 10291</span></span></code></pre>
 <p>In this case, the table would first have to be removed (<code>gtfs$transfers &lt;- NULL</code>), and the recalculated at the specified distance.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span>, d_limit <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 2701</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 1816</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="modifying-transfer-tables">Modifying transfer tables<a class="anchor" aria-label="anchor" href="#modifying-transfer-tables"></a>
@@ -447,7 +447,7 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span> <span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span> <span class="op">(</span><span class="st">"time difference (minutes)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="transfers_files/figure-html/plot1-1.png" width="700"></p>
-<p>And these additional transfer possibilities can make a significant difference to estimated travel times. Note, however, that the travel times only changed for 590 stations, while the value of <code>nsame</code> value recording numbers of stations for which travel times did not change was 3,677. Travel times may also increase as additional transfers may be used to reduce numbers of connecting services required for a particular trip, and the algorithm generally searches for connections with minimal numbers of transfers.</p>
+<p>And these additional transfer possibilities can make a significant difference to estimated travel times. Note, however, that the travel times only changed for 410 stations, while the value of <code>nsame</code> value recording numbers of stations for which travel times did not change was 4,263. Travel times may also increase as additional transfers may be used to reduce numbers of connecting services required for a particular trip, and the algorithm generally searches for connections with minimal numbers of transfers.</p>
 <p>The following code the quantifies the overall effect of these reductions in travel times, measured as the linear reduction in comparison with travel times calculated using the original transfers table provided with the feed. The function also returns the proportion of all stations for which travel times were affected by the modified transfer table.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transfer_difference</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">gtfs</span>,</span>
@@ -514,7 +514,7 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span> <span class="op">(</span>pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span> <span class="op">(</span>method <span class="op">=</span> <span class="st">"loess"</span>, formula <span class="op">=</span> <span class="st">"y ~ x"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="transfers_files/figure-html/transfer_d_limit_results-1.png" width="700"></p>
-<p>That result shows that travel times do decrease with increasing limits of maximal transfer distance, although the overall effect is very minimal. The object <code>d</code> also records the proportion of station pairs for which modifications to the transfers table actually changed travel times, which in this case amounts to a mean value of 0.0054, clearly revealing that very few trips actually change.</p>
+<p>That result shows that travel times do decrease with increasing limits of maximal transfer distance, although the overall effect is very minimal. The object <code>d</code> also records the proportion of station pairs for which modifications to the transfers table actually changed travel times, which in this case amounts to a mean value of 0.0038, clearly revealing that very few trips actually change.</p>
 <div class="section level3">
 <h3 id="a-more-realistic-example">A more realistic example<a class="anchor" aria-label="anchor" href="#a-more-realistic-example"></a>
 </h3>
