@@ -42,7 +42,6 @@ Rcpp::List rcpp_transfer_nbs (Rcpp::DataFrame stops,
     {
         const double cosy1 = cos (stop_y [i] * pi / 180.0);
 
-        //std::unordered_set <TransferPair, pair_hash> nbs;
         std::vector <size_t> index;
         std::vector <double> dist;
         for (size_t j = 0; j < n; j++)
@@ -55,17 +54,13 @@ Rcpp::List rcpp_transfer_nbs (Rcpp::DataFrame stops,
             if (d_j <= dlim)
             {
                 // + 1 so can be returned as 1-based R index:
-                //nbs.emplace (j + 1, d_j);
                 index.push_back (j + 1);
                 dist.push_back (d_j);
             }
         }
 
-        //res (i) = nbs;
         res (i) = index;
         res (n + i) = dist;
-
-        //nbs.clear ();
     }
 
     return res;
