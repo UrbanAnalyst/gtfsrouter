@@ -115,13 +115,16 @@ make_timetable <- function (gtfs) {
     gtfs$stop_times [, trip_id := force_char (trip_id)]
     gtfs$stop_times [, stop_id := force_char (stop_id)]
 
-    # trip_id values may be modified by rcpp_freqs_to_stop_times, by appending
-    # "_[0-9]+", so need to grep for actual 'trip_id' values in 'stop_times'
-    # table here:
-    index <- lapply (unique (trip_ids), function (i) {
-        grep (i, gtfs$stop_times [, trip_id], fixed = TRUE)
-    })
-    index <- sort (unique (unlist (index)))
+    # trip_id values in stop_times can be modified by rcpp_freq_to_stop_times,
+    # which appends a suffix and includes that as an attributes of the return
+    # object.
+    trip_ids <- gtfs$stop_times$trip_id
+    sfx <- attr (gtfs, "freq_sfx")
+    if (!is.null (sfx)) {
+        sfx <- paste0 ("\\", sfx, "[0-9]+$")
+        trip_ids <- gsub (sfx, "", trip_ids)
+    }
+    index <- which (trip_ids %in% gtfs$trips$trip_id)
     trip_ids <- unique (gtfs$stop_times$trip_id [index])
     tt <- rcpp_make_timetable (gtfs$stop_times, stop_ids, trip_ids)
     # tt has [departure/arrival_station, departure/arrival_time,
