@@ -70,9 +70,43 @@ frequencies_to_stop_times <- function (gtfs) {
     index <- match (freqs$trip_id, names (f_stop_times))
     f_stop_times <- f_stop_times [index]
 
-    # then get final number of new timetables to be made:
-    n <- ceiling ((freqs$end_time - freqs$start_time) / freqs$headway_secs)
-    n <- sum (n)
+    # then get final number of new timetables and actual timetable entries to be
+    # made:
+    index_non <- which (!duplicated (freqs$trip_id))
+    freqs$nseq <- NA_integer_
+    freqs$nseq [index_non] <- ceiling ((freqs$end_time - freqs$start_time) / freqs$headway_secs) [index_non]
+    index_dupl <- which (duplicated (freqs$trip_id))
+    if (length (index_dupl) > 0L) {
+        # same trip_ids, different headway values. construct sequences of trips
+        # spanning headway changes
+        index_dupl <- which (freqs$trip_id %in% freqs$trip_id [index_dupl])
+        freqs_dupl <- split (
+            freqs [index_dupl, ],
+            f = as.factor (freqs$trip_id [index_dupl])
+        )
+        n_seqs <- lapply (freqs_dupl, function (i) {
+            nseq <- (i$end_time - i$start_time) / i$headway_secs
+            out <- data.frame (
+                trip_id = i$trip_id,
+                start_time = i$start_time,
+                end_time = i$end_time,
+                headway_secs = i$headway_secs,
+                nseq,
+                end_time_actual = i$start_time + nseq * i$headway_secs
+            )
+            index <- which (out$end_time_actual > out$end_time)
+            out$nseq [index] <- out$nseq [index] - 1
+            out$end_time_actual [index] <- out$end_time_actual [index] -
+                out$headway_secs [index]
+
+            return (out)
+        })
+        freqs_dupl <- do.call (rbind, n_seqs)
+        freqs$nseq [index_dupl] <-
+            ceiling ((freqs_dupl$end_time - freqs_dupl$start_time) / freqs_dupl$headway_secs)
+    }
+
+    n <- sum (freqs$nseq)
 
     res <- rcpp_freq_to_stop_times (freqs, f_stop_times, n, sfx)
     res <- do.call (rbind, res)
