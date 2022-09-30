@@ -63,20 +63,18 @@ frequencies_to_stop_times <- function (gtfs) {
     gtfs_cp$stop_times <- gtfs_cp$stop_times [gtfs_cp$stop_times$timepoint == 1L, ]
 
     freqs <- gtfs_cp$frequencies
-    if (any (duplicated (freqs$trip_id))) {
-        stop ("frequencies table has duplicated 'trip_id' values", call. = FALSE)
-    }
+    sfx <- trip_id_suffix (freqs)
 
     # convert f_stop_times to list:
     f_stop_times <- split (f_stop_times, f = as.factor (f_stop_times$trip_id))
     index <- match (freqs$trip_id, names (f_stop_times))
     f_stop_times <- f_stop_times [index]
 
-    # then get final number of trips to be made:
+    # then get final number of new timetables to be made:
     n <- ceiling ((freqs$end_time - freqs$start_time) / freqs$headway_secs)
     n <- sum (n)
 
-    res <- rcpp_freq_to_stop_times (freqs, f_stop_times, n)
+    res <- rcpp_freq_to_stop_times (freqs, f_stop_times, n, sfx)
     res <- do.call (rbind, res)
 
     # The Rcpp fn only returns a subset of the main columns; any additional ones
@@ -84,5 +82,25 @@ frequencies_to_stop_times <- function (gtfs) {
     index <- which (names (gtfs_cp$stop_times) %in% names (res))
     gtfs_cp$stop_times <- rbind (gtfs_cp$stop_times [, ..index], res)
 
+    attr (gtfs_cp, "freq_sfx") <- sfx
+
     return (gtfs_cp)
+}
+
+#' Get unambiguous 'trip_id' suffix
+#'
+#' Original 'trip_id' values can then be easily recovered by removing these
+#' suffixes.
+#' @param freqs frequencies table including 'trip_id' column
+#' @noRd
+trip_id_suffix <- function (freqs) {
+
+    sfx <- "\\_f[0-9]+$"
+    while (any (grepl (sfx, freqs$trip_id))) {
+        sfx <- gsub ("\\_f", "\\_ff", sfx)
+    }
+    nf <- length (gregexpr ("f", sfx) [[1]])
+    sfx <- paste0 ("_", paste0 (rep ("f", nf), collapse = ""))
+
+    return (sfx)
 }
