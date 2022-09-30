@@ -82,6 +82,8 @@ frequencies_to_stop_times <- function (gtfs) {
     index <- which (names (gtfs_cp$stop_times) %in% names (res))
     gtfs_cp$stop_times <- rbind (gtfs_cp$stop_times [, ..index], res)
 
+    attr (gtfs_cp, "freq_sfx") <- sfx
+
     return (gtfs_cp)
 }
 
