@@ -184,13 +184,15 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
     index <- which (gtfs$trips [, service_id] %in% service_id)
     gtfs$trips <- gtfs$trips [index, ]
     # trip_id values in stop_times can be modified by rcpp_freq_to_stop_times,
-    # which appends "_[0:9]+" values. The grepped patterns can't be joined
-    # together, as too many "|" conditions can run out of memory on a grep call.
-    # Luckily, using lapply on grep with "fixed = TRUE" is pretty fast.
-    index <- lapply (unique (gtfs$trips [, trip_id]), function (i) {
-        grep (i, gtfs$stop_times [, trip_id], fixed = TRUE)
-    })
-    index <- sort (unique (unlist (index)))
+    # which appends a suffix and includes that as an attributes of the return
+    # object.
+    trip_ids <- gtfs$stop_times$trip_id
+    sfx <- attr (gtfs, "freq_sfx")
+    if (!is.null (sfx)) {
+        sfx <- paste0 ("\\", sfx, "[0-9]+$")
+        trip_ids <- gsub (sfx, "", trip_ids)
+    }
+    index <- which (trip_ids %in% gtfs$trips$trip_id)
     gtfs$stop_times <- gtfs$stop_times [index, ]
 
     return (gtfs)
