@@ -5,7 +5,8 @@
 //' @noRd
 // [[Rcpp::export]]
 Rcpp::List rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
-        Rcpp::List stop_times, const int n_timetables)
+        Rcpp::List stop_times, const int n_timetables,
+        const std::string sfx)
 {
     const std::vector <std::string> f_trip_id = frequencies ["trip_id"];
     const std::vector <int> f_start_time = frequencies ["start_time"];
@@ -42,7 +43,7 @@ Rcpp::List rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
             const Rcpp::IntegerVector stop_sequence = st_i ["stop_sequence"];
 
             const std::string trip_id_n =
-                static_cast <std::string> (trip_id [0]) + "_" + std::to_string (n);
+                static_cast <std::string> (trip_id [0]) + sfx + std::to_string (n);
 
             // Vectors to be modified:
             Rcpp::CharacterVector trip_id_new (n_stop_entries);
