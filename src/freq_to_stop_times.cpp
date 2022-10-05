@@ -12,6 +12,7 @@ Rcpp::DataFrame rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
     const std::vector <int> f_start_time = frequencies ["start_time"];
     const std::vector <int> f_end_time = frequencies ["end_time"];
     const std::vector <int> f_headway = frequencies ["headway_secs"];
+    const std::vector <int> f_nseq = frequencies ["nseq"];
 
     const size_t ntrips = static_cast <size_t> (frequencies.nrow ());
 
@@ -38,7 +39,7 @@ Rcpp::DataFrame rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
         const int start_time_i = f_start_time [i];
         const int end_time_i = f_end_time [i];
 
-        const int nrpts = static_cast <int> (ceil ((end_time_i - start_time_i) / headway_i));
+        const int nseq_i = f_nseq [i];
 
         // Get the base timetable
         size_t tt_start = INFINITE_INT, tt_end = 0;
@@ -74,7 +75,7 @@ Rcpp::DataFrame rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
             stop_sequence_sub [j - tt_start] = st_stop_seq [j];
         }
 
-        for (int n = 0; n < nrpts; n++) {
+        for (int n = 0; n < nseq_i; n++) {
 
             const std::string trip_id_n =
                 static_cast <std::string> (trip_id_i) + sfx + std::to_string (n);
@@ -88,7 +89,7 @@ Rcpp::DataFrame rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
                 stop_sequence [row] = stop_sequence_sub [j];
                 row++;
             }
-        } // end for n over nrpts
+        } // end for n over nseq_i
     } // end for i over ntrips
 
     Rcpp::DataFrame res = Rcpp::DataFrame::create (
