@@ -104,7 +104,7 @@ frequencies_to_stop_times <- function (gtfs) {
     n <- sum (freqs$nseq)
     # plus total numbers of timetable entries:
     trip_id_table <- table (f_stop_times$trip_id)
-    index <- match (names (trip_id_table), freqs$trip_id)
+    index <- match (freqs$trip_id, names (trip_id_table))
     freqs$num_tt_entries <- trip_id_table [index]
 
     num_tt_entries_exp <- sum (freqs$num_tt_entries * freqs$nseq)
