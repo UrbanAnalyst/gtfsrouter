@@ -51,8 +51,8 @@ rcpp_csa <- function(timetable, transfers, nstations, ntrips, start_stations, en
 #' rcpp_freq_to_stop_times
 #'
 #' @noRd
-rcpp_freq_to_stop_times <- function(frequencies, stop_times, n_timetables, sfx) {
-    .Call(`_gtfsrouter_rcpp_freq_to_stop_times`, frequencies, stop_times, n_timetables, sfx)
+rcpp_freq_to_stop_times <- function(frequencies, stop_times, nrows, sfx) {
+    .Call(`_gtfsrouter_rcpp_freq_to_stop_times`, frequencies, stop_times, nrows, sfx)
 }
 
 #' Haversine for variable x and y

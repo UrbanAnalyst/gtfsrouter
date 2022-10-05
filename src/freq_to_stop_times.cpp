@@ -4,8 +4,8 @@
 //'
 //' @noRd
 // [[Rcpp::export]]
-Rcpp::List rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
-        Rcpp::List stop_times, const int n_timetables,
+Rcpp::DataFrame rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
+        Rcpp::DataFrame stop_times, const size_t nrows,
         const std::string sfx)
 {
     const std::vector <std::string> f_trip_id = frequencies ["trip_id"];
@@ -15,60 +15,89 @@ Rcpp::List rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
 
     const size_t ntrips = static_cast <size_t> (frequencies.nrow ());
 
-    Rcpp::List res (n_timetables);
-    size_t count = 0;
+    const std::vector <std::string> st_trip_id = stop_times ["trip_id"];
+    const std::vector <int> st_arrival_time = stop_times ["arrival_time"];
+    const std::vector <int> st_departure_time = stop_times ["departure_time"];
+    const std::vector <std::string> st_stop_id = stop_times ["stop_id"];
+    const std::vector <int> st_stop_seq = stop_times ["stop_sequence"];
+
+    std::vector <std::string> trip_id (nrows);
+    std::vector <int> arrival_time (nrows);
+    std::vector <int> departure_time (nrows);
+    std::vector <std::string> stop_id (nrows);
+    std::vector <int> stop_sequence (nrows);
+
+    size_t row = 0;
 
     for (size_t i = 0; i < ntrips; i++)
     {
         Rcpp::checkUserInterrupt ();
 
-        const int headway = f_headway [i];
-        const int start_time = f_start_time [i];
-        const int end_time = f_end_time [i];
-        std::string trip_id = f_trip_id [i];
+        const std::string trip_id_i = f_trip_id [i];
+        const int headway_i = f_headway [i];
+        const int start_time_i = f_start_time [i];
+        const int end_time_i = f_end_time [i];
 
-        const int nrpts = static_cast <int> (ceil ((end_time - start_time) / headway));
+        const int nrpts = static_cast <int> (ceil ((end_time_i - start_time_i) / headway_i));
+
+        // Get the base timetable
+        size_t tt_start = INFINITE_INT, tt_end = 0;
+        bool found = false;
+        for (size_t j = 0; j < st_trip_id.size (); j++)
+        {
+            if (std::strcmp (st_trip_id [j].c_str (), trip_id_i.c_str ()) == 0L)
+            {
+                found = true;
+                if (j < tt_start)
+                {
+                    tt_start = j;
+                } else if (j > tt_end)
+                {
+                    tt_end = j;
+                }
+            } else if (found)
+            {
+                break;
+            }
+        }
+        const size_t tt_len = tt_end - tt_start + 1L;
+        std::vector <int> arrival_time_sub (tt_len);
+        std::vector <int> departure_time_sub (tt_len);
+        std::vector <std::string> stop_id_sub (tt_len);
+        std::vector <int> stop_sequence_sub (tt_len);
+
+        for (auto j = tt_start; j <= tt_end; j++)
+        {
+            arrival_time_sub [j - tt_start] = st_arrival_time [j] + start_time_i;
+            departure_time_sub [j - tt_start] = st_departure_time [j] + start_time_i;
+            stop_id_sub [j - tt_start] = st_stop_id [j];
+            stop_sequence_sub [j - tt_start] = st_stop_seq [j];
+        }
 
         for (int n = 0; n < nrpts; n++) {
-        
-            Rcpp::DataFrame st_i = Rcpp::as <Rcpp::DataFrame> (stop_times (i));
-            // st_i is a pointer to the original 'stop_times', so must be
-            // treated as const, and a new DF made instead.
-            const int n_stop_entries = st_i.nrow ();
-
-            const Rcpp::CharacterVector trip_id = st_i ["trip_id"];
-            const Rcpp::IntegerVector arrival_time = st_i ["arrival_time"];
-            const Rcpp::IntegerVector departure_time = st_i ["departure_time"];
-            const Rcpp::CharacterVector stop_id = st_i ["stop_id"];
-            const Rcpp::IntegerVector stop_sequence = st_i ["stop_sequence"];
 
             const std::string trip_id_n =
-                static_cast <std::string> (trip_id [0]) + sfx + std::to_string (n);
+                static_cast <std::string> (trip_id_i) + sfx + std::to_string (n);
 
-            // Vectors to be modified:
-            Rcpp::CharacterVector trip_id_new (n_stop_entries);
-            Rcpp::IntegerVector arrival_time_new (n_stop_entries);
-            Rcpp::IntegerVector departure_time_new (n_stop_entries);
-
-            for (int j = 0; j < n_stop_entries; j++)
+            for (size_t j = 0; j < tt_len; j++)
             {
-                trip_id_new [j] = trip_id_n;
-                arrival_time_new [j] = arrival_time [j] + start_time + n * headway;
-                departure_time_new [j] = departure_time [j] + start_time + n * headway;
+                trip_id [row] = trip_id_n;
+                arrival_time [row] = arrival_time_sub [j] + headway_i * n;
+                departure_time [row] = departure_time_sub [j] + headway_i * n;
+                stop_id [row] = stop_id_sub [j];
+                stop_sequence [row] = stop_sequence_sub [j];
+                row++;
             }
+        } // end for n over nrpts
+    } // end for i over ntrips
 
-            Rcpp::DataFrame new_stops = Rcpp::DataFrame::create (
-                Rcpp::Named ("trip_id") = trip_id_new,
-                Rcpp::Named ("arrival_time") = arrival_time_new,
-                Rcpp::Named ("departure_time") = departure_time_new,
-                Rcpp::Named ("stop_id") = stop_id,
-                Rcpp::Named ("stop_sequence") = stop_sequence,
-                Rcpp::_["stringsAsFactors"] = false);
-
-            res (count++) = new_stops;
-        }
-        
-    }
+    Rcpp::DataFrame res = Rcpp::DataFrame::create (
+            Rcpp::Named ("trip_id") = trip_id,
+            Rcpp::Named ("arrival_time") = arrival_time,
+            Rcpp::Named ("departure_time") = departure_time,
+            Rcpp::Named ("stop_id") = stop_id,
+            Rcpp::Named ("stop_sequence") = stop_sequence,
+            Rcpp::_["stringsAsFactors"] = false);
 
     return res;
 }
