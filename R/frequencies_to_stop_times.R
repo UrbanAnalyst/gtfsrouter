@@ -66,9 +66,9 @@ frequencies_to_stop_times <- function (gtfs) {
     sfx <- trip_id_suffix (freqs)
 
     # convert f_stop_times to list:
-    f_stop_times <- split (f_stop_times, f = as.factor (f_stop_times$trip_id))
-    index <- match (freqs$trip_id, names (f_stop_times))
-    f_stop_times <- f_stop_times [index]
+    f_stop_times_list <- split (f_stop_times, f = as.factor (f_stop_times$trip_id))
+    index <- match (freqs$trip_id, names (f_stop_times_list))
+    f_stop_times_list <- f_stop_times_list [index]
 
     # then get final number of new timetables and actual timetable entries to be
     # made:
@@ -107,8 +107,12 @@ frequencies_to_stop_times <- function (gtfs) {
     }
 
     n <- sum (freqs$nseq)
+    # plus total numbers of timetable entries:
+    trip_id_table <- table (f_stop_times$trip_id)
+    index <- match (names (trip_id_table), freqs$trip_id)
+    freqs$num_tt_entries <- trip_id_table [index]
 
-    res <- rcpp_freq_to_stop_times (freqs, f_stop_times, n, sfx)
+    res <- rcpp_freq_to_stop_times (freqs, f_stop_times_list, n, sfx)
     res <- do.call (rbind, res)
 
     # The Rcpp fn only returns a subset of the main columns; any additional ones

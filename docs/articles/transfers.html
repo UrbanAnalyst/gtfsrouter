@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.119</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.120</span>
       </span>
     </div>
 
@@ -72,7 +72,7 @@
       <h1 data-toc-skip>Transfer Tables</h1>
                         <h4 data-toc-skip class="author">Mark Padgham</h4>
             
-            <h4 data-toc-skip class="date">2022-09-30</h4>
+            <h4 data-toc-skip class="date">2022-10-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ATFutures/gtfs-router/blob/HEAD/vignettes/transfers.Rmd" class="external-link"><code>vignettes/transfers.Rmd</code></a></small>
       <div class="hidden name"><code>transfers.Rmd</code></div>
@@ -447,7 +447,7 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span> <span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span> <span class="op">(</span><span class="st">"time difference (minutes)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="transfers_files/figure-html/plot1-1.png" width="700"></p>
-<p>And these additional transfer possibilities can make a significant difference to estimated travel times. Note, however, that the travel times only changed for 951 stations, while the value of <code>nsame</code> value recording numbers of stations for which travel times did not change was 4,911. Travel times may also increase as additional transfers may be used to reduce numbers of connecting services required for a particular trip, and the algorithm generally searches for connections with minimal numbers of transfers.</p>
+<p>And these additional transfer possibilities can make a significant difference to estimated travel times. Note, however, that the travel times only changed for 539 stations, while the value of <code>nsame</code> value recording numbers of stations for which travel times did not change was 3,695. Travel times may also increase as additional transfers may be used to reduce numbers of connecting services required for a particular trip, and the algorithm generally searches for connections with minimal numbers of transfers.</p>
 <p>The following code the quantifies the overall effect of these reductions in travel times, measured as the linear reduction in comparison with travel times calculated using the original transfers table provided with the feed. The function also returns the proportion of all stations for which travel times were affected by the modified transfer table.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">transfer_difference</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">gtfs</span>,</span>
@@ -514,7 +514,7 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span> <span class="op">(</span>pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span> <span class="op">(</span>method <span class="op">=</span> <span class="st">"loess"</span>, formula <span class="op">=</span> <span class="st">"y ~ x"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="transfers_files/figure-html/transfer_d_limit_results-1.png" width="700"></p>
-<p>That result shows that travel times do decrease with increasing limits of maximal transfer distance, although the overall effect is very minimal. The object <code>d</code> also records the proportion of station pairs for which modifications to the transfers table actually changed travel times, which in this case amounts to a mean value of 0.007, clearly revealing that very few trips actually change.</p>
+<p>That result shows that travel times do decrease with increasing limits of maximal transfer distance, although the overall effect is very minimal. The object <code>d</code> also records the proportion of station pairs for which modifications to the transfers table actually changed travel times, which in this case amounts to a mean value of 0.0069, clearly revealing that very few trips actually change.</p>
 <div class="section level3">
 <h3 id="a-more-realistic-example">A more realistic example<a class="anchor" aria-label="anchor" href="#a-more-realistic-example"></a>
 </h3>
