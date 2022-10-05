@@ -36,31 +36,78 @@ Rcpp::List rcpp_transfer_nbs (Rcpp::DataFrame stops,
     const std::vector <double> stop_x = stops ["stop_lon"];
     const std::vector <double> stop_y = stops ["stop_lat"];
 
-    Rcpp::List res (n * 2);
-
+    std::unordered_map <std::pair <double, double>, std::unordered_set <size_t>, pair_hash> stop_map;
+    std::unordered_map <size_t, std::pair <double, double>> stop_index;
+    size_t count = 0;
     for (size_t i = 0; i < n; i++)
     {
-        const double cosy1 = cos (stop_y [i] * pi / 180.0);
+        std::pair <double, double> xy_pair {stop_x [i], stop_y [i]};
+
+        std::unordered_set <size_t> index_set;
+        if (stop_map.find (xy_pair) != stop_map.end ())
+        {
+            index_set = stop_map.at (xy_pair);
+        } else
+        {
+            stop_index.emplace (count++, xy_pair);
+        }
+        index_set.emplace (i);
+
+        stop_map.erase (xy_pair);
+        stop_map.emplace (xy_pair, index_set);
+    }
+
+    const size_t n_unique = stop_map.size ();
+
+    Rcpp::List res (n * 2);
+
+    for (size_t i = 0; i < n_unique; i++)
+    {
+        std::pair <double, double> xy_i = stop_index.at (i);
+        std::unordered_set <size_t> index_i = stop_map.at (xy_i);
+
+        const double cosy1 = cos (xy_i.second * pi / 180.0);
 
         std::vector <size_t> index;
         std::vector <double> dist;
-        for (size_t j = 0; j < n; j++)
+        for (size_t j = 0; j < n_unique; j++)
         {
-            if (j == i) continue;
+            std::pair <double, double> xy_j = stop_index.at (j);
 
-            const double cosy2 = cos (stop_y [j] * pi / 180.0);
-            const double d_j = transfers::one_haversine (stop_x [i], stop_y [i],
-                    stop_x [j], stop_y [j], cosy1, cosy2);
+            const double cosy2 = cos (xy_j.second * pi / 180.0);
+            const double d_j = transfers::one_haversine (xy_i.first, xy_i.second,
+                    xy_j.first, xy_j.second, cosy1, cosy2);
             if (d_j <= dlim)
             {
-                // + 1 so can be returned as 1-based R index:
-                index.push_back (j + 1);
-                dist.push_back (d_j);
+                std::unordered_set <size_t> index_j = stop_map.at (xy_j);
+                for (auto k: index_j)
+                {
+                    index.push_back (k + 1L); // +1 for 1-based R index
+                    dist.push_back (d_j);
+                }
             }
-        }
+        } // end for j
 
-        res (i) = index;
-        res (n + i) = dist;
+        // Then put those indices into expanded 'res', but need to exclude the
+        // self-references from both
+        for (auto j: index_i)
+        {
+            int self = -1;
+            for (size_t k = 0; k < index.size (); k++) {
+                if ((index [k] - 1L) == j) {
+                    self = static_cast <int> (k);
+                }
+            }
+            std::vector <size_t> index_j = index;
+            std::vector <double> dist_j = dist;
+            if (self >= 0)
+            {
+                index_j.erase (index_j.begin () + self);
+                dist_j.erase (dist_j.begin () + self);
+            }
+            res (j) = index_j;
+            res (n + j) = dist_j;
+        }
     }
 
     return res;
