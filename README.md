@@ -17,7 +17,7 @@ Feed Specification)](https://developers.google.com/transit/gtfs/) data.
 You can install latest stable version of `gtfsrouter` from CRAN with:
 
 ``` r
-install.packages("gtfsrouter")
+install.packages ("gtfsrouter")
 ```
 
 Alternatively, the current development version can be installed using
@@ -25,20 +25,21 @@ any of the following options:
 
 ``` r
 # install.packages("remotes")
-remotes::install_git("https://git.sr.ht/~mpadge/gtfsrouter")
-remotes::install_bitbucket("atfutures/gtfsrouter")
-remotes::install_gitlab("atfutures1/gtfsrouter")
-remotes::install_github("ATFutures/gtfsrouter")
+remotes::install_git ("https://git.sr.ht/~mpadge/gtfsrouter")
+remotes::install_git ("https://codeberg.org/ATFutures/gtfsrouter")
+remotes::install_bitbucket ("atfutures/gtfsrouter")
+remotes::install_gitlab ("atfutures1/gtfsrouter")
+remotes::install_github ("ATFutures/gtfsrouter")
 ```
 
 To load the package and check the version:
 
 ``` r
-library(gtfsrouter)
-packageVersion("gtfsrouter")
+library (gtfsrouter)
+packageVersion ("gtfsrouter")
 ```
 
-    ## [1] '0.0.5.35'
+    ## [1] '0.0.5.101'
 
 ## Main functions
 
@@ -49,11 +50,11 @@ can be written to the temporary directory (`tempdir()`) of the current R
 session with the function `berlin_gtfs_to_zip()`.
 
 ``` r
-filename <- berlin_gtfs_to_zip()
+filename <- berlin_gtfs_to_zip ()
 print (filename)
 ```
 
-    ## [1] "/tmp/Rtmp1crKJM/vbb.zip"
+    ## [1] "/tmp/RtmpvmK3vW/vbb.zip"
 
 For normal package use, `filename` will specify the name of a local GTFS
 `.zip` file.
@@ -67,9 +68,10 @@ as the following code:
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs, day = "Wed") # A pre-processing step to speed up queries
 gtfs_route (gtfs,
-            from = "Tegel",
-            to = "Berlin Hauptbahnhof",
-            start_time = 12 * 3600 + 120) # 12:02 in seconds
+    from = "Tegel",
+    to = "Berlin Hauptbahnhof",
+    start_time = 12 * 3600 + 120
+) # 12:02 in seconds
 ```
 
 | route_name | trip_name        | stop_name                       | arrival_time | departure_time |
@@ -100,8 +102,9 @@ stations within the feed for services which leave the nominated station
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs, day = "Monday")
 x <- gtfs_traveltimes (gtfs,
-                       from = "Alexanderplatz",
-                       start_time_limits = c (12, 13) * 3600)
+    from = "Alexanderplatz",
+    start_time_limits = c (12, 13) * 3600
+)
 ```
 
 The function returns a simple table detailing all stations reachable
@@ -113,11 +116,11 @@ head (x)
 
 | start_time | duration | ntransfers | stop_id      | stop_name               | stop_lon | stop_lat |
 |:-----------|:---------|-----------:|:-------------|:------------------------|---------:|---------:|
-| 12:03:42   | 00:14:12 |          1 | 060003102223 | S Bellevue (Berlin)     | 13.34710 | 52.51995 |
+| 12:00:42   | 00:14:42 |          1 | 060003102223 | S Bellevue (Berlin)     | 13.34710 | 52.51995 |
 | 12:00:42   | 00:08:36 |          0 | 060003102224 | S Bellevue (Berlin)     | 13.34710 | 52.51995 |
 | 12:00:42   | 00:15:06 |          1 | 060003103233 | S Tiergarten (Berlin)   | 13.33624 | 52.51396 |
 | 12:00:42   | 00:10:42 |          0 | 060003103234 | S Tiergarten (Berlin)   | 13.33624 | 52.51396 |
-| 12:03:42   | 00:11:18 |          1 | 060003201213 | S+U Berlin Hauptbahnhof | 13.36892 | 52.52585 |
+| 12:00:42   | 00:14:18 |          1 | 060003201213 | S+U Berlin Hauptbahnhof | 13.36892 | 52.52585 |
 | 12:00:42   | 00:05:54 |          0 | 060003201214 | S+U Berlin Hauptbahnhof | 13.36892 | 52.52585 |
 
 Further details are provided in a [separate
@@ -161,17 +164,19 @@ entries, to enable the feed to be used for routing.
 
 ## Contributors
 
-
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropenscilabs/allcontributors) following the [all-contributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the
+[`allcontributors`
+package](https://github.com/ropenscilabs/allcontributors) following the
+[all-contributors](https://allcontributors.org) specification.
+Contributions of any kind are welcome!
 
 ### Code
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -198,14 +203,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ATFutures/gtfs-router/commits?author=polettif">polettif</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Authors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/sridharraman">
@@ -250,8 +252,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aloanho23">loanho23</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/dcooley">
@@ -296,14 +296,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Acseveren">cseveren</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Contributors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/tbuckl">
@@ -330,9 +327,7 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Aabyrd">abyrd</a>
 </td>
 </tr>
-
 </table>
-
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->

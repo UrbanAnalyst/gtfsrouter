@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.123</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.124</span>
       </span>
     </div>
 
@@ -81,28 +81,29 @@
 </h2>
 <p>You can install latest stable version of <code>gtfsrouter</code> from CRAN with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"gtfsrouter"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span> <span class="op">(</span><span class="st">"gtfsrouter"</span><span class="op">)</span></span></code></pre></div>
 <p>Alternatively, the current development version can be installed using any of the following options:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_git</span><span class="op">(</span><span class="st">"https://git.sr.ht/~mpadge/gtfsrouter"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_bitbucket</span><span class="op">(</span><span class="st">"atfutures/gtfsrouter"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_gitlab</span><span class="op">(</span><span class="st">"atfutures1/gtfsrouter"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ATFutures/gtfsrouter"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_git</span> <span class="op">(</span><span class="st">"https://git.sr.ht/~mpadge/gtfsrouter"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_git</span> <span class="op">(</span><span class="st">"https://codeberg.org/ATFutures/gtfsrouter"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_bitbucket</span> <span class="op">(</span><span class="st">"atfutures/gtfsrouter"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_gitlab</span> <span class="op">(</span><span class="st">"atfutures1/gtfsrouter"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span> <span class="op">(</span><span class="st">"ATFutures/gtfsrouter"</span><span class="op">)</span></span></code></pre></div>
 <p>To load the package and check the version:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ATFutures/gtfs-router" class="external-link">gtfsrouter</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"gtfsrouter"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] '0.0.5.35'</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/ATFutures/gtfs-router" class="external-link">gtfsrouter</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span> <span class="op">(</span><span class="st">"gtfsrouter"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] '0.0.5.101'</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="main-functions">Main functions<a class="anchor" aria-label="anchor" href="#main-functions"></a>
 </h2>
 <p>The main functions can be demonstrated with sample data included with the package from Berlin (the “Verkehrverbund Berlin Brandenburg”, or VBB). GTFS data are always stored as <code>.zip</code> files, and these sample data can be written to the temporary directory (<code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>) of the current R session with the function <code><a href="reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span> <span class="op">(</span><span class="va">filename</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "/tmp/Rtmp1crKJM/vbb.zip"</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "/tmp/RtmpvmK3vW/vbb.zip"</span></span></code></pre></div>
 <p>For normal package use, <code>filename</code> will specify the name of a local GTFS <code>.zip</code> file.</p>
 <div class="section level3">
 <h3 id="gtfs_route">gtfs_route<a class="anchor" aria-label="anchor" href="#gtfs_route"></a>
@@ -112,9 +113,10 @@
 <code class="sourceCode R"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">filename</span><span class="op">)</span></span>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span>, day <span class="op">=</span> <span class="st">"Wed"</span><span class="op">)</span> <span class="co"># A pre-processing step to speed up queries</span></span>
 <span><span class="fu"><a href="reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>            from <span class="op">=</span> <span class="st">"Tegel"</span>,</span>
-<span>            to <span class="op">=</span> <span class="st">"Berlin Hauptbahnhof"</span>,</span>
-<span>            start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">120</span><span class="op">)</span> <span class="co"># 12:02 in seconds</span></span></code></pre></div>
+<span>    from <span class="op">=</span> <span class="st">"Tegel"</span>,</span>
+<span>    to <span class="op">=</span> <span class="st">"Berlin Hauptbahnhof"</span>,</span>
+<span>    start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span> <span class="op">+</span> <span class="fl">120</span></span>
+<span><span class="op">)</span> <span class="co"># 12:02 in seconds</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">route_name</th>
@@ -205,8 +207,9 @@
 <code class="sourceCode R"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">filename</span><span class="op">)</span></span>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span>, day <span class="op">=</span> <span class="st">"Monday"</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_traveltimes.html">gtfs_traveltimes</a></span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>                       from <span class="op">=</span> <span class="st">"Alexanderplatz"</span>,</span>
-<span>                       start_time_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span> <span class="op">(</span><span class="fl">12</span>, <span class="fl">13</span><span class="op">)</span> <span class="op">*</span> <span class="fl">3600</span><span class="op">)</span></span></code></pre></div>
+<span>    from <span class="op">=</span> <span class="st">"Alexanderplatz"</span>,</span>
+<span>    start_time_limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span> <span class="op">(</span><span class="fl">12</span>, <span class="fl">13</span><span class="op">)</span> <span class="op">*</span> <span class="fl">3600</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The function returns a simple table detailing all stations reachable with services departing from the nominated station and start times:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span> <span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
@@ -222,8 +225,8 @@
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">12:03:42</td>
-<td align="left">00:14:12</td>
+<td align="left">12:00:42</td>
+<td align="left">00:14:42</td>
 <td align="right">1</td>
 <td align="left">060003102223</td>
 <td align="left">S Bellevue (Berlin)</td>
@@ -258,8 +261,8 @@
 <td align="right">52.51396</td>
 </tr>
 <tr class="odd">
-<td align="left">12:03:42</td>
-<td align="left">00:11:18</td>
+<td align="left">12:00:42</td>
+<td align="left">00:14:18</td>
 <td align="right">1</td>
 <td align="left">060003201213</td>
 <td align="left">S+U Berlin Hauptbahnhof</td>
