@@ -16,7 +16,7 @@ Specification)](https://developers.google.com/transit/gtfs/) data.
 
 You can install latest stable version of `gtfsrouter` from CRAN with:
 ```{r cran-installation, eval = FALSE}
-install.packages("gtfsrouter")
+install.packages ("gtfsrouter")
 ```
 
 Alternatively, the current development version can be installed using any of
@@ -24,16 +24,17 @@ the following options:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("remotes")
-remotes::install_git("https://git.sr.ht/~mpadge/gtfsrouter")
-remotes::install_bitbucket("atfutures/gtfsrouter")
-remotes::install_gitlab("atfutures1/gtfsrouter")
-remotes::install_github("ATFutures/gtfsrouter")
+remotes::install_git ("https://git.sr.ht/~mpadge/gtfsrouter")
+remotes::install_git ("https://codeberg.org/ATFutures/gtfsrouter")
+remotes::install_bitbucket ("atfutures/gtfsrouter")
+remotes::install_gitlab ("atfutures1/gtfsrouter")
+remotes::install_github ("ATFutures/gtfsrouter")
 ```
 
 To load the package and check the version:
 ```{r pkg-version, eval=TRUE}
-library(gtfsrouter)
-packageVersion("gtfsrouter")
+library (gtfsrouter)
+packageVersion ("gtfsrouter")
 ```
 
 ## Main functions
@@ -45,7 +46,7 @@ the temporary directory (`tempdir()`) of the current R session with the
 function `berlin_gtfs_to_zip()`.
 
 ```{r create-zip, eval = TRUE}
-filename <- berlin_gtfs_to_zip()
+filename <- berlin_gtfs_to_zip ()
 print (filename)
 ```
 
@@ -61,17 +62,19 @@ following code:
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs, day = "Wed") # A pre-processing step to speed up queries
 gtfs_route (gtfs,
-            from = "Tegel",
-            to = "Berlin Hauptbahnhof",
-            start_time = 12 * 3600 + 120) # 12:02 in seconds
+    from = "Tegel",
+    to = "Berlin Hauptbahnhof",
+    start_time = 12 * 3600 + 120
+) # 12:02 in seconds
 ```
 ```{r example, echo = FALSE, message = FALSE}
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs)
 r <- gtfs_route (gtfs,
-                 from = "Schonlein",
-                 to = "Berlin Hauptbahnhof",
-                 start_time = 12 * 3600 + 120) # 12:02 in seconds
+    from = "Schonlein",
+    to = "Berlin Hauptbahnhof",
+    start_time = 12 * 3600 + 120
+) # 12:02 in seconds
 knitr::kable (r)
 ```
 
@@ -90,8 +93,9 @@ services which leave the nominated station ("Alexanderplatz") between 12:00 and
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs, day = "Monday")
 x <- gtfs_traveltimes (gtfs,
-                       from = "Alexanderplatz",
-                       start_time_limits = c (12, 13) * 3600)
+    from = "Alexanderplatz",
+    start_time_limits = c (12, 13) * 3600
+)
 ```
 
 The function returns a simple table detailing all stations reachable with
