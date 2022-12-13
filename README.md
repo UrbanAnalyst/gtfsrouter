@@ -29,7 +29,7 @@ remotes::install_git ("https://git.sr.ht/~mpadge/gtfsrouter")
 remotes::install_git ("https://codeberg.org/ATFutures/gtfsrouter")
 remotes::install_bitbucket ("atfutures/gtfsrouter")
 remotes::install_gitlab ("atfutures1/gtfsrouter")
-remotes::install_github ("ATFutures/gtfsrouter")
+remotes::install_github ("ATFutures/gtfs-router")
 ```
 
 To load the package and check the version:
