@@ -30,6 +30,8 @@ Rcpp::DataFrame rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
 
     size_t row = 0;
 
+    std::unordered_set <std::string> trip_id_set;
+
     for (size_t i = 0; i < ntrips; i++)
     {
         Rcpp::checkUserInterrupt ();
@@ -77,8 +79,16 @@ Rcpp::DataFrame rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
 
         for (int n = 0; n < nseq_i; n++) {
 
-            const std::string trip_id_n =
-                static_cast <std::string> (trip_id_i) + sfx + std::to_string (n);
+            int n_unique = n;
+            std::string trip_id_n =
+                static_cast <std::string> (trip_id_i) + sfx + std::to_string (n_unique);
+            while (trip_id_set.find (trip_id_n) != trip_id_set.end ())
+            {
+                n_unique++;
+                trip_id_n =
+                    static_cast <std::string> (trip_id_i) + sfx + std::to_string (n_unique);
+            }
+            trip_id_set.emplace (trip_id_n);
 
             for (size_t j = 0; j < tt_len; j++)
             {
