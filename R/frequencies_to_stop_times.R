@@ -82,6 +82,8 @@ frequencies_to_stop_times <- function (gtfs) {
     index <- which (names (gtfs_cp$stop_times) %in% names (res))
     gtfs_cp$stop_times <- rbind (gtfs_cp$stop_times [, ..index], res)
 
+    gtfs_cp <- update_trips_table_with_freqs (gtfs_cp, sfx)
+
     attr (gtfs_cp, "freq_sfx") <- sfx
 
     return (gtfs_cp)
@@ -146,4 +148,45 @@ calc_num_new_timetables <- function (freqs) {
     }
 
     return (freqs)
+}
+
+#' Expand each row of "trips" table to corresponding number of new trips with
+#' frequency table extensions of `sfx` + increasing numbers.
+#' @noRd
+update_trips_table_with_freqs <- function (gtfs, sfx) {
+
+    trip_ids <- unique (gtfs$stop_times$trip_id)
+    trip_ids_with_sfx <- grep (paste0 (sfx, "[0-9]*$"), trip_ids, value = TRUE)
+
+    # Current ids in freqs table:
+    freqs_trips <- gsub (paste0 (sfx, "[0-9]*$"), "", trip_ids_with_sfx)
+    freqs_trips_tab <- table (freqs_trips)
+    freqs_trips <- names (freqs_trips_tab)
+    # `freqs_trips` are then the names of the original `trips$trip_id` trips,
+    # with `freqs_trips_tab` tallying how many times each are repeated in
+    # translating the frequencies table.
+
+    index <- which (gtfs$trips$trip_id %in% freqs_trips)
+    if (length (index) == 0) {
+        return (gtfs)
+    }
+
+    trips_no_freqs <- gtfs$trips [seq_len (nrow (gtfs$trips)) [-index], ]
+    trips_freqs <- gtfs$trips [index, ]
+
+    freqs_trips <- freqs_trips [which (freqs_trips %in% trips_freqs$trip_id)]
+    freqs_trips_tab <- freqs_trips_tab [which (names (freqs_trips_tab) %in% trips_freqs$trip_id)]
+
+    # The `trips_freqs` table then has one row for each original trip, with
+    # `trip_id` not containing the `sfx` version for frequency table entries.
+    # Each row needs to be expanded to the corresponding number of
+    # frequency-table trips.
+    freqs_trips_tab <- freqs_trips_tab [match (trips_freqs$trip_id, freqs_trips)]
+    index <- rep (seq_len (nrow (trips_freqs)), times = freqs_trips_tab)
+    trips_freqs_exp <- trips_freqs [index, ]
+    trips_freqs_exp$trip_id <- trip_ids
+
+    gtfs$trips <- rbind (trips_no_freqs, trips_freqs_exp)
+
+    return (gtfs)
 }
