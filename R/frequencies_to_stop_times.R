@@ -52,6 +52,8 @@ frequencies_to_stop_times <- function (gtfs) {
     # copy even when it does nothing else, so always entails some cost.
     gtfs_cp <- data.table::copy (gtfs)
 
+    # Suppress no visible binding notes:
+    start_time <- end_time <- NULL
     gtfs_cp$frequencies [, start_time := rcpp_time_to_seconds (start_time)]
     gtfs_cp$frequencies [, end_time := rcpp_time_to_seconds (end_time)]
 
@@ -65,8 +67,54 @@ frequencies_to_stop_times <- function (gtfs) {
     freqs <- gtfs_cp$frequencies
     sfx <- trip_id_suffix (freqs)
 
-    # then get final number of new timetables and actual timetable entries to be
-    # made:
+    freqs <- calc_num_new_timetables (freqs)
+
+    n <- sum (freqs$nseq)
+    # plus total numbers of timetable entries:
+    trip_id_table <- table (f_stop_times$trip_id)
+    index <- match (freqs$trip_id, names (trip_id_table))
+    freqs$num_tt_entries <- trip_id_table [index]
+
+    num_tt_entries_exp <- sum (freqs$num_tt_entries * freqs$nseq)
+
+    res <- rcpp_freq_to_stop_times (freqs, f_stop_times, num_tt_entries_exp, sfx)
+
+    # The Rcpp fn only returns a subset of the main columns; any additional ones
+    # in original stop_times table are then removed:
+    index <- which (names (gtfs_cp$stop_times) %in% names (res))
+    gtfs_cp$stop_times <- rbind (gtfs_cp$stop_times [, ..index], res)
+
+    gtfs_cp <- update_trips_table_with_freqs (gtfs_cp, sfx)
+
+    attr (gtfs_cp, "freq_sfx") <- sfx
+
+    return (gtfs_cp)
+}
+
+#' Get unambiguous 'trip_id' suffix
+#'
+#' Original 'trip_id' values can then be easily recovered by removing these
+#' suffixes.
+#' @param freqs frequencies table including 'trip_id' column
+#' @noRd
+trip_id_suffix <- function (freqs) {
+
+    sfx <- "\\_f[0-9]+$"
+    while (any (grepl (sfx, freqs$trip_id))) {
+        sfx <- gsub ("\\_f", "\\_ff", sfx)
+    }
+    nf <- length (gregexpr ("f", sfx) [[1]])
+    sfx <- paste0 ("_", paste0 (rep ("f", nf), collapse = ""))
+
+    return (sfx)
+}
+
+#' Get final number of new timetables and actual timetable entries to be
+#' constructed.
+#' @param freqs frequencies table
+#' @noRd
+calc_num_new_timetables <- function (freqs) {
+
     index_non <- which (!duplicated (freqs$trip_id))
     freqs$nseq <- NA_integer_
     freqs$nseq [index_non] <- ceiling ((freqs$end_time - freqs$start_time) / freqs$headway_secs) [index_non]
@@ -101,40 +149,46 @@ frequencies_to_stop_times <- function (gtfs) {
             ceiling ((freqs_dupl$end_time - freqs_dupl$start_time) / freqs_dupl$headway_secs)
     }
 
-    n <- sum (freqs$nseq)
-    # plus total numbers of timetable entries:
-    trip_id_table <- table (f_stop_times$trip_id)
-    index <- match (freqs$trip_id, names (trip_id_table))
-    freqs$num_tt_entries <- trip_id_table [index]
-
-    num_tt_entries_exp <- sum (freqs$num_tt_entries * freqs$nseq)
-
-    res <- rcpp_freq_to_stop_times (freqs, f_stop_times, num_tt_entries_exp, sfx)
-
-    # The Rcpp fn only returns a subset of the main columns; any additional ones
-    # in original stop_times table are then removed:
-    index <- which (names (gtfs_cp$stop_times) %in% names (res))
-    gtfs_cp$stop_times <- rbind (gtfs_cp$stop_times [, ..index], res)
-
-    attr (gtfs_cp, "freq_sfx") <- sfx
-
-    return (gtfs_cp)
+    return (freqs)
 }
 
-#' Get unambiguous 'trip_id' suffix
-#'
-#' Original 'trip_id' values can then be easily recovered by removing these
-#' suffixes.
-#' @param freqs frequencies table including 'trip_id' column
+#' Expand each row of "trips" table to corresponding number of new trips with
+#' frequency table extensions of `sfx` + increasing numbers.
 #' @noRd
-trip_id_suffix <- function (freqs) {
+update_trips_table_with_freqs <- function (gtfs, sfx) {
 
-    sfx <- "\\_f[0-9]+$"
-    while (any (grepl (sfx, freqs$trip_id))) {
-        sfx <- gsub ("\\_f", "\\_ff", sfx)
+    trip_ids <- unique (gtfs$stop_times$trip_id)
+    trip_ids_with_sfx <- grep (paste0 (sfx, "[0-9]*$"), trip_ids, value = TRUE)
+
+    # Current ids in freqs table:
+    freqs_trips <- gsub (paste0 (sfx, "[0-9]*$"), "", trip_ids_with_sfx)
+    freqs_trips_tab <- table (freqs_trips)
+    freqs_trips <- names (freqs_trips_tab)
+    # `freqs_trips` are then the names of the original `trips$trip_id` trips,
+    # with `freqs_trips_tab` tallying how many times each are repeated in
+    # translating the frequencies table.
+
+    index <- which (gtfs$trips$trip_id %in% freqs_trips)
+    if (length (index) == 0) {
+        return (gtfs)
     }
-    nf <- length (gregexpr ("f", sfx) [[1]])
-    sfx <- paste0 ("_", paste0 (rep ("f", nf), collapse = ""))
 
-    return (sfx)
+    trips_no_freqs <- gtfs$trips [seq_len (nrow (gtfs$trips)) [-index], ]
+    trips_freqs <- gtfs$trips [index, ]
+
+    freqs_trips <- freqs_trips [which (freqs_trips %in% trips_freqs$trip_id)]
+    freqs_trips_tab <- freqs_trips_tab [which (names (freqs_trips_tab) %in% trips_freqs$trip_id)]
+
+    # The `trips_freqs` table then has one row for each original trip, with
+    # `trip_id` not containing the `sfx` version for frequency table entries.
+    # Each row needs to be expanded to the corresponding number of
+    # frequency-table trips.
+    freqs_trips_tab <- freqs_trips_tab [match (trips_freqs$trip_id, freqs_trips)]
+    index <- rep (seq_len (nrow (trips_freqs)), times = freqs_trips_tab)
+    trips_freqs_exp <- trips_freqs [index, ]
+    trips_freqs_exp$trip_id <- trip_ids_with_sfx
+
+    gtfs$trips <- rbind (trips_no_freqs, trips_freqs_exp)
+
+    return (gtfs)
 }
