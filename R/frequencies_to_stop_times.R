@@ -52,6 +52,8 @@ frequencies_to_stop_times <- function (gtfs) {
     # copy even when it does nothing else, so always entails some cost.
     gtfs_cp <- data.table::copy (gtfs)
 
+    # Suppress no visible binding notes:
+    start_time <- end_time <- ..index <- NULL
     gtfs_cp$frequencies [, start_time := rcpp_time_to_seconds (start_time)]
     gtfs_cp$frequencies [, end_time := rcpp_time_to_seconds (end_time)]
 
