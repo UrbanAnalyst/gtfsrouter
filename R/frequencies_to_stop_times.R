@@ -186,7 +186,7 @@ update_trips_table_with_freqs <- function (gtfs, sfx) {
     freqs_trips_tab <- freqs_trips_tab [match (trips_freqs$trip_id, freqs_trips)]
     index <- rep (seq_len (nrow (trips_freqs)), times = freqs_trips_tab)
     trips_freqs_exp <- trips_freqs [index, ]
-    trips_freqs_exp$trip_id <- trip_ids
+    trips_freqs_exp$trip_id <- trip_ids_with_sfx
 
     gtfs$trips <- rbind (trips_no_freqs, trips_freqs_exp)
 
