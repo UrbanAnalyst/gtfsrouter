@@ -7,7 +7,7 @@
   "codeRepository": "https://github.com/ATFutures/gtfs-router",
   "issueTracker": "https://github.com/ATFutures/gtfs-router/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.5.132",
+  "version": "0.0.5.133",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
