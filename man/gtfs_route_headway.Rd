@@ -4,7 +4,14 @@
 \alias{gtfs_route_headway}
 \title{Route headway}
 \usage{
-gtfs_route_headway(gtfs, from, to, quiet = FALSE)
+gtfs_route_headway(
+  gtfs,
+  from,
+  to,
+  from_to_are_ids = FALSE,
+  grep_fixed = TRUE,
+  quiet = FALSE
+)
 }
 \arguments{
 \item{gtfs}{A set of GTFS data returned from \link{extract_gtfs} or, for more
@@ -15,6 +22,15 @@ stations (as \code{stop_name} or \code{stop_id} entry in the \code{stops} table,
 of two numeric values). See Note.}
 
 \item{to}{Corresponding Names, IDs, or coordinates of end station.}
+
+\item{from_to_are_ids}{Set to \code{TRUE} to enable \code{from} and \code{to} parameter to
+specify entries in \code{stop_id} rather than \code{stop_name} column of the \code{stops}
+table.}
+
+\item{grep_fixed}{If \code{FALSE}, match station names (when passed as character
+string) with \code{grep(..., fixed = FALSE)}, to allow use of \code{grep} expressions.
+This is useful to refine matches in cases where desired stations may match
+multiple entries.}
 
 \item{quiet}{If \code{TRUE}, display a progress bar}
 }
