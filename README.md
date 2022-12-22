@@ -165,6 +165,7 @@ entries, to enable the feed to be used for routing.
 ## Contributors
 
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -297,6 +298,12 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <img src="https://avatars.githubusercontent.com/u/3945220?u=dcb262dbf7fe448a8b24b673bcb995e3311f08d4&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Ajh0ker">jh0ker</a>
+</td>
+<td align="center">
+<a href="https://github.com/zamirD123">
+<img src="https://avatars.githubusercontent.com/u/69770500?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3AzamirD123">zamirD123</a>
 </td>
 </tr>
 
