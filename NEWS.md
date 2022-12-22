@@ -10,6 +10,7 @@ Minor changes:
 
 - `gtfs_timetable()` modified to work on feeds which do not have "calendar.txt"
 - Fix `transfer_times` function with updated dodgr `match_pts_to_verts` fn
+- Bug fix in `gtfs_route_headway()` function (#94; thanks to @zamirD123)
 
 
 # v 0.0.5

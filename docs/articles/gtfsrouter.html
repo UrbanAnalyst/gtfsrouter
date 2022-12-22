@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.137</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.139</span>
       </span>
     </div>
 
@@ -126,7 +126,7 @@ to a locally-stored <code>.zip</code> archive in the
 data can be exported and re-imported with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpWDYQvt/vbb.zip"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/RtmpcsBVmd/vbb.zip"</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></span></code></pre></div>
@@ -365,7 +365,7 @@ data:</p>
 <span>                         to <span class="op">=</span> <span class="va">to</span>,</span>
 <span>                         start_time <span class="op">=</span> <span class="st">"12:00:00"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.062   0.000   0.062</span></span></code></pre>
+<span><span class="co">##   0.061   0.000   0.061</span></span></code></pre>
 <p>Note that the <code>day</code> parameter is used to extract the
 timetable, after which it is no longer required in the actual call to
 <code><a href="../reference/gtfs_route.html">gtfs_route()</a></code>.</p>
