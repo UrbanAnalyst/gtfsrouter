@@ -59,17 +59,18 @@ frequencies_to_stop_times <- function (gtfs) {
 
     gtfs_cp$stop_times$timepoint <- 1L
     freq_trips <- unique (gtfs_cp$frequencies$trip_id)
-    gtfs_cp$stop_times$timepoint [which (gtfs_cp$stop_times$trip_id %in% freq_trips)] <- 0L
+    index <- which (gtfs_cp$stop_times$trip_id %in% freq_trips)
+    gtfs_cp$stop_times$timepoint [index] <- 0L
 
     f_stop_times <- gtfs_cp$stop_times [gtfs_cp$stop_times$timepoint == 0L, ]
-    gtfs_cp$stop_times <- gtfs_cp$stop_times [gtfs_cp$stop_times$timepoint == 1L, ]
+    gtfs_cp$stop_times <-
+        gtfs_cp$stop_times [gtfs_cp$stop_times$timepoint == 1L, ]
 
     freqs <- gtfs_cp$frequencies
     sfx <- trip_id_suffix (freqs)
 
     freqs <- calc_num_new_timetables (freqs)
 
-    n <- sum (freqs$nseq)
     # plus total numbers of timetable entries:
     trip_id_table <- table (f_stop_times$trip_id)
     index <- match (freqs$trip_id, names (trip_id_table))
@@ -77,7 +78,12 @@ frequencies_to_stop_times <- function (gtfs) {
 
     num_tt_entries_exp <- sum (freqs$num_tt_entries * freqs$nseq)
 
-    res <- rcpp_freq_to_stop_times (freqs, f_stop_times, num_tt_entries_exp, sfx)
+    res <- rcpp_freq_to_stop_times (
+        freqs,
+        f_stop_times,
+        num_tt_entries_exp,
+        sfx
+    )
 
     # The Rcpp fn only returns a subset of the main columns; any additional ones
     # in original stop_times table are then removed:
@@ -117,7 +123,8 @@ calc_num_new_timetables <- function (freqs) {
 
     index_non <- which (!duplicated (freqs$trip_id))
     freqs$nseq <- NA_integer_
-    freqs$nseq [index_non] <- ceiling ((freqs$end_time - freqs$start_time) / freqs$headway_secs) [index_non]
+    freqs$nseq [index_non] <- ceiling ((freqs$end_time - freqs$start_time) /
+        freqs$headway_secs) [index_non]
     index_dupl <- which (duplicated (freqs$trip_id))
     if (length (index_dupl) > 0L) {
         # same trip_ids, different headway values. construct sequences of trips
@@ -146,7 +153,8 @@ calc_num_new_timetables <- function (freqs) {
         })
         freqs_dupl <- do.call (rbind, n_seqs)
         freqs$nseq [index_dupl] <-
-            ceiling ((freqs_dupl$end_time - freqs_dupl$start_time) / freqs_dupl$headway_secs)
+            ceiling ((freqs_dupl$end_time - freqs_dupl$start_time) /
+                freqs_dupl$headway_secs)
     }
 
     return (freqs)
@@ -177,7 +185,8 @@ update_trips_table_with_freqs <- function (gtfs, sfx) {
     trips_freqs <- gtfs$trips [index, ]
 
     freqs_trips <- freqs_trips [which (freqs_trips %in% trips_freqs$trip_id)]
-    freqs_trips_tab <- freqs_trips_tab [which (names (freqs_trips_tab) %in% trips_freqs$trip_id)]
+    index <- which (names (freqs_trips_tab) %in% trips_freqs$trip_id)
+    freqs_trips_tab <- freqs_trips_tab [index]
 
     # The `trips_freqs` table then has one row for each original trip, with
     # `trip_id` not containing the `sfx` version for frequency table entries.
