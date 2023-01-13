@@ -28,13 +28,25 @@ headway_times <- function (gtfs, start_stns, end_stns, start_time) {
 #' services across a single 24-hour period
 #' @family main
 #' @export
-gtfs_route_headway <- function (gtfs, from, to, quiet = FALSE) {
+gtfs_route_headway <- function (gtfs, from, to,
+                                from_to_are_ids = FALSE,
+                                grep_fixed = TRUE,
+                                quiet = FALSE) {
 
     departure_time <- NULL # suppress no visible binding note # nolint
 
-    from_to_are_ids <- FALSE
-    start_stns <- from_to_to_stations (from, gtfs, from_to_are_ids) [[1]]
-    end_stns <- from_to_to_stations (to, gtfs, from_to_are_ids) [[1]]
+    start_stns <- from_to_to_stations (
+        from,
+        gtfs,
+        from_to_are_ids = from_to_are_ids,
+        grep_fixed = grep_fixed
+    ) [[1]]
+    end_stns <- from_to_to_stations (
+        to,
+        gtfs,
+        from_to_are_ids = from_to_are_ids,
+        grep_fixed = grep_fixed
+    ) [[1]]
 
     start_time <- 0
     heads <- NULL

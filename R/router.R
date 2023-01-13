@@ -292,7 +292,8 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
 }
 
 # convert from and to values to indices into gtfs$stations
-from_to_to_stations <- function (stns, gtfs, from_to_are_ids, grep_fixed) {
+from_to_to_stations <- function (stns, gtfs,
+                                 from_to_are_ids = FALSE, grep_fixed = TRUE) {
     if (is.character (stns) || is.null (nrow (stns))) {
         ret <- lapply (stns, function (i) {
             unique (station_name_to_ids (

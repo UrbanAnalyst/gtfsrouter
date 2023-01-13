@@ -64,16 +64,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // rcpp_freq_to_stop_times
-Rcpp::List rcpp_freq_to_stop_times(Rcpp::DataFrame frequencies, Rcpp::List stop_times, const int n_timetables, const std::string sfx);
-RcppExport SEXP _gtfsrouter_rcpp_freq_to_stop_times(SEXP frequenciesSEXP, SEXP stop_timesSEXP, SEXP n_timetablesSEXP, SEXP sfxSEXP) {
+Rcpp::DataFrame rcpp_freq_to_stop_times(Rcpp::DataFrame frequencies, Rcpp::DataFrame stop_times, const size_t nrows, const std::string sfx);
+RcppExport SEXP _gtfsrouter_rcpp_freq_to_stop_times(SEXP frequenciesSEXP, SEXP stop_timesSEXP, SEXP nrowsSEXP, SEXP sfxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::DataFrame >::type frequencies(frequenciesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type stop_times(stop_timesSEXP);
-    Rcpp::traits::input_parameter< const int >::type n_timetables(n_timetablesSEXP);
+    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type stop_times(stop_timesSEXP);
+    Rcpp::traits::input_parameter< const size_t >::type nrows(nrowsSEXP);
     Rcpp::traits::input_parameter< const std::string >::type sfx(sfxSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_freq_to_stop_times(frequencies, stop_times, n_timetables, sfx));
+    rcpp_result_gen = Rcpp::wrap(rcpp_freq_to_stop_times(frequencies, stop_times, nrows, sfx));
     return rcpp_result_gen;
 END_RCPP
 }

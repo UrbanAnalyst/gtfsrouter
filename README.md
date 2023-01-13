@@ -17,7 +17,7 @@ Feed Specification)](https://developers.google.com/transit/gtfs/) data.
 You can install latest stable version of `gtfsrouter` from CRAN with:
 
 ``` r
-install.packages("gtfsrouter")
+install.packages ("gtfsrouter")
 ```
 
 Alternatively, the current development version can be installed using
@@ -25,20 +25,21 @@ any of the following options:
 
 ``` r
 # install.packages("remotes")
-remotes::install_git("https://git.sr.ht/~mpadge/gtfsrouter")
-remotes::install_bitbucket("atfutures/gtfsrouter")
-remotes::install_gitlab("atfutures1/gtfsrouter")
-remotes::install_github("ATFutures/gtfsrouter")
+remotes::install_git ("https://git.sr.ht/~mpadge/gtfsrouter")
+remotes::install_git ("https://codeberg.org/ATFutures/gtfsrouter")
+remotes::install_bitbucket ("atfutures/gtfsrouter")
+remotes::install_gitlab ("atfutures1/gtfsrouter")
+remotes::install_github ("ATFutures/gtfs-router")
 ```
 
 To load the package and check the version:
 
 ``` r
-library(gtfsrouter)
-packageVersion("gtfsrouter")
+library (gtfsrouter)
+packageVersion ("gtfsrouter")
 ```
 
-    ## [1] '0.0.5.35'
+    ## [1] '0.0.5.101'
 
 ## Main functions
 
@@ -49,11 +50,11 @@ can be written to the temporary directory (`tempdir()`) of the current R
 session with the function `berlin_gtfs_to_zip()`.
 
 ``` r
-filename <- berlin_gtfs_to_zip()
+filename <- berlin_gtfs_to_zip ()
 print (filename)
 ```
 
-    ## [1] "/tmp/Rtmp1crKJM/vbb.zip"
+    ## [1] "/tmp/RtmpvmK3vW/vbb.zip"
 
 For normal package use, `filename` will specify the name of a local GTFS
 `.zip` file.
@@ -67,9 +68,10 @@ as the following code:
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs, day = "Wed") # A pre-processing step to speed up queries
 gtfs_route (gtfs,
-            from = "Tegel",
-            to = "Berlin Hauptbahnhof",
-            start_time = 12 * 3600 + 120) # 12:02 in seconds
+    from = "Tegel",
+    to = "Berlin Hauptbahnhof",
+    start_time = 12 * 3600 + 120
+) # 12:02 in seconds
 ```
 
 | route_name | trip_name        | stop_name                       | arrival_time | departure_time |
@@ -100,8 +102,9 @@ stations within the feed for services which leave the nominated station
 gtfs <- extract_gtfs (filename)
 gtfs <- gtfs_timetable (gtfs, day = "Monday")
 x <- gtfs_traveltimes (gtfs,
-                       from = "Alexanderplatz",
-                       start_time_limits = c (12, 13) * 3600)
+    from = "Alexanderplatz",
+    start_time_limits = c (12, 13) * 3600
+)
 ```
 
 The function returns a simple table detailing all stations reachable
@@ -113,11 +116,11 @@ head (x)
 
 | start_time | duration | ntransfers | stop_id      | stop_name               | stop_lon | stop_lat |
 |:-----------|:---------|-----------:|:-------------|:------------------------|---------:|---------:|
-| 12:03:42   | 00:14:12 |          1 | 060003102223 | S Bellevue (Berlin)     | 13.34710 | 52.51995 |
+| 12:00:42   | 00:14:42 |          1 | 060003102223 | S Bellevue (Berlin)     | 13.34710 | 52.51995 |
 | 12:00:42   | 00:08:36 |          0 | 060003102224 | S Bellevue (Berlin)     | 13.34710 | 52.51995 |
 | 12:00:42   | 00:15:06 |          1 | 060003103233 | S Tiergarten (Berlin)   | 13.33624 | 52.51396 |
 | 12:00:42   | 00:10:42 |          0 | 060003103234 | S Tiergarten (Berlin)   | 13.33624 | 52.51396 |
-| 12:03:42   | 00:11:18 |          1 | 060003201213 | S+U Berlin Hauptbahnhof | 13.36892 | 52.52585 |
+| 12:00:42   | 00:14:18 |          1 | 060003201213 | S+U Berlin Hauptbahnhof | 13.36892 | 52.52585 |
 | 12:00:42   | 00:05:54 |          0 | 060003201214 | S+U Berlin Hauptbahnhof | 13.36892 | 52.52585 |
 
 Further details are provided in a [separate
@@ -162,6 +165,7 @@ entries, to enable the feed to be used for routing.
 ## Contributors
 
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -192,6 +196,12 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ATFutures/gtfs-router/commits?author=stmarcin">stmarcin</a>
 </td>
 <td align="center">
+<a href="https://github.com/dhersz">
+<img src="https://avatars.githubusercontent.com/u/1557047?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/commits?author=dhersz">dhersz</a>
+</td>
+<td align="center">
 <a href="https://github.com/polettif">
 <img src="https://avatars.githubusercontent.com/u/17431069?v=4" width="100px;" alt=""/>
 </a><br>
@@ -214,10 +224,10 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Asridharraman">sridharraman</a>
 </td>
 <td align="center">
-<a href="https://github.com/orlandoandradeb">
+<a href="https://github.com/orlandombaa">
 <img src="https://avatars.githubusercontent.com/u/48104481?u=66d48bb0e7efb664a94eace3472aa6a06960a7f4&v=4" width="100px;" alt=""/>
 </a><br>
-<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aorlandoandradeb">orlandoandradeb</a>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aorlandombaa">orlandombaa</a>
 </td>
 <td align="center">
 <a href="https://github.com/Maxime2506">
@@ -239,32 +249,20 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 </td>
 <td align="center">
 <a href="https://github.com/rafapereirabr">
-<img src="https://avatars.githubusercontent.com/u/7448421?u=9a760f26e72cd66150784babc5da6862e7775542&v=4" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/7448421?u=01aed495e612154e54be4c51221e706cdff7779d&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Arafapereirabr">rafapereirabr</a>
 </td>
-<td align="center">
-<a href="https://github.com/loanho23">
-<img src="https://avatars.githubusercontent.com/u/48426365?u=36727e1ed27b3b6206fb922c47544ef249fad83d&v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aloanho23">loanho23</a>
-</td>
-</tr>
-
-
-<tr>
 <td align="center">
 <a href="https://github.com/dcooley">
 <img src="https://avatars.githubusercontent.com/u/8093396?u=2c8d9162f246d90d433034d212b29a19e0f245c1&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Adcooley">dcooley</a>
 </td>
-<td align="center">
-<a href="https://github.com/dhersz">
-<img src="https://avatars.githubusercontent.com/u/1557047?v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Adhersz">dhersz</a>
-</td>
+</tr>
+
+
+<tr>
 <td align="center">
 <a href="https://github.com/bernd886">
 <img src="https://avatars.githubusercontent.com/u/56547410?v=4" width="100px;" alt=""/>
@@ -295,6 +293,18 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Acseveren">cseveren</a>
 </td>
+<td align="center">
+<a href="https://github.com/jh0ker">
+<img src="https://avatars.githubusercontent.com/u/3945220?u=dcb262dbf7fe448a8b24b673bcb995e3311f08d4&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Ajh0ker">jh0ker</a>
+</td>
+<td align="center">
+<a href="https://github.com/zamirD123">
+<img src="https://avatars.githubusercontent.com/u/69770500?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3AzamirD123">zamirD123</a>
+</td>
 </tr>
 
 </table>
@@ -324,10 +334,22 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3ARobinlovelace">Robinlovelace</a>
 </td>
 <td align="center">
+<a href="https://github.com/loanho23">
+<img src="https://avatars.githubusercontent.com/u/48426365?u=36727e1ed27b3b6206fb922c47544ef249fad83d&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Aloanho23">loanho23</a>
+</td>
+<td align="center">
 <a href="https://github.com/abyrd">
 <img src="https://avatars.githubusercontent.com/u/112871?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Aabyrd">abyrd</a>
+</td>
+<td align="center">
+<a href="https://github.com/hansmib">
+<img src="https://avatars.githubusercontent.com/u/52329319?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Ahansmib">hansmib</a>
 </td>
 </tr>
 

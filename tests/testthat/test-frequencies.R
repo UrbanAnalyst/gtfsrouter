@@ -97,7 +97,7 @@ test_that ("only routes with frequencies to stop_times", {
 
     expect_equal (
         nrow (gtfs_freq1$stop_times),
-        stop_times_no_freq * 7
+        stop_times_no_freq * 8
     )
     expect_equal (
         min (gtfs_freq1$stop_times$arrival_time),
