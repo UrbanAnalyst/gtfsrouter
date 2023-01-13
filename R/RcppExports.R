@@ -76,6 +76,10 @@ rcpp_transfer_nbs <- function(stops, dlim) {
     .Call(`_gtfsrouter_rcpp_transfer_nbs`, stops, dlim)
 }
 
+rcpp_transfer_nbs2 <- function(stops, dlim) {
+    .Call(`_gtfsrouter_rcpp_transfer_nbs2`, stops, dlim)
+}
+
 #' rcpp_traveltimes
 #'
 #' Calculate isochrones using Connection Scan Algorithm for GTFS data. Works

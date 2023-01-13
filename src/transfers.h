@@ -34,3 +34,6 @@ double one_haversine (const double &x1, const double &y1,
 
 Rcpp::List rcpp_transfer_nbs (Rcpp::DataFrame stops,
         const double dlim);
+
+Rcpp::List rcpp_transfer_nbs2 (Rcpp::DataFrame stops,
+        const double dlim);
