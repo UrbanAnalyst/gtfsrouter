@@ -67,11 +67,6 @@ rcpp_freq_to_stop_times <- function(frequencies, stop_times, nrows, sfx) {
 #' @noRd
 NULL
 
-#' rcpp_transfer_nbs
-#'
-#' Get nbs of every station within range dlim
-#'
-#' @noRd
 rcpp_transfer_nbs <- function(stops, dlim) {
     .Call(`_gtfsrouter_rcpp_transfer_nbs`, stops, dlim)
 }
