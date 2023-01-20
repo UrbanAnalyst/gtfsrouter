@@ -41,6 +41,8 @@ gtfs_transfer_table <- function (gtfs,
     # https://github.com/conveyal/r5/blob/dev/src/main/java/com/conveyal/r5/transit/TransitLayer.java#L69-L73 # nolint
     # implemented at:
     # https://github.com/conveyal/r5/blob/dev/src/main/java/com/conveyal/r5/transit/TransferFinder.java#L128 # nolint
+    # This identifies all potential transfers within straight-line distances of
+    # 'd_limit':
     transfers <- get_transfer_list (gtfs, d_limit)
 
     if (network_times) {
@@ -74,6 +76,18 @@ gtfs_transfer_table <- function (gtfs,
         "from_stop_id",
         "to_stop_id"
     )]))
+    transfers <- transfers [index, ]
+
+    # Those transfers only include times, but these may then correspond to
+    # actual transfer distances beyond 'd_limit', so calculat effective
+    # distances, and reduce to actual 'd_limit' of network times. (This will
+    # have no effect for non-network times.)
+    #
+    # 'dodgr' weighting of pedestrian networks uses a default maximal speed of 5
+    # km/h.
+    ped_speed <- 5 * 1000 / 3600 # ~ 1.4 m/s
+    transfer_dists <- transfers$min_transfer_time / ped_speed
+    index <- which (transfer_dists < d_limit)
 
     gtfs <- append_to_transfer_table (gtfs, transfers [index, ])
 
