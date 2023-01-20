@@ -27,7 +27,8 @@ encompassed by the GTFS feed (see Examples).}
 
 \item{network_times}{If \code{TRUE}, transfer times are calculated by routing
 throughout the underlying street network. If this is not provided as the
-\code{net} parameter, it will be automatically downloaded.}
+\code{net} parameter, it will be automatically downloaded. If a network, is
+provided, this parameter is automatically set to \code{TRUE}.}
 
 \item{quiet}{Set to \code{TRUE} to suppress screen messages}
 }
