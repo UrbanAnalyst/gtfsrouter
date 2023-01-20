@@ -11,7 +11,8 @@
 #' encompassed by the GTFS feed (see Examples).
 #' @param network_times If `TRUE`, transfer times are calculated by routing
 #' throughout the underlying street network. If this is not provided as the
-#' `net` parameter, it will be automatically downloaded.
+#' `net` parameter, it will be automatically downloaded. If a network, is
+#' provided, this parameter is automatically set to `TRUE`.
 #' @param quiet Set to `TRUE` to suppress screen messages
 #'
 #' @return Modified version of the `gtfs` input with additional transfers table.
@@ -35,6 +36,8 @@ gtfs_transfer_table <- function (gtfs,
 
     if (is.null (network) && network_times) {
         network <- dl_net (gtfs)
+    } else if (!is.null (network)) {
+        network_times <- TRUE
     }
 
     # d_limit in r5 is 1000m on street networks:
@@ -60,7 +63,10 @@ gtfs_transfer_table <- function (gtfs,
 
         # use max speed of 4km/h, as for OpenTripPlanner pedestrian speed
         # -> 4000 / 3600 = 1.11 m / s
-        transfer_times <- transfers$d / 1.111111
+        # transfer_times <- transfers$d / 1.111111
+        # ... but dodgr uses a max ped speed of 5 km/hr, which is then
+        # 5 * 1000 / 3600 ~= 1.4 m / 2
+        transfer_times <- transfers$d * 5 * 1000 / 3600
     }
 
     transfer_times [transfer_times < min_transfer_time] <- min_transfer_time
@@ -69,6 +75,7 @@ gtfs_transfer_table <- function (gtfs,
         from_stop_id = transfers$from,
         to_stop_id = transfers$to,
         transfer_type = 2,
+        d = transfers$d,
         min_transfer_time = ceiling (transfer_times)
     )
 
@@ -88,8 +95,19 @@ gtfs_transfer_table <- function (gtfs,
     ped_speed <- 5 * 1000 / 3600 # ~ 1.4 m/s
     transfer_dists <- transfers$min_transfer_time / ped_speed
     index <- which (transfer_dists < d_limit)
+    transfers <- transfers [index, ]
+    transfer_dists <- transfer_dists [index]
 
-    gtfs <- append_to_transfer_table (gtfs, transfers [index, ])
+    # Finally, where the GTFS feed extends beyond the spatial boundaries of the
+    # network, resultant network times may be anomalously low. These will be
+    # reflected in transfer_dists < actual network distances. Times for any such
+    # cases are then replaced by equivalent straight-line times.
+    index <- which (transfer_dists < transfers$d)
+    transfers$min_transfer_time [index] <-
+        ceiling (transfers$d [index] * 5 * 1000 / 3600)
+    transfers$d <- NULL
+
+    gtfs <- append_to_transfer_table (gtfs, transfers)
 
     return (gtfs)
 }
