@@ -27,11 +27,12 @@ void iso::trace_forward_traveltimes (
         // connections can also arrive at one of the departure stations, and
         // these are also flagged as start stations to prevent transfers being
         // constructed from the arrival/start station.
-        const bool is_start_stn =
-            iso::is_start_stn (start_stations_set, departure_station [i]) ||
+        const bool arrive_at_start =
             iso::is_start_stn (start_stations_set, arrival_station [i]);
+        const bool is_start_stn = arrive_at_start ||
+            iso::is_start_stn (start_stations_set, departure_station [i]);
 
-        if (is_start_stn && departure_time [i] > start_time_max)
+        if (arrive_at_start || (is_start_stn && departure_time [i] > start_time_max))
             continue;
 
         if (!is_start_stn &&
