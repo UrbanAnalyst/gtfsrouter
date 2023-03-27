@@ -13,6 +13,7 @@ Minor changes:
 - Improve estimation of pedestrian transfer times
 - Fix transfer times when GTFS feed extends beyond bounds of provided network
 - Bug fix in `gtfs_route_headway()` function (#94; thanks to @zamirD123)
+- Bug fix in `gtfs_traveltimes()` to remove trips ending at start (#99; thanks to @viajerus)
 
 
 # v 0.0.5
