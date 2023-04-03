@@ -20,9 +20,9 @@ border <- data.frame (x = 1 + c (rep (-s3, 2), 0, rep (s3, 2), 0, -s3),
                       y = 1 + c (0.5, -0.5, -1, -0.5, 0.5, 1, 0.5))
 asp <- diff (range (border$x)) / diff (range (border$y)) # aspect ratio for image
 
-fbus <- "bus.png"
-ftrain <- "train-cut.png"
-ftram <- "tram.png"
+fbus <- "bus.svg"
+ftrain <- "train.svg"
+ftram <- "tram.svg"
 
 dbus0 <- data.frame (x = 0.4, y = 1.35, image = fbus)
 dtrain0 <- data.frame (x = 0.4, y = 0.7, image = ftrain)
@@ -59,7 +59,8 @@ hex <- ggplot() +
                  size = 6, fill = NA, color = "#55BB55") +
     scale_x_continuous (expand = c (0.02, 0.02)) +
     scale_y_continuous (expand = c (0.02, 0.02))
-print (hex)
+# print (hex)
+hex0 <- hex
 ```
 ```{r}
 add_one_lab <- function (hex, lab_dat, aes, fs) {
@@ -85,7 +86,7 @@ lab_dat <- data.frame (x = 1 - 0.0001,
                        y = 1.2 + 0.0001,
                        lab = 'gtfs')
 aes <- ggplot2::aes (x, y, label = lab)
-fs <- 32 # font size
+fs <- 36 # font size
 hex <- add_one_lab (hex, lab_dat, aes, fs)
 
 lab_dat <- data.frame (x = 1 - 0.0001,
@@ -111,6 +112,11 @@ print (hex)
 ```
 
 
+---
+
+# Embedding fonts
+
+This is not needed for svg image
 
 from https://databasefaq.com/index.php/answer/182192/r-fonts-ggplot2-eps-error-using-arial-in-eps-figure-with-extrafont-package
 ```{r}
@@ -135,4 +141,5 @@ hex + theme_minimal (base_family = "SF Alien Encounters") +
            axis.title.y = element_blank())
 dev.off()
 ggsave ("gtfsrouter.png", hex)
+# ggsave ("gtfsrouter.eps", hex)
 ```
