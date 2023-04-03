@@ -31,6 +31,7 @@ repos:
           .*\.Rds|
           .*\.Rproj|
           .*\.sh|
+          .*\.svg|
           (.*/|)\.gitignore|
           (.*/|)\.gitlab-ci\.yml|
           (.*/|)\.lintr|
