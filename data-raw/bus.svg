@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<svg width="840" height="450" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - https://github.com/SVG-Edit/svgedit-->
+ <g class="layer">
+  <title>Bus</title>
+  <!-- Main outline, starting from lower right -->
+  <path d="M30,360 L30,320
+    M30,320 a300,300 45 0,1 300,-300
+    M330,20 L710,20
+    M710,20 a100,100 0 0,1 100,100
+    M810,120 L810,360"
+    fill="none" fill-opacity="null" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" />
+  <!-- wheels -->
+  <circle cx="200" cy="360" r="70" fill="none" fill-opacity="null" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" />
+  <circle cx="200" cy="360" r="30" fill="none" fill-opacity="null" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" />
+  <circle cx="650" cy="360" r="70" fill="none" fill-opacity="null" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" />
+  <circle cx="650" cy="360" r="30" fill="none" fill-opacity="null" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" />
+  <!-- bottom lines -->
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" x1="35" x2="120" y1="360" y2="360"/>
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" x1="280" x2="570" y1="360" y2="360"/>
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" x1="730" x2="810" y1="360" y2="360"/>
+  <!-- windscreen -->
+  <path d="M800,80 L750,80
+    M750,80 a30,30 0 0,0 -30,30
+    M720,110 L720,170
+    M720,170 a60,60 0 0,0 60,60
+    M780,230 L810,230
+    "
+    fill="none" fill-opacity="null" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" />
+  <!--  windows -->
+  <path d="M180,180 a100,100 0 0,1 100,-100
+    M280,80 L580,80
+    M580,80 a20,20 0 0,1 20,20
+    M600,100 L600,170
+    M600,170 a20,20 0 0,1 -20,20
+    M580,190 L180,190
+    "
+    fill="none" fill-opacity="null" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" />
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" x1="510" x2="510" y1="180" y2="90"/>
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" x1="430" x2="430" y1="180" y2="90"/>
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" x1="350" x2="350" y1="180" y2="90"/>
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" x1="270" x2="270" y1="180" y2="90"/>
+  <!-- bumper bars -->
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" x1="15" x2="60" y1="320" y2="320"/>
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" x1="770" x2="825" y1="320" y2="320"/>
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="30" x1="780" x2="800" y1="280" y2="280"/>
+
+ </g>
+</svg>

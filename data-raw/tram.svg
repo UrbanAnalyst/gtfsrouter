@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<svg width="640" height="480" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <!-- Created with SVG-edit - https://github.com/SVG-Edit/svgedit-->
+ <g class="layer">
+  <title>Tram</title>
+  <!-- Wheels: 420 + 100 / 2 = 470, and width = 15, so 475.5 = bottom of svg -->
+  <path d="M150,420 a1,1 0 0,0 100,0" fill="none" fill-opacity="null" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" />
+  <path d="M350,420 a1,1 0 0,0 100,0" fill="none" fill-opacity="null" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" />
+  <!-- Line connecting wheels -->
+  <line fill="none" fill-opacity="null" id="svg_4" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="250" x2="345" y1="440" y2="440"/>
+  <!-- Bottom Line -->
+  <line fill="none" fill-opacity="null" id="svg_3" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="50" x2="572" y1="410" y2="410"/>
+  <!-- Back (LHS) Line -->
+  <line fill="none" fill-opacity="null" id="svg_6" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="50" x2="50" y1="410" y2="120"/>
+  <!-- Front (RHS) line -->
+  <line fill="none" fill-opacity="null" id="svg_7" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="575" x2="575" y1="410" y2="120"/>
+  <!-- Roof Line -->
+  <line fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="30" x2="595" y1="120" y2="120"/>
+  <!-- Front and back nubbins -->
+  <line fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="20" x2="40" y1="380" y2="380"/>
+  <line fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="575" x2="605" y1="380" y2="380"/>
+  <!-- Doors -->
+  <path fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" d="M120,400 L120,180 M120,180 L190,180 M190,180 L190,400 Z" />
+  <path fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" d="M420,400 L420,180 M420,180 L490,180 M490,180 L490,400 Z" />
+  <!-- Front and back windows -->
+  <line fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="50" x2="110" y1="290" y2="290"/>
+  <path d="M50,180 L87,180 M87,180 L87,280 Z" fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" />
+  <line fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="490" x2="570" y1="290" y2="290"/>
+  <path d="M570,180 L535,180 M535,180 L535,280 Z" fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" />
+  <!-- Mid-line and two windows -->
+  <line fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="200" x2="410" y1="290" y2="290"/>
+  <path d="M230,280 L230,180 M230,180 L290,180 M290,180 L290,280 Z" fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" />
+  <path d="M325,280 L325,180 M325,180 L385,180 M385,180 L385,280 Z" fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" />
+  <!-- Antenna and root -->
+  <line fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="380" x2="320" y1="120" y2="20"/>
+  <line fill="none" fill-opacity="null" id="svg_8" stroke="#9b9b9b" stroke-dasharray="null" stroke-linecap="round" stroke-linejoin="null" stroke-opacity="null" stroke-width="20" x1="550" x2="550" y1="80" y2="110"/>
+ </g>
+</svg>
