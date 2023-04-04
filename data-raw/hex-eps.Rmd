@@ -1,6 +1,15 @@
 
 # hex sticker script
 
+**Problem** `ggimage` converts to bitmaps, and so loses all of the svg path information.
+The main hex and text can be exported as svg directly, but have links to my
+system fonts. These can be converted to svg paths in inkscape, but those paths
+are then the outlines of the letters, and are not filled.
+
+They then need to be filled in inkscape, which automatically converts the fonts
+to separate paths for each section. These then have to be tweaked in the svg
+itself.
+
 Images from
 https://www.onlinewebfonts.com/icon/
 
@@ -109,6 +118,7 @@ th$axis.ticks.length <- unit (0, 'null')
 
 hex <- hex + th
 print (hex)
+# ggsave ("gtfsrouter.svg", hex)
 ```
 
 
