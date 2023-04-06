@@ -26,7 +26,7 @@
 #define DEBUGMSG(msg, depstn, arrstn, deptime) \
     if ((DEPARTURE_STATION < 0 || \
                 (depstn) == DEPARTURE_STATION) && \
-                (arrstn) == ARRIVAL_STATION && \
+                ((ARRIVAL_STATION < 0) || (arrstn) == ARRIVAL_STATION) && \
                 (deptime) >= DEPARTURE_TIME_MIN && \
                 (deptime) <= DEPARTURE_TIME_MAX) \
     Rcpp::Rcout << msg << std::endl;
