@@ -254,6 +254,15 @@ bool iso::fill_one_iso (
 
     const size_t s = iso.extend (arrival_station) - 1;
 
+    DEBUGMSG("--con: (" << departure_station << " -> " <<
+            arrival_station << "), time(" <<
+            departure_time << " -> " <<
+            arrival_time << "), dur = " <<
+            arrival_time - latest_initial <<
+            " with " << ntransfers << " transfers",
+            departure_station, arrival_station,
+            departure_time);
+
     iso.connections [arrival_station].convec [s].prev_stn = departure_station;
     iso.connections [arrival_station].convec [s].departure_time = departure_time;
     iso.connections [arrival_station].convec [s].arrival_time = arrival_time;
