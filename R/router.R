@@ -292,9 +292,14 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
 }
 
 # convert from and to values to indices into gtfs$stations
-from_to_to_stations <- function (stns, gtfs,
-                                 from_to_are_ids = FALSE, grep_fixed = TRUE) {
-    if (is.character (stns) || is.null (nrow (stns))) {
+from_to_to_stations <- function (stns,
+                                 gtfs,
+                                 from_to_are_ids = FALSE,
+                                 grep_fixed = TRUE) {
+
+    if (is.character (stns) ||
+        (!is.numeric (stns) && is.null (nrow (stns)))) {
+
         ret <- lapply (stns, function (i) {
             unique (station_name_to_ids (
                 i,
@@ -303,7 +308,9 @@ from_to_to_stations <- function (stns, gtfs,
                 grep_fixed
             ))
         })
+
     } else if (!is.null (nrow (stns))) {
+
         ret <- apply (stns, 1, function (i) {
             unique (station_name_to_ids (
                 i,
@@ -315,13 +322,16 @@ from_to_to_stations <- function (stns, gtfs,
         if (!is.list (ret)) { # for single row stns
             ret <- list (as.integer (ret))
         }
+
     } else if (is.numeric (stns) && length (stns) == 2) {
+
         ret <- list (station_name_to_ids (
             stns,
             gtfs,
             from_to_are_ids,
             grep_fixed
         ))
+
     } else {
         stop ("from/to stations in unrecognised format")
     }
