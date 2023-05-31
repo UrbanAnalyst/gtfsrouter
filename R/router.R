@@ -451,7 +451,7 @@ map_all_trips <- function (gtfs, route, include_ids) {
         map_one_trip (gtfs, route, i)
     }))
     res <- res [order (res$departure_time), ]
-    rownames (res) <- seq (nrow (res))
+    rownames (res) <- seq_len (nrow (res))
 
     # Then insert routes and trip headsigns
     res$trip_name <- NA_character_
