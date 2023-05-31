@@ -192,7 +192,8 @@ update_trips_table_with_freqs <- function (gtfs, sfx) {
     # `trip_id` not containing the `sfx` version for frequency table entries.
     # Each row needs to be expanded to the corresponding number of
     # frequency-table trips.
-    freqs_trips_tab <- freqs_trips_tab [match (trips_freqs$trip_id, freqs_trips)]
+    freqs_trips_tab <-
+        freqs_trips_tab [match (trips_freqs$trip_id, freqs_trips)]
     index <- rep (seq_len (nrow (trips_freqs)), times = freqs_trips_tab)
     trips_freqs_exp <- trips_freqs [index, ]
     trips_freqs_exp$trip_id <- trip_ids_with_sfx

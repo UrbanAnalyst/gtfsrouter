@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.156</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.160</span>
       </span>
     </div>
 
@@ -73,7 +73,7 @@
                         <h4 data-toc-skip class="author">Mark
 Padgham</h4>
             
-            <h4 data-toc-skip class="date">2023-04-04</h4>
+            <h4 data-toc-skip class="date">2023-05-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ATFutures/gtfs-router/blob/HEAD/vignettes/transfers.Rmd" class="external-link"><code>vignettes/transfers.Rmd</code></a></small>
       <div class="hidden name"><code>transfers.Rmd</code></div>
@@ -594,9 +594,9 @@ range of distance limits.</p>
 <p><img src="transfers_files/figure-html/plot1-1.png" width="700"></p>
 <p>And these additional transfer possibilities can make a significant
 difference to estimated travel times. Note, however, that the travel
-times only changed for 625 stations, while the value of
+times only changed for 542 stations, while the value of
 <code>nsame</code> value recording numbers of stations for which travel
-times did not change was 3,693. Travel times may also increase as
+times did not change was 5,876. Travel times may also increase as
 additional transfers may be used to reduce numbers of connecting
 services required for a particular trip, and the algorithm generally
 searches for connections with minimal numbers of transfers.</p>
@@ -678,7 +678,7 @@ limits of maximal transfer distance, although the overall effect is very
 minimal. The object <code>d</code> also records the proportion of
 station pairs for which modifications to the transfers table actually
 changed travel times, which in this case amounts to a mean value of
-0.001, clearly revealing that very few trips actually change.</p>
+0.0011, clearly revealing that very few trips actually change.</p>
 <div class="section level3">
 <h3 id="a-more-realistic-example">A more realistic example<a class="anchor" aria-label="anchor" href="#a-more-realistic-example"></a>
 </h3>
