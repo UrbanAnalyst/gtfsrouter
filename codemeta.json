@@ -4,16 +4,16 @@
   "identifier": "gtfsrouter",
   "description": "Use GTFS (General Transit Feed Specification) data for routing from nominated start and end stations, and for extracting isochrones from nominated start station.",
   "name": "gtfsrouter: Routing with GTFS (General Transit Feed Specification) Data",
-  "codeRepository": "https://github.com/ATFutures/gtfs-router",
-  "issueTracker": "https://github.com/ATFutures/gtfs-router/issues",
+  "codeRepository": "https://github.com/UrbanAnalyst/gtfsrouter",
+  "issueTracker": "https://github.com/UrbanAnalyst/gtfsrouter/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.0.5.160",
+  "version": "0.0.5.161",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.2.1 (2022-06-23)",
+  "runtimePlatform": "R version 4.3.0 (2023-04-21)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -272,19 +272,19 @@
     },
     "SystemRequirements": "C++11"
   },
-  "fileSize": "5971.994KB",
-  "releaseNotes": "https://github.com/ATFutures/gtfs-router/blob/master/NEWS.md",
-  "readme": "https://github.com/ATFutures/gtfs-router/blob/main/README.md",
+  "fileSize": "9978.933KB",
+  "releaseNotes": "https://github.com/UrbanAnalyst/gtfsrouter/blob/master/NEWS.md",
+  "readme": "https://github.com/UrbanAnalyst/gtfsrouter/blob/main/README.md",
   "contIntegration": [
-    "https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check",
-    "https://app.codecov.io/gh/ATFutures/gtfs-router"
+    "https://github.com/UrbanAnalyst/gtfsrouter/actions?query=workflow%3AR-CMD-check",
+    "https://app.codecov.io/gh/UrbanAnalyst/gtfsrouter"
   ],
   "developmentStatus": "https://www.repostatus.org/#active",
   "keywords": [
     "gtfs",
     "public-transportation",
     "router",
-    "gtfs-router",
+    "gtfsrouter",
     "r-package"
   ],
   "relatedLink": "https://CRAN.R-project.org/package=gtfsrouter"
