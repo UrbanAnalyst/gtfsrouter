@@ -26,7 +26,7 @@ the following options:
 # install.packages("remotes")
 remotes::install_git ("https://git.sr.ht/~mpadge/gtfsrouter")
 remotes::install_git ("https://codeberg.org/UrbanAnalyst/gtfsrouter")
-remotes::install_bitbucket ("atfutures/gtfsrouter")
+remotes::install_bitbucket ("urbananalyst/gtfsrouter")
 remotes::install_gitlab ("UrbanAnalyst/gtfsrouter")
 remotes::install_github ("UrbanAnalyst/gtfsrouter")
 ```
