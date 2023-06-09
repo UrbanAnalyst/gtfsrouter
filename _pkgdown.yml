@@ -43,4 +43,4 @@ navbar:
     href: reference/index.html
   right:
   - icon: fa-github fa-lg
-    href: https://github.com/ATFutures/gtfs-router
+    href: https://github.com/UrbanAnalyst/gtfsrouter

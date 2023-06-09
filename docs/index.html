@@ -35,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.160</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.5.161</span>
       </span>
     </div>
 
@@ -53,7 +53,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/ATFutures/gtfs-router" class="external-link">
+  <a href="https://github.com/UrbanAnalyst/gtfsrouter" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -71,10 +71,10 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="gtfsrouter-">gtfsrouter <a href="https://atfutures.github.io/gtfs-router/" class="external-link"><img src="reference/figures/gtfsrouter.png" align="right" height="210" width="182/"></a>
+<div class="page-header"><h1 id="gtfsrouter-">gtfsrouter <a href="https://UrbanAnalyst.github.io/gtfsrouter/" class="external-link"><img src="reference/figures/gtfsrouter.png" align="right" height="210" width="182/"></a>
 <a class="anchor" aria-label="anchor" href="#gtfsrouter-"></a>
 </h1></div>
-<p><a href="https://github.com/atfutures/gtfs-router/actions?query=workflow%3AR-CMD-check" class="external-link"><img src="https://github.com/atfutures/gtfs-router/workflows/R-CMD-check/badge.svg" alt="R build status"></a> <a href="https://app.codecov.io/gh/ATFutures/gtfs-router" class="external-link"><img src="https://codecov.io/gh/ATFutures/gtfs-router/branch/main/graph/badge.svg" alt="codecov"></a> <a href="https://www.repostatus.org/#active" class="external-link"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active"></a> <a href="https://cran.r-project.org/package=gtfsrouter" class="external-link"><img src="http://www.r-pkg.org/badges/version/gtfsrouter" alt="CRAN_Status_Badge"></a> <a href="https://cran.r-project.org/package=gtfsrouter" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/grand-total/gtfsrouter?color=orange" alt="CRAN Downloads"></a></p>
+<p><a href="https://github.com/UrbanAnalyst/gtfsrouter/actions?query=workflow%3AR-CMD-check" class="external-link"><img src="https://github.com/UrbanAnalyst/gtfsrouter/workflows/R-CMD-check/badge.svg" alt="R build status"></a> <a href="https://app.codecov.io/gh/UrbanAnalyst/gtfsrouter" class="external-link"><img src="https://codecov.io/gh/UrbanAnalyst/gtfsrouter/branch/main/graph/badge.svg" alt="codecov"></a> <a href="https://www.repostatus.org/#active" class="external-link"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active"></a> <a href="https://cran.r-project.org/package=gtfsrouter" class="external-link"><img src="http://www.r-pkg.org/badges/version/gtfsrouter" alt="CRAN_Status_Badge"></a> <a href="https://cran.r-project.org/package=gtfsrouter" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/grand-total/gtfsrouter?color=orange" alt="CRAN Downloads"></a></p>
 <p><strong>R</strong> package for public transport routing with <a href="https://developers.google.com/transit/gtfs/" class="external-link">GTFS (General Transit Feed Specification)</a> data.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -86,15 +86,15 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_git</span> <span class="op">(</span><span class="st">"https://git.sr.ht/~mpadge/gtfsrouter"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_git</span> <span class="op">(</span><span class="st">"https://codeberg.org/ATFutures/gtfsrouter"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_git</span> <span class="op">(</span><span class="st">"https://codeberg.org/UrbanAnalyst/gtfsrouter"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_bitbucket</span> <span class="op">(</span><span class="st">"atfutures/gtfsrouter"</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_gitlab</span> <span class="op">(</span><span class="st">"atfutures1/gtfsrouter"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span> <span class="op">(</span><span class="st">"ATFutures/gtfs-router"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span> <span class="op">(</span><span class="st">"UrbanAnalyst/gtfsrouter"</span><span class="op">)</span></span></code></pre></div>
 <p>To load the package and check the version:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/ATFutures/gtfs-router" class="external-link">gtfsrouter</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/UrbanAnalyst/gtfsrouter" class="external-link">gtfsrouter</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span> <span class="op">(</span><span class="st">"gtfsrouter"</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] '0.0.5.101'</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] '0.0.5.158'</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="main-functions">Main functions<a class="anchor" aria-label="anchor" href="#main-functions"></a>
@@ -103,7 +103,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">filename</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span> <span class="op">(</span><span class="va">filename</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "/tmp/RtmpvmK3vW/vbb.zip"</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="do">## [1] "/tmp/RtmpvmGw2S/vbb.zip"</span></span></code></pre></div>
 <p>For normal package use, <code>filename</code> will specify the name of a local GTFS <code>.zip</code> file.</p>
 <div class="section level3">
 <h3 id="gtfs_route">gtfs_route<a class="anchor" aria-label="anchor" href="#gtfs_route"></a>
@@ -209,7 +209,7 @@
 <div class="section level3">
 <h3 id="gtfs_traveltimes">gtfs_traveltimes<a class="anchor" aria-label="anchor" href="#gtfs_traveltimes"></a>
 </h3>
-<p>The <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_traveltimes.html" class="external-link"><code>gtfs_traveltimes()</code> function`</a> calculates minimal travel times from any nominated stop to all other stops within a feed. It requires the two parameters of start station, and a vector of two values specifying earliest and latest desired start times. The following code returns the fastest travel times to all stations within the feed for services which leave the nominated station (“Alexanderplatz”) between 12:00 and 13:00 on a Monday:</p>
+<p>The <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_traveltimes.html" class="external-link"><code>gtfs_traveltimes()</code> function`</a> calculates minimal travel times from any nominated stop to all other stops within a feed. It requires the two parameters of start station, and a vector of two values specifying earliest and latest desired start times. The following code returns the fastest travel times to all stations within the feed for services which leave the nominated station (“Alexanderplatz”) between 12:00 and 13:00 on a Monday:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">filename</span><span class="op">)</span></span>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span>, day <span class="op">=</span> <span class="st">"Monday"</span><span class="op">)</span></span>
@@ -296,19 +296,19 @@
 </tr>
 </tbody>
 </table>
-<p>Further details are provided in a <a href="https://atfutures.github.io/gtfs-router/articles/traveltimes.html" class="external-link">separate vignette</a>.</p>
+<p>Further details are provided in a <a href="https://UrbanAnalyst.github.io/gtfsrouter/articles/traveltimes.html" class="external-link">separate vignette</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="gtfs_transfer_table">gtfs_transfer_table<a class="anchor" aria-label="anchor" href="#gtfs_transfer_table"></a>
 </h3>
-<p>Feeds should include a “transfers.txt” table detailing all possible transfers between nearby stations, yet many feeds omit these tables, rendering them unusable for routing because transfers between services can not be calculated. The <code>gtfsrouter</code> package also includes a function, <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html" class="external-link"><code>gtfs_transfer_table()</code></a>, which can calculate a transfer table for a given feed, with transfer times calculated either using straight-line distances (the default), or using more realistic pedestrian times routed through the underlying street network.</p>
-<p>This function can also be used to enable routing through multiple adjacent or overlapping GTFS feeds. The feeds need simply be merged through binding the rows of all tables, and the resultant aggregate feed submitted to the <a href="https://atfutures.github.io/gtfs-router/reference/gtfs_transfer_table.html" class="external-link"><code>gtfs_transfer_table()</code></a> function. This transfer table will retain all transfers specified in the original feeds, yet be augmented by all possible transfers between the multiple systems up to a user-specified maximal distance. Further details of this function are also provided in another <a href="https://atfutures.github.io/gtfs-router/articles/transfers.html" class="external-link">separate vignette</a>.</p>
+<p>Feeds should include a “transfers.txt” table detailing all possible transfers between nearby stations, yet many feeds omit these tables, rendering them unusable for routing because transfers between services can not be calculated. The <code>gtfsrouter</code> package also includes a function, <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link"><code>gtfs_transfer_table()</code></a>, which can calculate a transfer table for a given feed, with transfer times calculated either using straight-line distances (the default), or using more realistic pedestrian times routed through the underlying street network.</p>
+<p>This function can also be used to enable routing through multiple adjacent or overlapping GTFS feeds. The feeds need simply be merged through binding the rows of all tables, and the resultant aggregate feed submitted to the <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link"><code>gtfs_transfer_table()</code></a> function. This transfer table will retain all transfers specified in the original feeds, yet be augmented by all possible transfers between the multiple systems up to a user-specified maximal distance. Further details of this function are also provided in another <a href="https://UrbanAnalyst.github.io/gtfsrouter/articles/transfers.html" class="external-link">separate vignette</a>.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="additional-functionality">Additional Functionality<a class="anchor" aria-label="anchor" href="#additional-functionality"></a>
 </h2>
-<p>There are many ways to construct GTFS feeds. For background information, see <a href="https://gtfs.org" class="external-link"><code>gtfs.org</code></a>, and particularly their <a href="https://docs.google.com/document/d/16inL5BVcM1aU-_DcFJay_tC6Ni0wPa0nvQEstueG5k4/edit" class="external-link">GTFS Examples</a>. Feeds may include a “frequencies.txt” table which defines “service periods”, and overrides any schedule information during the specified times. The <code>gtfsrouter</code> package includes a function, <a href="https://atfutures.github.io/gtfs-router/reference/frequencies_to_stop_times.html" class="external-link"><code>frequencies_to_stop_times()</code></a>, to convert “frequencies.txt” tables to equivalent “stop_times.txt” entries, to enable the feed to be used for routing.</p>
+<p>There are many ways to construct GTFS feeds. For background information, see <a href="https://gtfs.org" class="external-link"><code>gtfs.org</code></a>, and particularly their <a href="https://docs.google.com/document/d/16inL5BVcM1aU-_DcFJay_tC6Ni0wPa0nvQEstueG5k4/edit" class="external-link">GTFS Examples</a>. Feeds may include a “frequencies.txt” table which defines “service periods”, and overrides any schedule information during the specified times. The <code>gtfsrouter</code> package includes a function, <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/frequencies_to_stop_times.html" class="external-link"><code>frequencies_to_stop_times()</code></a>, to convert “frequencies.txt” tables to equivalent “stop_times.txt” entries, to enable the feed to be used for routing.</p>
 </div>
 <div class="section level2">
 <h2 id="contributors">Contributors<a class="anchor" aria-label="anchor" href="#contributors"></a>
@@ -322,19 +322,19 @@
 </h3>
 <table class="table"><tr>
 <td align="center">
-<a href="https://github.com/mpadge" class="external-link"> <img src="https://avatars.githubusercontent.com/u/6697851?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/commits?author=mpadge" class="external-link">mpadge</a>
+<a href="https://github.com/mpadge" class="external-link"> <img src="https://avatars.githubusercontent.com/u/6697851?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/commits?author=mpadge" class="external-link">mpadge</a>
 </td>
 <td align="center">
-<a href="https://github.com/AlexandraKapp" class="external-link"> <img src="https://avatars.githubusercontent.com/u/18367515?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/commits?author=AlexandraKapp" class="external-link">AlexandraKapp</a>
+<a href="https://github.com/AlexandraKapp" class="external-link"> <img src="https://avatars.githubusercontent.com/u/18367515?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/commits?author=AlexandraKapp" class="external-link">AlexandraKapp</a>
 </td>
 <td align="center">
-<a href="https://github.com/stmarcin" class="external-link"> <img src="https://avatars.githubusercontent.com/u/11378350?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/commits?author=stmarcin" class="external-link">stmarcin</a>
+<a href="https://github.com/stmarcin" class="external-link"> <img src="https://avatars.githubusercontent.com/u/11378350?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/commits?author=stmarcin" class="external-link">stmarcin</a>
 </td>
 <td align="center">
-<a href="https://github.com/dhersz" class="external-link"> <img src="https://avatars.githubusercontent.com/u/1557047?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/commits?author=dhersz" class="external-link">dhersz</a>
+<a href="https://github.com/dhersz" class="external-link"> <img src="https://avatars.githubusercontent.com/u/1557047?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/commits?author=dhersz" class="external-link">dhersz</a>
 </td>
 <td align="center">
-<a href="https://github.com/polettif" class="external-link"> <img src="https://avatars.githubusercontent.com/u/17431069?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/commits?author=polettif" class="external-link">polettif</a>
+<a href="https://github.com/polettif" class="external-link"> <img src="https://avatars.githubusercontent.com/u/17431069?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/commits?author=polettif" class="external-link">polettif</a>
 </td>
 </tr></table>
 </div>
@@ -344,53 +344,53 @@
 <table class="table">
 <tr>
 <td align="center">
-<a href="https://github.com/sridharraman" class="external-link"> <img src="https://avatars.githubusercontent.com/u/570692?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Asridharraman" class="external-link">sridharraman</a>
+<a href="https://github.com/sridharraman" class="external-link"> <img src="https://avatars.githubusercontent.com/u/570692?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Asridharraman" class="external-link">sridharraman</a>
 </td>
 <td align="center">
-<a href="https://github.com/orlandombaa" class="external-link"> <img src="https://avatars.githubusercontent.com/u/48104481?u=66d48bb0e7efb664a94eace3472aa6a06960a7f4&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aorlandombaa" class="external-link">orlandombaa</a>
+<a href="https://github.com/orlandombaa" class="external-link"> <img src="https://avatars.githubusercontent.com/u/48104481?u=66d48bb0e7efb664a94eace3472aa6a06960a7f4&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Aorlandombaa" class="external-link">orlandombaa</a>
 </td>
 <td align="center">
-<a href="https://github.com/Maxime2506" class="external-link"> <img src="https://avatars.githubusercontent.com/u/54989587?u=6d2c848ee0c7d8a2841d47791c30eec1cab35470&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3AMaxime2506" class="external-link">Maxime2506</a>
+<a href="https://github.com/Maxime2506" class="external-link"> <img src="https://avatars.githubusercontent.com/u/54989587?u=6d2c848ee0c7d8a2841d47791c30eec1cab35470&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3AMaxime2506" class="external-link">Maxime2506</a>
 </td>
 <td align="center">
-<a href="https://github.com/chinhqho" class="external-link"> <img src="https://avatars.githubusercontent.com/u/47441312?u=577d1dca03b4bb904bb45f1e6205b11144c900cd&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Achinhqho" class="external-link">chinhqho</a>
+<a href="https://github.com/chinhqho" class="external-link"> <img src="https://avatars.githubusercontent.com/u/47441312?u=577d1dca03b4bb904bb45f1e6205b11144c900cd&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Achinhqho" class="external-link">chinhqho</a>
 </td>
 <td align="center">
-<a href="https://github.com/federicotallis" class="external-link"> <img src="https://avatars.githubusercontent.com/u/25511806?u=f074beb69d1984dad98483c5b43a4d42402542dc&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Afedericotallis" class="external-link">federicotallis</a>
+<a href="https://github.com/federicotallis" class="external-link"> <img src="https://avatars.githubusercontent.com/u/25511806?u=f074beb69d1984dad98483c5b43a4d42402542dc&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Afedericotallis" class="external-link">federicotallis</a>
 </td>
 <td align="center">
-<a href="https://github.com/rafapereirabr" class="external-link"> <img src="https://avatars.githubusercontent.com/u/7448421?u=01aed495e612154e54be4c51221e706cdff7779d&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Arafapereirabr" class="external-link">rafapereirabr</a>
+<a href="https://github.com/rafapereirabr" class="external-link"> <img src="https://avatars.githubusercontent.com/u/7448421?u=01aed495e612154e54be4c51221e706cdff7779d&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Arafapereirabr" class="external-link">rafapereirabr</a>
 </td>
 <td align="center">
-<a href="https://github.com/dcooley" class="external-link"> <img src="https://avatars.githubusercontent.com/u/8093396?u=2c8d9162f246d90d433034d212b29a19e0f245c1&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Adcooley" class="external-link">dcooley</a>
-</td>
-</tr>
-<tr>
-<td align="center">
-<a href="https://github.com/bernd886" class="external-link"> <img src="https://avatars.githubusercontent.com/u/56547410?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Abernd886" class="external-link">bernd886</a>
-</td>
-<td align="center">
-<a href="https://github.com/stefan-overkamp" class="external-link"> <img src="https://avatars.githubusercontent.com/u/55497288?u=946d42a5f3d068a44b43ee8e5f5fd5065d968419&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Astefan-overkamp" class="external-link">stefan-overkamp</a>
-</td>
-<td align="center">
-<a href="https://github.com/luukvdmeer" class="external-link"> <img src="https://avatars.githubusercontent.com/u/26540305?u=c576e87314499815cbf698b7781ee58fd1d773e2&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aluukvdmeer" class="external-link">luukvdmeer</a>
-</td>
-<td align="center">
-<a href="https://github.com/szaboildi" class="external-link"> <img src="https://avatars.githubusercontent.com/u/10348398?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aszaboildi" class="external-link">szaboildi</a>
-</td>
-<td align="center">
-<a href="https://github.com/cseveren" class="external-link"> <img src="https://avatars.githubusercontent.com/u/30906872?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Acseveren" class="external-link">cseveren</a>
-</td>
-<td align="center">
-<a href="https://github.com/jh0ker" class="external-link"> <img src="https://avatars.githubusercontent.com/u/3945220?u=dcb262dbf7fe448a8b24b673bcb995e3311f08d4&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Ajh0ker" class="external-link">jh0ker</a>
-</td>
-<td align="center">
-<a href="https://github.com/zamirD123" class="external-link"> <img src="https://avatars.githubusercontent.com/u/69770500?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3AzamirD123" class="external-link">zamirD123</a>
+<a href="https://github.com/dcooley" class="external-link"> <img src="https://avatars.githubusercontent.com/u/8093396?u=2c8d9162f246d90d433034d212b29a19e0f245c1&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Adcooley" class="external-link">dcooley</a>
 </td>
 </tr>
 <tr>
 <td align="center">
-<a href="https://github.com/viajerus" class="external-link"> <img src="https://avatars.githubusercontent.com/u/63015973?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+author%3Aviajerus" class="external-link">viajerus</a>
+<a href="https://github.com/bernd886" class="external-link"> <img src="https://avatars.githubusercontent.com/u/56547410?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Abernd886" class="external-link">bernd886</a>
+</td>
+<td align="center">
+<a href="https://github.com/stefan-overkamp" class="external-link"> <img src="https://avatars.githubusercontent.com/u/55497288?u=946d42a5f3d068a44b43ee8e5f5fd5065d968419&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Astefan-overkamp" class="external-link">stefan-overkamp</a>
+</td>
+<td align="center">
+<a href="https://github.com/luukvdmeer" class="external-link"> <img src="https://avatars.githubusercontent.com/u/26540305?u=c576e87314499815cbf698b7781ee58fd1d773e2&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Aluukvdmeer" class="external-link">luukvdmeer</a>
+</td>
+<td align="center">
+<a href="https://github.com/szaboildi" class="external-link"> <img src="https://avatars.githubusercontent.com/u/10348398?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Aszaboildi" class="external-link">szaboildi</a>
+</td>
+<td align="center">
+<a href="https://github.com/cseveren" class="external-link"> <img src="https://avatars.githubusercontent.com/u/30906872?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Acseveren" class="external-link">cseveren</a>
+</td>
+<td align="center">
+<a href="https://github.com/jh0ker" class="external-link"> <img src="https://avatars.githubusercontent.com/u/3945220?u=dcb262dbf7fe448a8b24b673bcb995e3311f08d4&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Ajh0ker" class="external-link">jh0ker</a>
+</td>
+<td align="center">
+<a href="https://github.com/zamirD123" class="external-link"> <img src="https://avatars.githubusercontent.com/u/69770500?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3AzamirD123" class="external-link">zamirD123</a>
+</td>
+</tr>
+<tr>
+<td align="center">
+<a href="https://github.com/viajerus" class="external-link"> <img src="https://avatars.githubusercontent.com/u/63015973?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Aviajerus" class="external-link">viajerus</a>
 </td>
 </tr>
 </table>
@@ -400,22 +400,22 @@
 </h3>
 <table class="table"><tr>
 <td align="center">
-<a href="https://github.com/tbuckl" class="external-link"> <img src="https://avatars.githubusercontent.com/u/98956?u=9580c2ee3c03cbbe44ac8180b0f6a6725b0415f0&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Atbuckl" class="external-link">tbuckl</a>
+<a href="https://github.com/tbuckl" class="external-link"> <img src="https://avatars.githubusercontent.com/u/98956?u=9580c2ee3c03cbbe44ac8180b0f6a6725b0415f0&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+commenter%3Atbuckl" class="external-link">tbuckl</a>
 </td>
 <td align="center">
-<a href="https://github.com/tuesd4y" class="external-link"> <img src="https://avatars.githubusercontent.com/u/13107179?u=cfcc7852d1bed6e2b17fa3f985cebf743c43b299&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Atuesd4y" class="external-link">tuesd4y</a>
+<a href="https://github.com/tuesd4y" class="external-link"> <img src="https://avatars.githubusercontent.com/u/13107179?u=cfcc7852d1bed6e2b17fa3f985cebf743c43b299&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+commenter%3Atuesd4y" class="external-link">tuesd4y</a>
 </td>
 <td align="center">
-<a href="https://github.com/Robinlovelace" class="external-link"> <img src="https://avatars.githubusercontent.com/u/1825120?u=461318c239e721dc40668e4b0ce6cc47731328ac&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3ARobinlovelace" class="external-link">Robinlovelace</a>
+<a href="https://github.com/Robinlovelace" class="external-link"> <img src="https://avatars.githubusercontent.com/u/1825120?u=461318c239e721dc40668e4b0ce6cc47731328ac&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+commenter%3ARobinlovelace" class="external-link">Robinlovelace</a>
 </td>
 <td align="center">
-<a href="https://github.com/loanho23" class="external-link"> <img src="https://avatars.githubusercontent.com/u/48426365?u=36727e1ed27b3b6206fb922c47544ef249fad83d&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Aloanho23" class="external-link">loanho23</a>
+<a href="https://github.com/loanho23" class="external-link"> <img src="https://avatars.githubusercontent.com/u/48426365?u=36727e1ed27b3b6206fb922c47544ef249fad83d&amp;v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+commenter%3Aloanho23" class="external-link">loanho23</a>
 </td>
 <td align="center">
-<a href="https://github.com/abyrd" class="external-link"> <img src="https://avatars.githubusercontent.com/u/112871?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Aabyrd" class="external-link">abyrd</a>
+<a href="https://github.com/abyrd" class="external-link"> <img src="https://avatars.githubusercontent.com/u/112871?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+commenter%3Aabyrd" class="external-link">abyrd</a>
 </td>
 <td align="center">
-<a href="https://github.com/hansmib" class="external-link"> <img src="https://avatars.githubusercontent.com/u/52329319?v=4" width="100px;" alt=""></a><br><a href="https://github.com/ATFutures/gtfs-router/issues?q=is%3Aissue+commenter%3Ahansmib" class="external-link">hansmib</a>
+<a href="https://github.com/hansmib" class="external-link"> <img src="https://avatars.githubusercontent.com/u/52329319?v=4" width="100px;" alt=""></a><br><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+commenter%3Ahansmib" class="external-link">hansmib</a>
 </td>
 </tr></table>
 <!-- markdownlint-enable --><!-- prettier-ignore-end --><!-- ALL-CONTRIBUTORS-LIST:END -->
@@ -429,8 +429,8 @@
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=gtfsrouter" class="external-link">View on CRAN</a></li>
-<li><a href="https://github.com/ATFutures/gtfs-router/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/ATFutures/gtfs-router/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/UrbanAnalyst/gtfsrouter/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/UrbanAnalyst/gtfsrouter/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 

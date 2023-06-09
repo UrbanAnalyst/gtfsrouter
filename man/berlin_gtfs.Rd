@@ -33,7 +33,7 @@ characters.
 }
 \note{
 Can be re-created with the script in
-\url{https://github.com/ATFutures/gtfs-router/blob/master/data-raw/data-script.Rmd}.
+\url{https://github.com/UrbanAnalyst/gtfsrouter/blob/master/data-raw/data-script.Rmd}.
 }
 \examples{
 berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir
