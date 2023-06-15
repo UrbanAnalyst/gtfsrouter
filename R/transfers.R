@@ -34,6 +34,16 @@ gtfs_transfer_table <- function (gtfs,
                                  network_times = FALSE,
                                  quiet = FALSE) {
 
+    if ("timetable" %in% names (gtfs)) {
+        stop (
+            "The 'gtfs_transfer_table' function must be called BEFORE ",
+            "the 'gtfs_timetable' function. Please re-load the feed, ",
+            "directly call this function, and then call ",
+            "'gtfs_timetable'.",
+            call. = FALSE
+        )
+    }
+
     if (is.null (network) && network_times) {
         network <- dl_net (gtfs)
     } else if (!is.null (network)) {
