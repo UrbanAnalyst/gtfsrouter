@@ -33,16 +33,16 @@ site](https://developers.google.com/transit/gtfs/).
 
 There are currently two other **R** packages which handle GTFS data:
 
-1. [`gtfsr`](https://github.com/ropensci/gtfsr), hosted by
+1. [`gtfsr`](https://github.com/ropensci-archive/gtfsr), hosted by
    [rOpenSci](https://ropensci.org), developed by [Danton
    Noriega](https://github.com/dantonnoriega), but no longer under active
    development.
 2. [`tidytransit`](https://github.com/r-transit/tidytransit), which began as a
-   fork of [`gtfsr`](https://github.com/ropensci/gtfsr), and currently
-   represents its successor. This package can be used to, "map transit stops and
-   routes, calculate transit frequencies, and validate transit feeds [as well as
-   to read] the General Transit Feed Specification into tidyverse and simple
-   features dataframes."
+   fork of [`gtfsr`](https://github.com/ropensci-archive/gtfsr), and currently
+   represents its successor. This package can be used to, "map transit stops
+   and routes, calculate transit frequencies, and validate transit feeds [as
+   well as to read] the General Transit Feed Specification into tidyverse and
+   simple features dataframes."
 
 The one thing neither of these packages enable is the use of GTFS data for
 transit routing. The `gtfsrouter` package enables both one-to-one and
