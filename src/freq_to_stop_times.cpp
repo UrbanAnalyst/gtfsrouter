@@ -10,7 +10,7 @@ Rcpp::DataFrame rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
 {
     const std::vector <std::string> f_trip_id = frequencies ["trip_id"];
     const std::vector <int> f_start_time = frequencies ["start_time"];
-    const std::vector <int> f_end_time = frequencies ["end_time"];
+    // const std::vector <int> f_end_time = frequencies ["end_time"];
     const std::vector <int> f_headway = frequencies ["headway_secs"];
     const std::vector <int> f_nseq = frequencies ["nseq"];
 
@@ -39,7 +39,6 @@ Rcpp::DataFrame rcpp_freq_to_stop_times (Rcpp::DataFrame frequencies,
         const std::string trip_id_i = f_trip_id [i];
         const int headway_i = f_headway [i];
         const int start_time_i = f_start_time [i];
-        const int end_time_i = f_end_time [i];
 
         const int nseq_i = f_nseq [i];
 
