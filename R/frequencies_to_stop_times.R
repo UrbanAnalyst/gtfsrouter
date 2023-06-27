@@ -8,7 +8,7 @@
 #' @return The input GTFS data with data from the 'frequencies' table converted
 #' to equivalent 'arrival_time' and 'departure_time' values in `stop_times`.
 #'
-#' @importFrom data.table shift
+#' @importFrom data.table shift .SD
 #'
 #' @family augment
 #' @export
@@ -88,7 +88,11 @@ frequencies_to_stop_times <- function (gtfs) {
     # The Rcpp fn only returns a subset of the main columns; any additional ones
     # in original stop_times table are then removed:
     index <- which (names (gtfs_cp$stop_times) %in% names (res))
-    gtfs_cp$stop_times <- rbind (gtfs_cp$stop_times [, ..index], res)
+
+    # '.SD' = data.table's "Subset of Data.table" syntax
+    # https://rdatatable.gitlab.io/data.table/articles/datatable-faq.html
+    # under "how-can-i-avoid-writing-a-really-long-j-expression"
+    gtfs_cp$stop_times <- rbind (gtfs_cp$stop_times [, .SD, .SDcols = index], res)
 
     gtfs_cp <- update_trips_table_with_freqs (gtfs_cp, sfx)
 
