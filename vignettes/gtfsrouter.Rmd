@@ -17,7 +17,6 @@ vignette: >
 
 ```{r pkg-load, echo = FALSE, message = FALSE}
 library (gtfsrouter)
-#devtools::load_all (".", export_all = FALSE)
 ```
 
 # 1 Background: GTFS and other R packages
