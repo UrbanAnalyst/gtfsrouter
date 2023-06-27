@@ -73,6 +73,7 @@ to reach all or most stations desired for a particular query, rather than set
 \code{max_traveltime} to an arbitrarily high value.
 }
 \examples{
+\dontrun{
 berlin_gtfs_to_zip ()
 f <- file.path (tempdir (), "vbb.zip")
 g <- extract_gtfs (f)
@@ -80,6 +81,7 @@ g <- gtfs_timetable (g)
 from <- "Alexanderplatz"
 start_times <- 12 * 3600 + c (0, 60) * 60 # 8:00-9:00
 res <- gtfs_traveltimes (g, from, start_times)
+}
 }
 \seealso{
 Other main: 

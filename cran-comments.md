@@ -1,9 +1,10 @@
-# CRAN notes for gtfsrouter_0.0.5 submission
+# CRAN notes for gtfsrouter_0.1.1 submission
 
-Current CRAN errors on linux-debian-gcc and macos=arm64 are related to failures in udunits2 and units, and not this package. Other than that the submission generates no notes or warnings on:
+Current CRAN version issues single note regarding explicit C++ specification. This submission rectifies that, and generates no additional notes or warnings on:
 
-* Ubuntu 18.04: R-oldrelease, R-release, R-devel
-* Windows: R-oldrelease, R-release, R-devel
+* Ubuntu 22.04: R-oldrelease, R-release, R-devel
+* Windows: R-release
+* Mac-OS: R-release
 * win-builder (R-release, R-devel, R-oldrelease)
 
 C++ source code in package also generates no warnings with either Clang++ -Weverything or UBSAN

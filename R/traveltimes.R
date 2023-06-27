@@ -27,6 +27,7 @@
 #' `max_traveltime` to an arbitrarily high value.
 #'
 #' @examples
+#' \dontrun{
 #' berlin_gtfs_to_zip ()
 #' f <- file.path (tempdir (), "vbb.zip")
 #' g <- extract_gtfs (f)
@@ -34,6 +35,7 @@
 #' from <- "Alexanderplatz"
 #' start_times <- 12 * 3600 + c (0, 60) * 60 # 8:00-9:00
 #' res <- gtfs_traveltimes (g, from, start_times)
+#' }
 #' @family main
 #' @export
 gtfs_traveltimes <- function (gtfs,

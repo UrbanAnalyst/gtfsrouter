@@ -65,6 +65,8 @@
 #' from <- "Innsbrucker Platz" # U-bahn station, not "S"
 #' to <- "Alexanderplatz"
 #' start_time <- 12 * 3600 + 120 # 12:02
+#'
+#' \dontrun{
 #' route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time)
 #'
 #' # Specify day of week
@@ -94,12 +96,12 @@
 #'     day = "Sunday",
 #'     route_pattern = "^S"
 #' )
+#' }
 #'
 #' # Route queries are generally faster if the GTFS data are pre-processed with
 #' # `gtfs_timetable()`:
 #' gt <- gtfs_timetable (gtfs, day = "Sunday", route_pattern = "^S")
 #' route <- gtfs_route (gt, from = from, to = to, start_time = start_time)
-#'
 #' @family main
 #' @export
 gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
