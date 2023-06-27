@@ -40,7 +40,7 @@
 #' Sys.setenv ("gtfs_home" = "<my home station>")
 #' Sys.setenv ("gtfs_work" = "<my work station>")
 #' Sys.setenv ("gtfs_data" = "/full/path/to/gtfs.zip")
-#' }
+#'
 #' # The following illustrate use with sample data bundled with package
 #' Sys.setenv ("gtfs_home" = "Tempelhof")
 #' Sys.setenv ("gtfs_work" = "Alexanderplatz")
@@ -48,10 +48,10 @@
 #' process_gtfs_local () # If not already done
 #' go_home (start_time = "12:00") # next available service after 12:00
 #' go_home (3, start_time = "12:00") # Wait until third service after that
+#'
 #' # Generally, `start_time` will not be specified, in which case `go_home` will
 #' # return next available service from current system time, so calls will
 #' # generally be as simple as:
-#' \dontrun{
 #' go_home ()
 #' go_home (3)
 #' }
@@ -78,7 +78,7 @@ go_home <- function (wait = 0, start_time) {
 #' Sys.setenv ("gtfs_home" = "<my home station>")
 #' Sys.setenv ("gtfs_work" = "<my work station>")
 #' Sys.setenv ("gtfs_data" = "/full/path/to/gtfs.zip")
-#' }
+#'
 #' # The following illustrate use with sample data bundled with package
 #' Sys.setenv ("gtfs_home" = "Tempelhof")
 #' Sys.setenv ("gtfs_work" = "Alexanderplatz")
@@ -86,10 +86,10 @@ go_home <- function (wait = 0, start_time) {
 #' process_gtfs_local () # If not already done
 #' go_to_work (start_time = "12:00") # next available service after 12:00
 #' go_to_work (3, start_time = "12:00") # Wait until third service after that
+#'
 #' # Generally, `start_time` will not be specified, in which case `go_to_work`
 #' # will return next available service from current system time, so calls will
 #' # generally be as simple as:
-#' \dontrun{
 #' go_to_work ()
 #' go_to_work (3)
 #' }
