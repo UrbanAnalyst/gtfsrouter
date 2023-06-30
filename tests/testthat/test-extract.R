@@ -115,3 +115,19 @@ test_that ("timetable summary", {
     names (vals) <- nms
     # expect_identical (vals, vapply (gt, nrow, numeric (1)))
 })
+
+# CRAN submission attempts were reject because examples had "CPU time > 2.5
+# times elapsed time". This was addressed via #109 by switching off most
+# examples. This is the last one which still actually runs, with this test
+# hopefully catching any likely reasons for rejection.
+testthat ("cpu time", {
+
+    test <- function () {
+        berlin_gtfs_to_zip ()
+        f <- file.path (tempdir (), "vbb.zip")
+        gtfs <- extract_gtfs (f)
+    }
+    st <- system.time (test ())
+    st_ratio <- st [1] / st [3]
+    expect_true (st_ratio < 1)
+})
