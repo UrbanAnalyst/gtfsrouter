@@ -10,8 +10,10 @@
 #' f <- file.path (tempdir (), "vbb.zip")
 #' g <- extract_gtfs (f)
 #' summary (g)
+#' \dontrun{
 #' g <- gtfs_timetable (g)
 #' summary (g) # also summarizes additional timetable information
+#' }
 #' @export
 summary.gtfs <- function (object, ...) {
     msg <- "A gtfs "
