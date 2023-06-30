@@ -170,12 +170,12 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
 
     } else {
 
-        # Find indices of all services on nominated days
-        index <- lapply (day, function (i) {
-            which (gtfs$calendar [, get (i)] == 1)
+        # Find indices of all services on nominated days. Uses DT "fast
+        # subsets", from "Secondary indices" vignette:
+        service_id <- lapply (day, function (i) {
+            gtfs$calendar [.(1L), on = i] [, service_id]
         })
-        index <- sort (unique (do.call (c, index)))
-        service_id <- gtfs$calendar [index, ] [, service_id]
+        service_id <- sort (unique (do.call (c, service_id)))
     }
 
     index <- which (gtfs$trips [, service_id] %in% service_id)
