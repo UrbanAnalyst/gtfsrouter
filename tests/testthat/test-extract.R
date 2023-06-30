@@ -120,7 +120,7 @@ test_that ("timetable summary", {
 # times elapsed time". This was addressed via #109 by switching off most
 # examples. This is the last one which still actually runs, with this test
 # hopefully catching any likely reasons for rejection.
-testthat ("cpu time", {
+test_that ("cpu time", {
 
     test <- function () {
         berlin_gtfs_to_zip ()
