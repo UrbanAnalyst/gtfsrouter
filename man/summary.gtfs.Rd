@@ -19,8 +19,10 @@ berlin_gtfs_to_zip ()
 f <- file.path (tempdir (), "vbb.zip")
 g <- extract_gtfs (f)
 summary (g)
+\dontrun{
 g <- gtfs_timetable (g)
 summary (g) # also summarizes additional timetable information
+}
 }
 \seealso{
 Other additional: 
