@@ -152,7 +152,7 @@ make_timetable <- function (gtfs) {
 filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
 
     # no visible binding notes
-    trip_id <- NULL
+    trip_id <- . <- NULL
 
     day <- convert_day (day, quiet)
 
