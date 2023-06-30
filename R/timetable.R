@@ -166,23 +166,29 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
         weekdays <- tolower (as.character (weekdays))
 
         index <- which (weekdays == substring (day, 1, 3))
-        service_id <- unique (gtfs$calendar_dates$service_id [index])
+        service_ids <- unique (gtfs$calendar_dates$service_id [index])
 
     } else {
 
-        # Find indices of all services on nominated days
-        index <- lapply (day, function (i) {
-            which (gtfs$calendar [, get (i)] == 1)
+        # Find indices of all services on nominated days. Uses DT "fast
+        # subsets", from "Secondary indices" vignette:
+        service_id <- lapply (day, function (i) {
+            gtfs$calendar [.(1L), on = i] [, service_id]
         })
-        index <- sort (unique (do.call (c, index)))
-        service_id <- gtfs$calendar [index, ] [, service_id]
+        service_ids <- sort (unique (do.call (c, service_id)))
+    }
+    if (!is.character (service_ids)) {
+        service_ids <- as.character (service_ids)
     }
 
-    index <- which (gtfs$trips [, service_id] %in% service_id)
-    gtfs$trips <- gtfs$trips [index, ]
+    gtfs$trips <- gtfs$trips [.(service_ids), on = "service_id"]
 
     index <- which (gtfs$stop_times$trip_id %in% gtfs$trips$trip_id)
     gtfs$stop_times <- gtfs$stop_times [index, ]
+    # This data.table fast sub-select causes subsequent errors?
+    # trip_ids <- unique (gtfs$trips$trip_id)
+    # trip_ids <- trip_ids [which (!is.na (trip_ids))]
+    # gtfs$stop_times <- gtfs$stop_times [.(trip_ids), on = "trip_id"]
 
     return (gtfs)
 }
