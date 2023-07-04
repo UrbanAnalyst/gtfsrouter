@@ -120,6 +120,8 @@ test_that ("timetable summary", {
 # times elapsed time". This was addressed via #109 by switching off most
 # examples. This is the last one which still actually runs, with this test
 # hopefully catching any likely reasons for rejection.
+
+skip_on_cran ()
 test_that ("cpu time", {
 
     test <- function () {
