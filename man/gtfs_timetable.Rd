@@ -54,7 +54,9 @@ that case will generally take longer.
 \examples{
 berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir
 f <- file.path (tempdir (), "vbb.zip") # name of feed
+\dontrun{
 gtfs <- extract_gtfs (f)
+}
 from <- "Innsbrucker Platz" # U-bahn station, not "S"
 to <- "Alexanderplatz"
 start_time <- 12 * 3600 + 120 # 12:02
