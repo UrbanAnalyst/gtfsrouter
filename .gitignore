@@ -20,3 +20,5 @@ data-raw/
 # compiled object files
 *.o
 *.so
+/doc/
+/Meta/
