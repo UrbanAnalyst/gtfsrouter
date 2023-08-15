@@ -420,6 +420,7 @@ for a given `d_limit` a random sample of starting stations:
 
 ```{r travel_times_d_limit-fn, message = FALSE}
 library (dplyr)
+library (hms) # 'parse_hms' function
 
 travel_times_d_limit <- function (gtfs, from, d_limit = 200) {
 
@@ -436,11 +437,13 @@ travel_times_d_limit <- function (gtfs, from, d_limit = 200) {
                                start_time_limits = start_time_limits,
                                quiet = TRUE)
         ret <- NULL
-        if (nrow (x) > 0)
+        if (nrow (x) > 0) {
+            # Convert duration to minutes:
+            dur <- as.integer (parse_hms (x$duration)) / 60
             ret <- data.frame (from = from,
                                to = x$stop_id,
-                               duration = as.integer (x$duration) / 60)
-        # duration in minutes
+                               duration = dur)
+        }
 
         return (ret)
     }
@@ -462,6 +465,7 @@ lines then compare these travel times between identical origin and
 destination stations for a range of distance limits.
 
 ```{r plot1, warning = FALSE, message = FALSE}
+set.seed (10L)
 from <- sample (gtfs$stops$stop_name, size = 10)
 d_limit <- 1:10 * 100
 x <- lapply (d_limit, function (i)
@@ -469,7 +473,7 @@ x <- lapply (d_limit, function (i)
 xall <- do.call (rbind, x) [, c ("from", "to")]
 xall <- xall [which (!duplicated (xall)), ]
 
-for (i in seq (x)) {
+for (i in seq_along (x)) {
 
     y <- left_join (xall, x [[i]], by = c ("from", "to"))
     xall [paste0 ("d_", x [[i]]$d_limit [1])] <- y$duration
@@ -542,8 +546,8 @@ transfer_difference <- function (gtfs,
                           duration2 = x2$duration)
         x2 <- dplyr::left_join (x1, x2, by = "stop_id")
 
-        dat <- data.frame (x = as.integer (x2$duration) / 60,
-                           y = as.integer (x2$duration2) / 60)
+        dat <- data.frame (x = as.integer (parse_hms (x2$duration)) / 60,
+                           y = as.integer (parse_hms (x2$duration2)) / 60)
         mod <- lm (y ~ x + 0, data = dat)
         return (c (prop = length (which (dat$x != dat$y)) / nrow (dat),
                    change = as.numeric (mod$coefficients)))
@@ -561,6 +565,7 @@ to examine the results with the following code:
 
 ```{r transfer_d_limit_results, warning = FALSE}
 d_limit <- 1:10 * 100
+set.seed (1L)
 d <- lapply (d_limit, function (i)
              transfer_difference (gtfs,
                                   nsamples = 20,
