@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.017</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.0.024</span>
       </span>
     </div>
 
@@ -73,7 +73,7 @@
                         <h4 data-toc-skip class="author">Mark
 Padgham</h4>
             
-            <h4 data-toc-skip class="date">2023-07-04</h4>
+            <h4 data-toc-skip class="date">2023-08-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/gtfsrouter/blob/HEAD/vignettes/transfers.Rmd" class="external-link"><code>vignettes/transfers.Rmd</code></a></small>
       <div class="hidden name"><code>transfers.Rmd</code></div>
@@ -129,11 +129,13 @@ session.</p>
 <p>A transfers table is required for successful routing between
 different services, like with the following code:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>            from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
-<span>            to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
-<span>            start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
-<span>            day <span class="op">=</span> <span class="st">"Monday"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span></span>
+<span>    <span class="va">gtfs</span>,</span>
+<span>    from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
+<span>    to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
+<span>    start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
+<span>    day <span class="op">=</span> <span class="st">"Monday"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   route_name       trip_name                      stop_name arrival_time</span></span>
 <span><span class="co">## 1        S26 S Waidmannslust S+U Friedrichstr. Bhf (Berlin)     12:03:06</span></span>
 <span><span class="co">## 2        S26 S Waidmannslust  S Oranienburger Str. (Berlin)     12:05:12</span></span>
@@ -161,11 +163,13 @@ what typically happens when attempting to calculate routes on feeds
 which lack this information:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>            from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
-<span>            to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
-<span>            start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
-<span>            day <span class="op">=</span> <span class="st">"Monday"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span></span>
+<span>    <span class="va">gtfs</span>,</span>
+<span>    from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
+<span>    to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
+<span>    start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
+<span>    day <span class="op">=</span> <span class="st">"Monday"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## NULL</span></span></code></pre>
 <p>No transfer is able to be make, and so no route is found. <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link">The
 <code>gtfs_transfer_table()</code> function</a> automatically calculates
@@ -173,11 +177,13 @@ and adds a transfer table to a feed, enabling it once again to be used
 to generate routes:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span>, d_limit <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>            from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
-<span>            to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
-<span>            start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
-<span>            day <span class="op">=</span> <span class="st">"Monday"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span></span>
+<span>    <span class="va">gtfs</span>,</span>
+<span>    from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
+<span>    to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
+<span>    start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
+<span>    day <span class="op">=</span> <span class="st">"Monday"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   route_name         trip_name                        stop_name arrival_time</span></span>
 <span><span class="co">## 1         S7 S Ahrensfelde Bhf   S+U Friedrichstr. Bhf (Berlin)     12:00:36</span></span>
 <span><span class="co">## 2         S7 S Ahrensfelde Bhf      S Hackescher Markt (Berlin)     12:02:54</span></span>
@@ -252,9 +258,9 @@ tables for increasing maximal transfer distances.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span> <span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">10</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>            <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span>, d_limit <span class="op">=</span> <span class="va">i</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
-<span>            <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">)</span><span class="op">)</span></span>
-<span>           <span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span> <span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span>    <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span>, d_limit <span class="op">=</span> <span class="va">i</span> <span class="op">*</span> <span class="fl">100</span><span class="op">)</span></span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span> <span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##  [1]  9834 10291 10369 10477 10665 10923 11677 12645 13729 14971 16149</span></span></code></pre>
 <p>The transfer table increases in size with each call, and retains all
 transfers generated from all previous calls. Because each call involves
@@ -294,12 +300,14 @@ be generally presumed to reflect a viable transfer.</p>
 <p>Note further that the actual locations of these stations can be
 extracted with the following lines:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>                 from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
-<span>                 to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
-<span>                 start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
-<span>                 day <span class="op">=</span> <span class="st">"Monday"</span>,</span>
-<span>                 include_ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span></span>
+<span>    <span class="va">gtfs</span>,</span>
+<span>    from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
+<span>    to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
+<span>    start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
+<span>    day <span class="op">=</span> <span class="st">"Monday"</span>,</span>
+<span>    include_ids <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">stns</span> <span class="op">&lt;-</span> <span class="va">r</span><span class="op">$</span><span class="va">stop_id</span> <span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span> <span class="co"># the transfer station IDs</span></span>
 <span><span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span> <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span> <span class="op">(</span><span class="va">stns</span>, <span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span><span class="op">$</span><span class="va">stop_id</span><span class="op">)</span>, <span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##         stop_id stop_code                        stop_name stop_desc stop_lat</span></span>
@@ -356,18 +364,20 @@ transfers between these two sets of stops, arbitrarily choosing here a
 value of 2 minutes:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span> <span class="op">(</span><span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">from_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">S_stops</span> <span class="op">&amp;</span></span>
-<span>                 <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">to_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">U_stops</span><span class="op">)</span> <span class="op">|</span></span>
-<span>                <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">from_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">U_stops</span> <span class="op">&amp;</span></span>
-<span>                 <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">to_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">S_stops</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">to_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">U_stops</span><span class="op">)</span> <span class="op">|</span></span>
+<span>    <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">from_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">U_stops</span> <span class="op">&amp;</span></span>
+<span>        <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">to_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">S_stops</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">min_transfer_time</span> <span class="op">[</span><span class="va">index</span><span class="op">]</span> <span class="op">&lt;-</span></span>
-<span>    <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">min_transfer_time</span> <span class="op">[</span><span class="va">index</span><span class="op">]</span>  <span class="op">+</span> <span class="fl">120</span></span></code></pre></div>
+<span>    <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">min_transfer_time</span> <span class="op">[</span><span class="va">index</span><span class="op">]</span> <span class="op">+</span> <span class="fl">120</span></span></code></pre></div>
 <p>Our route query then returns the following:</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>            from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
-<span>            to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
-<span>            start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
-<span>            day <span class="op">=</span> <span class="st">"Monday"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span></span>
+<span>    <span class="va">gtfs</span>,</span>
+<span>    from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
+<span>    to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
+<span>    start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
+<span>    day <span class="op">=</span> <span class="st">"Monday"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   route_name         trip_name                        stop_name arrival_time</span></span>
 <span><span class="co">## 1         S5 S Strausberg Nord   S+U Friedrichstr. Bhf (Berlin)     12:03:06</span></span>
 <span><span class="co">## 2         S5 S Strausberg Nord      S Hackescher Markt (Berlin)     12:05:24</span></span>
@@ -422,22 +432,24 @@ function for easy re-use:</p>
 <span>    <span class="va">U_stops</span> <span class="op">&lt;-</span> <span class="va">U_stops</span> <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span> <span class="op">(</span><span class="op">!</span><span class="va">U_stops</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">S_stops</span><span class="op">)</span><span class="op">]</span></span>
 <span></span>
 <span>    <span class="va">index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span> <span class="op">(</span><span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">from_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">S_stops</span> <span class="op">&amp;</span></span>
-<span>                     <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">to_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">U_stops</span><span class="op">)</span> <span class="op">|</span></span>
-<span>                    <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">from_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">U_stops</span> <span class="op">&amp;</span></span>
-<span>                     <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">to_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">S_stops</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">to_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">U_stops</span><span class="op">)</span> <span class="op">|</span></span>
+<span>        <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">from_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">U_stops</span> <span class="op">&amp;</span></span>
+<span>            <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">to_stop_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">S_stops</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">min_transfer_time</span> <span class="op">[</span><span class="va">index</span><span class="op">]</span> <span class="op">&lt;-</span></span>
-<span>        <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">min_transfer_time</span> <span class="op">[</span><span class="va">index</span><span class="op">]</span>  <span class="op">+</span> <span class="fl">120</span></span>
+<span>        <span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">$</span><span class="va">min_transfer_time</span> <span class="op">[</span><span class="va">index</span><span class="op">]</span> <span class="op">+</span> <span class="fl">120</span></span>
 <span></span>
 <span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu">transfer_penalties</span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span></code></pre></div>
 <p>Submitting the same routing query now gives the following:</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>            from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
-<span>            to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
-<span>            start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
-<span>            day <span class="op">=</span> <span class="st">"Monday"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span></span>
+<span>    <span class="va">gtfs</span>,</span>
+<span>    from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
+<span>    to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
+<span>    start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
+<span>    day <span class="op">=</span> <span class="st">"Monday"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   route_name         trip_name                        stop_name arrival_time</span></span>
 <span><span class="co">## 1         S5 S Strausberg Nord   S+U Friedrichstr. Bhf (Berlin)     12:03:06</span></span>
 <span><span class="co">## 2         S5 S Strausberg Nord      S Hackescher Markt (Berlin)     12:05:24</span></span>
@@ -456,12 +468,14 @@ function for easy re-use:</p>
 additional walking transfer over a distance which can be calculated by
 repeating the lines above:</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>                 from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
-<span>                 to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
-<span>                 start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
-<span>                 day <span class="op">=</span> <span class="st">"Monday"</span>,</span>
-<span>                 include_ids <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_route.html">gtfs_route</a></span> <span class="op">(</span></span>
+<span>    <span class="va">gtfs</span>,</span>
+<span>    from <span class="op">=</span> <span class="st">"Friedrichstr."</span>,</span>
+<span>    to <span class="op">=</span> <span class="st">"Rosenthaler Platz"</span>,</span>
+<span>    start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span>,</span>
+<span>    day <span class="op">=</span> <span class="st">"Monday"</span>,</span>
+<span>    include_ids <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="va">s</span> <span class="op">&lt;-</span> <span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span> <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span> <span class="op">(</span><span class="va">r</span><span class="op">$</span><span class="va">stop_id</span> <span class="op">[</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>, <span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span><span class="op">$</span><span class="va">stop_id</span><span class="op">)</span>, <span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span> <span class="op">(</span><span class="fu">geodist</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/geodist/man/geodist.html" class="external-link">geodist</a></span> <span class="op">(</span><span class="va">s</span> <span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">s</span> <span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 614.5902</span></span></code></pre>
@@ -476,15 +490,18 @@ of maximal walking distances:</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d_limit</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">20</span> <span class="op">*</span> <span class="fl">100</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span> <span class="op">(</span><span class="va">d_limit</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
-<span>                 <span class="va">gtfs</span><span class="op">$</span><span class="va">transfer</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span>                 <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span>, d_limit <span class="op">=</span> <span class="va">i</span><span class="op">)</span></span>
-<span>                 <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">)</span></span>
-<span>                 <span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span> <span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">gtfs</span><span class="op">$</span><span class="va">transfer</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
+<span>    <span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span>, d_limit <span class="op">=</span> <span class="va">i</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">)</span></span>
+<span><span class="op">}</span>, <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span> <span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">d_limit</span> <span class="op">&lt;-</span> <span class="va">d_limit</span> <span class="op">/</span> <span class="fl">1000</span> <span class="co"># in km</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="va">n</span> <span class="op">/</span> <span class="fl">1000</span> <span class="co"># in thousands</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span> <span class="op">(</span><span class="va">d_limit</span>, <span class="va">n</span>, type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>      xlab <span class="op">=</span> <span class="st">"Maximal transfer distance"</span>,</span>
-<span>      ylab <span class="op">=</span> <span class="st">"Number of transfers (1000s)"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span> <span class="op">(</span></span>
+<span>    <span class="va">d_limit</span>, <span class="va">n</span>,</span>
+<span>    type <span class="op">=</span> <span class="st">"l"</span>, col <span class="op">=</span> <span class="st">"red"</span>, lwd <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>    xlab <span class="op">=</span> <span class="st">"Maximal transfer distance"</span>,</span>
+<span>    ylab <span class="op">=</span> <span class="st">"Number of transfers (1000s)"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p><img src="transfers_files/figure-html/d_limit1-1.png" width="700"></p>
 <p>The line is initially flat because this number (around 3,300) is the
 number of transfers possible between stops which have identical spatial
@@ -522,6 +539,7 @@ generates travel times for a given <code>d_limit</code> a random sample
 of starting stations:</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="https://hms.tidyverse.org/" class="external-link">hms</a></span><span class="op">)</span> <span class="co"># 'parse_hms' function</span></span>
 <span></span>
 <span><span class="va">travel_times_d_limit</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">gtfs</span>, <span class="va">from</span>, <span class="va">d_limit</span> <span class="op">=</span> <span class="fl">200</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
@@ -533,22 +551,29 @@ of starting stations:</p>
 <span></span>
 <span>    <span class="va">get_one_times</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">gtfs</span>, <span class="va">from</span>, <span class="va">start_time_limits</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
-<span>        <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_traveltimes.html">gtfs_traveltimes</a></span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>                               from <span class="op">=</span> <span class="va">from</span>,</span>
-<span>                               start_time_limits <span class="op">=</span> <span class="va">start_time_limits</span>,</span>
-<span>                               quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>        <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_traveltimes.html">gtfs_traveltimes</a></span> <span class="op">(</span></span>
+<span>            <span class="va">gtfs</span>,</span>
+<span>            from <span class="op">=</span> <span class="va">from</span>,</span>
+<span>            start_time_limits <span class="op">=</span> <span class="va">start_time_limits</span>,</span>
+<span>            quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>        <span class="op">)</span></span>
 <span>        <span class="va">ret</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
-<span>        <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span>
-<span>            <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span> <span class="op">(</span>from <span class="op">=</span> <span class="va">from</span>,</span>
-<span>                               to <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">stop_id</span>,</span>
-<span>                               duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span> <span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span> <span class="op">/</span> <span class="fl">60</span><span class="op">)</span></span>
-<span>        <span class="co"># duration in minutes</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>            <span class="co"># Convert duration to minutes:</span></span>
+<span>            <span class="va">dur</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span> <span class="op">(</span><span class="fu"><a href="https://hms.tidyverse.org/reference/parse_hms.html" class="external-link">parse_hms</a></span> <span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">60</span></span>
+<span>            <span class="va">ret</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span> <span class="op">(</span></span>
+<span>                from <span class="op">=</span> <span class="va">from</span>,</span>
+<span>                to <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">stop_id</span>,</span>
+<span>                duration <span class="op">=</span> <span class="va">dur</span></span>
+<span>            <span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
 <span></span>
 <span>        <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span> <span class="op">(</span><span class="va">ret</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span></span>
-<span>    <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span> <span class="op">(</span><span class="va">from</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
-<span>                   <span class="fu">get_one_times</span> <span class="op">(</span><span class="va">gtfs</span>, <span class="va">i</span>, <span class="va">start_time_limits</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span> <span class="op">(</span><span class="va">from</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="fu">get_one_times</span> <span class="op">(</span><span class="va">gtfs</span>, <span class="va">i</span>, <span class="va">start_time_limits</span><span class="op">)</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
 <span>    <span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span> <span class="op">(</span><span class="va">rbind</span>, <span class="va">res</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span> <span class="op">(</span><span class="va">from</span>, <span class="va">to</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span> <span class="op">(</span>duration <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span> <span class="op">(</span><span class="va">duration</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span></span>
@@ -562,14 +587,16 @@ value of <code>d_limit</code>. The following lines then compare these
 travel times between identical origin and destination stations for a
 range of distance limits.</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">from</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span><span class="op">$</span><span class="va">stop_name</span>, size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span> <span class="op">(</span><span class="fl">10L</span><span class="op">)</span></span>
+<span><span class="va">from</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span><span class="op">$</span><span class="va">stop_name</span>, size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="va">d_limit</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">100</span></span>
-<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span> <span class="op">(</span><span class="va">d_limit</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
-<span>             <span class="fu">travel_times_d_limit</span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, d_limit <span class="op">=</span> <span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span> <span class="op">(</span><span class="va">d_limit</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu">travel_times_d_limit</span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="va">from</span>, d_limit <span class="op">=</span> <span class="va">i</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="va">xall</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span> <span class="op">(</span><span class="va">rbind</span>, <span class="va">x</span><span class="op">)</span> <span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span> <span class="op">(</span><span class="st">"from"</span>, <span class="st">"to"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="va">xall</span> <span class="op">&lt;-</span> <span class="va">xall</span> <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span> <span class="op">(</span><span class="va">xall</span><span class="op">)</span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span> <span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span> <span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
 <span>    <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span> <span class="op">(</span><span class="va">xall</span>, <span class="va">x</span> <span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span> <span class="op">(</span><span class="st">"from"</span>, <span class="st">"to"</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="va">xall</span> <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span> <span class="op">(</span><span class="st">"d_"</span>, <span class="va">x</span> <span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">d_limit</span> <span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">y</span><span class="op">$</span><span class="va">duration</span></span>
@@ -583,8 +610,9 @@ range of distance limits.</p>
 <span><span class="co"># travel times only:</span></span>
 <span><span class="va">times</span> <span class="op">&lt;-</span> <span class="va">xall</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span> <span class="op">(</span><span class="st">"from"</span>, <span class="st">"to"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># differences with each increase in d_limit:</span></span>
-<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span> <span class="op">(</span><span class="va">times</span>, <span class="fl">1</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
-<span>                   <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span> <span class="op">(</span><span class="va">i</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/apply.html" class="external-link">apply</a></span> <span class="op">(</span><span class="va">times</span>, <span class="fl">1</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span> <span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">times</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span> <span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span> <span class="op">(</span><span class="va">times</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span> <span class="op">(</span><span class="va">times</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span> <span class="op">(</span>x <span class="op">=</span> <span class="va">t</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -594,9 +622,9 @@ range of distance limits.</p>
 <p><img src="transfers_files/figure-html/plot1-1.png" width="700"></p>
 <p>And these additional transfer possibilities can make a significant
 difference to estimated travel times. Note, however, that the travel
-times only changed for 776 stations, while the value of
+times only changed for 684 stations, while the value of
 <code>nsame</code> value recording numbers of stations for which travel
-times did not change was 5,188. Travel times may also increase as
+times did not change was 5,234. Travel times may also increase as
 additional transfers may be used to reduce numbers of connecting
 services required for a particular trip, and the algorithm generally
 searches for connections with minimal numbers of transfers.</p>
@@ -623,50 +651,70 @@ transfer table.</p>
 <span>    <span class="va">get1</span> <span class="op">&lt;-</span> <span class="kw">function</span> <span class="op">(</span><span class="va">gtfs</span>, <span class="va">gtfs2</span>, <span class="va">start_time_limits</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
 <span>        <span class="va">from</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span><span class="op">$</span><span class="va">stop_name</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
-<span>        <span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_traveltimes.html">gtfs_traveltimes</a></span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>                                from <span class="op">=</span> <span class="va">from</span>,</span>
-<span>                                start_time_limits <span class="op">=</span> <span class="va">start_time_limits</span>,</span>
-<span>                                quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>        <span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_traveltimes.html">gtfs_traveltimes</a></span> <span class="op">(</span></span>
+<span>            <span class="va">gtfs</span>,</span>
+<span>            from <span class="op">=</span> <span class="va">from</span>,</span>
+<span>            start_time_limits <span class="op">=</span> <span class="va">start_time_limits</span>,</span>
+<span>            quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>        <span class="op">)</span></span>
 <span></span>
-<span>        <span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_traveltimes.html">gtfs_traveltimes</a></span> <span class="op">(</span><span class="va">gtfs2</span>,</span>
-<span>                                from <span class="op">=</span> <span class="va">from</span>,</span>
-<span>                                start_time_limits <span class="op">=</span> <span class="va">start_time_limits</span>,</span>
-<span>                                quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>        <span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_traveltimes.html">gtfs_traveltimes</a></span> <span class="op">(</span></span>
+<span>            <span class="va">gtfs2</span>,</span>
+<span>            from <span class="op">=</span> <span class="va">from</span>,</span>
+<span>            start_time_limits <span class="op">=</span> <span class="va">start_time_limits</span>,</span>
+<span>            quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>        <span class="op">)</span></span>
 <span></span>
-<span>        <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">x1</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0L</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">x2</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0L</span><span class="op">)</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">x1</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0L</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">x2</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0L</span><span class="op">)</span> <span class="op">{</span></span>
 <span>            <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span> <span class="op">(</span><span class="cn">NA</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
 <span></span>
-<span>        <span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span> <span class="op">(</span>stop_id <span class="op">=</span> <span class="va">x2</span><span class="op">$</span><span class="va">stop_id</span>,</span>
-<span>                          duration2 <span class="op">=</span> <span class="va">x2</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span></span>
+<span>        <span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span> <span class="op">(</span></span>
+<span>            stop_id <span class="op">=</span> <span class="va">x2</span><span class="op">$</span><span class="va">stop_id</span>,</span>
+<span>            duration2 <span class="op">=</span> <span class="va">x2</span><span class="op">$</span><span class="va">duration</span></span>
+<span>        <span class="op">)</span></span>
 <span>        <span class="va">x2</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span> <span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span>, by <span class="op">=</span> <span class="st">"stop_id"</span><span class="op">)</span></span>
 <span></span>
-<span>        <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span> <span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span> <span class="op">(</span><span class="va">x2</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span> <span class="op">/</span> <span class="fl">60</span>,</span>
-<span>                           y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span> <span class="op">(</span><span class="va">x2</span><span class="op">$</span><span class="va">duration2</span><span class="op">)</span> <span class="op">/</span> <span class="fl">60</span><span class="op">)</span></span>
+<span>        <span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span> <span class="op">(</span></span>
+<span>            x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span> <span class="op">(</span><span class="fu"><a href="https://hms.tidyverse.org/reference/parse_hms.html" class="external-link">parse_hms</a></span> <span class="op">(</span><span class="va">x2</span><span class="op">$</span><span class="va">duration</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">60</span>,</span>
+<span>            y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span> <span class="op">(</span><span class="fu"><a href="https://hms.tidyverse.org/reference/parse_hms.html" class="external-link">parse_hms</a></span> <span class="op">(</span><span class="va">x2</span><span class="op">$</span><span class="va">duration2</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fl">60</span></span>
+<span>        <span class="op">)</span></span>
 <span>        <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span> <span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span> <span class="op">+</span> <span class="fl">0</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
-<span>        <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span> <span class="op">(</span>prop <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">x</span> <span class="op">!=</span> <span class="va">dat</span><span class="op">$</span><span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">)</span>,</span>
-<span>                   change <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span> <span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">coefficients</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>        <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span> <span class="op">(</span></span>
+<span>            prop <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">x</span> <span class="op">!=</span> <span class="va">dat</span><span class="op">$</span><span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">dat</span><span class="op">)</span>,</span>
+<span>            change <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span> <span class="op">(</span><span class="va">mod</span><span class="op">$</span><span class="va">coefficients</span><span class="op">)</span></span>
+<span>        <span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span> <span class="op">(</span><span class="va">nsamples</span><span class="op">)</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
-<span>            <span class="fu">get1</span> <span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span>, <span class="va">start_time_limits</span><span class="op">)</span>,</span>
-<span>            <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span> <span class="op">(</span><span class="fl">2</span><span class="op">)</span>,</span>
-<span>            USE.NAMES <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">vapply</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span> <span class="op">(</span><span class="va">nsamples</span><span class="op">)</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="fu">get1</span> <span class="op">(</span><span class="va">g1</span>, <span class="va">g2</span>, <span class="va">start_time_limits</span><span class="op">)</span></span>
+<span>    <span class="op">}</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span> <span class="op">(</span><span class="fl">2</span><span class="op">)</span>,</span>
+<span>    USE.NAMES <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>    <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>That function can then be used to loop over a range of values of
 <code>d_limit</code>, and to examine the results with the following
 code:</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d_limit</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span> <span class="op">*</span> <span class="fl">100</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span> <span class="op">(</span><span class="va">d_limit</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
-<span>             <span class="fu">transfer_difference</span> <span class="op">(</span><span class="va">gtfs</span>,</span>
-<span>                                  nsamples <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>                                  d_limit <span class="op">=</span> <span class="va">i</span>,</span>
-<span>                                  day <span class="op">=</span> <span class="st">"Monday"</span>,</span>
-<span>                                  start_time_limits <span class="op">=</span> <span class="fl">12</span><span class="op">:</span><span class="fl">13</span> <span class="op">*</span> <span class="fl">3600</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span> <span class="op">(</span><span class="va">d_limit</span><span class="op">)</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span></span>
-<span>             <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span> <span class="op">(</span>d_limit <span class="op">=</span> <span class="va">d_limit</span> <span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
-<span>                         prop <span class="op">=</span> <span class="va">d</span> <span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>,</span>
-<span>                         change <span class="op">=</span> <span class="va">d</span> <span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span> <span class="op">(</span><span class="fl">1L</span><span class="op">)</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span> <span class="op">(</span><span class="va">d_limit</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu">transfer_difference</span> <span class="op">(</span></span>
+<span>        <span class="va">gtfs</span>,</span>
+<span>        nsamples <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>        d_limit <span class="op">=</span> <span class="va">i</span>,</span>
+<span>        day <span class="op">=</span> <span class="st">"Monday"</span>,</span>
+<span>        start_time_limits <span class="op">=</span> <span class="fl">12</span><span class="op">:</span><span class="fl">13</span> <span class="op">*</span> <span class="fl">3600</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span> <span class="op">(</span><span class="va">d_limit</span><span class="op">)</span>, <span class="kw">function</span> <span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span> <span class="op">(</span></span>
+<span>        d_limit <span class="op">=</span> <span class="va">d_limit</span> <span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
+<span>        prop <span class="op">=</span> <span class="va">d</span> <span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>,</span>
+<span>        change <span class="op">=</span> <span class="va">d</span> <span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">[</span><span class="fl">2</span>, <span class="op">]</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span> <span class="op">(</span><span class="va">rbind</span>, <span class="va">d</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span> <span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span> <span class="op">(</span>x <span class="op">=</span> <span class="va">d_limit</span>, y <span class="op">=</span> <span class="va">change</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>

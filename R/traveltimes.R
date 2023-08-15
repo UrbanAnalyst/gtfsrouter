@@ -108,8 +108,10 @@ gtfs_traveltimes <- function (gtfs,
         stringsAsFactors = FALSE
     )
     stns <- stns [which (stns$duration < .Machine$integer.max), ]
-    stns$start_time <- hms::hms (stns$start_time)
-    stns$duration <- hms::hms (stns$duration)
+    if (nrow (stns) > 0) {
+        stns$start_time <- format_time (stns$start_time)
+        stns$duration <- format_time (stns$duration)
+    }
 
     rownames (stns) <- NULL
 
