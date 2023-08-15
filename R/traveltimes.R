@@ -49,6 +49,8 @@ gtfs_traveltimes <- function (gtfs,
                               max_traveltime = 60 * 60,
                               quiet = FALSE) {
 
+    requireNamespace ("hms", quietly = TRUE)
+
     if (!all (is.numeric (max_traveltime)) ||
         all (max_traveltime <= 0) ||
         length (max_traveltime) > 1) {
