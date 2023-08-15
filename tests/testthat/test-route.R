@@ -3,7 +3,6 @@ context ("route")
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
-
 test_that ("extract", {
     expect_error (
         g <- extract_gtfs (),
@@ -87,6 +86,7 @@ test_that ("timetable", {
 })
 
 test_that ("route", {
+
     f <- file.path (tempdir (), "vbb.zip")
     expect_true (file.exists (f))
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
@@ -105,10 +105,13 @@ test_that ("route", {
         "stop_name",
         "arrival_time", "departure_time"
     ))
-    dep_t <- hms::parse_hms (route$departure_time)
-    expect_true (all (diff (dep_t) > 0))
-    arr_t <- hms::parse_hms (route$arrival_time)
-    expect_true (all (diff (arr_t) > 0))
+
+    if (requireNamespace ("hms", quietly = TRUE)) {
+        dep_t <- hms::parse_hms (route$departure_time)
+        expect_true (all (diff (dep_t) > 0))
+        arr_t <- hms::parse_hms (route$arrival_time)
+        expect_true (all (diff (arr_t) > 0))
+    }
 
     expect_silent (route2 <- gtfs_route (gt,
         from = from, to = to,

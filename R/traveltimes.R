@@ -49,8 +49,6 @@ gtfs_traveltimes <- function (gtfs,
                               max_traveltime = 60 * 60,
                               quiet = FALSE) {
 
-    requireNamespace ("hms", quietly = TRUE)
-
     if (!all (is.numeric (max_traveltime)) ||
         all (max_traveltime <= 0) ||
         length (max_traveltime) > 1) {
@@ -110,8 +108,8 @@ gtfs_traveltimes <- function (gtfs,
         stringsAsFactors = FALSE
     )
     stns <- stns [which (stns$duration < .Machine$integer.max), ]
-    stns$start_time <- hms::hms (stns$start_time)
-    stns$duration <- hms::hms (stns$duration)
+    stns$start_time <- format_time (stns$start_time)
+    stns$duration <- format_time (stns$duration)
 
     rownames (stns) <- NULL
 

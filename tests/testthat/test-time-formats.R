@@ -4,6 +4,7 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
 test_that ("convert-time", {
+
     berlin_gtfs_to_zip ()
     f <- file.path (tempdir (), "vbb.zip")
     expect_true (file.exists (f))
@@ -27,21 +28,25 @@ test_that ("convert-time", {
         start_time = start_time,
         quiet = TRUE
     ))
-    start_time <- hms::hms (0, 2, 12)
-    expect_silent (route2 <- gtfs_route (gt,
-        from = from, to = to,
-        start_time = start_time,
-        quiet = TRUE
-    ))
-    expect_identical (route1, route2)
+    if (requireNamespace ("hms", quietly = TRUE)) {
+        start_time <- hms::hms (0, 2, 12)
+        expect_silent (route2 <- gtfs_route (gt,
+            from = from, to = to,
+            start_time = start_time,
+            quiet = TRUE
+        ))
+        expect_identical (route1, route2)
+    }
 
-    start_time <- lubridate::hms ("12:2:0")
-    expect_silent (route3 <- gtfs_route (gt,
-        from = from, to = to,
-        start_time = start_time,
-        quiet = TRUE
-    ))
-    expect_identical (route1, route3)
+    if (requireNamespace ("lubridate", quietly = TRUE)) {
+        start_time <- lubridate::hms ("12:2:0")
+        expect_silent (route3 <- gtfs_route (gt,
+            from = from, to = to,
+            start_time = start_time,
+            quiet = TRUE
+        ))
+        expect_identical (route1, route3)
+    }
 
     start_time <- c (12, 2)
     expect_silent (route4 <- gtfs_route (gt,
