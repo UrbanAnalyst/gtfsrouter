@@ -7,7 +7,7 @@
   "codeRepository": "https://github.com/UrbanAnalyst/gtfsrouter",
   "issueTracker": "https://github.com/UrbanAnalyst/gtfsrouter/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.0.027",
+  "version": "0.1.0.028",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
