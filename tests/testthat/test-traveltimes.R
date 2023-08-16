@@ -1,5 +1,7 @@
 context ("traveltimes")
 
+data.table::setDTthreads (1L)
+
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 

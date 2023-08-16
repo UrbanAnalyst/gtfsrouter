@@ -1,5 +1,7 @@
 context ("frequencies")
 
+data.table::setDTthreads (1L)
+
 test_that ("not gtfs", {
     no_gtfs <- "a"
     msg <- "selected object does not appear to be a GTFS file"
