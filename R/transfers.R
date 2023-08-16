@@ -18,12 +18,13 @@
 #' @return Modified version of the `gtfs` input with additional transfers table.
 #'
 #' @examples
+#' # Examples must be run on single thread only:
+#' data.table::setDTthreads (1)
+#'
 #' berlin_gtfs_to_zip ()
 #' f <- file.path (tempdir (), "vbb.zip")
 #' g <- extract_gtfs (f, quiet = TRUE)
-#' \dontrun{
 #' g <- gtfs_transfer_table (g, d_limit = 200)
-#' }
 #' # g$transfers then has fewer rows than original, because original transfer
 #' # table contains duplicated rows.
 #' @family augment
