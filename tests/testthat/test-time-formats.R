@@ -3,6 +3,8 @@ context ("time formats")
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
+data.table::setDTthreads (1L)
+
 test_that ("convert-time", {
 
     berlin_gtfs_to_zip ()

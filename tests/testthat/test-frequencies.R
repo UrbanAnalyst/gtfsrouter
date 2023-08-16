@@ -1,5 +1,7 @@
 context ("frequencies")
 
+data.table::setDTthreads (1L)
+
 test_that ("not gtfs", {
     no_gtfs <- "a"
     msg <- "selected object does not appear to be a GTFS file"
@@ -171,10 +173,11 @@ test_that ("gtfs with mixed frequencies", {
         gtfs$routes [route_short_name ==
             "U1"] [["route_id"]]]
 
-    sel_trip_id_U1 <- head (gtfs$stop_times [trip_id %in% # nolint
-        trips_U1$trip_id,
-    .N,
-    by = "trip_id"
+    sel_trip_id_U1 <- head (gtfs$stop_times [
+        trip_id %in% # nolint
+            trips_U1$trip_id,
+        .N,
+        by = "trip_id"
     ] [N == max (N), trip_id], 1)
 
     gtfs$trips <- gtfs$trips [trip_id %in% c (trips_U3$trip_id, sel_trip_id_U1)]
