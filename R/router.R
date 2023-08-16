@@ -59,16 +59,16 @@
 #' for which no route is possible return `NULL`.
 #'
 #' @examples
+#' # Examples must be run on single thread only:
+#' data.table::setDTthreads (1)
+#'
 #' berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir
 #' f <- file.path (tempdir (), "vbb.zip") # name of feed
-#' \dontrun{
 #' gtfs <- extract_gtfs (f)
-#' }
 #' from <- "Innsbrucker Platz" # U-bahn station, not "S"
 #' to <- "Alexanderplatz"
 #' start_time <- 12 * 3600 + 120 # 12:02
 #'
-#' \dontrun{
 #' route <- gtfs_route (gtfs, from = from, to = to, start_time = start_time)
 #'
 #' # Specify day of week
@@ -103,7 +103,6 @@
 #' # `gtfs_timetable()`:
 #' gt <- gtfs_timetable (gtfs, day = "Sunday", route_pattern = "^S")
 #' route <- gtfs_route (gt, from = from, to = to, start_time = start_time)
-#' }
 #' @family main
 #' @export
 gtfs_route <- function (gtfs, from, to, start_time = NULL, day = NULL,
