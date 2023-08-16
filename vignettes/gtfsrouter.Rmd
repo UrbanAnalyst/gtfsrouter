@@ -18,6 +18,11 @@ vignette: >
 ```{r pkg-load, echo = FALSE, message = FALSE}
 library (gtfsrouter)
 ```
+```{r DTthread, echo = FALSE}
+# Necessary for CRAN to avoid CPU / elapsed time ratios being too high
+data.table::setDTthreads (1)
+```
+
 
 # 1 Background: GTFS and other R packages
 
