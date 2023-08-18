@@ -1,3 +1,8 @@
+
+# v 0.1.1.00x (dev version)
+
+---
+
 # v 0.1.1
 
 Major changes:
@@ -16,6 +21,8 @@ Minor changes:
 - Bug fix in `gtfs_route_headway()` function (#94; thanks to @zamirD123)
 - Bug fix in `gtfs_traveltimes()` to remove trips ending at start (#99; thanks to @viajerus)
 
+
+---
 
 # v 0.0.5
 
@@ -38,6 +45,8 @@ Minor changes:
 - Fix bug when column names do not exactly match expected values (#70; thanks
   to @AlexandraKapp)
 
+---
+
 # v 0.0.4
 
 Major changes:
@@ -47,6 +56,8 @@ Major changes:
 - Important bug fix that prevents routes including stops that are not part of
   actual route
 
+
+---
 
 # v 0.0.3
 

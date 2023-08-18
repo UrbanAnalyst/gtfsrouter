@@ -7,7 +7,7 @@
   "codeRepository": "https://github.com/UrbanAnalyst/gtfsrouter",
   "issueTracker": "https://github.com/UrbanAnalyst/gtfsrouter/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.1",
+  "version": "0.1.1.001",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -270,13 +270,22 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     },
-    "SystemRequirements": null
+    "SystemRequirements": {}
   },
   "fileSize": "23011.427KB",
   "releaseNotes": "https://github.com/UrbanAnalyst/gtfsrouter/blob/master/NEWS.md",
   "readme": "https://github.com/UrbanAnalyst/gtfsrouter/blob/main/README.md",
-  "contIntegration": ["https://github.com/UrbanAnalyst/gtfsrouter/actions?query=workflow%3AR-CMD-check", "https://app.codecov.io/gh/UrbanAnalyst/gtfsrouter"],
+  "contIntegration": [
+    "https://github.com/UrbanAnalyst/gtfsrouter/actions?query=workflow%3AR-CMD-check",
+    "https://app.codecov.io/gh/UrbanAnalyst/gtfsrouter"
+  ],
   "developmentStatus": "https://www.repostatus.org/#active",
-  "keywords": ["gtfs", "public-transportation", "router", "r-package", "gtfsrouter"],
+  "keywords": [
+    "gtfs",
+    "public-transportation",
+    "router",
+    "r-package",
+    "gtfsrouter"
+  ],
   "relatedLink": "https://CRAN.R-project.org/package=gtfsrouter"
 }
