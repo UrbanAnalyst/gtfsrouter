@@ -1,18 +1,22 @@
 
 # v 0.1.1.00x (dev version)
 
+## Minor changes:
+
+- Added @jmertic @5balls @pteridin to allcontributors
+
 ---
 
 # v 0.1.1
 
-Major changes:
+## Major changes:
 
 - Repository moved from "ATFutures/gtfs-router" to "UrbanAnalyst/gtfsrouter"
 - `gtfs_transfer_table()` function now much faster due to re-coding in C++
 - Removed previously deprecated `gtfs_isochrone()` function; now entirely
   replaced by `gtfs_traveltimes()`.
 
-Minor changes:
+## Minor changes:
 
 - `gtfs_timetable()` modified to work on feeds which do not have "calendar.txt"
 - Fix `transfer_times` function with updated dodgr `match_pts_to_verts` fn
@@ -26,11 +30,11 @@ Minor changes:
 
 # v 0.0.5
 
-Major changes:
+## Major changes:
 
 - Add new `gtfs_traveltimes` function and deprecate `gtfs_isochrone`
 
-Minor changes:
+## Minor changes:
 
 - All main functions now use a `grep_fixed` parameter to enable finer control
   over station name matching; thanks to @polettif via #66 for the idea.
@@ -49,7 +53,7 @@ Minor changes:
 
 # v 0.0.4
 
-Major changes:
+## Major changes:
 
 - New function, `gtfs_route_headway` to calculate headways for entire routes
   between any nominated points (see #43)
@@ -61,7 +65,7 @@ Major changes:
 
 # v 0.0.3
 
-Major changes:
+## Major changes:
 
 - New function `frequencies_to_stop_times` thanks to new co-author @stmarcin,
   and new contributor @AlexandraKapp
@@ -71,7 +75,7 @@ Major changes:
 - Main `gtfs_route()` function now accepts multiple `from` and `to` values, and
   returns a list of routes (see #28).
 
-Minor changes:
+## Minor changes:
 
 - `extract_gtfs` has new parameter, `stn_suffixes`, to enable specification of
   any suffixes to be optionally removed from station IDs (#37; thanks to
