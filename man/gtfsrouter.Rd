@@ -3,6 +3,7 @@
 \docType{package}
 \name{gtfsrouter}
 \alias{gtfsrouter}
+\alias{gtfsrouter-package}
 \title{gtfsrouter}
 \description{
 Routing engine for GTFS (General Transit Feed Specification) data, including
@@ -22,4 +23,26 @@ station to all stations reachable within a specified travel duration.
 }
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/UrbanAnalyst/gtfsrouter}
+  \item Report bugs at \url{https://github.com/UrbanAnalyst/gtfsrouter/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Mark Padgham \email{mark.padgham@email.com}
+
+Authors:
+\itemize{
+  \item Marcin Stepniak \email{marcinstepniak@ucm.es} (\href{https://orcid.org/0000-0002-6489-5443}{ORCID})
+}
+
+Other contributors:
+\itemize{
+  \item Alexandra Kapp \email{alk@mobilityinstitute.com} [contributor]
+}
+
+}
 \concept{package}
