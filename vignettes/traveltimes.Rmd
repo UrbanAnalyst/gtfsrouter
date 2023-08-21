@@ -17,7 +17,6 @@ vignette: >
 ```{r DTthread, echo = FALSE}
 # Necessary for CRAN to avoid CPU / elapsed time ratios being too high
 data.table::setDTthreads (1)
-requireNamespace ("hms", quietly = TRUE)
 ```
 
 `gtfsrouter` includes a function,
@@ -98,7 +97,8 @@ is 3600, or one hour. For the token feed used here, the maximum travel times
 returned are:
 
 ```{r maxtt}
-hms::hms (as.integer (max (tt$duration)))
+library (hms)
+hms (as.integer (max (tt$duration)))
 ```
 
 In this case that value actually reflects the restricted data included in the
