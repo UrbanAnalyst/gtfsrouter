@@ -20,7 +20,7 @@
 #' @family package
 #' @importFrom Rcpp evalCpp
 #' @useDynLib gtfsrouter, .registration = TRUE
-NULL
+"_PACKAGE"
 
 #' berlin_gtfs
 #'
