@@ -17,6 +17,7 @@ vignette: >
 ```{r DTthread, echo = FALSE}
 # Necessary for CRAN to avoid CPU / elapsed time ratios being too high
 data.table::setDTthreads (1)
+requireNamespace ("hms", quietly = TRUE)
 ```
 
 `gtfsrouter` includes a function,
