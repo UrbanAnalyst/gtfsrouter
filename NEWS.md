@@ -1,9 +1,11 @@
 
-# v 0.1.1.00x (dev version)
+# v 0.1.2
 
 ## Minor changes:
 
 - Added @jmertic @5balls @pteridin to allcontributors
+- Fix UBSAN bug in traveltimes.cpp (#111)
+- Updated package man entry (#110)
 
 ---
 

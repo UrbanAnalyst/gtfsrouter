@@ -364,8 +364,11 @@ void iso::fill_one_transfer (
         }
     }
 
-    iso.connections [trans_dest].convec [s].ntransfers = ntransfers + 1;
-    iso.connections [trans_dest].convec [s].initial_depart = latest_initial;
+    if (ntransfers < INFINITE_INT)
+    {
+        iso.connections [trans_dest].convec [s].ntransfers = ntransfers + 1;
+        iso.connections [trans_dest].convec [s].initial_depart = latest_initial;
+    }
 
     DEBUGMSGTR("---TR: (" << arrival_station << " -> " <<
             trans_dest << "), time(" <<
