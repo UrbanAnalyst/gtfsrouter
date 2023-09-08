@@ -74,11 +74,6 @@ repos:
         name: Version has been incremeneted in DESCRIPTION
         entry: .hooks/description
         language: script
-        # `exclude: <regex>` to allow committing specific files.
-        #-   id: src debug macros off
-        #name: src code has debug macros turned off
-        #entry: .hooks/description
-        #language: script
 
 ci:
     autoupdate_schedule: monthly
