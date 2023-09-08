@@ -2,7 +2,7 @@
 
 This submission fixes UBSAN errors from previous, recent submission. It also rectifies the package documentation in the man/ entry, as recommended in recent email from Kurt Hornik.
 
-Other than that, the current CRAN version issues a single note regarding explicit C++ specification. This submission rectifies that, and generates no additional notes or warnings on:
+Other than that, this submission generates no additional notes or warnings on:
 
 * Ubuntu 22.04: R-oldrelease, R-release, R-devel
 * Windows: R-release
