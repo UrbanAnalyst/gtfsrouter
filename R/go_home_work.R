@@ -174,6 +174,7 @@ get_rds_name <- function (f) {
 #' home and work stations, expanded by this multiple. If the function appears to
 #' behave strangely, try re-running this function with a higher value of this
 #' parameter.
+#' @return No return value. The function saves processed data to a local cache.
 #'
 #' @family additional
 #' @export

@@ -12,6 +12,9 @@ home and work stations, expanded by this multiple. If the function appears to
 behave strangely, try re-running this function with a higher value of this
 parameter.}
 }
+\value{
+No return value. The function saves processed data to a local cache.
+}
 \description{
 Process a local GTFS data set with environmental variables described in
 \link{go_home} into a condensed version for use in \link{go_home} and
