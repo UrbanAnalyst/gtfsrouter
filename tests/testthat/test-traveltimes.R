@@ -1,6 +1,6 @@
 context ("traveltimes")
 
-data.table::setDTthreads (1L)
+nthr <- data.table::setDTthreads (1L)
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
@@ -67,3 +67,5 @@ test_that ("traveltime errors", {
         "gtfs must have a transfers table"
     )
 })
+
+data.table::setDTthreads (nthr)

@@ -3,7 +3,7 @@ context ("time formats")
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
-data.table::setDTthreads (1L)
+nthr <- data.table::setDTthreads (1L)
 
 test_that ("convert-time", {
 
@@ -161,3 +161,5 @@ test_that ("date param", {
     expect_silent (gt <- gtfs_timetable (g, date = 20190127, quiet = TRUE))
     expect_false (identical (gt_day$timetable, gt$timetable))
 })
+
+data.table::setDTthreads (nthr)

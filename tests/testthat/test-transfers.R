@@ -1,6 +1,6 @@
 context ("transfers")
 
-data.table::setDTthreads (1L)
+nthr <- data.table::setDTthreads (1L)
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
@@ -50,3 +50,5 @@ test_that ("transfers works", {
     expect_true (mean (tr500$min_transfer_time) >
         mean (tr200$min_transfer_time))
 })
+
+data.table::setDTthreads (nthr)

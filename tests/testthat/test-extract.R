@@ -3,7 +3,7 @@ context ("summary")
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
-data.table::setDTthreads (1L)
+nthr <- data.table::setDTthreads (1L)
 
 test_that ("extract non gtfs", {
     f <- file.path (tempdir (), "junk.txt")
@@ -122,6 +122,8 @@ test_that ("timetable summary", {
 # times elapsed time". This was addressed via #109 by switching off most
 # examples. This is the last one which still actually runs, with this test
 # hopefully catching any likely reasons for rejection.
+
+data.table::setDTthreads (nthr)
 
 skip_on_cran ()
 test_that ("cpu time", {

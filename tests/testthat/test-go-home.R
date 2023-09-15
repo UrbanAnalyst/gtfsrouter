@@ -1,6 +1,6 @@
 context ("go home")
 
-data.table::setDTthreads (1L)
+nthr <- data.table::setDTthreads (1L)
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
@@ -80,3 +80,5 @@ test_that ("go to work", {
         route1$stop_name [nrow (route1)]
     )
 })
+
+data.table::setDTthreads (nthr)
