@@ -1,6 +1,6 @@
 # CRAN notes for gtfsrouter_0.1.2 submission
 
-This submission fixes UBSAN errors from previous, recent submission. It also rectifies the package documentation in the man/ entry, as recommended in recent email from Kurt Hornik.
+This submission fixes UBSAN errors from previous, recent submission. It documents return values on all functions, as suggested in email from Benjamin Altmann, and also rectifies the package documentation in the man/ entry, as recommended in recent email from Kurt Hornik.
 
 Other than that, this submission generates no additional notes or warnings on:
 
