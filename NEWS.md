@@ -7,6 +7,11 @@
 - Fix UBSAN bug in traveltimes.cpp (#111)
 - Updated package man entry (#110)
 
+## Minor changes:
+
+- Documented return values for all functions
+- Added `data.table::setDTthreads()` calls to all examples, tests, vignettes. See https://stat.ethz.ch/pipermail/r-package-devel/2023q3/thread.html#9454
+
 ---
 
 # v 0.1.1
