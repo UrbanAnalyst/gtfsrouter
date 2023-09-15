@@ -19,6 +19,10 @@
 #' @param max_traveltime The maximal traveltime to search for, specified in
 #' seconds (with default of 1 hour). See note for details.
 #' @inheritParams gtfs_route
+#' @return A `data.frame` of travel times and required numbers of transfers to
+#' all stations reachable from the given `from` station. Additional columns
+#' include "start_time"  of connection, and information on destination stops
+#' including "id" numbers, names, and geographical coordinates.
 #'
 #' @note Higher values of `max_traveltime` will return traveltimes for greater
 #' numbers of stations, but may lead to considerably longer calculation times.
