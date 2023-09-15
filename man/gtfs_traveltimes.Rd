@@ -80,7 +80,7 @@ to reach all or most stations desired for a particular query, rather than set
 }
 \examples{
 # Examples must be run on single thread only:
-data.table::setDTthreads (1)
+nthr <- data.table::setDTthreads (1)
 
 berlin_gtfs_to_zip ()
 f <- file.path (tempdir (), "vbb.zip")
@@ -89,6 +89,8 @@ g <- gtfs_timetable (g)
 from <- "Alexanderplatz"
 start_times <- 12 * 3600 + c (0, 60) * 60 # 8:00-9:00
 res <- gtfs_traveltimes (g, from, start_times)
+
+data.table::setDTthreads (nthr)
 }
 \seealso{
 Other main: 
