@@ -16,7 +16,7 @@ vignette: >
   
 ```{r DTthread, echo = FALSE}
 # Necessary for CRAN to avoid CPU / elapsed time ratios being too high
-data.table::setDTthreads (1)
+nthr <- data.table::setDTthreads (1)
 ```
 
 `gtfsrouter` includes a function,
@@ -310,3 +310,7 @@ The
 [`gtfs_traveltimes()`](https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_traveltimes.html),
 is based on a new algorithm specifically developed for this package, and which
 will be described here in further detail in subsequent releases of the package.
+
+```{r DTthread-reset, echo = FALSE}
+data.table::setDTthreads (nthr)
+```

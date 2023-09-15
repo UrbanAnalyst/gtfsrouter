@@ -16,7 +16,7 @@ vignette: >
   
 ```{r DTthread, echo = FALSE}
 # Necessary for CRAN to avoid CPU / elapsed time ratios being too high
-data.table::setDTthreads (1)
+nthr <- data.table::setDTthreads (1)
 ```
 
 GTFS feeds may include a table of possible transfers between stops, and
@@ -835,3 +835,7 @@ ggplot (d, aes (x = d_limit, y = prop)) +
 While travel times to most stops still remain unaffected, the proportion
 affected does increase to a large minority of around 30-40% as transfer
 distances approach 1km.
+
+```{r DTthread-reset, echo = FALSE}
+data.table::setDTthreads (nthr)
+```

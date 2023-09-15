@@ -1,6 +1,6 @@
 context ("route")
 
-data.table::setDTthreads (1L)
+nthr <- data.table::setDTthreads (1L)
 
 test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
@@ -313,3 +313,5 @@ test_that ("multiple routes", {
     # happens to be the S Bhf.
     # expect_identical (unname (route), unname (route2))
 })
+
+data.table::setDTthreads (nthr)

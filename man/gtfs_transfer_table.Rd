@@ -40,7 +40,7 @@ Construct a transfer table for a GTFS feed.
 }
 \examples{
 # Examples must be run on single thread only:
-data.table::setDTthreads (1)
+nhtr <- data.table::setDTthreads (1)
 
 berlin_gtfs_to_zip ()
 f <- file.path (tempdir (), "vbb.zip")
@@ -48,6 +48,8 @@ g <- extract_gtfs (f, quiet = TRUE)
 g <- gtfs_transfer_table (g, d_limit = 200)
 # g$transfers then has fewer rows than original, because original transfer
 # table contains duplicated rows.
+
+data.table::setDTthreads (nthr)
 }
 \seealso{
 Other augment: 

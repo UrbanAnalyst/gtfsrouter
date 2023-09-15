@@ -8,7 +8,7 @@
 #' @family additional
 #' @examples
 #' # Examples must be run on single thread only:
-#' data.table::setDTthreads (1)
+#' nthr <- data.table::setDTthreads (1)
 #'
 #' berlin_gtfs_to_zip ()
 #' f <- file.path (tempdir (), "vbb.zip")
@@ -16,6 +16,8 @@
 #' summary (g)
 #' g <- gtfs_timetable (g)
 #' summary (g) # also summarizes additional timetable information
+#'
+#' data.table::setDTthreads (nthr)
 #' @export
 summary.gtfs <- function (object, ...) {
     msg <- "A gtfs "

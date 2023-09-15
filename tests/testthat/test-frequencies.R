@@ -1,6 +1,6 @@
 context ("frequencies")
 
-data.table::setDTthreads (1L)
+nthr <- data.table::setDTthreads (1L)
 
 test_that ("not gtfs", {
     no_gtfs <- "a"
@@ -260,3 +260,5 @@ test_that ("gtfs frequencies in gtfs_route", {
     expect_equal (r [1, "arrival_time"], "20:06:30")
     expect_equal (r [nrow (r), "arrival_time"], "20:14:00")
 })
+
+data.table::setDTthreads (nthr)
