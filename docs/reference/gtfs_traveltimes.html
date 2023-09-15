@@ -18,7 +18,7 @@ other reachable station in a system."><!-- mathjax --><script src="https://cdnjs
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.009</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.011</span>
       </span>
     </div>
 
@@ -137,6 +137,15 @@ seconds (with default of 1 hour). See note for details.</p></dd>
 regarding timetable construction).</p></dd>
 
 </dl></div>
+    <div id="value">
+    <h2>Value</h2>
+    
+
+<p>A <code>data.frame</code> of travel times and required numbers of transfers to
+all stations reachable from the given <code>from</code> station. Additional columns
+include "start_time"  of connection, and information on destination stops
+including "id" numbers, names, and geographical coordinates.</p>
+    </div>
     <div id="note">
     <h2>Note</h2>
     <p>Higher values of <code>max_traveltime</code> will return traveltimes for greater
@@ -158,7 +167,7 @@ to reach all or most stations desired for a particular query, rather than set
 <span class="r-in"><span><span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/openmp-utils.html" class="external-link">setDTthreads</a></span> <span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpDgvKqz/vbb.zip"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmphdgRaG/vbb.zip"</span>
 <span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Unzipping GTFS archive</span></span>

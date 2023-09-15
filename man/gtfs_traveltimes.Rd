@@ -61,6 +61,12 @@ seconds (with default of 1 hour). See note for details.}
 \item{quiet}{Set to \code{TRUE} to suppress screen messages (currently just
 regarding timetable construction).}
 }
+\value{
+A \code{data.frame} of travel times and required numbers of transfers to
+all stations reachable from the given \code{from} station. Additional columns
+include "start_time"  of connection, and information on destination stops
+including "id" numbers, names, and geographical coordinates.
+}
 \description{
 Travel times from a nominated station departing at a nominated time to every
 other reachable station in a system.
