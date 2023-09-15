@@ -11,6 +11,9 @@
 
 \item{...}{ignored here}
 }
+\value{
+Nothing; this function only prints a summary to the console.
+}
 \description{
 summary.gtfs
 }
