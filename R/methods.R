@@ -3,6 +3,7 @@
 #' @name summary.gtfs
 #' @param object A `gtfs` object to be summarised
 #' @param ... ignored here
+#' @return Nothing; this function only prints a summary to the console.
 #'
 #' @family additional
 #' @examples
