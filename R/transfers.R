@@ -19,7 +19,7 @@
 #'
 #' @examples
 #' # Examples must be run on single thread only:
-#' nhtr <- data.table::setDTthreads (1)
+#' nthr <- data.table::setDTthreads (1)
 #'
 #' berlin_gtfs_to_zip ()
 #' f <- file.path (tempdir (), "vbb.zip")

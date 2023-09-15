@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.019</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.021</span>
       </span>
     </div>
 
@@ -126,7 +126,7 @@ to a locally-stored <code>.zip</code> archive in the
 data can be exported and re-imported with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/Rtmp2YAEzh/vbb.zip"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/RtmppMhLgr/vbb.zip"</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></span></code></pre></div>
@@ -353,7 +353,7 @@ data:</p>
 <span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##    0.06    0.00    0.06</span></span></code></pre>
+<span><span class="co">##   0.058   0.000   0.057</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "calendar"   "routes"     "trips"      "stop_times" "stops"     </span></span>
@@ -374,7 +374,7 @@ data:</p>
 <span>    start_time <span class="op">=</span> <span class="st">"12:00:00"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.046   0.000   0.047</span></span></code></pre>
+<span><span class="co">##   0.044   0.000   0.044</span></span></code></pre>
 <p>Note that the <code>day</code> parameter is used to extract the
 timetable, after which it is no longer required in the actual call to
 <code><a href="../reference/gtfs_route.html">gtfs_route()</a></code>.</p>
