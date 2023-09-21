@@ -94,7 +94,9 @@ can be calculated by setting \code{earliest_arrival = FALSE}.
 }
 \examples{
 # Examples must be run on single thread only:
-nthr <- data.table::setDTthreads (1)
+nthr_dt <- data.table::setDTthreads (1)
+nthr_omp <- Sys.getenv ("OMP_THREAD_LIMIT")
+Sys.setenv ("OMP_THREAD_LIMIT" = 1L)
 
 berlin_gtfs_to_zip () # Write sample feed from Berlin, Germany to tempdir
 f <- file.path (tempdir (), "vbb.zip") # name of feed
@@ -138,7 +140,8 @@ route <- gtfs_route (
 gt <- gtfs_timetable (gtfs, day = "Sunday", route_pattern = "^S")
 route <- gtfs_route (gt, from = from, to = to, start_time = start_time)
 
-data.table::setDTthreads (nthr)
+data.table::setDTthreads (nthr_dt)
+Sys.setenv ("OMP_THREAD_LIMIT" = nthr_omp)
 }
 \seealso{
 Other main: 
