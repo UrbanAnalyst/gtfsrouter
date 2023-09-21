@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.021</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.023</span>
       </span>
     </div>
 
@@ -90,7 +90,7 @@
 <span class="r-in"><span><span class="va">nthr</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/openmp-utils.html" class="external-link">setDTthreads</a></span> <span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpoqMToh/vbb.zip"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/Rtmp2wXRSC/vbb.zip"</span>
 <span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Unzipping GTFS archive</span></span>
@@ -106,11 +106,11 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span>   calendar     routes      trips stop_times      stops  transfers </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       2395         52      28590      22666        957       9833 </span>
 <span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">g</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Day not specified; extracting timetable for friday</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Day not specified; extracting timetable for thursday</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span> <span class="op">(</span><span class="va">g</span><span class="op">)</span> <span class="co"># also summarizes additional timetable information</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> A gtfs timetable object with the following tables and respective numbers of entries in each:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   calendar     routes      trips stop_times      stops  transfers  timetable </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       2395         52       7763       7626        957       9833       7052 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       2395         52       7458       7626        957       9833       7052 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   stop_ids   trip_ids </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>        957        574 </span>
 <span class="r-in"><span></span></span>
