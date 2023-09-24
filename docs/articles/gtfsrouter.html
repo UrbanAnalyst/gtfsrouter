@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.1.023</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
       </span>
     </div>
 
@@ -73,7 +73,7 @@
                         <h4 data-toc-skip class="author">Mark
 Padgham</h4>
             
-            <h4 data-toc-skip class="date">2023-09-21</h4>
+            <h4 data-toc-skip class="date">2023-09-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/gtfsrouter/blob/HEAD/vignettes/gtfsrouter.Rmd" class="external-link"><code>vignettes/gtfsrouter.Rmd</code></a></small>
       <div class="hidden name"><code>gtfsrouter.Rmd</code></div>
@@ -126,7 +126,7 @@ to a locally-stored <code>.zip</code> archive in the
 data can be exported and re-imported with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpGSrgfL/vbb.zip"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/RtmpqCCz7N/vbb.zip"</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span> <span class="op">(</span><span class="va">f</span><span class="op">)</span></span></code></pre></div>
@@ -162,12 +162,12 @@ for the current day of the week.</p>
 <span>    from <span class="op">=</span> <span class="va">from</span>,</span>
 <span>    to <span class="op">=</span> <span class="va">to</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Day not specified; extracting timetable for thursday</span></span></code></pre>
+<pre><code><span><span class="co">## Day not specified; extracting timetable for sunday</span></span></code></pre>
 <table class="table">
 <colgroup>
 <col width="11%">
-<col width="18%">
-<col width="40%">
+<col width="19%">
+<col width="39%">
 <col width="13%">
 <col width="15%">
 </colgroup>
@@ -180,123 +180,88 @@ for the current day of the week.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">U4</td>
-<td align="left">U Nollendorfplatz</td>
+<td align="left">S42</td>
+<td align="left">S Sudkreuz Bhf</td>
 <td align="left">S+U Innsbrucker Platz (Berlin)</td>
-<td align="left">12:06:00</td>
-<td align="left">12:06:00</td>
+<td align="left">12:06:42</td>
+<td align="left">12:07:12</td>
 </tr>
 <tr class="even">
-<td align="left">U4</td>
-<td align="left">U Nollendorfplatz</td>
-<td align="left">U Rathaus Schoneberg (Berlin)</td>
-<td align="left">12:07:00</td>
-<td align="left">12:07:00</td>
+<td align="left">S42</td>
+<td align="left">S Sudkreuz Bhf</td>
+<td align="left">S Schoneberg (Berlin)</td>
+<td align="left">12:08:18</td>
+<td align="left">12:08:48</td>
 </tr>
 <tr class="odd">
-<td align="left">U4</td>
-<td align="left">U Nollendorfplatz</td>
-<td align="left">U Bayerischer Platz (Berlin)</td>
-<td align="left">12:08:30</td>
-<td align="left">12:08:30</td>
+<td align="left">S42</td>
+<td align="left">S Sudkreuz Bhf</td>
+<td align="left">S Sudkreuz Bhf (Berlin)</td>
+<td align="left">12:10:12</td>
+<td align="left">12:10:12</td>
 </tr>
 <tr class="even">
-<td align="left">U4</td>
-<td align="left">U Nollendorfplatz</td>
-<td align="left">U Viktoria-Luise-Platz (Berlin)</td>
-<td align="left">12:10:00</td>
-<td align="left">12:10:00</td>
+<td align="left">S2</td>
+<td align="left">S Buch</td>
+<td align="left">S Sudkreuz Bhf (Berlin)</td>
+<td align="left">12:16:18</td>
+<td align="left">12:16:54</td>
 </tr>
 <tr class="odd">
-<td align="left">U4</td>
-<td align="left">U Nollendorfplatz</td>
-<td align="left">U Nollendorfplatz (Berlin)</td>
-<td align="left">12:12:00</td>
-<td align="left">12:12:00</td>
+<td align="left">S2</td>
+<td align="left">S Buch</td>
+<td align="left">S+U Yorckstr. S2 S25 S26 U7 (Berlin)</td>
+<td align="left">12:19:00</td>
+<td align="left">12:19:30</td>
 </tr>
 <tr class="even">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">U Nollendorfplatz (Berlin)</td>
-<td align="left">12:17:00</td>
-<td align="left">12:17:00</td>
+<td align="left">S2</td>
+<td align="left">S Buch</td>
+<td align="left">S Anhalter Bahnhof (Berlin)</td>
+<td align="left">12:21:42</td>
+<td align="left">12:22:12</td>
 </tr>
 <tr class="odd">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">U Bulowstr. (Berlin)</td>
-<td align="left">12:18:30</td>
-<td align="left">12:18:30</td>
+<td align="left">S2</td>
+<td align="left">S Buch</td>
+<td align="left">S+U Potsdamer Platz Bhf (Berlin)</td>
+<td align="left">12:23:48</td>
+<td align="left">12:24:18</td>
 </tr>
 <tr class="even">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">U Gleisdreieck (Berlin)</td>
-<td align="left">12:20:30</td>
-<td align="left">12:20:30</td>
+<td align="left">S2</td>
+<td align="left">S Buch</td>
+<td align="left">S+U Brandenburger Tor (Berlin)</td>
+<td align="left">12:25:54</td>
+<td align="left">12:26:24</td>
 </tr>
 <tr class="odd">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">U Mendelssohn-Bartholdy-Park (Berlin)</td>
-<td align="left">12:22:00</td>
-<td align="left">12:22:00</td>
+<td align="left">S2</td>
+<td align="left">S Buch</td>
+<td align="left">S+U Friedrichstr. Bhf (Berlin)</td>
+<td align="left">12:27:36</td>
+<td align="left">12:28:24</td>
 </tr>
 <tr class="even">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">S+U Potsdamer Platz (Bln) [U2]</td>
-<td align="left">12:23:30</td>
-<td align="left">12:23:30</td>
+<td align="left">S7</td>
+<td align="left">S Ahrensfelde Bhf</td>
+<td align="left">S+U Friedrichstr. Bhf (Berlin)</td>
+<td align="left">12:30:36</td>
+<td align="left">12:31:24</td>
 </tr>
 <tr class="odd">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">U Mohrenstr. (Berlin)</td>
-<td align="left">12:25:00</td>
-<td align="left">12:25:00</td>
+<td align="left">S7</td>
+<td align="left">S Ahrensfelde Bhf</td>
+<td align="left">S Hackescher Markt (Berlin)</td>
+<td align="left">12:32:54</td>
+<td align="left">12:33:24</td>
 </tr>
 <tr class="even">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">Berlin, U Stadtmitte U2</td>
-<td align="left">12:26:00</td>
-<td align="left">12:26:00</td>
-</tr>
-<tr class="odd">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">U Hausvogteiplatz (Berlin)</td>
-<td align="left">12:27:30</td>
-<td align="left">12:27:30</td>
-</tr>
-<tr class="even">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">U Spittelmarkt (Berlin)</td>
-<td align="left">12:29:00</td>
-<td align="left">12:29:00</td>
-</tr>
-<tr class="odd">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">U Markisches Museum (Berlin)</td>
-<td align="left">12:30:00</td>
-<td align="left">12:30:00</td>
-</tr>
-<tr class="even">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">U Klosterstr. (Berlin)</td>
-<td align="left">12:31:30</td>
-<td align="left">12:31:30</td>
-</tr>
-<tr class="odd">
-<td align="left">U2</td>
-<td align="left">S+U Pankow</td>
-<td align="left">S+U Alexanderplatz (Berlin) [U2]</td>
-<td align="left">12:33:30</td>
-<td align="left">12:33:30</td>
+<td align="left">S7</td>
+<td align="left">S Ahrensfelde Bhf</td>
+<td align="left">S+U Alexanderplatz Bhf (Berlin)</td>
+<td align="left">12:34:36</td>
+<td align="left">12:35:24</td>
 </tr>
 </tbody>
 </table>
@@ -353,7 +318,7 @@ data:</p>
 <span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.071   0.000   0.072</span></span></code></pre>
+<span><span class="co">##   0.067   0.001   0.067</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "calendar"   "routes"     "trips"      "stop_times" "stops"     </span></span>
@@ -374,7 +339,7 @@ data:</p>
 <span>    start_time <span class="op">=</span> <span class="st">"12:00:00"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##    user  system elapsed </span></span>
-<span><span class="co">##   0.054   0.000   0.053</span></span></code></pre>
+<span><span class="co">##    0.05    0.00    0.05</span></span></code></pre>
 <p>Note that the <code>day</code> parameter is used to extract the
 timetable, after which it is no longer required in the actual call to
 <code><a href="../reference/gtfs_route.html">gtfs_route()</a></code>.</p>
@@ -805,32 +770,32 @@ can be executed as single calls from any <strong>R</strong> session to
 return the next available service.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/go_home.html">go_home</a></span> <span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##    route_name              trip_name                            stop_name</span></span>
-<span><span class="co">## 1          S7 S Potsdam Hauptbahnhof      S+U Alexanderplatz Bhf (Berlin)</span></span>
-<span><span class="co">## 2          S7 S Potsdam Hauptbahnhof          S Hackescher Markt (Berlin)</span></span>
-<span><span class="co">## 3          S7 S Potsdam Hauptbahnhof       S+U Friedrichstr. Bhf (Berlin)</span></span>
-<span><span class="co">## 4          S2          S Lichtenrade       S+U Friedrichstr. Bhf (Berlin)</span></span>
-<span><span class="co">## 5          S2          S Lichtenrade       S+U Brandenburger Tor (Berlin)</span></span>
-<span><span class="co">## 6          S2          S Lichtenrade     S+U Potsdamer Platz Bhf (Berlin)</span></span>
-<span><span class="co">## 7          S2          S Lichtenrade          S Anhalter Bahnhof (Berlin)</span></span>
-<span><span class="co">## 8          S2          S Lichtenrade S+U Yorckstr. S2 S25 S26 U7 (Berlin)</span></span>
-<span><span class="co">## 9          S2          S Lichtenrade              S Sudkreuz Bhf (Berlin)</span></span>
-<span><span class="co">## 10        S46              S Westend              S Sudkreuz Bhf (Berlin)</span></span>
-<span><span class="co">## 11        S46              S Westend                S Schoneberg (Berlin)</span></span>
-<span><span class="co">## 12        S46              S Westend       S+U Innsbrucker Platz (Berlin)</span></span>
+<pre><code><span><span class="co">##    route_name              trip_name                        stop_name</span></span>
+<span><span class="co">## 1          S7 S Potsdam Hauptbahnhof  S+U Alexanderplatz Bhf (Berlin)</span></span>
+<span><span class="co">## 2          S7 S Potsdam Hauptbahnhof      S Hackescher Markt (Berlin)</span></span>
+<span><span class="co">## 3          S7 S Potsdam Hauptbahnhof   S+U Friedrichstr. Bhf (Berlin)</span></span>
+<span><span class="co">## 4          S1          S Wannsee Bhf   S+U Friedrichstr. Bhf (Berlin)</span></span>
+<span><span class="co">## 5          S1          S Wannsee Bhf   S+U Brandenburger Tor (Berlin)</span></span>
+<span><span class="co">## 6          S1          S Wannsee Bhf S+U Potsdamer Platz Bhf (Berlin)</span></span>
+<span><span class="co">## 7          S1          S Wannsee Bhf      S Anhalter Bahnhof (Berlin)</span></span>
+<span><span class="co">## 8          S1          S Wannsee Bhf     S+U Yorckstr. S1 U7 (Berlin)</span></span>
+<span><span class="co">## 9          S1          S Wannsee Bhf   S Julius-Leber-Brucke (Berlin)</span></span>
+<span><span class="co">## 10         S1          S Wannsee Bhf            S Schoneberg (Berlin)</span></span>
+<span><span class="co">## 11        S46  S+U Gesundbrunnen Bhf            S Schoneberg (Berlin)</span></span>
+<span><span class="co">## 12        S46  S+U Gesundbrunnen Bhf   S+U Innsbrucker Platz (Berlin)</span></span>
 <span><span class="co">##    arrival_time departure_time</span></span>
 <span><span class="co">## 1      12:19:54       12:20:42</span></span>
 <span><span class="co">## 2      12:21:54       12:22:24</span></span>
 <span><span class="co">## 3      12:23:54       12:24:42</span></span>
-<span><span class="co">## 4      12:28:00       12:28:42</span></span>
-<span><span class="co">## 5      12:29:54       12:30:24</span></span>
-<span><span class="co">## 6      12:31:54       12:32:24</span></span>
-<span><span class="co">## 7      12:34:00       12:34:30</span></span>
-<span><span class="co">## 8      12:36:42       12:37:12</span></span>
-<span><span class="co">## 9      12:39:18       12:39:54</span></span>
-<span><span class="co">## 10     12:43:00       12:43:42</span></span>
-<span><span class="co">## 11     12:45:12       12:45:42</span></span>
-<span><span class="co">## 12     12:46:54       12:47:24</span></span></code></pre>
+<span><span class="co">## 4      12:25:30       12:26:12</span></span>
+<span><span class="co">## 5      12:27:24       12:27:54</span></span>
+<span><span class="co">## 6      12:29:24       12:29:54</span></span>
+<span><span class="co">## 7      12:31:30       12:32:18</span></span>
+<span><span class="co">## 8      12:34:42       12:35:12</span></span>
+<span><span class="co">## 9      12:36:24       12:36:54</span></span>
+<span><span class="co">## 10     12:38:18       12:38:48</span></span>
+<span><span class="co">## 11     12:43:12       12:43:42</span></span>
+<span><span class="co">## 12     12:44:54       12:45:24</span></span></code></pre>
 <p>The complementary function, <code><a href="../reference/go_to_work.html">go_to_work()</a></code> routes in the
 reverse direction. These functions are intended to allow real-time
 queries of public transport schedules from within the comfort of an
