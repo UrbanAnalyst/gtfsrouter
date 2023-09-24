@@ -2,12 +2,12 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "gtfsrouter",
-  "description": "Use GTFS (General Transit Feed Specification) data for routing from nominated start and end stations, and for extracting isochrones from nominated start station.",
-  "name": "gtfsrouter: Routing with GTFS (General Transit Feed Specification) Data",
+  "description": "Use 'GTFS' (General Transit Feed Specification) data for routing from nominated start and end stations, for extracting 'isochrones', and travel times from any nominated start station to all other stations.",
+  "name": "gtfsrouter: Routing with 'GTFS' (General Transit Feed Specification) Data",
   "codeRepository": "https://github.com/UrbanAnalyst/gtfsrouter",
   "issueTracker": "https://github.com/UrbanAnalyst/gtfsrouter/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "0.1.1.024",
+  "version": "0.1.2",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -270,22 +270,13 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     },
-    "SystemRequirements": {}
+    "SystemRequirements": null
   },
-  "fileSize": "23011.427KB",
+  "fileSize": "16146.154KB",
   "releaseNotes": "https://github.com/UrbanAnalyst/gtfsrouter/blob/master/NEWS.md",
   "readme": "https://github.com/UrbanAnalyst/gtfsrouter/blob/main/README.md",
-  "contIntegration": [
-    "https://github.com/UrbanAnalyst/gtfsrouter/actions?query=workflow%3AR-CMD-check",
-    "https://app.codecov.io/gh/UrbanAnalyst/gtfsrouter"
-  ],
+  "contIntegration": ["https://github.com/UrbanAnalyst/gtfsrouter/actions?query=workflow%3AR-CMD-check", "https://app.codecov.io/gh/UrbanAnalyst/gtfsrouter"],
   "developmentStatus": "https://www.repostatus.org/#active",
-  "keywords": [
-    "gtfs",
-    "public-transportation",
-    "router",
-    "r-package",
-    "gtfsrouter"
-  ],
+  "keywords": ["gtfs", "public-transportation", "router", "r-package", "gtfsrouter"],
   "relatedLink": "https://CRAN.R-project.org/package=gtfsrouter"
 }
