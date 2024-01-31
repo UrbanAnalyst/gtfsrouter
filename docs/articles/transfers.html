@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.004</span>
       </span>
     </div>
 
@@ -73,7 +73,7 @@
                         <h4 data-toc-skip class="author">Mark
 Padgham</h4>
             
-            <h4 data-toc-skip class="date">2023-09-24</h4>
+            <h4 data-toc-skip class="date">2024-01-31</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/gtfsrouter/blob/HEAD/vignettes/transfers.Rmd" class="external-link"><code>vignettes/transfers.Rmd</code></a></small>
       <div class="hidden name"><code>transfers.Rmd</code></div>
@@ -622,9 +622,9 @@ range of distance limits.</p>
 <p><img src="transfers_files/figure-html/plot1-1.png" width="700"></p>
 <p>And these additional transfer possibilities can make a significant
 difference to estimated travel times. Note, however, that the travel
-times only changed for 674 stations, while the value of
+times only changed for 684 stations, while the value of
 <code>nsame</code> value recording numbers of stations for which travel
-times did not change was 5,257. Travel times may also increase as
+times did not change was 5,234. Travel times may also increase as
 additional transfers may be used to reduce numbers of connecting
 services required for a particular trip, and the algorithm generally
 searches for connections with minimal numbers of transfers.</p>
@@ -641,10 +641,10 @@ transfer table.</p>
 <span>                                 <span class="va">day</span> <span class="op">=</span> <span class="st">"Monday"</span>,</span>
 <span>                                 <span class="va">start_time_limits</span> <span class="op">=</span> <span class="fl">12</span><span class="op">:</span><span class="fl">13</span> <span class="op">*</span> <span class="fl">3600</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
-<span>    <span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/copy.html" class="external-link">copy</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span>
+<span>    <span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/copy.html" class="external-link">copy</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span>
 <span>    <span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">g1</span>, day <span class="op">=</span> <span class="va">day</span><span class="op">)</span></span>
 <span></span>
-<span>    <span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/copy.html" class="external-link">copy</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span>
+<span>    <span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu">data.table</span><span class="fu">::</span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/copy.html" class="external-link">copy</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span>
 <span>    <span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">g2</span>, d_limit <span class="op">=</span> <span class="va">d_limit</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>    <span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">g2</span>, day <span class="op">=</span> <span class="va">day</span><span class="op">)</span></span>
 <span></span>
