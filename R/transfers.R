@@ -93,10 +93,9 @@ gtfs_transfer_table <- function (gtfs,
         min_transfer_time = ceiling (transfer_times)
     )
 
-    index <- which (!duplicated (transfers [, c (
-        "from_stop_id",
-        "to_stop_id"
-    )]))
+    # See #114: data.table::duplicated currently segfaults (Jan 2024):
+    ft <- data.frame (transfers [, c ("from_stop_id", "to_stop_id")])
+    index <- which (!duplicated (ft))
     transfers <- transfers [index, ]
 
     # Those transfers only include times, but these may then correspond to
