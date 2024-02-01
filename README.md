@@ -165,6 +165,7 @@ entries, to enable the feed to be used for routing.
 ## Contributors
 
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -310,7 +311,7 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <tr>
 <td align="center">
 <a href="https://github.com/viajerus">
-<img src="https://avatars.githubusercontent.com/u/63015973?v=4" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/63015973?u=e85734d18801b607316ea25b24624da6762862c3&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Aviajerus">viajerus</a>
 </td>
@@ -331,6 +332,12 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <img src="https://avatars.githubusercontent.com/u/29350560?u=a3a45577202757768e14a8a2d59a31c9d92a32db&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Apteridin">pteridin</a>
+</td>
+<td align="center">
+<a href="https://github.com/FlxPo">
+<img src="https://avatars.githubusercontent.com/u/5145583?u=cbd02ee0a0fa0447429f38bd7e3a1da57c841239&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3AFlxPo">FlxPo</a>
 </td>
 </tr>
 
