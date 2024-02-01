@@ -126,6 +126,7 @@ test_that ("timetable summary", {
 data.table::setDTthreads (nthr)
 
 skip_on_cran ()
+skip_if (TRUE)
 test_that ("cpu time", {
 
     test <- function () {

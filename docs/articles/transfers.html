@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.006</span>
       </span>
     </div>
 
@@ -73,7 +73,7 @@
                         <h4 data-toc-skip class="author">Mark
 Padgham</h4>
             
-            <h4 data-toc-skip class="date">2024-01-31</h4>
+            <h4 data-toc-skip class="date">2024-02-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/gtfsrouter/blob/HEAD/vignettes/transfers.Rmd" class="external-link"><code>vignettes/transfers.Rmd</code></a></small>
       <div class="hidden name"><code>transfers.Rmd</code></div>
@@ -103,6 +103,7 @@ session.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span></span></code></pre></div>
 <pre><code><span><span class="co">##       from_stop_id   to_stop_id transfer_type min_transfer_time from_route_id</span></span>
+<span><span class="co">##             &lt;char&gt;       &lt;char&gt;         &lt;int&gt;             &lt;num&gt;        &lt;char&gt;</span></span>
 <span><span class="co">##    1: 000008010205 000008010205             2               300              </span></span>
 <span><span class="co">##    2: 000008010205 000008098205             2               300              </span></span>
 <span><span class="co">##    3: 000008010318 000008010318             2               300              </span></span>
@@ -115,6 +116,7 @@ session.</p>
 <span><span class="co">## 9832: 060230000099 060230000842             2               300              </span></span>
 <span><span class="co">## 9833: 060230000099 060230000099             2               180              </span></span>
 <span><span class="co">##       to_route_id from_trip_id to_trip_id</span></span>
+<span><span class="co">##            &lt;char&gt;        &lt;int&gt;      &lt;int&gt;</span></span>
 <span><span class="co">##    1:                       NA         NA</span></span>
 <span><span class="co">##    2:                       NA         NA</span></span>
 <span><span class="co">##    3:                       NA         NA</span></span>
@@ -311,9 +313,11 @@ extracted with the following lines:</p>
 <span><span class="va">stns</span> <span class="op">&lt;-</span> <span class="va">r</span><span class="op">$</span><span class="va">stop_id</span> <span class="op">[</span><span class="fl">3</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span> <span class="co"># the transfer station IDs</span></span>
 <span><span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span> <span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/match.html" class="external-link">match</a></span> <span class="op">(</span><span class="va">stns</span>, <span class="va">gtfs</span><span class="op">$</span><span class="va">stops</span><span class="op">$</span><span class="va">stop_id</span><span class="op">)</span>, <span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">##         stop_id stop_code                        stop_name stop_desc stop_lat</span></span>
+<span><span class="co">##          &lt;char&gt;    &lt;char&gt;                           &lt;char&gt;    &lt;char&gt;    &lt;num&gt;</span></span>
 <span><span class="co">## 1: 060100003723            S+U Alexanderplatz Bhf (Berlin)           52.52151</span></span>
 <span><span class="co">## 2: 070201083602           S+U Alexanderplatz (Berlin) [U8]           52.52162</span></span>
 <span><span class="co">##    stop_lon location_type parent_station wheelchair_boarding</span></span>
+<span><span class="co">##       &lt;num&gt;         &lt;int&gt;         &lt;char&gt;               &lt;int&gt;</span></span>
 <span><span class="co">## 1: 13.41127             0   900000100003                  NA</span></span>
 <span><span class="co">## 2: 13.41212             0   900000100705                  NA</span></span></code></pre>
 <p>The distance between them is:</p>

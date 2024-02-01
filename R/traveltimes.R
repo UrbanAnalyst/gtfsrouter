@@ -104,6 +104,8 @@ gtfs_traveltimes <- function (gtfs,
 
     # C++ matrix is 1-indexed, so discard first row (= 0)
     stns <- stns [-1, ]
+    index <- which (stns [, 1] < 0 | stns [, 1] == .Machine$integer.max)
+    stns [index, ] <- NA
     stns <- data.frame (
         start_time = stns [, 1],
         duration = stns [, 2],
@@ -114,7 +116,7 @@ gtfs_traveltimes <- function (gtfs,
         stop_lat = gtfs$stops$stop_lat,
         stringsAsFactors = FALSE
     )
-    stns <- stns [which (stns$duration < .Machine$integer.max), ]
+    stns <- stns [which (!is.na (stns$start_time)), ]
     if (nrow (stns) > 0) {
         stns$start_time <- format_time (stns$start_time)
         stns$duration <- format_time (stns$duration)
