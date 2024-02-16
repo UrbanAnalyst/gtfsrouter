@@ -2,8 +2,8 @@
 % Please edit documentation in R/gtfsrouter-package.R
 \docType{package}
 \name{gtfsrouter}
-\alias{gtfsrouter}
 \alias{gtfsrouter-package}
+\alias{gtfsrouter}
 \title{gtfsrouter}
 \description{
 Routing engine for GTFS (General Transit Feed Specification) data, including

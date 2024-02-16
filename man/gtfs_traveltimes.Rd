@@ -94,7 +94,7 @@ data.table::setDTthreads (nthr)
 }
 \seealso{
 Other main: 
-\code{\link{gtfs_route_headway}()},
-\code{\link{gtfs_route}()}
+\code{\link{gtfs_route}()},
+\code{\link{gtfs_route_headway}()}
 }
 \concept{main}
