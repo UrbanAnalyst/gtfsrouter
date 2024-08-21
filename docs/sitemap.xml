@@ -1,72 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/gtfsrouter.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/transfers.html</loc>
-  </url>
-  <url>
-    <loc>/articles/traveltimes.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/berlin_gtfs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/berlin_gtfs_to_zip.html</loc>
-  </url>
-  <url>
-    <loc>/reference/extract_gtfs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/frequencies_to_stop_times.html</loc>
-  </url>
-  <url>
-    <loc>/reference/go_home.html</loc>
-  </url>
-  <url>
-    <loc>/reference/go_to_work.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gtfs_route.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gtfs_route_headway.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gtfs_timetable.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gtfs_transfer_table.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gtfs_traveltimes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gtfsrouter.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/process_gtfs_local.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.gtfs.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/articles/gtfsrouter.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/transfers.html</loc></url>
+<url><loc>/articles/traveltimes.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/berlin_gtfs.html</loc></url>
+<url><loc>/reference/berlin_gtfs_to_zip.html</loc></url>
+<url><loc>/reference/extract_gtfs.html</loc></url>
+<url><loc>/reference/frequencies_to_stop_times.html</loc></url>
+<url><loc>/reference/go_home.html</loc></url>
+<url><loc>/reference/go_to_work.html</loc></url>
+<url><loc>/reference/gtfs_route.html</loc></url>
+<url><loc>/reference/gtfs_route_headway.html</loc></url>
+<url><loc>/reference/gtfs_timetable.html</loc></url>
+<url><loc>/reference/gtfs_transfer_table.html</loc></url>
+<url><loc>/reference/gtfs_traveltimes.html</loc></url>
+<url><loc>/reference/gtfsrouter.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/process_gtfs_local.html</loc></url>
+<url><loc>/reference/summary.gtfs.html</loc></url>
 </urlset>
+
