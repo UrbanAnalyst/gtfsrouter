@@ -8,8 +8,8 @@ nthr <- data.table::setDTthreads (1L)
 test_that ("convert-time", {
 
     berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
     expect_silent (gt <- gtfs_timetable (g, quiet = TRUE))
     days <- c (
@@ -103,8 +103,8 @@ test_that ("convert-time", {
 
 test_that ("day param", {
     berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
     expect_silent (gt <- gtfs_timetable (g, quiet = TRUE))
     expect_silent (gt <- gtfs_timetable (g, 1, quiet = FALSE))
@@ -122,8 +122,8 @@ test_that ("day param", {
 
 test_that ("date param", {
     berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
 
     # date not in feed
