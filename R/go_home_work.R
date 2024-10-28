@@ -180,6 +180,22 @@ get_rds_name <- function (f) {
 #'
 #' @family additional
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' # For general use, please set these three variables:
+#' Sys.setenv ("gtfs_home" = "<my home station>")
+#' Sys.setenv ("gtfs_work" = "<my work station>")
+#' Sys.setenv ("gtfs_data" = "/full/path/to/gtfs.zip")
+#'
+#' # The following illustrate use with sample data bundled with package
+#' Sys.setenv ("gtfs_home" = "Tempelhof")
+#' Sys.setenv ("gtfs_work" = "Alexanderplatz")
+#' Sys.setenv ("gtfs_data" = file.path (tempdir (), "vbb.zip"))
+#' process_gtfs_local ()
+#' # next available service from current system time:
+#' go_home ()
+#' }
 process_gtfs_local <- function (expand = 2) {
 
     vars <- get_envvars ()

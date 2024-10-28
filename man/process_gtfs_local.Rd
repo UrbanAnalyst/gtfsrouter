@@ -20,6 +20,22 @@ Process a local GTFS data set with environmental variables described in
 \link{go_home} into a condensed version for use in \link{go_home} and
 \code{go_to_work} functions.
 }
+\examples{
+\dontrun{
+# For general use, please set these three variables:
+Sys.setenv ("gtfs_home" = "<my home station>")
+Sys.setenv ("gtfs_work" = "<my work station>")
+Sys.setenv ("gtfs_data" = "/full/path/to/gtfs.zip")
+
+# The following illustrate use with sample data bundled with package
+Sys.setenv ("gtfs_home" = "Tempelhof")
+Sys.setenv ("gtfs_work" = "Alexanderplatz")
+Sys.setenv ("gtfs_data" = file.path (tempdir (), "vbb.zip"))
+process_gtfs_local ()
+# next available service from current system time:
+go_home ()
+}
+}
 \seealso{
 Other additional: 
 \code{\link{go_home}()},
