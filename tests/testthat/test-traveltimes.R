@@ -6,7 +6,7 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
     identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
 
 berlin_gtfs_to_zip ()
-f <- file.path (tempdir (), "vbb.zip")
+f <- fs::path (fs::path_temp (), "vbb.zip")
 g <- extract_gtfs (f, quiet = TRUE)
 g2 <- gtfs_timetable (g, day = 3, quiet = TRUE)
 

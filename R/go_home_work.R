@@ -104,7 +104,7 @@ go_home_work <- function (home = TRUE, wait, start_time) {
 
     vars <- get_envvars ()
     fname <- get_rds_name (vars$file)
-    if (!file.exists (fname)) {
+    if (!fs::file_exists (fname)) {
         stop (
             "This function requires the GTFS data to be pre-processed ",
             "with 'process_gtfs_local'."
@@ -145,7 +145,7 @@ get_envvars <- function () {
     }
 
     f <- (Sys.getenv ("gtfs_data"))
-    if (!file.exists (f)) {
+    if (!fs::file_exists (f)) {
         stop (
             "File ", f, " specified by environmental variable ",
             "'gtfs_data' does not exist"

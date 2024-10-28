@@ -7,7 +7,7 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
 
 test_that ("transfers works", {
     berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
+    f <- fs::path (fs::path_temp (), "vbb.zip")
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
 
     expect_silent (

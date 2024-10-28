@@ -89,7 +89,7 @@ unzip_gtfs <- function (filename, quiet = FALSE) {
         )
     }
 
-    flist <- utils::unzip (filename, exdir = tempdir ())
+    flist <- utils::unzip (filename, exdir = fs::path_temp ())
 
     if (!quiet) {
         message ("\r", cli::col_green (
@@ -106,7 +106,7 @@ check_extract_pars <- function (filename, stn_suffixes) {
     if (is.null (filename)) {
         stop ("filename must be given")
     }
-    if (!file.exists (filename)) {
+    if (!fs::file_exists (filename)) {
         stop ("filename ", filename, " does not exist")
     }
     if (!(is.null (stn_suffixes) || is.character (stn_suffixes))) {
@@ -191,7 +191,7 @@ extract_objs_into_env <- function (flist, quiet = FALSE) {
             value = fout,
             envir = e
         )
-        chk <- file.remove (flist [f]) # nolint
+        chk <- fs::file_delete (flist [f]) # nolint
     }
 
     if (!quiet) {

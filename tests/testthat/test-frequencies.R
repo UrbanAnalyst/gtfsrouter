@@ -10,7 +10,7 @@ test_that ("not gtfs", {
 
 test_that ("gtfs without frequencies", {
     berlin_gtfs_to_zip ()
-    tempfiles <- list.files (tempdir (), full.names = TRUE)
+    tempfiles <- list.files (fs::path_temp (), full.names = TRUE)
     filename <- tempfiles [grep ("vbb.zip", tempfiles)]
     gtfs <- extract_gtfs (filename)
 
@@ -21,7 +21,7 @@ test_that ("gtfs without frequencies", {
 
 test_that ("gtfs with empty frequencies", {
     berlin_gtfs_to_zip ()
-    tempfiles <- list.files (tempdir (), full.names = TRUE)
+    tempfiles <- list.files (fs::path_temp (), full.names = TRUE)
     filename <- tempfiles [grep ("vbb.zip", tempfiles)]
     gtfs <- extract_gtfs (filename)
 
@@ -41,7 +41,7 @@ test_that ("gtfs with empty frequencies", {
 
 test_that ("frequencies with missing columns", {
     berlin_gtfs_to_zip ()
-    tempfiles <- list.files (tempdir (), full.names = TRUE)
+    tempfiles <- list.files (fs::path_temp (), full.names = TRUE)
     filename <- tempfiles [grep ("vbb.zip", tempfiles)]
     gtfs <- extract_gtfs (filename)
 
@@ -63,7 +63,7 @@ test_that ("frequencies with missing columns", {
 
 test_that ("only routes with frequencies to stop_times", {
     f <- berlin_gtfs_to_zip ()
-    expect_true (file.exists (f))
+    expect_true (fs::file_exists (f))
     gtfs <- extract_gtfs (f)
 
     # filter only one route from gtfs
@@ -158,8 +158,8 @@ test_that ("only routes with frequencies to stop_times", {
 
 test_that ("gtfs with mixed frequencies", {
     berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     gtfs <- extract_gtfs (f)
 
     # filter two routes: U1 - only one trip and U3 with all trips
@@ -215,7 +215,7 @@ test_that ("gtfs with mixed frequencies", {
 
 test_that ("gtfs frequencies in gtfs_route", {
     f <- berlin_gtfs_to_zip ()
-    expect_true (file.exists (f))
+    expect_true (fs::file_exists (f))
     gtfs <- extract_gtfs (f)
 
     gtfs$routes <- gtfs$routes [route_short_name %in% c ("U1", "U6")]

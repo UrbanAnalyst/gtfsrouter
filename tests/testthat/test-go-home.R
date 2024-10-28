@@ -14,7 +14,7 @@ test_that ("go home set up", {
             "This function requires environmental variables"
         )
     }
-    f <- file.path (tempdir (), "doesnotexist.zip")
+    f <- fs::path (fs::path_temp (), "doesnotexist.zip")
     Sys.setenv ("gtfs_home" = "Innsbrucker Platz")
     Sys.setenv ("gtfs_work" = "Alexanderplatz")
     Sys.setenv ("gtfs_data" = f)
@@ -29,7 +29,7 @@ test_that ("go home set up", {
         )
     }
     berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
+    f <- fs::path (fs::path_temp (), "vbb.zip")
     Sys.setenv ("gtfs_data" = f)
 
     expect_error (
