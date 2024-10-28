@@ -31,6 +31,13 @@ headway_times <- function (gtfs, start_stns, end_stns, start_time) {
 #' services across a single 24-hour period
 #' @family main
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' path <- berlin_gtfs_to_zip ()
+#' gtfs <- extract_gtfs (path)
+#' gtfs_route_headway (gtfs, from = "Tegel", to = "Berlin Hauptbahnhof")
+#' }
 gtfs_route_headway <- function (gtfs, from, to,
                                 from_to_are_ids = FALSE,
                                 grep_fixed = TRUE,
