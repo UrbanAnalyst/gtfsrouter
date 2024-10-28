@@ -6,6 +6,12 @@
 #' @return Path to newly created zip file
 #' @family extract
 #' @export
+#'
+#' @examples
+#' path <- berlin_gtfs_to_zip ()
+#' gtfs <- extract_gtfs (path)
+#' gtfs <- gtfs_timetable (gtfs, day = "Wed") # A pre-processing step to speed up queries
+#' gtfs_route (gtfs, from = "Tegel", to = "Berlin Hauptbahnhof", start_time = 12 * 3600)
 berlin_gtfs_to_zip <- function () {
     flist <- c (
         "calendar.txt",
