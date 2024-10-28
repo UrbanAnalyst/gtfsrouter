@@ -34,6 +34,9 @@
 #' largely unavoidable.
 #'
 #' @return A `data.frame` specifying the next available route from work to home.
+#' @family additional
+#' @export
+#'
 #' @examples
 #' \dontrun{
 #' # For general use, please set these three variables:
@@ -55,8 +58,6 @@
 #' go_home ()
 #' go_home (3)
 #' }
-#' @family additional
-#' @export
 go_home <- function (wait = 0, start_time) {
 
     go_home_work (home = TRUE, wait = wait, start_time)
@@ -72,6 +73,9 @@ go_home <- function (wait = 0, start_time) {
 #' @inherit go_home return details
 #'
 #' @return A `data.frame` specifying the next available route from work to home.
+#' @export
+#' @family additional
+#'
 #' @examples
 #' \dontrun{
 #' # For general use, please set these three variables:
@@ -93,8 +97,6 @@ go_home <- function (wait = 0, start_time) {
 #' go_to_work ()
 #' go_to_work (3)
 #' }
-#' @export
-#' @family additional
 go_to_work <- function (wait = 0, start_time) {
 
     go_home_work (home = FALSE, wait = wait, start_time)
