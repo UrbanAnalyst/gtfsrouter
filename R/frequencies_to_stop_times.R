@@ -12,6 +12,14 @@
 #'
 #' @family augment
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' # Presume an input feed has been created and includes a "frequencies" table:
+#' gtfs2 <- frequencies_to_stop_times (gtfs)
+#' # "gtfs2" will then have an expanded "stop_times" table, with all
+#' # "frequencies" entries converted to equivalent absolute stop times.
+#' }
 frequencies_to_stop_times <- function (gtfs) {
 
     # check if gtfs is a gtfs class of object

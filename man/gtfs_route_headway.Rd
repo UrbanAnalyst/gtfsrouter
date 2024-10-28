@@ -42,6 +42,13 @@ services across a single 24-hour period
 Calculate a vector of headway values -- that is, time intervals between
 consecutive services -- for all routes between two specified stations.
 }
+\examples{
+\dontrun{
+path <- berlin_gtfs_to_zip ()
+gtfs <- extract_gtfs (path)
+gtfs_route_headway (gtfs, from = "Tegel", to = "Berlin Hauptbahnhof")
+}
+}
 \seealso{
 Other main: 
 \code{\link{gtfs_route}()},
