@@ -18,7 +18,7 @@ a file named "vbb.zip" to tempdir().'><!-- mathjax --><script src="https://cdnjs
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.018</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.029</span>
       </span>
     </div>
 
@@ -72,6 +72,60 @@ a file named "vbb.zip" to <code><a href="https://rdrr.io/r/base/tempfile.html" c
 <code><a href="gtfs_timetable.html">gtfs_timetable</a>()</code></p></div>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">path</span> <span class="op">&lt;-</span> <span class="fu">berlin_gtfs_to_zip</span> <span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">path</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Unzipping GTFS archive</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Unzipped GTFS archive  </span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Extracting GTFS feed</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Extracted GTFS feed </span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Converting stop times to seconds</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Converted stop times to seconds </span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ▶<span style="color: #00BB00;"> Converting transfer times to seconds</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔ Converted transfer times to seconds </span></span>
+<span class="r-in"><span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="gtfs_timetable.html">gtfs_timetable</a></span> <span class="op">(</span><span class="va">gtfs</span>, day <span class="op">=</span> <span class="st">"Wed"</span><span class="op">)</span> <span class="co"># A pre-processing step to speed up queries</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="gtfs_route.html">gtfs_route</a></span> <span class="op">(</span><span class="va">gtfs</span>, from <span class="op">=</span> <span class="st">"Tegel"</span>, to <span class="op">=</span> <span class="st">"Berlin Hauptbahnhof"</span>, start_time <span class="op">=</span> <span class="fl">12</span> <span class="op">*</span> <span class="fl">3600</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    route_name        trip_name                        stop_name arrival_time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          U6 U Alt-Mariendorf             U Alt-Tegel (Berlin)     12:02:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          U6 U Alt-Mariendorf           U Borsigwerke (Berlin)     12:03:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          U6 U Alt-Mariendorf       U Holzhauser Str. (Berlin)     12:05:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          U6 U Alt-Mariendorf              U Otisstr. (Berlin)     12:06:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          U6 U Alt-Mariendorf       U Scharnweberstr. (Berlin)     12:07:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          U6 U Alt-Mariendorf U Kurt-Schumacher-Platz (Berlin)     12:09:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          U6 U Alt-Mariendorf     U Afrikanische Str. (Berlin)     12:10:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          U6 U Alt-Mariendorf              U Rehberge (Berlin)     12:11:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          U6 U Alt-Mariendorf               U Seestr. (Berlin)     12:13:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         U6 U Alt-Mariendorf          U Leopoldplatz (Berlin)     12:15:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11         U6 U Alt-Mariendorf             S+U Wedding (Berlin)     12:16:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12         U6 U Alt-Mariendorf  U Reinickendorfer Str. (Berlin)     12:17:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13         U6 U Alt-Mariendorf     U Schwartzkopffstr. (Berlin)     12:18:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         U6 U Alt-Mariendorf      U Naturkundemuseum (Berlin)     12:19:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15         U6 U Alt-Mariendorf     U Oranienburger Tor (Berlin)     12:21:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16         U6 U Alt-Mariendorf   S+U Friedrichstr. Bhf (Berlin)     12:22:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17         S3    S Spandau Bhf   S+U Friedrichstr. Bhf (Berlin)     12:26:54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18         S3    S Spandau Bhf          S+U Berlin Hauptbahnhof     12:29:36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    departure_time</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        12:02:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        12:03:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        12:05:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        12:06:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        12:07:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        12:09:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        12:10:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        12:11:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        12:13:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       12:15:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       12:16:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       12:17:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       12:18:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14       12:19:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       12:21:00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       12:22:30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17       12:27:42</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18       12:30:12</span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

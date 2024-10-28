@@ -1,4 +1,3 @@
-
 headway_times <- function (gtfs, start_stns, end_stns, start_time) {
 
     from_to_are_ids <- include_ids <- FALSE # nolint
@@ -14,7 +13,11 @@ headway_times <- function (gtfs, start_stns, end_stns, start_time) {
         max_transfers
     )
 
-    return (range (route$time))
+    ret <- NULL
+    if (nrow (route) > 0L) {
+        ret <- range (route$time)
+    }
+    return (ret)
 }
 
 #' Route headway
@@ -28,12 +31,23 @@ headway_times <- function (gtfs, start_stns, end_stns, start_time) {
 #' services across a single 24-hour period
 #' @family main
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' path <- berlin_gtfs_to_zip ()
+#' gtfs <- extract_gtfs (path)
+#' gtfs_route_headway (gtfs, from = "Tegel", to = "Berlin Hauptbahnhof")
+#' }
 gtfs_route_headway <- function (gtfs, from, to,
                                 from_to_are_ids = FALSE,
                                 grep_fixed = TRUE,
                                 quiet = FALSE) {
 
     departure_time <- NULL # suppress no visible binding note # nolint
+
+    if (!"timetable" %in% names (gtfs)) {
+        gtfs <- gtfs_timetable (gtfs, quiet = quiet)
+    }
 
     start_stns <- from_to_to_stations (
         from,
@@ -60,6 +74,9 @@ gtfs_route_headway <- function (gtfs, from, to,
         times <- headway_times (gtfs, start_stns, end_stns, start_time)
         heads <- rbind (heads, unname (times))
         start_time <- times [1] + 1
+        if (length (start_time) == 0) {
+            start_time <- 24 * 3600
+        }
         if (!quiet) {
             utils::setTxtProgressBar (pb, start_time / (24 * 3600))
         }

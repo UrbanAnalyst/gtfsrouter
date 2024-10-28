@@ -18,7 +18,7 @@ used for routing."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/aja
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.018</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2.029</span>
       </span>
     </div>
 
@@ -80,6 +80,16 @@ to equivalent 'arrival_time' and 'departure_time' values in <code>stop_times</co
 <code><a href="gtfs_transfer_table.html">gtfs_transfer_table</a>()</code></p></div>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co"># Presume an input feed has been created and includes a "frequencies" table:</span></span></span>
+<span class="r-in"><span><span class="va">gtfs2</span> <span class="op">&lt;-</span> <span class="fu">frequencies_to_stop_times</span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># "gtfs2" will then have an expanded "stop_times" table, with all</span></span></span>
+<span class="r-in"><span><span class="co"># "frequencies" entries converted to equivalent absolute stop times.</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+</code></pre></div>
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

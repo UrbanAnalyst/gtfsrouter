@@ -13,6 +13,12 @@ Path to newly created zip file
 Write a zip archive of the internal package data, \link{berlin_gtfs} to
 a file named "vbb.zip" to \code{tempdir()}.
 }
+\examples{
+path <- berlin_gtfs_to_zip ()
+gtfs <- extract_gtfs (path)
+gtfs <- gtfs_timetable (gtfs, day = "Wed") # A pre-processing step to speed up queries
+gtfs_route (gtfs, from = "Tegel", to = "Berlin Hauptbahnhof", start_time = 12 * 3600)
+}
 \seealso{
 Other extract: 
 \code{\link{extract_gtfs}()},
