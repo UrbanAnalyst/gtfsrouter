@@ -17,6 +17,14 @@ to equivalent 'arrival_time' and 'departure_time' values in \code{stop_times}.
 Convert a GTFS 'frequencies' table to equivalent 'stop_times' that can be
 used for routing.
 }
+\examples{
+\dontrun{
+# Presume an input feed has been created and includes a "frequencies" table:
+gtfs2 <- frequencies_to_stop_times (gtfs)
+# "gtfs2" will then have an expanded "stop_times" table, with all
+# "frequencies" entries converted to equivalent absolute stop times.
+}
+}
 \seealso{
 Other augment: 
 \code{\link{gtfs_transfer_table}()}
