@@ -130,9 +130,9 @@ dl_net <- function (gtfs) {
     stops <- gtfs$stops [, c ("stop_lon", "stop_lat")]
     requireNamespace ("digest")
     hash <- digest::digest (stops)
-    net_name <- file.path (tempdir (), paste0 ("net", hash, ".Rds"))
+    net_name <- fs::path (fs::path_temp (), paste0 ("net", hash, ".Rds"))
 
-    if (!file.exists (net_name)) {
+    if (!fs::file_exists (net_name)) {
         requireNamespace ("dodgr")
         net <- dodgr::dodgr_streetnet_sc (pts = stops)
         saveRDS (net, file = net_name)

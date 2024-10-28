@@ -6,13 +6,13 @@ test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
 nthr <- data.table::setDTthreads (1L)
 
 test_that ("extract non gtfs", {
-    f <- file.path (tempdir (), "junk.txt")
+    f <- fs::path (fs::path_temp (), "junk.txt")
     con <- file (f)
     writeLines ("blah", con)
     close (con)
-    fz <- file.path (tempdir (), "vbb.zip")
-    if (file.exists (fz)) {
-        chk <- file.remove (fz)
+    fz <- fs::path (fs::path_temp (), "vbb.zip")
+    if (fs::file_exists (fz)) {
+        chk <- fs::file_delete (fz)
     }
     chk <- zip (fz, file = f)
 
@@ -20,27 +20,27 @@ test_that ("extract non gtfs", {
     if (test_all) { # windows paths get mucked up
         expect_error (g <- extract_gtfs (fz), msg)
     }
-    invisible (file.remove (fz))
+    invisible (fs::file_delete (fz))
 })
 
 test_that ("extract", {
     berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     expect_message (g <- extract_gtfs (f, quiet = FALSE))
 
     # remove calendar and transfers from feed:
-    unzip (file.path (tempdir (), "vbb.zip"),
-        exdir = tempdir (),
+    unzip (fs::path (fs::path_temp (), "vbb.zip"),
+        exdir = fs::path_temp (),
         junkpaths = TRUE
     )
-    froutes <- file.path (tempdir (), "routes.txt")
-    ftrips <- file.path (tempdir (), "trips.txt")
-    fstop_times <- file.path (tempdir (), "stop_times.txt")
-    fstops <- file.path (tempdir (), "stops.txt")
-    ftransfers <- file.path (tempdir (), "transfers.txt")
-    fcalendar <- file.path (tempdir (), "calendar.txt")
-    f_cut <- file.path (tempdir (), "vbb_cut.zip")
+    froutes <- fs::path (fs::path_temp (), "routes.txt")
+    ftrips <- fs::path (fs::path_temp (), "trips.txt")
+    fstop_times <- fs::path (fs::path_temp (), "stop_times.txt")
+    fstops <- fs::path (fs::path_temp (), "stops.txt")
+    ftransfers <- fs::path (fs::path_temp (), "transfers.txt")
+    fcalendar <- fs::path (fs::path_temp (), "calendar.txt")
+    f_cut <- fs::path (fs::path_temp (), "vbb_cut.zip")
 
     chk <- zip (f_cut,
         file = c (
@@ -62,7 +62,7 @@ test_that ("extract", {
     names (vals) <- nms
     expect_identical (vals, vapply (g, nrow, numeric (1)))
     expect_true (!"transfers" %in% names (vals))
-    invisible (file.remove (f_cut))
+    invisible (fs::file_delete (f_cut))
 
     chk <- zip (f_cut,
         file = c (
@@ -82,13 +82,13 @@ test_that ("extract", {
     names (vals) <- nms
     expect_identical (vals, vapply (g, nrow, numeric (1)))
     expect_true (!"calendar" %in% names (vals))
-    invisible (file.remove (f_cut))
+    invisible (fs::file_delete (f_cut))
 })
 
 test_that ("summary", {
     berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
 
     x <- capture.output (summary (g))
@@ -103,8 +103,8 @@ test_that ("summary", {
 
 test_that ("timetable summary", {
     berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
     gt <- gtfs_timetable (g, day = 3)
 
@@ -131,7 +131,7 @@ test_that ("cpu time", {
 
     test <- function () {
         berlin_gtfs_to_zip ()
-        f <- file.path (tempdir (), "vbb.zip")
+        f <- fs::path (fs::path_temp (), "vbb.zip")
         gtfs <- extract_gtfs (f)
     }
     st <- system.time (test ())

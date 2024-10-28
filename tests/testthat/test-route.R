@@ -14,14 +14,14 @@ test_that ("extract", {
         g <- extract_gtfs ("non-existent-file.zip"),
         "filename non-existent-file.zip does not exist"
     )
-    f <- file.path (tempdir (), "junk")
+    f <- fs::path (fs::path_temp (), "junk")
     cat ("junk", file = f)
     # if (test_all)
     #    expect_error (g <- extract_gtfs (f))
 
     berlin_gtfs_to_zip ()
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
     expect_is (g, c ("gtfs", "list"))
     expect_true (all (sapply (g, function (i) {
@@ -33,12 +33,12 @@ test_that ("extract", {
     )
     expect_equal (names (g), nms)
 
-    files <- file.path (tempdir (), paste0 (nms, ".txt"))
+    files <- fs::path (fs::path_temp (), paste0 (nms, ".txt"))
     # files <- files [-1]
     for (f in files) {
         writeLines ("a", f)
     }
-    f2 <- file.path (tempdir (), "vbb2.zip")
+    f2 <- fs::path (fs::path_temp (), "vbb2.zip")
     zip (f2, files)
     if (test_all) {
         expect_error (
@@ -52,8 +52,8 @@ test_that ("extract", {
 })
 
 test_that ("timetable", {
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
     expect_silent (gt <- gtfs_timetable (g, day = 3, quiet = TRUE))
     expect_false (identical (g, gt))
@@ -89,8 +89,8 @@ test_that ("timetable", {
 
 test_that ("route", {
 
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
     expect_silent (gt <- gtfs_timetable (g, day = 3, quiet = TRUE))
     from <- "Schonlein"
@@ -145,8 +145,8 @@ test_that ("route", {
 })
 
 test_that ("route without timetable", {
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
     expect_silent (gt <- gtfs_timetable (g, day = 3, quiet = TRUE))
     from <- "Schonlein"
@@ -167,8 +167,8 @@ test_that ("route without timetable", {
 })
 
 test_that ("route_pattern", {
-    f <- file.path (tempdir (), "vbb.zip")
-    expect_true (file.exists (f))
+    f <- fs::path (fs::path_temp (), "vbb.zip")
+    expect_true (fs::file_exists (f))
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
     expect_silent (gt1 <- gtfs_timetable (g,
         day = 3,
@@ -224,7 +224,7 @@ test_that ("route_pattern", {
 })
 
 test_that ("earliest_arrival", {
-    f <- file.path (tempdir (), "vbb.zip")
+    f <- fs::path (fs::path_temp (), "vbb.zip")
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
     from <- "Schonlein" # U-bahn station, not "S"
     to <- "Berlin Hauptbahnhof"
@@ -246,7 +246,7 @@ test_that ("earliest_arrival", {
 })
 
 test_that ("max_transfers", {
-    f <- file.path (tempdir (), "vbb.zip")
+    f <- fs::path (fs::path_temp (), "vbb.zip")
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
     from <- "Innsbrucker Platz" # U-bahn station, not "S"
     to <- "Alexanderplatz"
@@ -267,7 +267,7 @@ test_that ("max_transfers", {
 })
 
 test_that ("multiple routes", {
-    f <- file.path (tempdir (), "vbb.zip")
+    f <- fs::path (fs::path_temp (), "vbb.zip")
     expect_silent (g <- extract_gtfs (f, quiet = TRUE))
     from <- c ("Schonlein", "Innsbrucker Platz")
     to <- c ("Berlin Hauptbahnhof", "Alexanderplatz")
