@@ -35,6 +35,10 @@ gtfs_route_headway <- function (gtfs, from, to,
 
     departure_time <- NULL # suppress no visible binding note # nolint
 
+    if (!"timetable" %in% names (gtfs)) {
+        gtfs <- gtfs_timetable (gtfs, quiet = quiet)
+    }
+
     start_stns <- from_to_to_stations (
         from,
         gtfs,
