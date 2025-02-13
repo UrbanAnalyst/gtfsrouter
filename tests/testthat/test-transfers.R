@@ -2,9 +2,6 @@ context ("transfers")
 
 nthr <- data.table::setDTthreads (1L)
 
-test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
-    identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
-
 test_that ("transfers works", {
     berlin_gtfs_to_zip ()
     f <- fs::path (fs::path_temp (), "vbb.zip")

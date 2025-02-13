@@ -2,8 +2,8 @@ context ("go home")
 
 nthr <- data.table::setDTthreads (1L)
 
-test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") |
-    identical (Sys.getenv ("GITHUB_WORKFLOW"), "test-coverage"))
+test_all <- (identical (Sys.getenv ("MPADGE_LOCAL"), "true") ||
+    identical (Sys.getenv ("GITHUB_JOB"), "test-coverage"))
 
 test_that ("go home set up", {
     if (Sys.getenv ("gtfs_home") == "" |
