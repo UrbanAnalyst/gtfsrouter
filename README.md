@@ -164,30 +164,23 @@ entries, to enable the feed to be used for routing.
 
 ## Contributors
 
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the
-[`allcontributors` package](https://github.com/ropensci/allcontributors)
-following the [all-contributors](https://allcontributors.org)
-specification. Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropensci/allcontributors) following the [allcontributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
 
 ### Code
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
 <img src="https://avatars.githubusercontent.com/u/6697851?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/commits?author=mpadge">mpadge</a>
-</td>
-<td align="center">
-<a href="https://github.com/AlexandraKapp">
-<img src="https://avatars.githubusercontent.com/u/18367515?v=4" width="100px;" alt=""/>
-</a><br>
-<a href="https://github.com/UrbanAnalyst/gtfsrouter/commits?author=AlexandraKapp">AlexandraKapp</a>
 </td>
 <td align="center">
 <a href="https://github.com/stmarcin">
@@ -208,11 +201,14 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/commits?author=polettif">polettif</a>
 </td>
 </tr>
+
 </table>
+
 
 ### Issue Authors
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/sridharraman">
@@ -251,13 +247,21 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Arafapereirabr">rafapereirabr</a>
 </td>
 <td align="center">
+<a href="https://github.com/AlexandraKapp">
+<img src="https://avatars.githubusercontent.com/u/18367515?u=724495e943af19d2ee3fd5358de2c543fb9369d0&v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3AAlexandraKapp">AlexandraKapp</a>
+</td>
+</tr>
+
+
+<tr>
+<td align="center">
 <a href="https://github.com/dcooley">
 <img src="https://avatars.githubusercontent.com/u/8093396?u=2c8d9162f246d90d433034d212b29a19e0f245c1&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Adcooley">dcooley</a>
 </td>
-</tr>
-<tr>
 <td align="center">
 <a href="https://github.com/bernd886">
 <img src="https://avatars.githubusercontent.com/u/56547410?v=4" width="100px;" alt=""/>
@@ -278,7 +282,7 @@ specification. Contributions of any kind are welcome!
 </td>
 <td align="center">
 <a href="https://github.com/szaboildi">
-<img src="https://avatars.githubusercontent.com/u/10348398?v=4" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/10348398?u=671b1f56067fa883440aeb24857ee2e14d3b43f9&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Aszaboildi">szaboildi</a>
 </td>
@@ -294,14 +298,16 @@ specification. Contributions of any kind are welcome!
 </a><br>
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Ajh0ker">jh0ker</a>
 </td>
+</tr>
+
+
+<tr>
 <td align="center">
 <a href="https://github.com/zamirD123">
 <img src="https://avatars.githubusercontent.com/u/69770500?v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3AzamirD123">zamirD123</a>
 </td>
-</tr>
-<tr>
 <td align="center">
 <a href="https://github.com/viajerus">
 <img src="https://avatars.githubusercontent.com/u/63015973?u=e85734d18801b607316ea25b24624da6762862c3&v=4" width="100px;" alt=""/>
@@ -327,17 +333,36 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Apteridin">pteridin</a>
 </td>
 <td align="center">
+<a href="https://github.com/github-actions">
+<img src="https://avatars.githubusercontent.com/in/15368?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Agithub-actions">github-actions</a>
+</td>
+<td align="center">
 <a href="https://github.com/FlxPo">
 <img src="https://avatars.githubusercontent.com/u/5145583?u=cbd02ee0a0fa0447429f38bd7e3a1da57c841239&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3AFlxPo">FlxPo</a>
 </td>
 </tr>
+
+
+<tr>
+<td align="center">
+<a href="https://github.com/Tom-NutsOne">
+<img src="https://avatars.githubusercontent.com/u/173142362?v=4" width="100px;" alt=""/>
+</a><br>
+<a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3ATom-NutsOne">Tom-NutsOne</a>
+</td>
+</tr>
+
 </table>
+
 
 ### Issue Contributors
 
 <table>
+
 <tr>
 <td align="center">
 <a href="https://github.com/tbuckl">
@@ -347,13 +372,13 @@ specification. Contributions of any kind are welcome!
 </td>
 <td align="center">
 <a href="https://github.com/tuesd4y">
-<img src="https://avatars.githubusercontent.com/u/13107179?u=cfcc7852d1bed6e2b17fa3f985cebf743c43b299&v=4" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/13107179?u=c55693d8de75f1d01b941ab6541b03a8c1ddc08b&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+commenter%3Atuesd4y">tuesd4y</a>
 </td>
 <td align="center">
 <a href="https://github.com/Robinlovelace">
-<img src="https://avatars.githubusercontent.com/u/1825120?u=461318c239e721dc40668e4b0ce6cc47731328ac&v=4" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/1825120?u=4b78d134ed1814b0677455f45d932b3b4a6ba3a5&v=4" width="100px;" alt=""/>
 </a><br>
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+commenter%3ARobinlovelace">Robinlovelace</a>
 </td>
@@ -376,7 +401,9 @@ specification. Contributions of any kind are welcome!
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+commenter%3Ahansmib">hansmib</a>
 </td>
 </tr>
+
 </table>
+
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
