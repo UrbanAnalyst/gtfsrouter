@@ -158,7 +158,9 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
 
     # calendar.txt may be omitted if "calendar_dates" contains all days of
     # service.
-    if (!"calendar" %in% names (gtfs)) {
+    service_ids <- NULL
+
+    if ("calendar_dates" %in% names (gtfs)) {
 
         requireNamespace ("lubridate")
         dates <- strptime (gtfs$calendar_dates$date, "%Y%m%d")
@@ -168,18 +170,20 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
         index <- which (weekdays == substring (day, 1, 3))
         service_ids <- unique (gtfs$calendar_dates$service_id [index])
 
-    } else {
-
+    }
+    if ("calendar" %in% names (gtfs)) {
         # Find indices of all services on nominated days. Uses DT "fast
         # subsets", from "Secondary indices" vignette:
         service_id <- lapply (day, function (i) {
             gtfs$calendar [.(1L), on = i] [, service_id]
         })
-        service_ids <- sort (unique (do.call (c, service_id)))
+        service_ids <- c (service_ids, sort (unique (do.call (c, service_id))))
     }
     if (!is.character (service_ids)) {
         service_ids <- as.character (service_ids)
     }
+
+    service_ids <- unique (service_ids)
 
     gtfs$trips <- gtfs$trips [.(service_ids), on = "service_id"]
 
