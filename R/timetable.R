@@ -158,7 +158,7 @@ filter_by_day <- function (gtfs, day = NULL, quiet = FALSE) {
 
     # calendar.txt may be omitted if "calendar_dates" contains all days of
     # service.
-    if (!"calendar" %in% names (gtfs)) {
+    if ("calendar_dates" %in% names (gtfs)) {
 
         requireNamespace ("lubridate")
         dates <- strptime (gtfs$calendar_dates$date, "%Y%m%d")
