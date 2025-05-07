@@ -432,10 +432,13 @@ map_one_trip <- function (gtfs, route, route_name = "") {
     ]
     trip_stops <- trip_stops [which (trip_stops [, stop_id %in%
         trip_stop_id]), ]
-    trip_stop_departure <- format_time (trip_stops [, departure_time])
-    trip_stop_arrival <- format_time (trip_stops [, arrival_time])
+    trip_stop_departure <- trip_stop_arrival <- integer (0L)
+    if (nrow (trip_stops) > 0L) {
+        trip_stop_departure <- format_time (trip_stops [, departure_time])
+        trip_stop_arrival <- format_time (trip_stops [, arrival_time])
+    }
     data.frame (
-        trip_id = route_name,
+        trip_id = rep (route_name, length (trip_stop_names)),
         stop_name = trip_stop_names,
         stop_id = trip_stop_id,
         departure_time = trip_stop_departure,
