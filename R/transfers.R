@@ -159,6 +159,7 @@ get_transfer_list <- function (gtfs, d_limit) {
             d = dists [[i]]
         )
     }
+    transfers <- transfers[lens>0]
     transfers <- data.frame (do.call (rbind, transfers),
         stringsAsFactors = FALSE
     )
