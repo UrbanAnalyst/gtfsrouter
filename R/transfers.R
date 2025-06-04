@@ -152,17 +152,26 @@ get_transfer_list <- function (gtfs, d_limit) {
     transfers <- transfers [index]
 
     lens <- vapply (transfers, length, integer (1))
-    for (i in which (lens > 0)) {
-        transfers [[i]] <- cbind (
-            from = gtfs$stops$stop_id [i],
-            to = gtfs$stops$stop_id [transfers [[i]]],
-            d = dists [[i]]
-        )
-    }
-    transfers <- transfers[lens>0]
-    transfers <- data.frame (do.call (rbind, transfers),
+    if (any(lens > 0)) {
+      for (i in which (lens > 0)) {
+          transfers [[i]] <- cbind (
+              from = gtfs$stops$stop_id [i],
+              to = gtfs$stops$stop_id [transfers [[i]]],
+              d = dists [[i]]
+          )
+      }
+      transfers <- transfers[lens>0]
+      transfers <- data.frame (do.call (rbind, transfers),
+          stringsAsFactors = FALSE
+      )
+    } else {
+      transfers <- data.frame(
+        from = character(0),
+        to = character(0),
+        d = numeric(0),
         stringsAsFactors = FALSE
-    )
+      )
+    }
 
     index <- match (transfers$from, gtfs$stops$stop_id)
     transfers$from_lon <- gtfs$stops$stop_lon [index]
