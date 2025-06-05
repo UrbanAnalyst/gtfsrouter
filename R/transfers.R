@@ -160,7 +160,9 @@ get_transfer_list <- function (gtfs, d_limit) {
       )
     })
 
-    transfers <- rbind( # rbind with empty data.frame to make sure that even if no transfers, columns are created
+    transfers <- rbind(
+    # rbind with empty data.frame to make sure that even if no transfers,
+    # columns are created
       data.frame(
         from = character(0),
         to = character(0),
