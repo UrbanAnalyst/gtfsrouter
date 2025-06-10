@@ -151,16 +151,27 @@ get_transfer_list <- function (gtfs, d_limit) {
     dists <- transfers [index + nstops]
     transfers <- transfers [index]
 
-    lens <- vapply (transfers, length, integer (1))
-    for (i in which (lens > 0)) {
-        transfers [[i]] <- cbind (
-            from = gtfs$stops$stop_id [i],
-            to = gtfs$stops$stop_id [transfers [[i]]],
-            d = dists [[i]]
-        )
-    }
-    transfers <- data.frame (do.call (rbind, transfers),
+    index <- which (vapply (transfers, length, integer (1L)) > 0L)
+    transfers [index] <- lapply (index, function (i) {
+      transfers [[i]] <- cbind (
+        from = gtfs$stops$stop_id [i],
+        to = gtfs$stops$stop_id [transfers [[i]]],
+        d = dists [[i]]
+      )
+    })
+
+    transfers <- rbind(
+    # rbind with empty data.frame to make sure that even if no transfers,
+    # columns are created
+      data.frame(
+        from = character(0),
+        to = character(0),
+        d = numeric(0),
         stringsAsFactors = FALSE
+      ),
+      data.frame (do.call (rbind, transfers),
+         stringsAsFactors = FALSE
+      )
     )
 
     index <- match (transfers$from, gtfs$stops$stop_id)
