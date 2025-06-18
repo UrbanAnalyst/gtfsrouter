@@ -1,4 +1,9 @@
-# v0.1.3.00x - current dev
+# v0.1.4
+
+## Minor changes
+
+- Fix bug in transfer table when no transfers found (#131; thanks to @gmatosferreira)
+- Fix bug in router when no stops found (#127; thanks to @Tom-NutsOne)
 
 ---
 
