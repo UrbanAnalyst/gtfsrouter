@@ -1,4 +1,4 @@
-# v0.1.3.00x - current dev
+# v0.1.4
 
 ## Minor changes
 
