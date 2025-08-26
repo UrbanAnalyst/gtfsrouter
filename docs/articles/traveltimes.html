@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.4.002</span>
       </span>
     </div>
 
@@ -72,9 +72,9 @@
                         <h4 data-toc-skip class="author">Mark Padgham
 &amp; Alexandra Kapp</h4>
             
-            <h4 data-toc-skip class="date">2025-06-18</h4>
+            <h4 data-toc-skip class="date">2025-08-26</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/gtfsrouter/blob/v0.1.4/vignettes/traveltimes.Rmd" class="external-link"><code>vignettes/traveltimes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/gtfsrouter/blob/main/vignettes/traveltimes.Rmd" class="external-link"><code>vignettes/traveltimes.Rmd</code></a></small>
       <div class="hidden name"><code>traveltimes.Rmd</code></div>
 
     </div>
@@ -100,7 +100,7 @@ function</a>, is necessary prior to calculating travel times.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/UrbanAnalyst/gtfsrouter" class="external-link">gtfsrouter</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #BB0000; font-weight: bold;">/tmp/Rtmp3QQgJe/vbb.zip</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #BB0000; font-weight: bold;">/tmp/Rtmpi5KIG5/vbb.zip</span></span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span> <span class="op">(</span><span class="op">)</span>, <span class="st">"vbb.zip"</span><span class="op">)</span></span>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
