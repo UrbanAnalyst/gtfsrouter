@@ -184,7 +184,8 @@ extract_objs_into_env <- function (flist, quiet = FALSE) {
         fout <- data.table::fread (flist [f],
             integer64 = "character",
             showProgress = FALSE,
-            colClasses = classes
+            colClasses = classes,
+            blank.lines.skip = TRUE
         )
 
         assign (gsub (".txt", "", basename (flist [f])),
