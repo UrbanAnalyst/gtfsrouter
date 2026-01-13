@@ -1,7 +1,6 @@
 LFILE = README
 VIGNETTE = gtfsrouter
 
-
 all: help
 
 doc: ## Update package documentation with `roxygen2`
@@ -22,13 +21,19 @@ knith: $(LFILE).Rmd ## Render README as HTML
 knitr: $(LFILE).Rmd ## Render README as markdown
 	echo "rmarkdown::render('$(LFILE).Rmd',output_file='$(LFILE).md')" | R --no-save -q
 
-allcontribs: ## Update allcontributors in README
-	Rscript -e "allcontributors::add_contributors ()"
-
 open: ## Open main HTML vignette in browser
 	xdg-open docs/articles/$(VIGNETTE).html &
 
-check: ## Run pkgcheck
+allcontribs: ## Update allcontributors in README
+	Rscript -e "allcontributors::add_contributors ()"
+
+check: ## Run `rcmdcheck`
+	Rscript -e 'rcmdcheck::rcmdcheck()'
+
+test: ## Run test suite
+	Rscript -e 'testthat::test_local()'
+
+pkgcheck: ## Run `pkgcheck` and print results to screen.
 	Rscript -e 'library(pkgcheck); checks <- pkgcheck(); print(checks); summary (checks)'
 
 clean: ## Clean all junk files, including all pkgdown docs
