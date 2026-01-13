@@ -182,7 +182,7 @@ CSA_Return csa::main_csa_loop (
     csa_ret.earliest_time = INFINITE_INT;
     csa_ret.end_station = INFINITE_INT;
 
-    std::vector <bool> is_connected (csa_pars.ntrips, false);
+    std::vector <bool> is_connected (csa_pars.ntrips + 1L, false);
 
     // trip connections:
     for (size_t i = 0; i < csa_pars.timetable_size; i++)
@@ -198,6 +198,13 @@ CSA_Return csa::main_csa_loop (
             is_connected [csa_in.trip_id [i] ] = true;
             csa::fill_one_csa_out (csa_out, csa_in,
                     csa_in.arrival_station [i], i);
+        }
+
+        if (csa_in.departure_station [i] < 0 || csa_in.departure_station [i] >= csa_out.earliest_connection.size ()) {
+            Rcpp::stop ("Departure station in wrong range.");
+        }
+        if (csa_in.trip_id [i] < 0 || csa_in.trip_id [i] >= is_connected.size ()) {
+            Rcpp::stop ("Trip id in wrong range.");
         }
 
         // main connection scan:
