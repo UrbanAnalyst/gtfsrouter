@@ -247,6 +247,32 @@ gtfs_csa <- function (gtfs, start_stns, end_stns, start_time,
     if (nrow (route) == 0) {
         return (NULL)
     }
+    # Algorithm can generate transfers which transfer back again, because
+    # transfers are incremented at arrival stations, so even on same trip_id,
+    # can still have incremented value as algorithm progresses. These need to
+    # be detected here, and 'max_transfers' reduced to remove intermediate
+    # transfers. This is a very unsatisfactory solution to
+    # https://github.com/UrbanAnalyst/gtfsrouter/issues/140;
+    # full solution will come when #71 is one day implemented.
+    trip_nums <- unique (route$trip_number)
+    back_transfers <- vapply (trip_nums, function (n) {
+        length (unique (diff (which (route$trip_number == n))))
+    }, integer (1L))
+    max_transfers <- max (back_transfers)
+    while (any (back_transfers > 1L)) {
+        max_transfers <- max_transfers - 1L
+        route <- rcpp_csa (
+            gtfs$timetable, gtfs$transfers,
+            nrow (gtfs$stop_ids), nrow (gtfs$trip_ids),
+            start_stns, end_stns, start_time, max_transfers
+        )
+
+        trip_nums <- unique (route$trip_number)
+# Check for transfers back to same trips:
+        back_transfers <- vapply (trip_nums, function (n) {
+            length (unique (diff (which (route$trip_number == n))))
+        }, integer (1L))
+    }
 
     route$trip_id <- gtfs$trip_ids [, trip_ids] [route$trip_number]
 
