@@ -210,6 +210,12 @@ CSA_Return csa::main_csa_loop (
             const bool less_transfers = csa_out.n_transfers [csa_in.departure_station [i] ] <
                     csa_out.n_transfers [csa_in.arrival_station [i] ];
 
+            DEBUGMSG_CSA("   main loop: (" << csa_in.departure_station [i] << " -> " <<
+                     csa_in.arrival_station [i] << "); transfers (dep, arr) = (" <<
+                     csa_out.n_transfers [csa_in.departure_station [i]] << ", " <<
+                     csa_out.n_transfers [csa_in.arrival_station [i]] << ")",
+                     csa_in.departure_station [i]);
+
             if (time_earlier || (time_equal && less_transfers))
             {
                 csa::fill_one_csa_out (csa_out, csa_in,
@@ -247,6 +253,7 @@ CSA_Return csa::main_csa_loop (
         if (end_stations_set.size () == 0)
             break;
     }
+
     return csa_ret;
 }
 
@@ -278,6 +285,11 @@ void csa::fill_one_csa_out (
         csa_out.current_trip [i] = csa_in.trip_id [j];
         csa_out.prev_stn [i] = csa_in.departure_station [j];
         csa_out.prev_time [i] = csa_in.departure_time [j];
+
+        DEBUGMSG_CSA("   fill csa out: (" << csa_in.departure_station [i] << " -> " <<
+            csa_in.arrival_station [i] << ")",
+            csa_in.departure_station [i]);
+
     }
 }
 
@@ -345,6 +357,7 @@ void csa::extract_final_trip (
             end_station [count] = i;
             if (i < INFINITE_INT)
                 trip [count] = csa_out.current_trip [i];
+            DEBUGMSG_CSA("   final trip: " << end_station [count - 1] << " -> " << i, i);
             count++;
         }
         // The last entry of these is all INF, so must be removed.

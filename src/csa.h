@@ -2,6 +2,24 @@
 
 #include <Rcpp.h>
 
+/* These lines dump debug info for the journey from DEPARTURE_STATION to
+ * ARRIVAL_STATION, including all transfers from DEPARTURE_STATION.
+ */
+
+// ----- debugging output START -----
+#define DEBUG_CSA
+#define DEPARTURE_STATION_CSA 25620
+
+#ifdef DEBUG_CSA
+#define DEBUGMSG_CSA(msg, depstn) \
+    if ((DEPARTURE_STATION_CSA < 0 || \
+                (depstn) == DEPARTURE_STATION_CSA)) \
+    Rcpp::Rcout << msg << std::endl;
+#else
+#define DEBUGMSG_CSA(msg, depstn) do{}while(0)
+#endif
+// ----- debugging output END -----
+
 constexpr int INFINITE_INT =  std::numeric_limits<int>::max ();
 
 typedef std::unordered_map <size_t, std::unordered_map <size_t, int> > 
