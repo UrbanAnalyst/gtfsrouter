@@ -221,14 +221,18 @@ CSA_Return csa::main_csa_loop (
                 csa::fill_one_csa_out (csa_out, csa_in,
                         csa_in.arrival_station [i], i);
 
-                DEBUGMSG_CSA("   main loop: updating arrival transfers at " <<
-                    csa_in.arrival_station [i] << " from " <<
-                    csa_out.n_transfers [csa_in.arrival_station [i] ] << " to " <<
-                    csa_out.n_transfers [csa_in.departure_station [i] ],
-                    csa_in.arrival_station [i]);
+                if (!is_connected [csa_in.trip_id [i]]) {
+                    DEBUGMSG_CSA("   main loop: updating arrival transfers " <<
+                        csa_in.departure_station [i] << " -> " <<
+                        csa_in.arrival_station [i] << " from " <<
+                        csa_out.n_transfers [csa_in.arrival_station [i] ] << " to " <<
+                        csa_out.n_transfers [csa_in.departure_station [i] ] <<
+                        "; is_connected = " << is_connected [csa_in.trip_id [i]]
+                        , csa_in.arrival_station [i]);
 
-                csa_out.n_transfers [csa_in.arrival_station [i] ] =
-                    csa_out.n_transfers [csa_in.departure_station [i] ];
+                    csa_out.n_transfers [csa_in.arrival_station [i] ] =
+                        csa_out.n_transfers [csa_in.departure_station [i] ];
+                }
             }
             csa::check_end_stations (end_stations_set, csa_in.arrival_station [i],
                     csa_in.arrival_time [i], csa_ret);

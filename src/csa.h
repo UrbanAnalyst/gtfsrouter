@@ -7,7 +7,7 @@
  */
 
 // ----- debugging output START -----
-#define DEBUG_CSA
+// #define DEBUG_CSA
 #define DEP_STN_CSA1 25620
 #define DEP_STN_CSA2 25680
 
