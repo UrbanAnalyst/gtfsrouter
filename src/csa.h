@@ -8,11 +8,12 @@
 
 // ----- debugging output START -----
 #define DEBUG_CSA
-#define DEPARTURE_STATION_CSA 25620
+#define DEP_STN_CSA1 25620
+#define DEP_STN_CSA2 25680
 
 #ifdef DEBUG_CSA
 #define DEBUGMSG_CSA(msg, depstn) \
-    if ((depstn) == DEPARTURE_STATION_CSA) \
+    if ((depstn) == DEP_STN_CSA1 || (depstn) == DEP_STN_CSA2) \
     Rcpp::Rcout << msg << std::endl;
 #else
 #define DEBUGMSG_CSA(msg, depstn) do{}while(0)
