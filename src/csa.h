@@ -12,8 +12,7 @@
 
 #ifdef DEBUG_CSA
 #define DEBUGMSG_CSA(msg, depstn) \
-    if ((DEPARTURE_STATION_CSA < 0 || \
-                (depstn) == DEPARTURE_STATION_CSA)) \
+    if ((depstn) == DEPARTURE_STATION_CSA) \
     Rcpp::Rcout << msg << std::endl;
 #else
 #define DEBUGMSG_CSA(msg, depstn) do{}while(0)

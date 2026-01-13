@@ -221,6 +221,12 @@ CSA_Return csa::main_csa_loop (
                 csa::fill_one_csa_out (csa_out, csa_in,
                         csa_in.arrival_station [i], i);
 
+                DEBUGMSG_CSA("   main loop: updating arrival transfers at " <<
+                    csa_in.arrival_station [i] << " from " <<
+                    csa_out.n_transfers [csa_in.arrival_station [i] ] << " to " <<
+                    csa_out.n_transfers [csa_in.departure_station [i] ],
+                    csa_in.arrival_station [i]);
+
                 csa_out.n_transfers [csa_in.arrival_station [i] ] =
                     csa_out.n_transfers [csa_in.departure_station [i] ];
             }
@@ -236,6 +242,11 @@ CSA_Return csa::main_csa_loop (
                     if (ttime <= csa_out.earliest_connection [trans_dest] &&
                             csa_out.n_transfers [trans_dest] <= csa_pars.max_transfers)
                     {
+                        DEBUGMSG_CSA("   main loop: incrementing transfer destination " <<
+                            trans_dest << " to " <<
+                            csa_out.n_transfers [trans_dest] + 1 << " transfers.",
+                            csa_in.departure_station [i]);
+
                         // modified version of fill_one_csa_out:
                         csa_out.earliest_connection [trans_dest] = ttime;
                         csa_out.prev_stn [trans_dest] = csa_in.arrival_station [i];
