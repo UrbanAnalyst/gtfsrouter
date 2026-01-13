@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.4.003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.4.005</span>
       </span>
     </div>
 
@@ -72,7 +72,7 @@
                         <h4 data-toc-skip class="author">Mark
 Padgham</h4>
             
-            <h4 data-toc-skip class="date">2025-10-15</h4>
+            <h4 data-toc-skip class="date">2026-01-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/gtfsrouter/blob/main/vignettes/transfers.Rmd" class="external-link"><code>vignettes/transfers.Rmd</code></a></small>
       <div class="hidden name"><code>transfers.Rmd</code></div>
@@ -505,7 +505,7 @@ of maximal walking distances:</p>
 <span>    xlab <span class="op">=</span> <span class="st">"Maximal transfer distance"</span>,</span>
 <span>    ylab <span class="op">=</span> <span class="st">"Number of transfers (1000s)"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="transfers_files/figure-html/d_limit1-1.png" width="700"></p>
+<p><img src="transfers_files/figure-html/d_limit1-1.png" class="r-plt" alt="" width="700"></p>
 <p>The line is initially flat because this number (around 3,300) is the
 number of transfers possible between stops which have identical spatial
 locations (and so a distance of 0.0). Numbers of transfers can never be
@@ -622,7 +622,7 @@ range of distance limits.</p>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">stat_bin</a></span> <span class="op">(</span>bins <span class="op">=</span> <span class="fl">30</span>, col <span class="op">=</span> <span class="st">"red"</span>, fill <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_log10</a></span> <span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span> <span class="op">(</span><span class="st">"time difference (minutes)"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="transfers_files/figure-html/plot1-1.png" width="700"></p>
+<p><img src="transfers_files/figure-html/plot1-1.png" class="r-plt" alt="" width="700"></p>
 <p>And these additional transfer possibilities can make a significant
 difference to estimated travel times. Note, however, that the travel
 times only changed for 684 stations, while the value of
@@ -723,7 +723,7 @@ code:</p>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span> <span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span> <span class="op">(</span>x <span class="op">=</span> <span class="va">d_limit</span>, y <span class="op">=</span> <span class="va">change</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span> <span class="op">(</span>pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span> <span class="op">(</span>method <span class="op">=</span> <span class="st">"loess"</span>, formula <span class="op">=</span> <span class="st">"y ~ x"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="transfers_files/figure-html/transfer_d_limit_results-1.png" width="700"></p>
+<p><img src="transfers_files/figure-html/transfer_d_limit_results-1.png" class="r-plt" alt="" width="700"></p>
 <p>That result shows that travel times do decrease with increasing
 limits of maximal transfer distance, although the overall effect is very
 minimal. The object <code>d</code> also records the proportion of
@@ -736,7 +736,7 @@ changed travel times, which in this case amounts to a mean value of
 <p>The following results apply the code given above to the full feed for
 Stuttgart, Germany, showing what might more typically be expected as the
 <code>d_limit</code> parameter is increased.</p>
-<p><img src="transfers_files/figure-html/stuttgart-results-1.png" width="700"></p>
+<p><img src="transfers_files/figure-html/stuttgart-results-1.png" class="r-plt" alt="" width="700"></p>
 <p>The decrease in travel times in this case approaches 15% as transfers
 are implemented with walks of up to 1km, although values are highly
 variable depending on starting stations. The equivalent proportion of
@@ -746,7 +746,7 @@ the following graph:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span> <span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span> <span class="op">(</span>x <span class="op">=</span> <span class="va">d_limit</span>, y <span class="op">=</span> <span class="va">prop</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span> <span class="op">(</span>pch <span class="op">=</span> <span class="fl">19</span>, col <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span> <span class="op">(</span>method <span class="op">=</span> <span class="st">"loess"</span>, formula <span class="op">=</span> <span class="st">"y ~ x"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="transfers_files/figure-html/stuttgart-plot2-1.png" width="700"></p>
+<p><img src="transfers_files/figure-html/stuttgart-plot2-1.png" class="r-plt" alt="" width="700"></p>
 <p>While travel times to most stops still remain unaffected, the
 proportion affected does increase to a large minority of around 30-40%
 as transfer distances approach 1km.</p>
@@ -769,7 +769,7 @@ as transfer distances approach 1km.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
