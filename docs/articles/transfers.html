@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.4.008</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.4.009</span>
       </span>
     </div>
 
@@ -72,7 +72,7 @@
                         <h4 data-toc-skip class="author">Mark
 Padgham</h4>
             
-            <h4 data-toc-skip class="date">2026-01-13</h4>
+            <h4 data-toc-skip class="date">2026-01-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/gtfsrouter/blob/main/vignettes/transfers.Rmd" class="external-link"><code>vignettes/transfers.Rmd</code></a></small>
       <div class="hidden name"><code>transfers.Rmd</code></div>
@@ -138,21 +138,21 @@ different services, like with the following code:</p>
 <span>    day <span class="op">=</span> <span class="st">"Monday"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   route_name       trip_name                      stop_name arrival_time</span></span>
-<span><span class="co">## 1        S26 S Waidmannslust S+U Friedrichstr. Bhf (Berlin)     12:03:06</span></span>
-<span><span class="co">## 2        S26 S Waidmannslust  S Oranienburger Str. (Berlin)     12:05:12</span></span>
-<span><span class="co">## 3        S26 S Waidmannslust         S Nordbahnhof (Berlin)     12:07:12</span></span>
-<span><span class="co">## 4        S26 S Waidmannslust        S Humboldthain (Berlin)     12:09:54</span></span>
-<span><span class="co">## 5        S26 S Waidmannslust S+U Gesundbrunnen Bhf (Berlin)     12:11:42</span></span>
+<span><span class="co">## 1         S1       S Frohnau S+U Friedrichstr. Bhf (Berlin)     12:00:06</span></span>
+<span><span class="co">## 2         S1       S Frohnau  S Oranienburger Str. (Berlin)     12:02:12</span></span>
+<span><span class="co">## 3         S1       S Frohnau         S Nordbahnhof (Berlin)     12:04:12</span></span>
+<span><span class="co">## 4         S1       S Frohnau        S Humboldthain (Berlin)     12:06:54</span></span>
+<span><span class="co">## 5         S1       S Frohnau S+U Gesundbrunnen Bhf (Berlin)     12:08:42</span></span>
 <span><span class="co">## 6         U8 S+U Hermannstr. S+U Gesundbrunnen Bhf (Berlin)     12:15:30</span></span>
 <span><span class="co">## 7         U8 S+U Hermannstr.           U Voltastr. (Berlin)     12:17:00</span></span>
 <span><span class="co">## 8         U8 S+U Hermannstr.       U Bernauer Str. (Berlin)     12:18:30</span></span>
 <span><span class="co">## 9         U8 S+U Hermannstr.   U Rosenthaler Platz (Berlin)     12:20:00</span></span>
 <span><span class="co">##   departure_time</span></span>
-<span><span class="co">## 1       12:03:54</span></span>
-<span><span class="co">## 2       12:05:42</span></span>
-<span><span class="co">## 3       12:07:42</span></span>
-<span><span class="co">## 4       12:10:24</span></span>
-<span><span class="co">## 5       12:12:24</span></span>
+<span><span class="co">## 1       12:00:54</span></span>
+<span><span class="co">## 2       12:02:42</span></span>
+<span><span class="co">## 3       12:04:42</span></span>
+<span><span class="co">## 4       12:07:24</span></span>
+<span><span class="co">## 5       12:09:24</span></span>
 <span><span class="co">## 6       12:15:30</span></span>
 <span><span class="co">## 7       12:17:00</span></span>
 <span><span class="co">## 8       12:18:30</span></span>
@@ -189,16 +189,16 @@ to generate routes:</p>
 <span><span class="co">## 1         S7 S Ahrensfelde Bhf   S+U Friedrichstr. Bhf (Berlin)     12:00:36</span></span>
 <span><span class="co">## 2         S7 S Ahrensfelde Bhf      S Hackescher Markt (Berlin)     12:02:54</span></span>
 <span><span class="co">## 3         S7 S Ahrensfelde Bhf  S+U Alexanderplatz Bhf (Berlin)     12:04:36</span></span>
-<span><span class="co">## 4         U8      S+U Wittenau S+U Alexanderplatz (Berlin) [U8]     12:07:30</span></span>
-<span><span class="co">## 5         U8      S+U Wittenau       U Weinmeisterstr. (Berlin)     12:09:00</span></span>
-<span><span class="co">## 6         U8      S+U Wittenau     U Rosenthaler Platz (Berlin)     12:10:30</span></span>
+<span><span class="co">## 4         U8  U Paracelsus-Bad S+U Alexanderplatz (Berlin) [U8]     12:12:30</span></span>
+<span><span class="co">## 5         U8  U Paracelsus-Bad       U Weinmeisterstr. (Berlin)     12:14:00</span></span>
+<span><span class="co">## 6         U8  U Paracelsus-Bad     U Rosenthaler Platz (Berlin)     12:15:30</span></span>
 <span><span class="co">##   departure_time</span></span>
 <span><span class="co">## 1       12:01:24</span></span>
 <span><span class="co">## 2       12:03:24</span></span>
 <span><span class="co">## 3       12:05:24</span></span>
-<span><span class="co">## 4       12:07:30</span></span>
-<span><span class="co">## 5       12:09:00</span></span>
-<span><span class="co">## 6       12:10:30</span></span></code></pre>
+<span><span class="co">## 4       12:12:30</span></span>
+<span><span class="co">## 5       12:14:00</span></span>
+<span><span class="co">## 6       12:15:30</span></span></code></pre>
 <p>That route is considerably faster than the original one, because it
 utilises a transfer (at “S+U Alexanderplatz”) which is not in the
 original transfers table. That particular transfer highlights the most
@@ -382,16 +382,16 @@ value of 2 minutes:</p>
 <span>    day <span class="op">=</span> <span class="st">"Monday"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   route_name         trip_name                        stop_name arrival_time</span></span>
-<span><span class="co">## 1         S5 S Strausberg Nord   S+U Friedrichstr. Bhf (Berlin)     12:03:06</span></span>
-<span><span class="co">## 2         S5 S Strausberg Nord      S Hackescher Markt (Berlin)     12:05:24</span></span>
-<span><span class="co">## 3         S5 S Strausberg Nord  S+U Alexanderplatz Bhf (Berlin)     12:07:06</span></span>
+<span><span class="co">## 1         S7 S Ahrensfelde Bhf   S+U Friedrichstr. Bhf (Berlin)     12:00:36</span></span>
+<span><span class="co">## 2         S7 S Ahrensfelde Bhf      S Hackescher Markt (Berlin)     12:02:54</span></span>
+<span><span class="co">## 3         S7 S Ahrensfelde Bhf  S+U Alexanderplatz Bhf (Berlin)     12:04:36</span></span>
 <span><span class="co">## 4         U8  U Paracelsus-Bad S+U Alexanderplatz (Berlin) [U8]     12:12:30</span></span>
 <span><span class="co">## 5         U8  U Paracelsus-Bad       U Weinmeisterstr. (Berlin)     12:14:00</span></span>
 <span><span class="co">## 6         U8  U Paracelsus-Bad     U Rosenthaler Platz (Berlin)     12:15:30</span></span>
 <span><span class="co">##   departure_time</span></span>
-<span><span class="co">## 1       12:03:54</span></span>
-<span><span class="co">## 2       12:05:54</span></span>
-<span><span class="co">## 3       12:07:54</span></span>
+<span><span class="co">## 1       12:01:24</span></span>
+<span><span class="co">## 2       12:03:24</span></span>
+<span><span class="co">## 3       12:05:24</span></span>
 <span><span class="co">## 4       12:12:30</span></span>
 <span><span class="co">## 5       12:14:00</span></span>
 <span><span class="co">## 6       12:15:30</span></span></code></pre>
@@ -454,16 +454,16 @@ function for easy re-use:</p>
 <span>    day <span class="op">=</span> <span class="st">"Monday"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   route_name         trip_name                        stop_name arrival_time</span></span>
-<span><span class="co">## 1         S5 S Strausberg Nord   S+U Friedrichstr. Bhf (Berlin)     12:03:06</span></span>
-<span><span class="co">## 2         S5 S Strausberg Nord      S Hackescher Markt (Berlin)     12:05:24</span></span>
-<span><span class="co">## 3         S5 S Strausberg Nord  S+U Alexanderplatz Bhf (Berlin)     12:07:06</span></span>
+<span><span class="co">## 1         S7 S Ahrensfelde Bhf   S+U Friedrichstr. Bhf (Berlin)     12:00:36</span></span>
+<span><span class="co">## 2         S7 S Ahrensfelde Bhf      S Hackescher Markt (Berlin)     12:02:54</span></span>
+<span><span class="co">## 3         S7 S Ahrensfelde Bhf  S+U Alexanderplatz Bhf (Berlin)     12:04:36</span></span>
 <span><span class="co">## 4         U8  U Paracelsus-Bad S+U Alexanderplatz (Berlin) [U8]     12:12:30</span></span>
 <span><span class="co">## 5         U8  U Paracelsus-Bad       U Weinmeisterstr. (Berlin)     12:14:00</span></span>
 <span><span class="co">## 6         U8  U Paracelsus-Bad     U Rosenthaler Platz (Berlin)     12:15:30</span></span>
 <span><span class="co">##   departure_time</span></span>
-<span><span class="co">## 1       12:03:54</span></span>
-<span><span class="co">## 2       12:05:54</span></span>
-<span><span class="co">## 3       12:07:54</span></span>
+<span><span class="co">## 1       12:01:24</span></span>
+<span><span class="co">## 2       12:03:24</span></span>
+<span><span class="co">## 3       12:05:24</span></span>
 <span><span class="co">## 4       12:12:30</span></span>
 <span><span class="co">## 5       12:14:00</span></span>
 <span><span class="co">## 6       12:15:30</span></span></code></pre>
