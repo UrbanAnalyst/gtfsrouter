@@ -250,19 +250,28 @@ CSA_Return csa::main_csa_loop (
                 {
                     size_t trans_dest = t.first;
                     int ttime = csa_in.arrival_time [i] + t.second;
-                    if (ttime <= csa_out.earliest_connection [trans_dest] &&
-                            csa_out.n_transfers [trans_dest] <= csa_pars.max_transfers)
+                    int new_n_transfers = csa_out.n_transfers [csa_in.arrival_station [i]] + 1;
+
+                    const bool time_is_better = ttime < csa_out.earliest_connection [trans_dest];
+                    const bool time_is_equal = ttime == csa_out.earliest_connection [trans_dest];
+                    const bool fewer_transfers = new_n_transfers < csa_out.n_transfers [trans_dest];
+                    const bool same_trip =
+                        csa_out.current_trip [csa_in.arrival_station [i]] == csa_in.trip_id [i];
+
+                    if ((time_is_better || (time_is_equal && fewer_transfers)) &&
+                            new_n_transfers <= csa_pars.max_transfers &&
+                            !(same_trip && new_n_transfers > csa_out.n_transfers [trans_dest]))
                     {
                         DEBUGMSG_CSA("   main loop: incrementing transfer destination " <<
                             trans_dest << " to " <<
-                            csa_out.n_transfers [trans_dest] + 1 << " transfers.",
+                            new_n_transfers << " transfers.",
                             csa_in.departure_station [i]);
 
                         // modified version of fill_one_csa_out:
                         csa_out.earliest_connection [trans_dest] = ttime;
                         csa_out.prev_stn [trans_dest] = csa_in.arrival_station [i];
                         csa_out.prev_time [trans_dest] = csa_in.arrival_time [i];
-                        csa_out.n_transfers [trans_dest]++;
+                        csa_out.n_transfers [trans_dest] = new_n_transfers;
 
                         csa::check_end_stations (end_stations_set,
                                 trans_dest, ttime, csa_ret);
