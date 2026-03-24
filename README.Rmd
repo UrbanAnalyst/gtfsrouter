@@ -1,5 +1,5 @@
 
-# gtfsrouter <a href='https://UrbanAnalyst.github.io/gtfsrouter/'><img src='man/figures/gtfsrouter.png' align="right" height=210 width=182/></a>
+# gtfsrouter <a href='https://UrbanAnalyst.github.io/gtfsrouter/'><img src='man/figures/logo.png' align="right" height=210 width=182/></a>
 
 [![R build
 status](https://github.com/UrbanAnalyst/gtfsrouter/workflows/R-CMD-check/badge.svg)](https://github.com/UrbanAnalyst/gtfsrouter/actions?query=workflow%3AR-CMD-check)
