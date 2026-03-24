@@ -1,11 +1,11 @@
-# gtfsrouter <a href='https://UrbanAnalyst.github.io/gtfsrouter/'><img src='man/figures/gtfsrouter.png' align="right" height=210 width=182/></a>
+# gtfsrouter <a href='https://UrbanAnalyst.github.io/gtfsrouter/'><img src='man/figures/logo.png' align="right" height=210 width=182/></a>
 
 [![R build
 status](https://github.com/UrbanAnalyst/gtfsrouter/workflows/R-CMD-check/badge.svg)](https://github.com/UrbanAnalyst/gtfsrouter/actions?query=workflow%3AR-CMD-check)
 [![codecov](https://codecov.io/gh/UrbanAnalyst/gtfsrouter/branch/main/graph/badge.svg)](https://app.codecov.io/gh/UrbanAnalyst/gtfsrouter)
 [![Project Status:
 Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/gtfsrouter)](https://cran.r-project.org/package=gtfsrouter)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/gtfsrouter)](https://cran.r-project.org/package=gtfsrouter)
 [![CRAN
 Downloads](http://cranlogs.r-pkg.org/badges/grand-total/gtfsrouter?color=orange)](https://cran.r-project.org/package=gtfsrouter)
 
@@ -16,30 +16,24 @@ Feed Specification)](https://developers.google.com/transit/gtfs/) data.
 
 You can install latest stable version of `gtfsrouter` from CRAN with:
 
-``` r
-install.packages ("gtfsrouter")
-```
+    install.packages ("gtfsrouter")
 
 Alternatively, the current development version can be installed using
 any of the following options:
 
-``` r
-# install.packages("remotes")
-remotes::install_git ("https://git.sr.ht/~mpadge/gtfsrouter")
-remotes::install_git ("https://codeberg.org/UrbanAnalyst/gtfsrouter")
-remotes::install_bitbucket ("urbananalyst/gtfsrouter")
-remotes::install_gitlab ("UrbanAnalyst/gtfsrouter")
-remotes::install_github ("UrbanAnalyst/gtfsrouter")
-```
+    # install.packages("remotes")
+    remotes::install_git ("https://git.sr.ht/~mpadge/gtfsrouter")
+    remotes::install_git ("https://codeberg.org/UrbanAnalyst/gtfsrouter")
+    remotes::install_bitbucket ("urbananalyst/gtfsrouter")
+    remotes::install_gitlab ("UrbanAnalyst/gtfsrouter")
+    remotes::install_github ("UrbanAnalyst/gtfsrouter")
 
 To load the package and check the version:
 
-``` r
-library (gtfsrouter)
-packageVersion ("gtfsrouter")
-```
+    library (gtfsrouter)
+    packageVersion ("gtfsrouter")
 
-    ## [1] '0.1.2.7'
+    ## [1] '0.1.4.8'
 
 ## Main functions
 
@@ -49,45 +43,119 @@ VBB). GTFS data are always stored as `.zip` files, and these sample data
 can be written to the temporary directory (`tempdir()`) of the current R
 session with the function `berlin_gtfs_to_zip()`.
 
-``` r
-filename <- berlin_gtfs_to_zip ()
-print (filename)
-```
+    filename <- berlin_gtfs_to_zip ()
+    print (filename)
 
-    ## [1] "/tmp/Rtmp420siD/vbb.zip"
+    ## /tmp/RtmpTnlacm/vbb.zip
 
 For normal package use, `filename` will specify the name of a local GTFS
 `.zip` file.
 
-### gtfs_route
+### gtfs\_route
 
 Given the name of a GTFS `.zip` file, `filename`, routing is as simple
 as the following code:
 
-``` r
-gtfs <- extract_gtfs (filename)
-gtfs <- gtfs_timetable (gtfs, day = "Wed") # A pre-processing step to speed up queries
-gtfs_route (gtfs,
-    from = "Tegel",
-    to = "Berlin Hauptbahnhof",
-    start_time = 12 * 3600 + 120
-) # 12:02 in seconds
-```
+    gtfs <- extract_gtfs (filename)
+    gtfs <- gtfs_timetable (gtfs, day = "Wed") # A pre-processing step to speed up queries
+    gtfs_route (gtfs,
+        from = "Tegel",
+        to = "Berlin Hauptbahnhof",
+        start_time = 12 * 3600 + 120
+    ) # 12:02 in seconds
 
-| route_name | trip_name        | stop_name                       | arrival_time | departure_time |
-|:-----------|:-----------------|:--------------------------------|:-------------|:---------------|
-| U8         | U Paracelsus-Bad | U Schonleinstr. (Berlin)        | 12:04:00     | 12:04:00       |
-| U8         | U Paracelsus-Bad | U Kottbusser Tor (Berlin)       | 12:06:00     | 12:06:00       |
-| U8         | U Paracelsus-Bad | U Moritzplatz (Berlin)          | 12:08:00     | 12:08:00       |
-| U8         | U Paracelsus-Bad | U Heinrich-Heine-Str. (Berlin)  | 12:09:30     | 12:09:30       |
-| U8         | U Paracelsus-Bad | S+U Jannowitzbrucke (Berlin)    | 12:10:30     | 12:10:30       |
-| S5         | S Westkreuz      | S+U Jannowitzbrucke (Berlin)    | 12:15:24     | 12:15:54       |
-| S5         | S Westkreuz      | S+U Alexanderplatz Bhf (Berlin) | 12:17:24     | 12:18:12       |
-| S5         | S Westkreuz      | S Hackescher Markt (Berlin)     | 12:19:24     | 12:19:54       |
-| S5         | S Westkreuz      | S+U Friedrichstr. Bhf (Berlin)  | 12:21:24     | 12:22:12       |
-| S5         | S Westkreuz      | S+U Berlin Hauptbahnhof         | 12:24:06     | 12:24:42       |
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 19%" />
+<col style="width: 36%" />
+<col style="width: 14%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">route_name</th>
+<th style="text-align: left;">trip_name</th>
+<th style="text-align: left;">stop_name</th>
+<th style="text-align: left;">arrival_time</th>
+<th style="text-align: left;">departure_time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">U8</td>
+<td style="text-align: left;">U Paracelsus-Bad</td>
+<td style="text-align: left;">U Schonleinstr. (Berlin)</td>
+<td style="text-align: left;">12:04:00</td>
+<td style="text-align: left;">12:04:00</td>
+</tr>
+<tr>
+<td style="text-align: left;">U8</td>
+<td style="text-align: left;">U Paracelsus-Bad</td>
+<td style="text-align: left;">U Kottbusser Tor (Berlin)</td>
+<td style="text-align: left;">12:06:00</td>
+<td style="text-align: left;">12:06:00</td>
+</tr>
+<tr>
+<td style="text-align: left;">U8</td>
+<td style="text-align: left;">U Paracelsus-Bad</td>
+<td style="text-align: left;">U Moritzplatz (Berlin)</td>
+<td style="text-align: left;">12:08:00</td>
+<td style="text-align: left;">12:08:00</td>
+</tr>
+<tr>
+<td style="text-align: left;">U8</td>
+<td style="text-align: left;">U Paracelsus-Bad</td>
+<td style="text-align: left;">U Heinrich-Heine-Str. (Berlin)</td>
+<td style="text-align: left;">12:09:30</td>
+<td style="text-align: left;">12:09:30</td>
+</tr>
+<tr>
+<td style="text-align: left;">U8</td>
+<td style="text-align: left;">U Paracelsus-Bad</td>
+<td style="text-align: left;">S+U Jannowitzbrucke (Berlin)</td>
+<td style="text-align: left;">12:10:30</td>
+<td style="text-align: left;">12:10:30</td>
+</tr>
+<tr>
+<td style="text-align: left;">S5</td>
+<td style="text-align: left;">S Westkreuz</td>
+<td style="text-align: left;">S+U Jannowitzbrucke (Berlin)</td>
+<td style="text-align: left;">12:15:24</td>
+<td style="text-align: left;">12:15:54</td>
+</tr>
+<tr>
+<td style="text-align: left;">S5</td>
+<td style="text-align: left;">S Westkreuz</td>
+<td style="text-align: left;">S+U Alexanderplatz Bhf (Berlin)</td>
+<td style="text-align: left;">12:17:24</td>
+<td style="text-align: left;">12:18:12</td>
+</tr>
+<tr>
+<td style="text-align: left;">S5</td>
+<td style="text-align: left;">S Westkreuz</td>
+<td style="text-align: left;">S Hackescher Markt (Berlin)</td>
+<td style="text-align: left;">12:19:24</td>
+<td style="text-align: left;">12:19:54</td>
+</tr>
+<tr>
+<td style="text-align: left;">S5</td>
+<td style="text-align: left;">S Westkreuz</td>
+<td style="text-align: left;">S+U Friedrichstr. Bhf (Berlin)</td>
+<td style="text-align: left;">12:21:24</td>
+<td style="text-align: left;">12:22:12</td>
+</tr>
+<tr>
+<td style="text-align: left;">S5</td>
+<td style="text-align: left;">S Westkreuz</td>
+<td style="text-align: left;">S+U Berlin Hauptbahnhof</td>
+<td style="text-align: left;">12:24:06</td>
+<td style="text-align: left;">12:24:42</td>
+</tr>
+</tbody>
+</table>
 
-### gtfs_traveltimes
+### gtfs\_traveltimes
 
 The [`gtfs_traveltimes()`
 function\`](https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_traveltimes.html)
@@ -98,35 +166,101 @@ times. The following code returns the fastest travel times to all
 stations within the feed for services which leave the nominated station
 (“Alexanderplatz”) between 12:00 and 13:00 on a Monday:
 
-``` r
-gtfs <- extract_gtfs (filename)
-gtfs <- gtfs_timetable (gtfs, day = "Monday")
-x <- gtfs_traveltimes (gtfs,
-    from = "Alexanderplatz",
-    start_time_limits = c (12, 13) * 3600
-)
-```
+    gtfs <- extract_gtfs (filename)
+    gtfs <- gtfs_timetable (gtfs, day = "Monday")
+    x <- gtfs_traveltimes (gtfs,
+        from = "Alexanderplatz",
+        start_time_limits = c (12, 13) * 3600
+    )
 
 The function returns a simple table detailing all stations reachable
 with services departing from the nominated station and start times:
 
-``` r
-head (x)
-```
+    head (x)
 
-| start_time | duration | ntransfers | stop_id      | stop_name               | stop_lon | stop_lat |
-|:-----------|:---------|-----------:|:-------------|:------------------------|---------:|---------:|
-| 12:00:42   | 00:14:42 |          1 | 060003102223 | S Bellevue (Berlin)     | 13.34710 | 52.51995 |
-| 12:00:42   | 00:08:36 |          0 | 060003102224 | S Bellevue (Berlin)     | 13.34710 | 52.51995 |
-| 12:00:42   | 00:15:06 |          1 | 060003103233 | S Tiergarten (Berlin)   | 13.33624 | 52.51396 |
-| 12:00:42   | 00:10:42 |          0 | 060003103234 | S Tiergarten (Berlin)   | 13.33624 | 52.51396 |
-| 12:00:42   | 00:14:18 |          1 | 060003201213 | S+U Berlin Hauptbahnhof | 13.36892 | 52.52585 |
-| 12:00:42   | 00:05:54 |          0 | 060003201214 | S+U Berlin Hauptbahnhof | 13.36892 | 52.52585 |
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 10%" />
+<col style="width: 12%" />
+<col style="width: 15%" />
+<col style="width: 27%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr>
+<th style="text-align: left;">start_time</th>
+<th style="text-align: left;">duration</th>
+<th style="text-align: right;">ntransfers</th>
+<th style="text-align: left;">stop_id</th>
+<th style="text-align: left;">stop_name</th>
+<th style="text-align: right;">stop_lon</th>
+<th style="text-align: right;">stop_lat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">12:00:42</td>
+<td style="text-align: left;">00:14:42</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">060003102223</td>
+<td style="text-align: left;">S Bellevue (Berlin)</td>
+<td style="text-align: right;">13.34710</td>
+<td style="text-align: right;">52.51995</td>
+</tr>
+<tr>
+<td style="text-align: left;">12:00:42</td>
+<td style="text-align: left;">00:08:36</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">060003102224</td>
+<td style="text-align: left;">S Bellevue (Berlin)</td>
+<td style="text-align: right;">13.34710</td>
+<td style="text-align: right;">52.51995</td>
+</tr>
+<tr>
+<td style="text-align: left;">12:00:42</td>
+<td style="text-align: left;">00:15:06</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">060003103233</td>
+<td style="text-align: left;">S Tiergarten (Berlin)</td>
+<td style="text-align: right;">13.33624</td>
+<td style="text-align: right;">52.51396</td>
+</tr>
+<tr>
+<td style="text-align: left;">12:00:42</td>
+<td style="text-align: left;">00:10:42</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">060003103234</td>
+<td style="text-align: left;">S Tiergarten (Berlin)</td>
+<td style="text-align: right;">13.33624</td>
+<td style="text-align: right;">52.51396</td>
+</tr>
+<tr>
+<td style="text-align: left;">12:00:42</td>
+<td style="text-align: left;">00:14:18</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">060003201213</td>
+<td style="text-align: left;">S+U Berlin Hauptbahnhof</td>
+<td style="text-align: right;">13.36892</td>
+<td style="text-align: right;">52.52585</td>
+</tr>
+<tr>
+<td style="text-align: left;">12:00:42</td>
+<td style="text-align: left;">00:05:54</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">060003201214</td>
+<td style="text-align: left;">S+U Berlin Hauptbahnhof</td>
+<td style="text-align: right;">13.36892</td>
+<td style="text-align: right;">52.52585</td>
+</tr>
+</tbody>
+</table>
 
 Further details are provided in a [separate
 vignette](https://UrbanAnalyst.github.io/gtfsrouter/articles/traveltimes.html).
 
-### gtfs_transfer_table
+### gtfs\_transfer\_table
 
 Feeds should include a “transfers.txt” table detailing all possible
 transfers between nearby stations, yet many feeds omit these tables,
@@ -159,23 +293,23 @@ Feeds may include a “frequencies.txt” table which defines “service
 periods”, and overrides any schedule information during the specified
 times. The `gtfsrouter` package includes a function,
 [`frequencies_to_stop_times()`](https://UrbanAnalyst.github.io/gtfsrouter/reference/frequencies_to_stop_times.html),
-to convert “frequencies.txt” tables to equivalent “stop_times.txt”
+to convert “frequencies.txt” tables to equivalent “stop\_times.txt”
 entries, to enable the feed to be used for routing.
 
 ## Contributors
-
-
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
-All contributions to this project are gratefully acknowledged using the [`allcontributors` package](https://github.com/ropensci/allcontributors) following the [allcontributors](https://allcontributors.org) specification. Contributions of any kind are welcome!
+All contributions to this project are gratefully acknowledged using the
+[`allcontributors` package](https://github.com/ropensci/allcontributors)
+following the [allcontributors](https://allcontributors.org)
+specification. Contributions of any kind are welcome!
 
 ### Code
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/mpadge">
@@ -208,14 +342,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/commits?author=polettif">polettif</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Authors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/sridharraman">
@@ -260,8 +391,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3AAlexandraKapp">AlexandraKapp</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/dcooley">
@@ -306,8 +435,6 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3Ajh0ker">jh0ker</a>
 </td>
 </tr>
-
-
 <tr>
 <td align="center">
 <a href="https://github.com/zamirD123">
@@ -352,14 +479,11 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+author%3ATom-NutsOne">Tom-NutsOne</a>
 </td>
 </tr>
-
 </table>
-
 
 ### Issue Contributors
 
 <table>
-
 <tr>
 <td align="center">
 <a href="https://github.com/tbuckl">
@@ -398,9 +522,7 @@ All contributions to this project are gratefully acknowledged using the [`allcon
 <a href="https://github.com/UrbanAnalyst/gtfsrouter/issues?q=is%3Aissue+commenter%3Ahansmib">hansmib</a>
 </td>
 </tr>
-
 </table>
-
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
