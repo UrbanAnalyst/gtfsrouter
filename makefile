@@ -19,13 +19,13 @@ knith: $(LFILE).Rmd ## Render README as HTML
 	echo "rmarkdown::render('$(LFILE).Rmd',output_file='$(LFILE).html')" | R --no-save -q
 
 knitr: $(LFILE).Rmd ## Render README as markdown
-	echo "rmarkdown::render('$(LFILE).Rmd',output_file='$(LFILE).md')" | R --no-save -q
+	echo "rmarkdown::render('$(LFILE).Rmd',output_file='$(LFILE).md',output_format='md_document')" | R --no-save -q
 
 open: ## Open main HTML vignette in browser
 	xdg-open docs/articles/$(VIGNETTE).html &
 
-allcontribs: ## Update allcontributors in README
-	Rscript -e "allcontributors::add_contributors ()"
+allcon: ## Run 'allcontributors::add_contributors'
+	Rscript -e 'allcontributors::add_contributors()'
 
 check: ## Run `rcmdcheck`
 	Rscript -e 'rcmdcheck::rcmdcheck()'
