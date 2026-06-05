@@ -52,7 +52,7 @@ g <- gtfs_transfer_table (g, d_limit = 200)
 data.table::setDTthreads (nthr)
 }
 \seealso{
-Other augment: 
-\code{\link{frequencies_to_stop_times}()}
+Other augment:
+\code{\link[=frequencies_to_stop_times]{frequencies_to_stop_times()}}
 }
 \concept{augment}

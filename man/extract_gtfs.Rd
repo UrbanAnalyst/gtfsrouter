@@ -38,8 +38,8 @@ gtfs <- extract_gtfs (f)
 
 }
 \seealso{
-Other extract: 
-\code{\link{berlin_gtfs_to_zip}()},
-\code{\link{gtfs_timetable}()}
+Other extract:
+\code{\link[=berlin_gtfs_to_zip]{berlin_gtfs_to_zip()}},
+\code{\link[=gtfs_timetable]{gtfs_timetable()}}
 }
 \concept{extract}

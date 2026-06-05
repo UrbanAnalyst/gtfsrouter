@@ -69,9 +69,9 @@ go_to_work (3)
 }
 }
 \seealso{
-Other additional: 
-\code{\link{go_home}()},
-\code{\link{process_gtfs_local}()},
-\code{\link{summary.gtfs}()}
+Other additional:
+\code{\link[=go_home]{go_home()}},
+\code{\link[=process_gtfs_local]{process_gtfs_local()}},
+\code{\link[=summary.gtfs]{summary.gtfs()}}
 }
 \concept{additional}
