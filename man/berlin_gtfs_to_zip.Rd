@@ -20,8 +20,8 @@ gtfs <- gtfs_timetable (gtfs, day = "Wed") # A pre-processing step to speed up q
 gtfs_route (gtfs, from = "Tegel", to = "Berlin Hauptbahnhof", start_time = 12 * 3600)
 }
 \seealso{
-Other extract: 
-\code{\link{extract_gtfs}()},
-\code{\link{gtfs_timetable}()}
+Other extract:
+\code{\link[=extract_gtfs]{extract_gtfs()}},
+\code{\link[=gtfs_timetable]{gtfs_timetable()}}
 }
 \concept{extract}

@@ -50,8 +50,8 @@ gtfs_route_headway (gtfs, from = "Tegel", to = "Berlin Hauptbahnhof")
 }
 }
 \seealso{
-Other main: 
-\code{\link{gtfs_route}()},
-\code{\link{gtfs_traveltimes}()}
+Other main:
+\code{\link[=gtfs_route]{gtfs_route()}},
+\code{\link[=gtfs_traveltimes]{gtfs_traveltimes()}}
 }
 \concept{main}

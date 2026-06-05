@@ -31,9 +31,9 @@ summary (g) # also summarizes additional timetable information
 data.table::setDTthreads (nthr)
 }
 \seealso{
-Other additional: 
-\code{\link{go_home}()},
-\code{\link{go_to_work}()},
-\code{\link{process_gtfs_local}()}
+Other additional:
+\code{\link[=go_home]{go_home()}},
+\code{\link[=go_to_work]{go_to_work()}},
+\code{\link[=process_gtfs_local]{process_gtfs_local()}}
 }
 \concept{additional}

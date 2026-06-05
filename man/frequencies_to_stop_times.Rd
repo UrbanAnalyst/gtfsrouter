@@ -26,7 +26,7 @@ gtfs2 <- frequencies_to_stop_times (gtfs)
 }
 }
 \seealso{
-Other augment: 
-\code{\link{gtfs_transfer_table}()}
+Other augment:
+\code{\link[=gtfs_transfer_table]{gtfs_transfer_table()}}
 }
 \concept{augment}

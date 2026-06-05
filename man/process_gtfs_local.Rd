@@ -37,9 +37,9 @@ go_home ()
 }
 }
 \seealso{
-Other additional: 
-\code{\link{go_home}()},
-\code{\link{go_to_work}()},
-\code{\link{summary.gtfs}()}
+Other additional:
+\code{\link[=go_home]{go_home()}},
+\code{\link[=go_to_work]{go_to_work()}},
+\code{\link[=summary.gtfs]{summary.gtfs()}}
 }
 \concept{additional}

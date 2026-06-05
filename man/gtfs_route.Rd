@@ -144,8 +144,8 @@ data.table::setDTthreads (nthr_dt)
 Sys.setenv ("OMP_THREAD_LIMIT" = nthr_omp)
 }
 \seealso{
-Other main: 
-\code{\link{gtfs_route_headway}()},
-\code{\link{gtfs_traveltimes}()}
+Other main:
+\code{\link[=gtfs_route_headway]{gtfs_route_headway()}},
+\code{\link[=gtfs_traveltimes]{gtfs_traveltimes()}}
 }
 \concept{main}

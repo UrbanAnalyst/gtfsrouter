@@ -93,8 +93,8 @@ res <- gtfs_traveltimes (g, from, start_times)
 data.table::setDTthreads (nthr)
 }
 \seealso{
-Other main: 
-\code{\link{gtfs_route}()},
-\code{\link{gtfs_route_headway}()}
+Other main:
+\code{\link[=gtfs_route]{gtfs_route()}},
+\code{\link[=gtfs_route_headway]{gtfs_route_headway()}}
 }
 \concept{main}
