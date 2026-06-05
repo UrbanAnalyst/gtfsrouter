@@ -103,8 +103,8 @@ data.table::setDTthreads (nthr_dt)
 Sys.setenv ("OMP_THREAD_LIMIT" = nthr_omp)
 }
 \seealso{
-Other extract: 
-\code{\link{berlin_gtfs_to_zip}()},
-\code{\link{extract_gtfs}()}
+Other extract:
+\code{\link[=berlin_gtfs_to_zip]{berlin_gtfs_to_zip()}},
+\code{\link[=extract_gtfs]{extract_gtfs()}}
 }
 \concept{extract}

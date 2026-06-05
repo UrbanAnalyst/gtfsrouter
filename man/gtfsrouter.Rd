@@ -36,6 +36,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Mark Padgham \email{mark.padgham@email.com}
   \item Marcin Stepniak \email{marcinstepniak@ucm.es} (\href{https://orcid.org/0000-0002-6489-5443}{ORCID})
 }
 
