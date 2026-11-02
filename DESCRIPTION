@@ -1,8 +1,9 @@
 Package: gtfsrouter
 Title: Routing with 'GTFS' (General Transit Feed Specification) Data
-Version: 0.1.4.014
+Version: 0.1.4.015
 Authors@R: c(
-    person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre")),
+    person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-2172-5265")),
     person("Marcin", "Stepniak", , "marcinstepniak@ucm.es", role = "aut",
            comment = c(ORCID = "0000-0002-6489-5443")),
     person("Alexandra", "Kapp", , "alk@mobilityinstitute.com", role = "ctb")
