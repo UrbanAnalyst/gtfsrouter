@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.4.015</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.4.017</span>
       </span>
     </div>
 
@@ -83,9 +83,10 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># install.packages("remotes")</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_git</span> (<span class="st">"https://git.sr.ht/~mpadge/gtfsrouter"</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_git</span> (<span class="st">"https://codeberg.org/UrbanAnalyst/gtfsrouter"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_bitbucket</span> (<span class="st">"urbananalyst/gtfsrouter"</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_gitlab</span> (<span class="st">"UrbanAnalyst/gtfsrouter"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span> (<span class="st">"UrbanAnalyst/gtfsrouter"</span>)</span></code></pre></div>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_git</span> (<span class="st">"https://tangled.org/mpadge.eu/gtfsrouter"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_bitbucket</span> (<span class="st">"urbananalyst/gtfsrouter"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_gitlab</span> (<span class="st">"UrbanAnalyst/gtfsrouter"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span> (<span class="st">"UrbanAnalyst/gtfsrouter"</span>)</span></code></pre></div>
 <p>To load the package and check the version:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span> (gtfsrouter)</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">packageVersion</span> (<span class="st">"gtfsrouter"</span>)</span>
@@ -99,7 +100,7 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>filename <span class="ot">&lt;-</span> <span class="fu">berlin_gtfs_to_zip</span> ()</span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">print</span> (filename)</span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">## /tmp/RtmpTnlacm/vbb.zip</span></span></code></pre></div>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="do">## /tmp/Rtmpaox8RS/vbb.zip</span></span></code></pre></div>
 <p>For normal package use, <code>filename</code> will specify the name of a local GTFS <code>.zip</code> file.</p>
 <div class="section level3">
 <h3 id="gtfs_route">gtfs_route<a class="anchor" aria-label="anchor" href="#gtfs_route"></a>

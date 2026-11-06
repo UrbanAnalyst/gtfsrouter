@@ -24,6 +24,7 @@ any of the following options:
     # install.packages("remotes")
     remotes::install_git ("https://git.sr.ht/~mpadge/gtfsrouter")
     remotes::install_git ("https://codeberg.org/UrbanAnalyst/gtfsrouter")
+    remotes::install_git ("https://tangled.org/mpadge.eu/gtfsrouter")
     remotes::install_bitbucket ("urbananalyst/gtfsrouter")
     remotes::install_gitlab ("UrbanAnalyst/gtfsrouter")
     remotes::install_github ("UrbanAnalyst/gtfsrouter")
@@ -46,7 +47,7 @@ session with the function `berlin_gtfs_to_zip()`.
     filename <- berlin_gtfs_to_zip ()
     print (filename)
 
-    ## /tmp/RtmpTnlacm/vbb.zip
+    ## /tmp/Rtmpaox8RS/vbb.zip
 
 For normal package use, `filename` will specify the name of a local GTFS
 `.zip` file.
