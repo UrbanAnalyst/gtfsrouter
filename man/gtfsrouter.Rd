@@ -32,11 +32,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Mark Padgham \email{mark.padgham@email.com}
+\strong{Maintainer}: Mark Padgham \email{mark.padgham@email.com} (\href{https://orcid.org/0000-0003-2172-5265}{ORCID})
 
 Authors:
 \itemize{
-  \item Mark Padgham \email{mark.padgham@email.com}
+  \item Mark Padgham \email{mark.padgham@email.com} (\href{https://orcid.org/0000-0003-2172-5265}{ORCID})
   \item Marcin Stepniak \email{marcinstepniak@ucm.es} (\href{https://orcid.org/0000-0002-6489-5443}{ORCID})
 }
 

@@ -1,6 +1,6 @@
 Package: gtfsrouter
 Title: Routing with 'GTFS' (General Transit Feed Specification) Data
-Version: 0.1.4.017
+Version: 0.1.4.018
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2172-5265")),
@@ -45,4 +45,4 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: yes
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1
