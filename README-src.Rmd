@@ -2,7 +2,7 @@
 # gtfsrouter <a href='https://UrbanAnalyst.github.io/gtfsrouter/'><img src='man/figures/logo.png' align="right" height=210 width=182/></a>
 
 [![R build
-status](https://github.com/UrbanAnalyst/gtfsrouter/workflows/R-CMD-check/badge.svg)](https://github.com/UrbanAnalyst/gtfsrouter/actions?query=workflow%3AR-CMD-check)
+status](https://github.com/UrbanAnalyst/gtfsrouter/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/UrbanAnalyst/gtfsrouter/actions?query=workflow%3AR-CMD-check.yaml)
 [![codecov](https://codecov.io/gh/UrbanAnalyst/gtfsrouter/branch/main/graph/badge.svg)](https://app.codecov.io/gh/UrbanAnalyst/gtfsrouter)
 [![Project Status: Active](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/gtfsrouter)](https://cran.r-project.org/package=gtfsrouter) 
@@ -138,11 +138,9 @@ vignette](https://UrbanAnalyst.github.io/gtfsrouter/articles/transfers.html).
 ## Additional Functionality
 
 There are many ways to construct GTFS feeds. For background information, see
-[`gtfs.org`](https://gtfs.org), and particularly their [GTFS
-Examples](https://docs.google.com/document/d/16inL5BVcM1aU-_DcFJay_tC6Ni0wPa0nvQEstueG5k4/edit).
-Feeds may include a "frequencies.txt" table which defines "service periods",
-and overrides any schedule information during the specified times. The
-`gtfsrouter` package includes a function,
+[`gtfs.org`](https://gtfs.org),. Feeds may include a "frequencies.txt" table
+which defines "service periods", and overrides any schedule information during
+the specified times. The `gtfsrouter` package includes a function,
 [`frequencies_to_stop_times()`](https://UrbanAnalyst.github.io/gtfsrouter/reference/frequencies_to_stop_times.html),
 to convert "frequencies.txt" tables to equivalent "stop_times.txt" entries, to
 enable the feed to be used for routing.
