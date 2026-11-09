@@ -3,79 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Transfer Tables • gtfsrouter</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Transfer Tables">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Transfer Tables">
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">gtfsrouter</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.4.017</span>
-      </span>
-    </div>
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="default" aria-label="Site navigation"><div class="container">
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">Home</a>
-</li>
-<li>
-  <a href="../articles/index.html">Vignettes</a>
-</li>
-<li>
-  <a href="../reference/index.html">Functions</a>
-</li>
+    <a class="navbar-brand me-2" href="../index.html">gtfsrouter</a>
+
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4.021</small>
+
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="../index.html">Home</a></li>
+<li class="active nav-item"><a class="nav-link" href="../articles/index.html">Vignettes</a></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Functions</a></li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/UrbanAnalyst/gtfsrouter" class="external-link">
-    <span class="fa fa-github fa-lg"></span>
-
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/UrbanAnalyst/gtfsrouter" aria-label="GitHub"><span class="fa fa-github fa-lg"></span></a></li>
       </ul>
 </div>
-<!--/.nav-collapse -->
+
+
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
 
 
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Transfer Tables</h1>
+
+<div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
+      <img src="../logo.png" class="logo" alt=""><h1>Transfer Tables</h1>
                         <h4 data-toc-skip class="author">Mark
 Padgham</h4>
             
-            <h4 data-toc-skip class="date">2026-11-06</h4>
+            <h4 data-toc-skip class="date">2026-11-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/UrbanAnalyst/gtfsrouter/blob/main/vignettes/transfers.Rmd" class="external-link"><code>vignettes/transfers.Rmd</code></a></small>
-      <div class="hidden name"><code>transfers.Rmd</code></div>
-
+      <div class="d-none name"><code>transfers.Rmd</code></div>
     </div>
 
     
@@ -84,17 +62,17 @@ Padgham</h4>
 and potentially between specific connecting services. There feeds are
 nevertheless optional, and many feeds omit transfer tables, making them
 difficult if not impossible to use for routing. The
-<code>gtfsrouter</code> package includes a function, <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link"><code>gtfs_transfer_table()</code></a>,
+<code>gtfsrouter</code> package includes a function, <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html"><code>gtfs_transfer_table()</code></a>,
 which calculates and inserts a transfer table into a feed.</p>
 <div class="section level2">
 <h2 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h2>
 <p>This function can also be demonstrated with the very small feed
-included with this package, by first running <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/berlin_gtfs_to_zip.html" class="external-link"><code>berlin_gtfs_to_zip()</code></a>
+included with this package, by first running <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/berlin_gtfs_to_zip.html"><code>berlin_gtfs_to_zip()</code></a>
 to create the feed in the temporary directory of the current R
 session.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="https://github.com/UrbanAnalyst/gtfsrouter" class="external-link">gtfsrouter</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span> <span class="op">(</span><span class="va"><a href="https://urbananalyst.github.io/gtfsrouter/" class="external-link">gtfsrouter</a></span><span class="op">)</span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/berlin_gtfs_to_zip.html">berlin_gtfs_to_zip</a></span> <span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_gtfs.html">extract_gtfs</a></span> <span class="op">(</span><span class="va">f</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>The transfers table of the feed looks like this:</p>
@@ -171,7 +149,7 @@ which lack this information:</p>
 <span>    day <span class="op">=</span> <span class="st">"Monday"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## NULL</span></span></code></pre>
-<p>No transfer is able to be make, and so no route is found. <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link">The
+<p>No transfer is able to be make, and so no route is found. <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html">The
 <code>gtfs_transfer_table()</code> function</a> automatically calculates
 and adds a transfer table to a feed, enabling it once again to be used
 to generate routes:</p>
@@ -201,7 +179,7 @@ to generate routes:</p>
 <p>That route is considerably faster than the original one, because it
 utilises a transfer (at “S+U Alexanderplatz”) which is not in the
 original transfers table. That particular transfer highlights the most
-important caveat to using <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link">the
+important caveat to using <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html">the
 <code>gtfs_transfer_table()</code> function</a>: that tables may and
 often will still require some degree of manual checking and adjustment
 to make them usable, as demonstrated in the following section.</p>
@@ -210,7 +188,7 @@ to make them usable, as demonstrated in the following section.</p>
 <h2 id="extending-transfer-tables">Extending transfer tables<a class="anchor" aria-label="anchor" href="#extending-transfer-tables"></a>
 </h2>
 <p>The above example first removed the transfer table by setting
-<code>gtfs$transfers &lt;- NULL</code>. Applying <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link">the
+<code>gtfs$transfers &lt;- NULL</code>. Applying <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html">the
 <code>gtfs_transfer_table()</code> function</a> to a feed which already
 has a transfer table will extend that table by adding any additional
 transfers within the specified distance (<a href="#transfer-distances">see below</a>). Any transfers already present
@@ -218,7 +196,7 @@ in the transfers table will be retained as is, and the table will be
 extended by adding any new transfers not present in the original
 table.</p>
 <p>Transfers are calculated based on distance alone, and do not utilise
-any information on routes or trips. Some feeds, such as the <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/berlin_gtfs_to_zip.html" class="external-link">example
+any information on routes or trips. Some feeds, such as the <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/berlin_gtfs_to_zip.html">example
 Berlin feed included with this package</a>, include transfer information
 between specific routes and services, resulting in a transfers table in
 which station pairs are repeated numerous times for distinct
@@ -239,7 +217,7 @@ the following results:</p>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 1894</span></span></code></pre>
-<p>The <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link"><code>gtfs_transfer_table()</code>
+<p>The <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html"><code>gtfs_transfer_table()</code>
 function</a> generates -335 additional transfers not present in the
 original feed, but as stated contains no information on transfers
 between specific routes or trips. Alternatively, using the function to
@@ -250,7 +228,7 @@ following result:</p>
 <span><span class="va">gtfs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gtfs_transfer_table.html">gtfs_transfer_table</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span> <span class="op">(</span><span class="va">gtfs</span><span class="op">$</span><span class="va">transfers</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 10369</span></span></code></pre>
-<p>Note that each call to <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link"><code>gtfs_transfer_table()</code></a>
+<p>Note that each call to <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html"><code>gtfs_transfer_table()</code></a>
 will only extend the table through adding any transfers not present in
 the previous table, and that no transfers will be removed. The following
 code uses the <code>d_limit</code> parameter <a href="#transfer-distances">described below</a> to calculate transfer
@@ -285,10 +263,10 @@ specified distance.</p>
 <div class="section level2">
 <h2 id="modifying-transfer-tables">Modifying transfer tables<a class="anchor" aria-label="anchor" href="#modifying-transfer-tables"></a>
 </h2>
-<p>This section demonstrates that transfer tables generated using <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link">the
+<p>This section demonstrates that transfer tables generated using <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html">the
 <code>gtfs_transfer_table()</code> function</a> often need to be
 manually modified to ensure sensible results. The second route generated
-above after using <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link">the
+above after using <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html">the
 <code>gtfs_transfer_table()</code> function</a> includes a transfer at
 “S+U Alexanderplatz” from a route named “S7” to one named “U8”. This
 train station is in fact one of the largest stations in Berlin, with the
@@ -396,7 +374,7 @@ value of 2 minutes:</p>
 <span><span class="co">## 6       12:15:30</span></span></code></pre>
 <p>The route follows exactly the same connections, but now allows a far
 more realistic time of just over 5 minutes for the transfer at
-Alexanderplatz. This exemplifies that, while <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link">the
+Alexanderplatz. This exemplifies that, while <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html">the
 <code>gtfs_transfer_table()</code> function</a> can “automatically”
 generate transfer tables, these will often still need manual tweaking
 and adjustment to reflect the unique characteristics of any given
@@ -405,7 +383,7 @@ system.</p>
 <div class="section level2">
 <h2 id="transfer-distances">Transfer distances<a class="anchor" aria-label="anchor" href="#transfer-distances"></a>
 </h2>
-<p><a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link">The
+<p><a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html">The
 <code>gtfs_transfer_table()</code> function</a> includes an additional
 parameter, <code>d_limit</code>, quantifying the maximum permissible
 walking distance between transfers, with a default value of 200 metres.
@@ -510,7 +488,7 @@ number of transfers possible between stops which have identical spatial
 locations (and so a distance of 0.0). Numbers of transfers can never be
 less than this number.</p>
 <p>The following section delves further into the effect of this distance
-limit, though examining the result of <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_traveltimes.html" class="external-link"><code>gtfs_traveltimes()</code></a>
+limit, though examining the result of <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_traveltimes.html"><code>gtfs_traveltimes()</code></a>
 for different distance limits.</p>
 </div>
 <div class="section level2">
@@ -528,12 +506,12 @@ carefully considered with regard to concrete knowledge of a particular
 system.</p>
 <p>The <code>gtfsrouter</code> package is nevertheless not intended to
 be used only to generate individual routing queries, but also includes
-<a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_traveltimes.html" class="external-link">the
+<a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_traveltimes.html">the
 <code>gtfs_traveltimes()</code> function</a> designed to enable
 efficient estimation of travel times anywhere in a system from any
 nominated station. The result of this function will obviously be
 influenced by the transfers table, and in particular by the maximal
-walking distance used to construct transfer tables with <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html" class="external-link">the
+walking distance used to construct transfer tables with <a href="https://UrbanAnalyst.github.io/gtfsrouter/reference/gtfs_transfer_table.html">the
 <code>gtfs_transfer_table()</code> function</a>.</p>
 <p>The effect of different distances can also be examined using the
 internal data set provided with this package. The following function
@@ -751,29 +729,22 @@ proportion affected does increase to a large minority of around 30-40%
 as transfer distances approach 1km.</p>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-      </div>
-
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
-  <p></p>
-<p>Developed by Mark Padgham, Marcin Stepniak.</p>
+    <footer><div class="pkgdown-footer-left">
+  <p>Developed by Mark Padgham, Marcin Stepniak.</p>
 </div>
 
-<div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
+<div class="pkgdown-footer-right">
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
-
 
 
 

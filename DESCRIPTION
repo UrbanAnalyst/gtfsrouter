@@ -1,6 +1,6 @@
 Package: gtfsrouter
 Title: Routing with 'GTFS' (General Transit Feed Specification) Data
-Version: 0.1.4.017
+Version: 0.1.4.021
 Authors@R: c(
     person("Mark", "Padgham", , "mark.padgham@email.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-2172-5265")),
@@ -12,7 +12,8 @@ Description: Use 'GTFS' (General Transit Feed Specification) data for routing
     from nominated start and end stations, for extracting 'isochrones', and
     travel times from any nominated start station to all other stations.
 License: GPL-3
-URL: https://github.com/UrbanAnalyst/gtfsrouter
+URL: https://urbananalyst.github.io/gtfsrouter/,
+    https://github.com/UrbanAnalyst/gtfsrouter
 BugReports: https://github.com/UrbanAnalyst/gtfsrouter/issues
 Depends: 
     R (>= 2.10)
@@ -45,4 +46,4 @@ Encoding: UTF-8
 LazyData: true
 NeedsCompilation: yes
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1

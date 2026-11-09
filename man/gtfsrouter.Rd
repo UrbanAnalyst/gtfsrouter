@@ -26,17 +26,18 @@ station to all stations reachable within a specified travel duration.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://urbananalyst.github.io/gtfsrouter/}
   \item \url{https://github.com/UrbanAnalyst/gtfsrouter}
   \item Report bugs at \url{https://github.com/UrbanAnalyst/gtfsrouter/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Mark Padgham \email{mark.padgham@email.com}
+\strong{Maintainer}: Mark Padgham \email{mark.padgham@email.com} (\href{https://orcid.org/0000-0003-2172-5265}{ORCID})
 
 Authors:
 \itemize{
-  \item Mark Padgham \email{mark.padgham@email.com}
+  \item Mark Padgham \email{mark.padgham@email.com} (\href{https://orcid.org/0000-0003-2172-5265}{ORCID})
   \item Marcin Stepniak \email{marcinstepniak@ucm.es} (\href{https://orcid.org/0000-0002-6489-5443}{ORCID})
 }
 

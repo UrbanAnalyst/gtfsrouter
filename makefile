@@ -4,13 +4,16 @@ VIGNETTE = gtfsrouter
 all: help
 
 doc: ## Update package documentation with `roxygen2`
-	Rscript -e "roxygen2::roxygenise()"; \
+	Rscript -e 'roxygen2::roxygenise()'
 
 init: ## Initialize pkgdown site
 	echo "pkgdown::init_site()" | R --no-save -q
 
 pkgdown: ## Build entire pkgdown site
 	echo "pkgdown::build_site()" | R --no-save -q
+
+pkgdowncheck: ## Check 'pkgdown' site structure
+	echo "pkgdown::check_pkgdown()" | R --no-save -q
 
 vignette: ## Build pkgdown article
 	echo "pkgdown::build_article('$(VIGNETTE)',quiet=FALSE)" | R --no-save -q
@@ -19,13 +22,13 @@ knith: $(RFILE)-src.Rmd ## Render README as HTML
 	echo "rmarkdown::render('$(RFILE)-src.Rmd',output_file='$(RFILE).html')" | R --no-save -q
 
 knitr: $(RFILE)-src.Rmd ## Render README as markdown
-	echo "rmarkdown::render('$(RFILE)-src.Rmd',output_file='$(RFILE).md',output_format='md_document')" | R --no-save -q
+	echo "rmarkdown::render('$(RFILE)-src.Rmd',output_file='$(RFILE).md')" | R --no-save -q
 
 open: ## Open main HTML vignette in browser
 	xdg-open docs/articles/$(VIGNETTE).html &
 
 allcon: ## Run 'allcontributors::add_contributors'
-	Rscript -e 'allcontributors::add_contributors()'
+	Rscript -e 'allcontributors::add_contributors(ncols = 6L, check_urls = FALSE)'
 
 check: ## Run `rcmdcheck`
 	Rscript -e 'rcmdcheck::rcmdcheck()'
@@ -35,6 +38,9 @@ test: ## Run test suite
 
 pkgcheck: ## Run `pkgcheck` and print results to screen.
 	Rscript -e 'library(pkgcheck); checks <- pkgcheck(); print(checks); summary (checks)'
+
+urls: ## Apply 'urlchecker::url_update()' to update all URLs
+	Rscript -e 'urlchecker::url_update()'
 
 clean: ## Clean all junk files, including all pkgdown docs
 	rm -rf *.html *.png README_cache docs/

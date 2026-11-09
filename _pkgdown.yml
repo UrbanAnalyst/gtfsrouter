@@ -1,8 +1,8 @@
+url: https://UrbanAnalyst.github.io/gtfsrouter
 title: gtfsrouter
 
-templates:
-  params:
-    bootswatch: cerulean
+template:
+  bootstrap: 5
 
 reference:
   - title: Package doc
@@ -44,3 +44,4 @@ navbar:
   right:
   - icon: fa-github fa-lg
     href: https://github.com/UrbanAnalyst/gtfsrouter
+    aria-label: GitHub
