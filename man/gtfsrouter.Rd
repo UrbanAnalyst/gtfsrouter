@@ -26,6 +26,7 @@ station to all stations reachable within a specified travel duration.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://urbananalyst.github.io/gtfsrouter/}
   \item \url{https://github.com/UrbanAnalyst/gtfsrouter}
   \item Report bugs at \url{https://github.com/UrbanAnalyst/gtfsrouter/issues}
 }
